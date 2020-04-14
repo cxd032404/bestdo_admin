@@ -13,7 +13,7 @@ class OssClientFile
     /*
      *
      */
-    public function uploadMatchCdn($fileName,$fileFullPath,$ossConfig)
+    public static function uploadMatchCdn($fileName,$fileFullPath,$ossConfig)
     {
         include('Common.php');
         $bucket = $ossConfig['BUCKET'];

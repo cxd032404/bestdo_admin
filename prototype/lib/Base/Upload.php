@@ -119,7 +119,6 @@ class Base_Upload
 			}
 			$suffix = Base_Common::fileSuffix($file['name']);
 			$isImage = in_array($suffix, $this->allowImageExtArr);
-
 //			if ($this->onlyAllowImage && !$isImage) {
 //				$this->resultArr[$k]['errno'] = 2;
 //				$this->resultArr[$k]['description'] = '不允许上传非图片类型文件';
