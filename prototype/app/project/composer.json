@@ -1,0 +1,7 @@
+{
+    "require": {
+        "aliyuncs/oss-sdk-php": "^2.3",
+        "elasticsearch/elasticsearch": "^7.6",
+        "monolog/monolog": "^2.0"
+    }
+}
