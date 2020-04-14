@@ -159,7 +159,7 @@ class Base_Common
 
 	/**
 	 * 错误
-	 * @param unknown_type $e
+	 * @param object $e
 	 * @return void
 	 */
 	public static function error($e)

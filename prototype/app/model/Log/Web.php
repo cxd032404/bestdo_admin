@@ -13,7 +13,7 @@ class Log_Web extends Base_Widget
 
 	public function insert()
 	{
-		$result = Base_Common::pputHttpSQS($this->getDbTable(),$this->logArr);
+		$result = Base_Common::pputHttpSQS($this->getDbTable($this->table),$this->logArr);
 		if (!$result) {
 			$fp = fopen(Base_Common::$config['vars_dir'] . 'error.log', 'a+');
 			fwrite($fp, var_export($this->logArr, true));

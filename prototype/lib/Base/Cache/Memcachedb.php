@@ -11,23 +11,23 @@
 class Base_Cache_Memcachedb implements Base_Cache_Interface
 {
 	/**
-	 * @param unknown_type $key
+	 * @param string $key
 	 */
 	public function get($key) {
 		
 	}
 
 	/**
-	 * @param unknown_type $key
-	 * @param unknown_type $value
-	 * @param unknown_type $expire
+	 * @param intval $key
+	 * @param string $value
+	 * @param intval $expire
 	 */
 	public function set($key, $value, $expire = 900) {
 		
 	}
 
 	/**
-	 * @param unknown_type $key
+	 * @param string $key
 	 */
 	public function remove($key) {
 		

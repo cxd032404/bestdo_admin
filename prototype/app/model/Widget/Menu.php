@@ -18,36 +18,36 @@ class Widget_Menu extends Base_Widget
 	public function insert(array $bind)
 	{
 		$insertStruct = array(
-			'name' => empty($bind['name']) ? '' : $bind['name'],
-			'link' => empty($bind['link']) ? '' : $bind['link'],
-			'parent' => empty($bind['parent']) ? 0 : intval($bind['parent']),
-			'sort' => empty($bind['sort']) ? 80 : intval($bind['sort']),
-            'permission_List' => empty($bind['permission_List']) ? "" : intval($bind['permission_List']),
+            'name' => empty($bind['name']) ? '' : $bind['name'],
+            'link' => empty($bind['link']) ? '' : $bind['link'],
+            'parent' => empty($bind['parent']) ? 0 : intval($bind['parent']),
+            'sort' => empty($bind['sort']) ? 80 : intval($bind['sort']),
+            'permission_List' => empty($bind['permission_list']) ? "" : trim($bind['permission_list']),
         );
 
 		if (isset($bind['menu_id'])) {
 			$insertStruct['menu_id']=$bind['menu_id'];
 		}
 
-		return $this->db->insert($this->getDbTable(), $insertStruct);
+		return $this->db->insert($this->getDbTable($this->table), $insertStruct);
 	}
 
 	/**
 	 * 
 	 * 删除菜单
 	 * @author 陈晓东
-	 * @param unknown_type $menu_id
+	 * @param intval $menu_id
 	 */
 	public function delete($menu_id)
 	{
-		return $this->db->delete($this->getDbTable(), '`menu_id` = ?', $menu_id);
+		return $this->db->delete($this->getDbTable($this->table), '`menu_id` = ?', $menu_id);
 	}
 
 	/**
 	 * 
 	 * 修改更新菜单
 	 * @author 陈晓东
-	 * @param unknown_type $menu_id
+	 * @param intval $menu_id
 	 * @param array $bind
 	 */
 	public function update($menu_id, array $bind)
@@ -84,12 +84,12 @@ class Widget_Menu extends Base_Widget
 	 * 
 	 * 按id取得菜单指定例
 	 * @author 陈晓东
-	 * @param unknown_type $menu_id
-	 * @param unknown_type $fields
+	 * @param integer $menu_id
+	 * @param string $fields
 	 */
 	public function get($menu_id, $fields = '*')
 	{
-		$sql = "SELECT $fields FROM {$this->table} WHERE `menu_id` = ?";
+		$sql = "SELECT $fields FROM ".$this->getDbTable($this->table)." WHERE `menu_id` = ?";
 		return $this->db->getRow($sql, $menu_id);
 	}
 
@@ -97,12 +97,12 @@ class Widget_Menu extends Base_Widget
 	 * 
 	 * 按路径取得指定菜单
 	 * @author 陈晓东
-	 * @param unknown_type $sign
-	 * @param unknown_type $field
+	 * @param string $sign
+	 * @param string $fields
 	 */
 	public function getOneBylink($link, $fields = '*')
 	{
-		$sql = "SELECT $fields FROM " . $this->getDbTable() . " WHERE link = ?";
+		$sql = "SELECT $fields FROM " . $this->getDbTable($this->table) . " WHERE link = ?";
 		return $this->db->getRow($sql, $link);
 	}
 
@@ -122,8 +122,8 @@ class Widget_Menu extends Base_Widget
 	 * 
 	 * 按菜单名取得菜单
 	 * @author 陈晓东
-	 * @param unknown_type $name
-	 * @param unknown_type $fields
+	 * @param string $name
+	 * @param string $fields
 	 */
 	public function getByName($name, $fields = '*')
 	{

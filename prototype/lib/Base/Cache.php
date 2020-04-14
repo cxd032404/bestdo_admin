@@ -17,7 +17,7 @@ class Base_Cache
 
 	/**
 	 * 工厂方法
-	 * @param unknown_type $type
+	 * @param string $type
 	 * @return object
 	 */
 	public function factory($type = 'File')
