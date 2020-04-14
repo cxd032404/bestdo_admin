@@ -24,7 +24,7 @@ class Bestdo_UserController extends AbstractController
 	public function init()
 	{
 		parent::init();
-        $this->oUserInfo = new Xrace_UserInfo();
+        $this->oUserInfo = new Bestdo_UserInfo();
 	}
 	//用户列表
 	public function indexAction()

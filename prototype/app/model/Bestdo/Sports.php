@@ -5,12 +5,19 @@
  */
 
 
-class Xrace_Sports extends Base_Widget
+class Bestdo_Sports extends Base_Widget
 {
 	//声明所用到的表
 	protected $table = 'config_sports_type';
     //速度显示规则列表
-    protected $speedDisplayList = array('km/h'/*每小时公里数*/,'mile/h'/*每小时英里数*/,'time/100m'/*每100米耗时*/,'time/km'/*每公里耗时*/,'time/mile'/*每公里耗时*/);
+    protected $speedDisplayList =
+        [
+            'km/h'/*每小时公里数*/,
+            'mile/h'/*每小时英里数*/,
+            'time/100m'/*每100米耗时*/,
+            'time/km'/*每公里耗时*/,
+            'time/mile'/*每公里耗时*/
+        ];
 
     public function getSpeedDisplayList()
     {

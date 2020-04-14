@@ -6,13 +6,15 @@
  * @author Chen<cxd032404@hotmail.com>
  */
 
-class Xrace_SportsController extends AbstractController
+class Bestdo_SportsController extends AbstractController
 {
 	/**运动类型:SportsType
 	 * @var string
 	 */
-	protected $sign = '?ctl=xrace/sports';
-	/**
+	protected $sign = '?ctl=bestdo/sports';
+    protected $ctl = 'bestdo/sports';
+
+    /**
 	 * game对象
 	 * @var object
 	 */
@@ -26,7 +28,7 @@ class Xrace_SportsController extends AbstractController
 	public function init()
 	{
 		parent::init();
-		$this->oSports = new Xrace_Sports();
+		$this->oSports = new Bestdo_Sports();
 
 	}
 	//运动类型配置列表页面
@@ -45,7 +47,7 @@ class Xrace_SportsController extends AbstractController
                 $SportTypeList[$key]['comment'] = json_decode($SportsTypeInfo['comment'],true);
             }
 			//渲染模版
-			include $this->tpl('Xrace_Sports_SportsTypeList');
+			include $this->tpl('Bestdo_Sports_SportsTypeList');
 		}
 		else
 		{
@@ -63,7 +65,7 @@ class Xrace_SportsController extends AbstractController
             //获取速度显示单位
             $SpeedDisplayTypeList = $this->oSports->getSpeedDisplayList();
 			//渲染模版
-			include $this->tpl('Xrace_Sports_SportsTypeAdd');
+			include $this->tpl('Bestdo_Sports_SportsTypeAdd');
 		}
 		else
 		{
@@ -113,7 +115,7 @@ class Xrace_SportsController extends AbstractController
 			//获取速度显示单位
             $SpeedDisplayTypeList = $this->oSports->getSpeedDisplayList();
             //渲染模版
-			include $this->tpl('Xrace_Sports_SportsTypeModify');
+			include $this->tpl('Bestdo_Sports_SportsTypeModify');
 		}
 		else
 		{
@@ -126,7 +128,7 @@ class Xrace_SportsController extends AbstractController
 	public function sportsTypeUpdateAction()
 	{
 	    //接收页面参数
-		$bind=$this->request->from('SportsTypeId','SportsTypeName','SpeedDisplayType','HorizonSign');
+		$bind=$this->request->from('SportsTypeId','SportsTypeName','SpeedDisplayType');
         //运动类型名称不能为空
 		if(trim($bind['SportsTypeName'])=="")
 		{
@@ -134,9 +136,6 @@ class Xrace_SportsController extends AbstractController
 		}
 		else
 		{
-            //保存地平线对应的类型标识
-            $bind['comment']['HorizonSign'] = $bind['HorizonSign'];
-            unset($bind['HorizonSign']);
             //数据打包
             $bind['comment'] = json_encode($bind['comment']);
 			//修改运动类型
