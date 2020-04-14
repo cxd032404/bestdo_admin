@@ -7,33 +7,13 @@
 class Widget_Menu_Permission extends Base_Widget
 {
 
-	protected $table = 'config_menu_purview';
+	protected $table = 'config_menu_permission';
 	protected $table_permission = 'config_menu_permission';
 
-	public function insert(array $bind)
-	{
-		return $this->db->insert($this->table, $bind);
-	}
 	public function insertPermission(array $bind)
 	{
 		$table_to_process = Base_Widget::getDbTable($this->table_permission);
 		return $this->db->insert($table_to_process, $bind);
-	}
-	public function update($menu_id, $group_id, array $bind)
-	{
-		return $this->db->update($this->table, $bind, '`menu_id` = ? AND `group_id` = ?', array($menu_id, $group_id));
-	}
-	public function delete($menu_id, $group_id)
-	{
-
-	}
-	public function deleteByGroup($group_id)
-	{
-		return $this->db->delete($this->table, '`group_id` = ?', $group_id);
-	}
-	public function deleteByMenu($menu_id)
-	{
-		return $this->db->delete($this->table, 'menu_id = ?', $menu_id);
 	}
 	public function deletePermissionByMenu($menu_id)
 	{
@@ -44,15 +24,6 @@ class Widget_Menu_Permission extends Base_Widget
 	{
 		$table_to_process = Base_Widget::getDbTable($this->table_permission);
 		return $this->db->delete($table_to_process, 'group_id = ?', $group_id);
-	}
-	public function get($menu_id, $group_id, $fields = '*')
-	{
-		$sql = "SELECT $fields FROM {$this->table} WHERE `menu_id` = ? AND `group_id` = ?";
-		return $this->db->getRow($sql, array($menu_id, $group_id));
-	}
-	public function getOne($menu_id, $group_id, $field)
-	{
-		return $this->db->selectOne($this->getDbTable(), $field, 'group_id = ? AND menu_id = ?', array($group_id, $menu_id));
 	}
 	public function getPermission($menu_id, $group_id, $field = '*')
 	{
@@ -118,6 +89,7 @@ class Widget_Menu_Permission extends Base_Widget
 				foreach($p_list as $p => $value)
 				{
 					$permissionArr = array('group_id'=>$group_id,'permission'=>$p,'menu_id'=>$menu_id);
+
 					//插入权限记录
 					$insert = $this->insertPermission($permissionArr);
 					//如果任意一条插入失败则回滚

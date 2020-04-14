@@ -40,10 +40,6 @@ function getChildMenu(Id,level)
 		<input type="text" name="link" id="link" class="span3" /> </td><td>&nbsp;</td>
 	</tr>
 	<tr>
-		<th><label for="link">权限名</label></th><td>
-		<input type="text" name="sign" id="sign" class="span3" /> </td><td>&nbsp;</td>
-	</tr>    
-	<tr>
 		<th><label for="sort">排序</label></th><td>
 		<input type="text" name="sort" id="sort" class="span3" /> </td><td>&nbsp;</td>
 	</tr>
@@ -57,6 +53,10 @@ function getChildMenu(Id,level)
 			</select>
         </td>
         <td>&nbsp;</td>
+	</tr>
+	<tr>
+		<th class="rowtip"><label for="permission_list">权限列表</label></th><td class="rowform">
+			<textarea name="permission_list" id="permission_list" class="span5" rows="4"></textarea><td>*</td>
 	</tr>
 	<tr class="noborder">
 		<th></th><td>

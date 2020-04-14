@@ -22,8 +22,8 @@ class Widget_Menu extends Base_Widget
 			'link' => empty($bind['link']) ? '' : $bind['link'],
 			'parent' => empty($bind['parent']) ? 0 : intval($bind['parent']),
 			'sort' => empty($bind['sort']) ? 80 : intval($bind['sort']),
-			'sign' => empty($bind['sign']) ? '' : $bind['sign'],
-		);
+            'permission_List' => empty($bind['permission_List']) ? "" : intval($bind['permission_List']),
+        );
 
 		if (isset($bind['menu_id'])) {
 			$insertStruct['menu_id']=$bind['menu_id'];

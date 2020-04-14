@@ -98,7 +98,9 @@ class MenuController extends AbstractController
 		$name = $this->request->name;
 		$link = $this->request->link;
 		$sort = $this->request->sort;
-        
+        $permission_list = $this->request->permission_list??"";
+
+
         foreach($_REQUEST as $key=>$val){
             if(strstr($key,"parent") && $val!=0){
                 $k = explode("_",$key);
@@ -131,23 +133,14 @@ class MenuController extends AbstractController
 		$bind['link'] = $link;
 		$bind['parent'] = $parent;
 		$bind['sort'] = $sort;
-		$menu_id = $Menu->insert($bind);
+        $bind['permission_list'] = trim($permission_list);
+        $menu_id = $Menu->insert($bind);
 		if(!$menu_id)
 		{
 			$response = array('errno' => 9);
 			echo json_encode($response);
 			return false;
 		}
-
-		//更新权限
-		$MenuPermission = new Widget_Menu_Permission();
-		$bind = array();
-		$bind['menu_id'] = $menu_id;
-		$bind['group_id'] = $this->manager->menu_group_id;
-		$bind['purview'] = bindec(1111);
-		$res=$MenuPermission->insert($bind);
-		if(!$res)
-			$response = array('errno' => 4);
 
 		$response = array('errno' => 0);
 		echo json_encode($response);
@@ -166,7 +159,6 @@ class MenuController extends AbstractController
 		$log = "修改菜单表单页面\n\nServerIp:\n" . $this->request->getServer('SERVER_ADDR') . "\n\nGET:\n" . var_export($_GET, true) . "\n\nPOST:\n" . var_export($_POST, true);
 		$this->oLogManager->push('log', $log);
 				
-		$this->manager->checkMenuPermission($this->sign, Widget_Manager::MENU_PURVIEW_UPDATE);
 		$this->manager->checkMenuPermission($this->sign, 'update');
 
 		$menu_id = $this->request->menu_id;
@@ -316,11 +308,6 @@ class MenuController extends AbstractController
 
 		$Menu = new Widget_Menu();
 		$res = $Menu->delete($menu_id);
-		if ($res)
-		{
-			$Widget_Menu_Permission = new Widget_Menu_Permission();
-			$Widget_Menu_Permission->deleteByMenu($menu_id);
-		}
 		$this->response->goBack();
 	}
     
