@@ -1,6 +1,5 @@
 /.idea
 
-/prototype/app/project/admin/html/
 /prototype/app/project/api/Timing/
 /CommonConfig/CacheConfig.php
 /CommonConfig/databaseConfig.php

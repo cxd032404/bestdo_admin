@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <script type="text/javascript" src="js/jquery.js"></script>
+        <script type="text/javascript" src="js/jquery.13.js"></script>
         <script type="text/javascript" src="lib/lhgdialog/lhgdialog.js"></script>
         <script type="text/javascript" src="js/divBox.js"></script>
      	<script type="text/javascript" src="js/FusionCharts.js"></script>

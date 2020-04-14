@@ -45,8 +45,7 @@ class Test_UploadController extends AbstractController
 	//添加新赛事
 	public function uploadAction()
 	{
-	    //文件上传
-        $oUpload = new Base_Upload('upload_img');
+	    $oUpload = new Base_Upload('upload_img');
         $upload = $oUpload->upload('upload_img');
         $res[1] = $upload->resultArr;
         $path = $res[1][1];
@@ -55,7 +54,9 @@ class Test_UploadController extends AbstractController
         include('Third/oss/OssClientFile.php');
         $oss = app\lib\Third\oss\ossClientFile::uploadMatchCdn($path['path_root'],$path['path'],$this->config->oss);
         $url = $oss['info']['url'];
-        $response = ["ossUrl"=>$url,'errno'=>0];
+        $response = array('errno' => 0,'url'=>$url);
+
+        //$response = ["ossUrl"=>$url,'errno'=>0];
 		echo json_encode($response);
 		return true;
 	}
