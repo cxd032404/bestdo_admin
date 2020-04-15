@@ -57,10 +57,10 @@ function uploadfile()
 		if(move_uploaded_file($_FILES['upload']['tmp_name'],$file_host))
 		{
 
-		    if(count($config['oss'])>=1)
+		    if(isset($config['oss']) && count($config['oss'])>=1)
             {
                 $oOss = new Third_oss_OssClientFile();
-                $oss = $oOss::uploadMatchCdn([['path_root'=>$file_abso,'path'=>$file_host,'error'=>0]],$config['oss']);
+                $oss = $oOss::upload2Oss([['path_root'=>$file_abso,'path'=>$file_host,'error'=>0]],$config['oss']);
                 $oss_url = $oss['0']['info']['url'];
             }
 
