@@ -98,7 +98,7 @@ class Base_Upload
 	    return $this;
 	}
 
-	public function upload($path)
+	public function upload($path,$ossConfig = [])
 	{
 		$this->savePath = $path;
 		if (!is_dir($this->fileDir . $this->savePath) && !mkdir($this->fileDir . $this->savePath)) {
@@ -145,21 +145,24 @@ class Base_Upload
 				$this->resultArr[$k]['errno'] = 0;
 				$this->resultArr[$k]['description'] = '文件上传成功';
 				$this->resultArr[$k]['path'] = $target;
-				$this->resultArr[$k]['path_root'] = $target_root;
-				$this->uploadedFileArr[] = array(
-					'name' => $file['name'],
-					'url' => $this->savePath . $filename,
-					'type' => $file['type'],
-					'size' => $file['size'],
-					'description' => $file['description'],
-					'is_image' => $isImage,
-				);
+				$this->resultArr[$k]['size'] = $file['size'];
+                $this->resultArr[$k]['type'] = $file['type'];
+                $this->resultArr[$k]['path_root'] = $target_root;
 			} else {
 				$this->resultArr[$k]['errno'] = 5;
 				$this->resultArr[$k]['description'] = '文件上传失败';
 			}
 
 		}
+        if(count($ossConfig) >= 1)
+        {
+            include('Third/oss/OssClientFile.php');
+            $oss = app\lib\Third\oss\ossClientFile::uploadMatchCdn($this->resultArr,$ossConfig);
+            foreach($oss as $k => $ossFile)
+            {
+                $this->resultArr[$k]['oss'] = $ossFile['info']['url']??"";
+            }
+        }
 		return $this;
 	}
 

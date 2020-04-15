@@ -46,18 +46,10 @@ class Test_UploadController extends AbstractController
 	public function uploadAction()
 	{
 	    $oUpload = new Base_Upload('upload_img');
-        $upload = $oUpload->upload('upload_img');
-        $res[1] = $upload->resultArr;
-        $path = $res[1][1];
-        $res[1] = $upload->resultArr;
-        $path = isset( $res[1][1] ) ? $res[1][1]:array('path'=>"");
-        include('Third/oss/OssClientFile.php');
-        $oss = app\lib\Third\oss\ossClientFile::uploadMatchCdn($path['path_root'],$path['path'],$this->config->oss);
-        $url = $oss['info']['url'];
-        $response = array('errno' => 0,'url'=>$url);
-
-        //$response = ["ossUrl"=>$url,'errno'=>0];
-		echo json_encode($response);
+        $upload = $oUpload->upload('upload_img',$this->config->oss);
+        $oss_urls = array_column($upload->resultArr,'oss');
+        $response = array('errno' => 0,'url'=>implode("<br>",$oss_urls));
+        echo json_encode($response);
 		return true;
 	}
 }

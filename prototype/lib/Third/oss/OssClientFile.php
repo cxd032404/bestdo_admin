@@ -13,20 +13,26 @@ class OssClientFile
     /*
      *
      */
-    public static function uploadMatchCdn($fileName,$fileFullPath,$ossConfig)
+    public static function uploadMatchCdn($fileArr = [],/*$fileName,$fileFullPath,*/$ossConfig)
     {
         include('Common.php');
         $bucket = $ossConfig['BUCKET'];
         $client = Common::getOssClient($ossConfig);
-        $local_file = $fileFullPath;
-        $object = "public/xrace/images".$fileName;
-        try {
-            $res = $client->uploadFile($bucket, $object, $local_file);
-            return $res;
-        }catch(OssException $e) {
-            //Log::info("update error code:".$e->getCode()." msg:".$e->getMessage());
-            // todo 日志
-            return false;
+        $returnArr = [];
+        foreach($fileArr as $key => $file)
+        {
+            if($fileArr['error'] == 0)
+            {
+                $local_file = $file['path'];
+                $object = "public/xrace/images".$file['path_root'];
+                try {
+                    $res = $client->uploadFile($bucket, $object, $local_file);
+                    $returnArr[$key] = $res;
+                }catch(OssException $e) {
+                    $returnArr[$key] = false;
+                }
+            }
         }
+        return $returnArr;
     }
 }
