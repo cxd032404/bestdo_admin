@@ -156,8 +156,7 @@ class Base_Upload
 		}
         if(count($ossConfig) >= 1)
         {
-            include('Third/oss/OssClientFile.php');
-            $oss = app\lib\Third\oss\ossClientFile::uploadMatchCdn($this->resultArr,$ossConfig);
+            $oss = Third_oss_OssClientFile::uploadMatchCdn($this->resultArr,$ossConfig);
             foreach($oss as $k => $ossFile)
             {
                 $this->resultArr[$k]['oss'] = $ossFile['info']['url']??"";

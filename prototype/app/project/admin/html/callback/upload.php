@@ -4,10 +4,11 @@
 	monkee
 	2009-11-15	16:47
 */
+include dirname(dirname(__FILE__)) . '/init.php';
+
 $config=array();
-
+$config  = (@include dirname(dirname(__FILE__)) . '/../etc/config.php');
 $config['type']=array("flash","img");	//上传允许type值
-
 $config['img']=array("jpg","bmp","gif","png");	//img允许后缀
 $config['flash']=array("flv","swf");	//flash允许后缀
 
@@ -16,28 +17,28 @@ $config['img_size']=4000;	//上传img大小上限 单位：KB
 
 $config['message']="上传成功";	//上传成功后显示的消息，若为空则不显示
 
-$config['name']=mktime();	//上传后的文件命名规则 这里以unix时间戳来命名
+$config['name']=time();	//上传后的文件命名规则 这里以unix时间戳来命名
 
 $config['base_url'] = dirname(dirname(__FILE__));
 $config['flash_dir']="/upload/swf";	//上传flash文件地址 采用绝对地址 方便upload.php文件放在站内的任何位置 后面不加"/"
 $config['img_dir']="/upload/img";	//上传img文件地址 采用绝对地址 采用绝对地址 方便upload.php文件放在站内的任何位置 后面不加"/"
 
 $config['site_url']= "http://". $_SERVER['HTTP_HOST'];	//网站的网址 这与图片上传后的地址有关 最后不加"/" 可留空
-
 //文件上传
 uploadfile();
 
 function uploadfile()
 {
 	global $config;
-	/*
-	//判断是否是非法调用
-	if(empty($_GET['CKEditorFuncNum']))
-		mkhtml(1,"","错误的功能调用请求");
-	$fn=$_GET['CKEditorFuncNum'];
-	if(!in_array($_GET['type'],$config['type']))
-		mkhtml(1,"","错误的文件调用请求");
-	*/
+
+    /*
+    //判断是否是非法调用
+    if(empty($_GET['CKEditorFuncNum']))
+        mkhtml(1,"","错误的功能调用请求");
+    $fn=$_GET['CKEditorFuncNum'];
+    if(!in_array($_GET['type'],$config['type']))
+        mkhtml(1,"","错误的文件调用请求");
+    */
 	$type=$_GET['type'];
 	if(is_uploaded_file($_FILES['upload']['tmp_name']))
 	{
@@ -51,12 +52,20 @@ function uploadfile()
 			mkhtml($fn,"","上传的文件不能超过".$config[$type."_size"]."KB！");
 		//$filearr=explode(".",$_FILES['upload']['name']);
 		//$filetype=$filearr[count($filearr)-1];
-		$file_abso=$config[$type."_dir"]."/".$config['name'].".".$filetype;
-		$file_host=$config['base_url'].$file_abso;
-
+		$file_abso=$config[$type."_dir"]."/".$config['name'].".".$filetype;//文件相对路径
+		$file_host=$config['base_url'].$file_abso;//文件绝对路径
 		if(move_uploaded_file($_FILES['upload']['tmp_name'],$file_host))
 		{
-			$return = array("uploaded"=>1,"url"=>$config['site_url'].$file_abso);
+
+		    if(count($config['oss'])>=1)
+            {
+                $oOss = new Third_oss_OssClientFile();
+                $oss = $oOss::uploadMatchCdn([['path_root'=>$file_abso,'path'=>$file_host,'error'=>0]],$config['oss']);
+                $oss_url = $oss['0']['info']['url'];
+            }
+
+
+		    $return = array("uploaded"=>1,"url"=>/*$config['site_url'].$file_abso*/$oss_url);
 			echo json_encode($return);
 		    //mkhtml($fn,$config['site_url'].$file_abso,$config['message']);
 		}

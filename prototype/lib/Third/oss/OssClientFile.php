@@ -1,9 +1,9 @@
 <?php
-namespace app\lib\Third\oss;
+//namespace app\lib\Third\oss;
 use OSS\OssClient;
-//use Log;
+use app\lib\Third\oss\Common;
 
-class OssClientFile
+class Third_oss_OssClientFile
 {
     private $bucketName;
     private $client;
@@ -21,14 +21,14 @@ class OssClientFile
         $returnArr = [];
         foreach($fileArr as $key => $file)
         {
-            if($fileArr['error'] == 0)
+            if($file['error'] == 0)
             {
                 $local_file = $file['path'];
                 $object = "public/xrace/images".$file['path_root'];
                 try {
                     $res = $client->uploadFile($bucket, $object, $local_file);
                     $returnArr[$key] = $res;
-                }catch(OssException $e) {
+                }catch(\OSS\Core\OssException $e) {
                     $returnArr[$key] = false;
                 }
             }

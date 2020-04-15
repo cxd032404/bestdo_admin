@@ -673,9 +673,9 @@ EOF;
     return   $string;  
 	}
 	//对输入的数组p_sign计算得出sign
-	public function check_sign($arr,$p_sign)
+	public static function check_sign($arr,$p_sign)
 	{
-		foreach($arr as $key => $value)
+	    foreach($arr as $key => $value)
 		{
 			if((strlen(trim($value))==0)||(($value==0)&&(is_numeric($value))))
 			{
