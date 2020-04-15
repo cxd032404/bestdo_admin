@@ -59,7 +59,7 @@ function uploadfile()
 
 		    if(isset($config['oss']) && count($config['oss'])>=1)
             {
-                $oOss = new Third_oss_OssClientFile();
+                $oOss = new Third_aliyun_oss_OssClientFile();
                 $oss = $oOss::upload2Oss([['path_root'=>$file_abso,'path'=>$file_host,'error'=>0]],$config['oss']);
                 $oss_url = $oss['0']['info']['url'];
             }

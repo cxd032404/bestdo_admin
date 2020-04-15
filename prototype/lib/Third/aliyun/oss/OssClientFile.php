@@ -3,7 +3,7 @@
 use OSS\OssClient;
 use app\lib\Third\oss\Common;
 
-class Third_oss_OssClientFile
+class Third_aliyun_oss_OssClientFile
 {
     private $bucketName;
     private $client;

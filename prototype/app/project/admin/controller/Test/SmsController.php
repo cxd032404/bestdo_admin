@@ -4,12 +4,12 @@
  * @author Chen<cxd032404@hotmail.com>
  */
 
-class Test_UploadController extends AbstractController
+class Test_SmsController extends AbstractController
 {
-	/**测试：上传
+	/**测试：短信
 	 * @var string
 	 */
-	protected $sign = '?ctl=test/upload';
+	protected $sign = '?ctl=test/sms';
 	/**
 	 * race对象
 	 * @var object
@@ -33,7 +33,7 @@ class Test_UploadController extends AbstractController
 		if($PermissionCheck['return'])
 		{
 			//渲染模板
-			include $this->tpl('Test_Upload');
+			include $this->tpl('Test_sms');
 		}
 		else
 		{
@@ -42,13 +42,15 @@ class Test_UploadController extends AbstractController
 		}
 	}
 
-	//添加新赛事
-	public function uploadAction()
+	//短信发送
+	public function sendAction()
 	{
-	    $oUpload = new Base_Upload('upload_img');
-        $upload = $oUpload->upload('upload_img',$this->config->oss);
-        $oss_urls = array_column($upload->resultArr,'oss');
-        $response = array('errno' => 0,'url'=>implode("<br>",$oss_urls));
+        //手机号码
+        $mobile = trim($this->request->mobile)??'18621758237';
+        $oSms = new Third_aliyun_sms_SmsClient();
+        $oSms->sendSms($mobile = [$mobile],$template = "reg",$params = ["code"=>sprintf("%06d",rand(1,999999))],$this->config->sms);
+        //die($mobile);
+        $response = ["errno"=>0,"success"=>1];
         echo json_encode($response);
 		return true;
 	}
