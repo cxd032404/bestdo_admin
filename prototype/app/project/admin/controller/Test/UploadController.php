@@ -52,4 +52,20 @@ class Test_UploadController extends AbstractController
         echo json_encode($response);
 		return true;
 	}
+    //上传页面
+    public function ckAction()
+    {
+        //检查权限
+        $PermissionCheck = $this->manager->checkMenuPermission(0);
+        if($PermissionCheck['return'])
+        {
+            //渲染模板
+            include $this->tpl('Test_ck');
+        }
+        else
+        {
+            $home = $this->sign;
+            include $this->tpl('403');
+        }
+    }
 }

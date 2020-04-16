@@ -23,7 +23,42 @@
  * @endcode
  */
 
-if ( !function_exists('version_compare') || version_compare( phpversion(), '5', '<' ) )
-	include_once( 'ckeditor_php4.php' ) ;
-else
-	include_once( 'ckeditor_php5.php' ) ;
+class Third_ckeditor_ckeditor
+{
+    public static function render($name)
+    {
+        $script = "
+        <script>
+	ClassicEditor.create( document.querySelector( '#".$name."' ), {
+		language: 'zh-cn',
+
+		ckfinder: {
+			// To avoid issues, set it to an absolute path that does not start with dots, e.g. '/ckfinder/core/php/(...)'
+			uploadUrl: '/callback/upload.php?type=img',
+		},
+
+   		toolbar: [ 'heading', '|', 'bold',  'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote','imageUpload','insertTable','mediaEmbed','undo','redo'],
+
+		heading: {
+			options: [
+				{ model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
+				{ model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1' },
+				{ model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' }
+			]
+		}
+
+	})
+			.then( function( editor ) {
+				// console.log( editor );
+			} )
+			.catch( function( error ) {
+				console.error( error );
+			});
+</script>";
+        echo $script;
+    }
+
+
+}
+
+
