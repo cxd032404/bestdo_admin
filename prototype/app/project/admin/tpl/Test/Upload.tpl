@@ -18,7 +18,7 @@
 		</tr>
 		<tr class="hover"><td colspan = 2>富文本编辑器：</td></tr>
 		<tr class="hover" ><td colspan = 2>
-				<textarea name="comment" id="comment" >{tpl:$RaceCatalogInfo.RaceCatalogComment/}</textarea>
+				<textarea name="comment" id="comment" >111</textarea>
 			</td>
 		</tr>
 		<tr class="hover"><td colspan = 2>富文本编辑器：</td></tr>
@@ -51,22 +51,10 @@
 	});
 </script>
 
-<script>
-	ClassicEditor
-			.create( document.querySelector( '#comment' ),
-					{
-						toolbar: [ 'heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote','imageUpload','insertTable',"mediaEmbed","undo","redo" ],
-						config: { height: '300px', width: '552px' },
-						ckfinder: {
-							uploadUrl: '/callback/upload.php?type=img',
-						}
-					}
-			)
-			.catch( error => {
-				console.error( error );
-			} );
+<?php Third_ckeditor_ckeditor::render("comment")?>
 
-</script>
+
+<?php Third_ckeditor_ckeditor::render("comment2")?>
 {tpl:tpl contentFooter/}
 
 

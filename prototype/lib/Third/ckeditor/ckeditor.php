@@ -37,7 +37,7 @@ class Third_ckeditor_ckeditor
 			uploadUrl: '/callback/upload.php?type=img',
 		},
 
-   		toolbar: [ 'heading', '|', 'bold',  'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote','imageUpload','insertTable','mediaEmbed','undo','redo'],
+   		toolbar: [ 'alignment','heading', '|', 'bold',  'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote','imageUpload','insertTable','mediaEmbed','undo','redo','SpecialCharacters'],
 
 		heading: {
 			options: [
