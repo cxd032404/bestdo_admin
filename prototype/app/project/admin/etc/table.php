@@ -75,4 +75,8 @@ $table['config_action']['num'] = 1;
 $table['user_info']['db'] = 'bestdo_user';
 $table['user_info']['num'] = 1;
 
+#富文本测试表
+$table['rich_text_text']['db'] = 'bestdo_user';
+$table['rich_text_text']['num'] = 1;
+
 return $table;

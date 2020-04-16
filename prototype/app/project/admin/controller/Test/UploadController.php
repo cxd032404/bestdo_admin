@@ -42,7 +42,7 @@ class Test_UploadController extends AbstractController
 		}
 	}
 
-	//添加新赛事
+	//上传图片
 	public function uploadAction()
 	{
 	    $oUpload = new Base_Upload('upload_img');
@@ -59,7 +59,12 @@ class Test_UploadController extends AbstractController
         $PermissionCheck = $this->manager->checkMenuPermission(0);
         if($PermissionCheck['return'])
         {
-            //渲染模板
+            $oText = new Bestdo_RichText();
+            $record = $oText->get();
+            $comment = json_decode($record[1]['text']);
+            $record2 = $oText->get(2);
+            $comment2 = json_decode($record2[2]['text']);
+                //渲染模板
             include $this->tpl('Test_ck');
         }
         else
@@ -67,5 +72,28 @@ class Test_UploadController extends AbstractController
             $home = $this->sign;
             include $this->tpl('403');
         }
+    }
+    //富文本上传图片
+    public function richUploadAction()
+    {
+
+        $oText = new Bestdo_RichText();
+        $comment = $this->request->comment;
+        $comment = json_encode($comment);
+        $save = $oText->save(1,$comment);
+
+        $comment2 = $this->request->comment2;
+        $comment2 = json_encode($comment2);
+        $save2 = $oText->save(2,$comment2);
+        if($save || $save2)
+        {
+            $response = ['errno'=>0];
+        }
+        else
+        {
+            $response = ['errno'=>1];
+        }
+        echo json_encode($response);
+        return true;
     }
 }
