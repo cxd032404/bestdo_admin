@@ -3,6 +3,7 @@
 /prototype/app/project/api/Timing/
 /CommonConfig/CacheConfig.php
 /CommonConfig/databaseConfig.php
+/CommonConfig/keyConfig.php
 /prototype/app/project/vendor/
 /prototype/app/project/composer.lock
 
