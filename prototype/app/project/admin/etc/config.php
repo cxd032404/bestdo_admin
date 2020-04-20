@@ -3,7 +3,8 @@
  * @author Chen <cxd032404@hotmail.com>
  * $Id: config.php 15195 2014-07-23 07:18:26Z 334746 $
  */
-$keyConfig = require_once dirname(dirname(dirname(dirname(dirname(dirname(__FILE__))))))."/CommonConfig/keyConfig.php";
+$file = __APP_ROOT_DIR__."../../../../CommonConfig/keyConfig.php";
+$keyConfig = require $file;
 $config = array();
 $config['js'] = '/js/';
 $config['style'] = '/style/';
@@ -26,5 +27,4 @@ $config['sms'] = array_merge($config['aliConfig'],
         "regionId"=>"cn-hangzhou"
     ]);
 $config['alipay'] = ['appid'=>'2021001156616661'];
-
 return $config;

@@ -46,10 +46,9 @@ abstract class AbstractController extends Base_Controller_Action
 		$this->oLogManager->push('referer', $this->request->getReferer() ? $this->request->getReferer() : 'referer');
 		$this->oLogManager->push('agent', $this->request->getAgent());
 		$config = (@include Base_Common::$config['config_file']);
-		$appConfig = (@include dirname(dirname(__FILE__)) . '/etc/config.php');
-		is_array($appConfig) && $config = $config + $appConfig;
+		//$appConfig = (@include dirname(dirname(__FILE__)) . '/etc/config.php');
+		//is_array($appConfig) && $config = $config + $appConfig;
 		$this->config = Base_Config::factory($config);
-
 		$this->notice = Base_Notice::getInstance();
         if ($this->needLogin && !$this->manager->isLogin()) 
         {	        
