@@ -29,6 +29,8 @@ class Widget_Manager extends Base_Widget
     protected $table_data_permission = 'config_data_permission';
 
     protected $operation_table = 'user_menu_operation';
+    protected $log_table = 'config_logs_manager';
+
     /**
      * cookie名称
      * @var string
@@ -444,7 +446,6 @@ class Widget_Manager extends Base_Widget
             'menu_group_id' => $this->menu_group_id,
             'menu_id' => $MenuInfo['menu_id'],
             'parent_menu_id' => $MenuInfo['parent'],
-            
         );
         //如果只是进入页面,不执行操作
         if($operation == "0")
@@ -453,15 +454,17 @@ class Widget_Manager extends Base_Widget
             //当前页面有任何权限
             if(count($purview)>0)
             {
-                    $bind['operation_flag'] = 1;
-                    $this->logUserMenuOperation($bind);
-                    $return = array('return'=>1);
+                $bind['operation_flag'] = 1;
+                $this->logUserMenuOperation($bind);
+                $return = array('return'=>1);
             }
             else
             {       
-                    $bind['operation_flag'] = 0;
-                    $this->logUserMenuOperation($bind);
-                    $return = array('return'=>0,'message'=>"对不起,您没有进入 ".$MenuInfo['name']." 的权限!");
+                $bind['operation_flag'] = 0;
+                $return = array('return'=>0,'message'=>"对不起,您没有进入 ".$MenuInfo['name']." 的权限!");
+                //$bind['log'] = json_encode($return);
+                $this->logUserMenuOperation($bind);
+
             }
         }
         else
@@ -473,8 +476,8 @@ class Widget_Manager extends Base_Widget
 				{
                     if($value['permission'] == $operation)
 					{
-                                                $bind['operation_flag'] = 1;
-                                                $this->logUserMenuOperation($bind);
+                        $bind['operation_flag'] = 1;
+                        $this->logUserMenuOperation($bind);
 						$return = array('return'=>1);
 						return $return;
 					}
@@ -489,15 +492,17 @@ class Widget_Manager extends Base_Widget
 						break;
 					}
 				}
-                                $bind['operation_flag'] = 0;
-                                $this->logUserMenuOperation($bind);
-				$return = array('return'=>0,'message'=>"对不起,您没有执行 ".$operation.".-.".$action." 的权限!");
+                $bind['operation_flag'] = 0;
+				$return = array('return'=>0,'message'=>"对不起,您没有执行 ".$operation."-".$action." 的权限!");
+                //$bind['log'] = json_encode($return);
+                $this->logUserMenuOperation($return);
 			}
 			else
 			{
-                                $bind['operation_flag'] = 0;
-                                $this->logUserMenuOperation($bind);
+                $bind['operation_flag'] = 0;
 				$return = array('return'=>0,'message'=>"无此".$operation."权限!");
+                //$bind['log'] = json_encode($return);
+                $this->logUserMenuOperation($bind);
 			}
 		}
 		return $return;
@@ -507,7 +512,11 @@ class Widget_Manager extends Base_Widget
      * 记录用户操作菜单操作
      * @param integer $menu_id
      */    
-    public function logUserMenuOperation($bind) {
+    public function logUserMenuOperation($return) {
+        $this->oLogManager = new Log_LogsManager();
+        $this->oLogManager->push('log', json_encode($return));
+        return true;
+        /*
         $insertStruct = array(
             'user_name' => $bind['user_name'],
             'menu_group_id' => $bind['menu_group_id'],
@@ -518,12 +527,13 @@ class Widget_Manager extends Base_Widget
         );
 		if($bind['menu_id'])
 		{
-			return $this->db->insert($this->operation_table, $insertStruct);
+			return $this->db->insert($this->log_table, $insertStruct);
 		}
 		else
 		{
 			return true;
 		}
+        */
         //return $this->db->insert($this->operation_table, $insertStruct);
     }
 
@@ -652,7 +662,7 @@ class Widget_Manager extends Base_Widget
             return true;
         }
     }
-    //新增单个赛事分站
+    //新增单个数据权限
     public function insertDataPermission($group_id,$RaceCatalogId)
     {
         if($group_id == 0)
@@ -663,7 +673,7 @@ class Widget_Manager extends Base_Widget
         $table_to_process = Base_Widget::getDbTable($this->table_data_permission);
         return $this->db->insert($table_to_process, $bind);
     }
-    //删除单个赛事分站
+    //删除单个数据权限
     public function deleteDataPermission($group_id,$RaceCatalogId)
     {
         $group_id = abs(intval($group_id));

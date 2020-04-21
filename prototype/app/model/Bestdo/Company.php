@@ -19,10 +19,13 @@ class Bestdo_Company extends Base_Widget
 	 * @param $fields
 	 * @return array
 	 */
-	public function getAllCompanyList($fields = "*")
+	public function getAllCompanyList($params = [],$fields = "*")
 	{
 		$table_to_process = Base_Widget::getDbTable($this->table);
-		$sql = "SELECT $fields FROM " . $table_to_process . " ORDER BY company_id ASC";
+	    $whereParent = isset($params['parent_id'])?" parent_id = ".$params['parent_id']:"";
+        $whereCondition = array($whereParent);
+        $where = Base_common::getSqlWhere($whereCondition);
+		$sql = "SELECT $fields FROM " . $table_to_process . " where 1 ".$where." ORDER BY company_id ASC";
 		$return = $this->db->getAll($sql);
 		$CompanyList = array();
 		if(count($return))
@@ -36,28 +39,28 @@ class Bestdo_Company extends Base_Widget
 	}
 	/**
 	 * 获取单条记录
-	 * @param integer $CompanyId
+	 * @param integer $company_id
 	 * @param string $fields
 	 * @return array
 	 */
-	public function getCompany($CompanyId, $fields = '*')
+	public function getCompany($company_id, $fields = '*')
 	{
-		$CompanyId = intval($CompanyId);
+		$company_id = intval($company_id);
         $table_to_process = Base_Widget::getDbTable($this->table);
-		return $this->db->selectRow($table_to_process, $fields, '`company_id` = ?', $CompanyId);
+		return $this->db->selectRow($table_to_process, $fields, '`company_id` = ?', $company_id);
 	}
 	/**
 	 * 更新
-	 * @param integer $CompanyId
+	 * @param integer $company_id
 	 * @param array $bind
 	 * @return boolean
 	 */
-	public function updateCompany($CompanyId, array $bind)
+	public function updateCompany($company_id, array $bind)
 	{
-		$CompanyId = intval($CompanyId);
-		$bind['update_time'] = time();
+		$company_id = intval($company_id);
+		$bind['update_time'] = date("Y-m-d H:i:s");
 		$table_to_process = Base_Widget::getDbTable($this->table);
-		return $this->db->update($table_to_process, $bind, '`company_id` = ?', $CompanyId);
+		return $this->db->update($table_to_process, $bind, '`company_id` = ?', $company_id);
 	}
 	/**
 	 * 插入
@@ -73,14 +76,14 @@ class Bestdo_Company extends Base_Widget
 
 	/**
 	 * 删除
-	 * @param integer $CompanyId
+	 * @param integer $company_id
 	 * @return boolean
 	 */
-	public function deleteCompany($CompanyId)
+	public function deleteCompany($company_id)
 	{
-		$CompanyId = intval($CompanyId);
+		$company_id = intval($company_id);
 		$table_to_process = Base_Widget::getDbTable($this->table);
-		return $this->db->delete($table_to_process, '`company_id` = ?', $CompanyId);
+		return $this->db->delete($table_to_process, '`company_id` = ?', $company_id);
 	}
 
 }

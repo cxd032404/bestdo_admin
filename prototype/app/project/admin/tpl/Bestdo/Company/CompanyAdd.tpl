@@ -6,6 +6,21 @@
 <td>企业名称</td>
 	<td align="left"><input type="text" class="span2" name="company_name"  id="company_name" value="" size="50" /></td>
 </tr>
+<tr class="hover"><td>上级企业</td>
+	<td align="left">	<select name="parent_id"  id="parent_id" size="1">
+			<option value="0">无上级</option>
+			{tpl:loop $companyList  $companyInfo}
+			<option value="{tpl:$companyInfo.company_id/}">{tpl:$companyInfo.company_name/}</option>
+			{/tpl:loop}
+		</select></td>
+</tr>
+<tr class="hover"><td>是否显示</td>
+	<td align="left">
+	<input type="radio" name="display" id="display" value="1">显示
+	<input type="radio" name="display" id="display" value="0" checked >隐藏
+</td>
+</tr>
+<tr class="hover">
 <td>图片上传：</td>
 	<td align="left"><input name="upload_img[1]" type="file" id="upload_img[1]" /></td>
 </tr>
@@ -23,6 +38,7 @@ $('#company_add_submit').click(function(){
 			if (jsonResponse.errno) {
 				var errors = [];
 				errors[1] = '企业名称不能为空，请修正后再次提交';
+				errors[2] = '没有上传图片或上传失败，请修正后再次提交';
 				errors[9] = '入库失败，请修正后再次提交';
 				divBox.alertBox(errors[jsonResponse.errno],function(){});
 			} else {
