@@ -1,8 +1,8 @@
 {tpl:tpl contentHeader/}
 <script type="text/javascript">
 $(document).ready(function(){
-  $('#add_app').click(function(){
-    addAppBox = divBox.showBox('{tpl:$this.sign/}&ac=company.add', {title:'添加企业',width:600,height:300});
+  $('#add_company').click(function(){
+    addCompanyBox = divBox.showBox('{tpl:$this.sign/}&ac=company.add', {title:'添加企业',width:600,height:300});
   });
 });
 
@@ -25,7 +25,7 @@ function companyModify(mid){
 </script>
 
 <fieldset><legend>操作</legend>
-[ <a href="javascript:;" id="add_app">添加企业</a> ]
+[ <a href="javascript:;" id="add_company">添加企业</a> ]
 </fieldset>
 
 <fieldset><legend>企业列表 </legend>

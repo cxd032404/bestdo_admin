@@ -10,16 +10,12 @@ class Bestdo_Company extends Base_Widget
 	//声明所用到的表
 	protected $table = 'config_company';
 
-    public function getSpeedDisplayList()
-    {
-        return $this->speedDisplayList;
-    }
     /**
 	 * 查询全部
 	 * @param $fields
 	 * @return array
 	 */
-	public function getAllCompanyList($params = [],$fields = "*")
+	public function getCompanyList($params = [],$fields = "*")
 	{
 		$table_to_process = Base_Widget::getDbTable($this->table);
 	    $whereParent = isset($params['parent_id'])?" parent_id = ".$params['parent_id']:"";

@@ -1,8 +1,6 @@
 <?php
-//ALTER TABLE `config_sports_type` ADD `SpeedDisplayType` VARCHAR(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '速度显示单位' AFTER `SportsTypeName`;
-
 /**
- * 运动管理
+ * 企业管理
  * @author Chen<cxd032404@hotmail.com>
  */
 
@@ -39,7 +37,7 @@ class Bestdo_CompanyController extends AbstractController
 		if($PermissionCheck['return'])
 		{
 			//获取企业列表
-			$companyList = $this->oCompany->getAllCompanyList();
+			$companyList = $this->oCompany->getCompanyList();
 			//循环企业列表
 			foreach($companyList as $key => $companyInfo)
             {
@@ -67,7 +65,7 @@ class Bestdo_CompanyController extends AbstractController
 		if($PermissionCheck['return'])
 		{
 			//获取顶级企业列表
-			$companyList = $this->oCompany->getAllCompanyList(['parent_id'=>0],"company_id,company_name");
+			$companyList = $this->oCompany->getCompanyList(['parent_id'=>0],"company_id,company_name");
 			//渲染模版
 			include $this->tpl('Bestdo_Company_CompanyAdd');
 		}
@@ -127,7 +125,7 @@ class Bestdo_CompanyController extends AbstractController
 			//数据解包
 			$companyInfo['comment'] = json_decode($company_info['comment'],true);
 			//获取顶级企业列表
-			$companyList = $this->oCompany->getAllCompanyList(['parent_id'=>0],"company_id,company_name");
+			$companyList = $this->oCompany->getCompanyList(['parent_id'=>0],"company_id,company_name");
             //渲染模版
 			include $this->tpl('Bestdo_Company_CompanyModify');
 		}
@@ -180,7 +178,7 @@ class Bestdo_CompanyController extends AbstractController
 			//企业ID
 			$company_id = trim($this->request->company_id);
 			//获取下属企业列表
-			$companyList = $this->oCompany->getAllCompanyList(['parent_id'=>$company_id],"company_id");
+			$companyList = $this->oCompany->getCompanyList(['parent_id'=>$company_id],"company_id");
 			//循环删除下属企业
 			if(count($companyList)>0)
 			{

@@ -79,8 +79,12 @@ $table['user_info']['num'] = 1;
 $table['rich_text_text']['db'] = 'bestdo_user';
 $table['rich_text_text']['num'] = 1;
 
-#运动类型
+#企业
 $table['config_company']['db'] = 'bestdo_config';
 $table['config_company']['num'] = 1;
+
+#页面
+$table['config_page']['db'] = 'bestdo_config';
+$table['config_page']['num'] = 1;
 
 return $table;
