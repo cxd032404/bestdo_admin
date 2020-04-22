@@ -9,19 +9,20 @@ class DataGroupController extends AbstractController
 	protected $sign = "?ctl=data.group";
 	
 	public function indexAction()
-	{
-		/**
-		 * 记录日志
-		 */
-		$log = "数据用户组管理\n\nServerIp:\n" . $this->request->getServer('SERVER_ADDR') . "\n\nGET:\n" . var_export($_GET, true) . "\n\nPOST:\n" . var_export($_POST, true);
-		$this->oLogManager->push('log', $log);
-				
+	{		
 		//检查权限
-		$this->manager->checkMenuPermission($this->sign, Widget_Manager::MENU_PURVIEW_SELECT);
-		
-		$oGroup = new Widget_Group();
-		$groupArr = $oGroup->getClass('2');
-		include $this->tpl();
+		$PermissionCheck = $this->manager->checkMenuPermission(0);
+		if($PermissionCheck['return'])
+		{
+			$oGroup = new Widget_Group();
+			$groupArr = $oGroup->getClass('2');
+			include $this->tpl();
+		}
+		else
+		{
+			$home = $this->sign;
+			include $this->tpl('403');
+		}
 	}
 	
 	public function addAction()

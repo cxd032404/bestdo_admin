@@ -66,18 +66,23 @@ class MenuController extends AbstractController
 	 */
 	public function addAction()
 	{
-		/**
-		 * 记录日志
-		 */
-		$log = "添加菜单表单页面\n\nServerIp:\n" . $this->request->getServer('SERVER_ADDR') . "\n\nGET:\n" . var_export($_GET, true) . "\n\nPOST:\n" . var_export($_POST, true);
+		
+		/*
 		$this->oLogManager->push('log', $log);
-				
-		$this->manager->checkMenuPermission($this->sign, Widget_Manager::MENU_PURVIEW_INSERT);
+		*/		
+		$PermissionCheck = $this->manager->checkMenuPermission("AddMenu");
+		if($PermissionCheck['return'])
+		{
+			$Menu = new Widget_Menu();
+			$root = $Menu->getRootAll();
+			include $this->tpl("Menu_add");
+		}
+		else
+		{
+			$home = $this->sign;
+			include $this->tpl('403');
+		}
 
-		$Menu = new Widget_Menu();
-		$root = $Menu->getRootAll();
-
-		include $this->tpl("Menu_add");
 	}
 
 	/**
@@ -90,11 +95,10 @@ class MenuController extends AbstractController
 		/**
 		 * 记录日志
 		 */
+		/*()
 		$log = "添加菜单执行页面\n\nServerIp:\n" . $this->request->getServer('SERVER_ADDR') . "\n\nGET:\n" . var_export($_GET, true) . "\n\nPOST:\n" . var_export($_POST, true);
 		$this->oLogManager->push('log', $log);
-				
-		$this->manager->checkMenuPermission($this->sign, Widget_Manager::MENU_PURVIEW_INSERT);
-        
+        */
 		$name = $this->request->name;
 		$link = $this->request->link;
 		$sort = $this->request->sort;
@@ -156,26 +160,34 @@ class MenuController extends AbstractController
 		/**
 		 * 记录日志
 		 */
+		/*
 		$log = "修改菜单表单页面\n\nServerIp:\n" . $this->request->getServer('SERVER_ADDR') . "\n\nGET:\n" . var_export($_GET, true) . "\n\nPOST:\n" . var_export($_POST, true);
 		$this->oLogManager->push('log', $log);
-				
-		$this->manager->checkMenuPermission($this->sign, 'update');
-
-		$menu_id = $this->request->menu_id;
-		$Menu = new Widget_Menu();
-        
-        $menu = $Menu->get($menu_id);
-        $root = $Menu->getRootAll();
-        
-        $getParentMenu = $this->getParentMenu($menu_id);
-        $MenuCount = count($getParentMenu);
-        foreach($getParentMenu as $key=>$val){
-            if($val['parent'] == 0){
-                $menu_id = $val['menu_id'];
-            }
-        }
-        
-		include $this->tpl("Menu_modify");
+		*/
+		$PermissionCheck = $this->manager->checkMenuPermission("UpdateMenu");
+		if($PermissionCheck['return'])
+		{
+			$menu_id = $this->request->menu_id;
+			$Menu = new Widget_Menu();
+	        
+	        $menu = $Menu->get($menu_id);
+	        $root = $Menu->getRootAll();
+	        
+	        $getParentMenu = $this->getParentMenu($menu_id);
+	        $MenuCount = count($getParentMenu);
+	        foreach($getParentMenu as $key=>$val){
+	            if($val['parent'] == 0){
+	                $menu_id = $val['menu_id'];
+	            }
+	        }
+	        
+			include $this->tpl("Menu_modify");
+		}
+		else
+		{
+			$home = $this->sign;
+			include $this->tpl('403');
+		}
 	}
     
     /**
@@ -211,10 +223,11 @@ class MenuController extends AbstractController
 		/**
 		 * 记录日志
 		 */
+		/*
 		$log = "修改菜单执行页面\n\nServerIp:\n" . $this->request->getServer('SERVER_ADDR') . "\n\nGET:\n" . var_export($_GET, true) . "\n\nPOST:\n" . var_export($_POST, true);
 		$this->oLogManager->push('log', $log);
-				
-		$PermissionCheck = $this->manager->checkMenuPermission("UpdateMenu");
+		*/		
+		//$PermissionCheck = $this->manager->checkMenuPermission("UpdateMenu");
 		$menu_id = $this->request->menu_id;
 		$name = $this->request->name;
 		$link = $this->request->link;
@@ -268,14 +281,6 @@ class MenuController extends AbstractController
 	 */
 	public function sortAction()
 	{
-		/**
-		 * 记录日志
-		 */
-		$log = "对菜单排序执行页面\n\nServerIp:\n" . $this->request->getServer('SERVER_ADDR') . "\n\nGET:\n" . var_export($_GET, true) . "\n\nPOST:\n" . var_export($_POST, true);
-		$this->oLogManager->push('log', $log);
-				
-		$this->manager->checkMenuPermission($this->sign, Widget_Manager::MENU_PURVIEW_SELECT);
-
 		$Menu = new Widget_Menu();
 
 		$sort = $this->request->sort;
@@ -295,20 +300,20 @@ class MenuController extends AbstractController
 	 * @author 张骥
 	 */
 	public function deleteAction()
-	{
-		/**
-		 * 记录日志
-		 */
-		$log = "删除菜单执行页面\n\nServerIp:\n" . $this->request->getServer('SERVER_ADDR') . "\n\nGET:\n" . var_export($_GET, true) . "\n\nPOST:\n" . var_export($_POST, true);
-		$this->oLogManager->push('log', $log);
-				
-		$this->manager->checkMenuPermission($this->sign, Widget_Manager::MENU_PURVIEW_DELETE);
-
-		$menu_id = intval($this->request->menu_id);
-
-		$Menu = new Widget_Menu();
-		$res = $Menu->delete($menu_id);
-		$this->response->goBack();
+	{		
+		$this->manager->checkMenuPermission("DeleteMenu");
+		if($PermissionCheck['return'])
+		{
+			$menu_id = intval($this->request->menu_id);
+			$Menu = new Widget_Menu();
+			$res = $Menu->delete($menu_id);
+			$this->response->goBack();
+		}
+		else
+		{
+			$home = $this->sign;
+			include $this->tpl('403');
+		}
 	}
     
     /**

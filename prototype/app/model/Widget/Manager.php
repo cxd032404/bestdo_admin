@@ -28,8 +28,7 @@ class Widget_Manager extends Base_Widget
     protected $table = 'config_manager';
     protected $table_data_permission = 'config_data_permission';
 
-    protected $operation_table = 'user_menu_operation';
-    protected $log_table = 'config_logs_manager';
+    protected $operation_table = 'user_permission_log';
 
     /**
      * cookie名称
@@ -455,14 +454,15 @@ class Widget_Manager extends Base_Widget
             if(count($purview)>0)
             {
                 $bind['operation_flag'] = 1;
-                $this->logUserMenuOperation($bind);
                 $return = array('return'=>1);
+                $bind['return'] = $return;
+                $this->logUserMenuOperation($bind);
             }
             else
             {       
                 $bind['operation_flag'] = 0;
                 $return = array('return'=>0,'message'=>"对不起,您没有进入 ".$MenuInfo['name']." 的权限!");
-                //$bind['log'] = json_encode($return);
+                $bind['return'] = $return;
                 $this->logUserMenuOperation($bind);
 
             }
@@ -477,8 +477,9 @@ class Widget_Manager extends Base_Widget
                     if($value['permission'] == $operation)
 					{
                         $bind['operation_flag'] = 1;
-                        $this->logUserMenuOperation($bind);
 						$return = array('return'=>1);
+                        $bind['return'] = $return;
+                        $this->logUserMenuOperation($bind);
 						return $return;
 					}
 				}
@@ -494,14 +495,14 @@ class Widget_Manager extends Base_Widget
 				}
                 $bind['operation_flag'] = 0;
 				$return = array('return'=>0,'message'=>"对不起,您没有执行 ".$operation."-".$action." 的权限!");
-                //$bind['log'] = json_encode($return);
-                $this->logUserMenuOperation($return);
+                $bind['return'] = $return;
+                $this->logUserMenuOperation($bind);
 			}
 			else
 			{
                 $bind['operation_flag'] = 0;
 				$return = array('return'=>0,'message'=>"无此".$operation."权限!");
-                //$bind['log'] = json_encode($return);
+                $bind['return'] = $return;
                 $this->logUserMenuOperation($bind);
 			}
 		}
@@ -512,11 +513,10 @@ class Widget_Manager extends Base_Widget
      * 记录用户操作菜单操作
      * @param integer $menu_id
      */    
-    public function logUserMenuOperation($return) {
-        $this->oLogManager = new Log_LogsManager();
-        $this->oLogManager->push('log', json_encode($return));
-        return true;
-        /*
+    public function logUserMenuOperation($bind) {
+        //$this->oLogManager = new Log_LogsManager();
+        //$this->oLogManager->push('log', json_encode($return));
+        //return true;
         $insertStruct = array(
             'user_name' => $bind['user_name'],
             'menu_group_id' => $bind['menu_group_id'],
@@ -524,16 +524,17 @@ class Widget_Manager extends Base_Widget
             'parent_menu_id' => $bind['parent_menu_id'],
             'operation_name' => $bind['operation_name'],
             'operation_flag' => $bind['operation_flag'],
+            'comment' => json_encode($bind['return']??[]),
         );
 		if($bind['menu_id'])
 		{
-			return $this->db->insert($this->log_table, $insertStruct);
+			return $this->db->insert($this->operation_table, $insertStruct);
 		}
 		else
 		{
 			return true;
 		}
-        */
+        
         //return $this->db->insert($this->operation_table, $insertStruct);
     }
 

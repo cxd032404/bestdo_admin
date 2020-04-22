@@ -20,11 +20,6 @@ class ManagerController extends AbstractController
 	 */
 	public function indexAction()
 	{
-		/**
-		 * 记录日志
-		 */
-		$log = "管理员管理首页\n\nServerIp:\n" . $this->request->getServer('SERVER_ADDR') . "\n\nGET:\n" . var_export($_GET, true) . "\n\nPOST:\n" . var_export($_POST, true);
-		$this->oLogManager->push('log', $log);
 		$PermissionCheck = $this->manager->checkMenuPermission(0);
 		if($PermissionCheck['return'])
 		{

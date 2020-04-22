@@ -17,38 +17,39 @@ class MenuGroupController extends AbstractController
 		$this->oLogManager->push('log', $log);
 				
 		//检查权限
-		$this->manager->checkMenuPermission($this->sign, Widget_Manager::MENU_PURVIEW_SELECT);
-		
-		$oGroup = new Widget_Group();
-		$groupArr = $oGroup->getClass('1');
-		include $this->tpl();
+		$PermissionCheck = $this->manager->checkMenuPermission(0);
+		if($PermissionCheck['return'])
+		{
+			$oGroup = new Widget_Group();
+			$groupArr = $oGroup->getClass('1');
+			include $this->tpl();
+		}
+		else
+		{
+			$home = $this->sign;
+			include $this->tpl('403');
+		}
+
 	}
 	
 	public function addAction()
-	{
-		/**
-		 * 记录日志
-		 */
-		$log = "菜单用户组添加\n\nServerIp:\n" . $this->request->getServer('SERVER_ADDR') . "\n\nGET:\n" . var_export($_GET, true) . "\n\nPOST:\n" . var_export($_POST, true);
-		$this->oLogManager->push('log', $log);
-				
+	{	
 		//检查权限
-		$this->manager->checkMenuPermission($this->sign, Widget_Manager::MENU_PURVIEW_INSERT);
+		$PermissionCheck = $this->manager->checkMenuPermission("AddMenuGroup");
+		if($PermissionCheck['return'])
+		{
+			include $this->tpl();
+		}
+		else
+		{
+			$home = $this->sign;
+			include $this->tpl('403');
+		}
 		
-		include $this->tpl();
 	}
 	
 	public function insertAction()
 	{
-		/**
-		 * 记录日志
-		 */
-		$log = "菜单用户组添加入库\n\nServerIp:\n" . $this->request->getServer('SERVER_ADDR') . "\n\nGET:\n" . var_export($_GET, true) . "\n\nPOST:\n" . var_export($_POST, true);
-		$this->oLogManager->push('log', $log);
-				
-		//检查权限
-		$this->manager->checkMenuPermission($this->sign, Widget_Manager::MENU_PURVIEW_INSERT);
-		
 		$data = $this->request->from('name', 'ClassId');
 		$oGroup = new Widget_Group();
 		if(empty($data['name']))
@@ -69,34 +70,25 @@ class MenuGroupController extends AbstractController
 	}
 	
 	public function modifyAction()
-	{
-		/**
-		 * 记录日志
-		 */
-		$log = "菜单用户组修改\n\nServerIp:\n" . $this->request->getServer('SERVER_ADDR') . "\n\nGET:\n" . var_export($_GET, true) . "\n\nPOST:\n" . var_export($_POST, true);
-		$this->oLogManager->push('log', $log);
-				
+	{				
 		//检查权限
-		$this->manager->checkMenuPermission($this->sign, Widget_Manager::MENU_PURVIEW_UPDATE);
-		
-		$group_id = $this->request->group_id;
-		$oGroup = new Widget_Group();
-		$group = $oGroup->get($group_id);
-		
-		include $this->tpl();
+		$this->manager->checkMenuPermission("UpdateMenuGroup");
+		if($PermissionCheck['return'])
+		{
+			$group_id = $this->request->group_id;
+			$oGroup = new Widget_Group();
+			$group = $oGroup->get($group_id);
+			include $this->tpl();
+		}
+		else
+		{
+			$home = $this->sign;
+			include $this->tpl('403');
+		}
 	}
 	
 	public function updateAction()
 	{
-		/**
-		 * 记录日志
-		 */
-		$log = "菜单用户组修改入库\n\nServerIp:\n" . $this->request->getServer('SERVER_ADDR') . "\n\nGET:\n" . var_export($_GET, true) . "\n\nPOST:\n" . var_export($_POST, true);
-		$this->oLogManager->push('log', $log);
-				
-		//检查权限
-		$this->manager->checkMenuPermission($this->sign, Widget_Manager::MENU_PURVIEW_UPDATE);
-		
 		$data = $this->request->from('name', 'ClassId');
 		$group_id = $this->request->group_id;
 		if(!intVal($group_id))
@@ -124,25 +116,26 @@ class MenuGroupController extends AbstractController
 	}
 	
 	public function deleteAction()
-	{
-		/**
-		 * 记录日志
-		 */
-		$log = "菜单用户组删除\n\nServerIp:\n" . $this->request->getServer('SERVER_ADDR') . "\n\nGET:\n" . var_export($_GET, true) . "\n\nPOST:\n" . var_export($_POST, true);
-		$this->oLogManager->push('log', $log);
-				
+	{		
 		//检查权限
-		$this->manager->checkMenuPermission($this->sign, Widget_Manager::MENU_PURVIEW_DELETE);
-		
-		$group_id = intVal($this->request->group_id);
-		$oGroup = new Widget_Group();
-		$res = $oGroup->delete($group_id);
-		if ($res)
+		$this->manager->checkMenuPermission("DeleteMenuGroup");
+		if($PermissionCheck['return'])
 		{
-			$Widget_Menu_Permission = new Widget_Menu_Permission();
-			$Widget_Menu_Permission->deleteByGroup($group_id);
+			$group_id = intVal($this->request->group_id);
+			$oGroup = new Widget_Group();
+			$res = $oGroup->delete($group_id);
+			if ($res)
+			{
+				$Widget_Menu_Permission = new Widget_Menu_Permission();
+				$Widget_Menu_Permission->deleteByGroup($group_id);
+			}
+			$this->response->goBack();
 		}
-		$this->response->goBack();
+		else
+		{
+			$home = $this->sign;
+			include $this->tpl('403');
+		}
 	}
 }
 
