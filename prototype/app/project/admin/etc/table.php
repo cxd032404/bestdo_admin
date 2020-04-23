@@ -87,4 +87,11 @@ $table['config_company']['num'] = 1;
 $table['config_page']['db'] = 'bestdo_config';
 $table['config_page']['num'] = 1;
 
+#页面元素
+$table['config_page_element']['db'] = 'bestdo_config';
+$table['config_page_element']['num'] = 1;
+
+#页面元素类型
+$table['config_element']['db'] = 'bestdo_config';
+$table['config_element']['num'] = 1;
 return $table;

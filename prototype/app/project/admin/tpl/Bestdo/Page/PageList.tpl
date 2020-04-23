@@ -6,9 +6,9 @@ $(document).ready(function(){
   });
 });
 
-function Delete(p_id,p_name){
+function pageDelete(p_id,p_name){
     msg = '是否删除 ' + p_name + '?'
-  deletePageBox = divBox.confirmBox({content:msg,ok:function(){location.href = '{tpl:$this.sign/}&ac=company.delete&page_id=' + p_id;}});
+  deletePageBox = divBox.confirmBox({content:msg,ok:function(){location.href = '{tpl:$this.sign/}&ac=page.delete&page_id=' + p_id;}});
 }
 
 function pageModify(mid){
@@ -49,7 +49,7 @@ function pageModify(mid){
     <td align="center">{tpl:$pageInfo.company_name/}</td>
     <td align="center">{tpl:$pageInfo.update_time/}</td>
       <td align="center"><a  href="javascript:;" onclick="pageDelete('{tpl:$pageInfo.page_id/}','{tpl:$pageInfo.page_name/}')">删除</a>
- |  <a href="javascript:;" onclick="pageModify('{tpl:$pageInfo.page_id/}');">修改</a> |  <a href="{tpl:$this.sign/}&ac=page.detail&page_id={tpl:$pageInfo.page_id/}">页面元素</a></td>
+ |  <a href="javascript:;" onclick="pageModify('{tpl:$pageInfo.page_id/}');">修改</a> |  <a href="{tpl:$this.sign/}&ac=page.detail&page_id={tpl:$pageInfo.page_id/}">页面元素 ({tpl:$pageInfo.element_count/})</a></td>
   </tr>
 {/tpl:loop}
 </table>
