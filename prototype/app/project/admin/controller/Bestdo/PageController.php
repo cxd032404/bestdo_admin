@@ -396,8 +396,8 @@ class Bestdo_PageController extends AbstractController
 			include $this->tpl('403');
 		}
 	}
-    //添加页面元素详情页面
-    public function pageElementDetailAddAction()
+    //添加页面元素单个详情页面
+    public function pageElementSingleDetailAddAction()
     {
         //检查权限
         $PermissionCheck = $this->manager->checkMenuPermission("updatePage");
@@ -416,8 +416,8 @@ class Bestdo_PageController extends AbstractController
             include $this->tpl('403');
         }
     }
-    //添加页面元素详情
-    public function pageElementDetailPushAction()
+    //添加页面单个元素详情
+    public function pageElementSingleDetailInsertAction()
     {
         //元素ID
         $element_id = intval($this->request->element_id);
@@ -446,25 +446,23 @@ class Bestdo_PageController extends AbstractController
         echo json_encode($response);
         return true;
     }
-    //修改页面元素详情
-    public function pageElementDetailModifyAction()
+    //修改页面单个元素详情页面
+    public function pageElementSingleDetailModifyAction()
     {
         //元素ID
         $element_id = intval($this->request->element_id);
         $pos = intval($this->request->pos??0);
-        echo $element_id."-".$pos;
         $elementDetail = $this->oPageElement->getPageElement($element_id,"detail,element_type");
         $elementDetail['detail'] = json_decode($elementDetail['detail'],true);
         if(in_array($elementDetail['element_type'],['slidePic']))
         {
-            print_R($elementDetail['detail'][$pos]);
+            $elementDetailInfo = $elementDetail['detail'][$pos];
             //渲染模版
-            //include $this->tpl('Bestdo_Page_PageElementDetail_Add_'.$elementDetail['element_type']);
+            include $this->tpl('Bestdo_Page_PageElementDetail_Modify_'.$elementDetail['element_type']);
         }
-        //$this->response->goBack();
     }
-    //删除页面元素详情
-    public function pageElementDetailPopAction()
+    //删除页面单个元素详情
+    public function pageElementSingleDetailDeleteAction()
     {
         //元素ID
         $element_id = intval($this->request->element_id);
@@ -482,5 +480,39 @@ class Bestdo_PageController extends AbstractController
             }
         }
         $this->response->goBack();
+    }
+    //添加页面元素详情
+    public function pageElementSingleDetailUpdateAction()
+    {
+        //元素ID
+        $element_id = intval($this->request->element_id);
+        $detail = $this->request->detail;
+        $elementDetail = $this->oPageElement->getPageElement($element_id,"detail,element_type");
+        $elementDetail['detail'] = json_decode($elementDetail['detail'],true);
+        if(in_array($elementDetail['element_type'],['slidePic']))
+        {
+            $pos = intval($this->request->pos??0);
+            //上传图片
+            $oUpload = new Base_Upload('upload_img');
+            $upload = $oUpload->upload('upload_img',$this->config->oss);
+            $oss_urls = array_column($upload->resultArr,'oss');
+            //如果以前没上传过且这次也没有成功上传
+            if((!isset($elementDetail['detail'][$pos]['img_url']) || $elementDetail['detail'][$pos]['img_url']=="") && (!isset($oss_urls['0']) || $oss_urls['0'] == ""))
+            {
+                $response = array('errno' => 2);
+            }
+            else
+            {
+                //这次传成功了就用这次，否则维持
+                $elementDetail['detail'][$pos]['img_url'] = (isset($oss_urls['0']) && $oss_urls['0']!="")?($oss_urls['0']):($elementDetail['detail'][$pos]['img_url']);
+                //保存跳转链接
+                $elementDetail['detail'][$pos]['img_jump_url'] = $detail['img_jump_url'];
+                $elementDetail['detail'] = json_encode($elementDetail['detail']);
+                $res = $this->oPageElement->updatePageElement($element_id,$elementDetail);
+                $response = $res ? array('errno' => 0) : array('errno' => 9);
+            }
+        }
+        echo json_encode($response);
+        return true;
     }
 }

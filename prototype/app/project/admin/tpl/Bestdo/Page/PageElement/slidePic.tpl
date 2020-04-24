@@ -2,17 +2,17 @@
 <script type="text/javascript">
 	$(document).ready(function(){
 		$('#add_page_element_detail').click(function(){
-			addPageElementDetailBox = divBox.showBox('{tpl:$this.sign/}&ac=page.element.detail.add&element_id='+$('#element_id').val(), {title:'添加元素详情到'+$('#element_type_name').val(),width:500,height:250});
+			addPageElementDetailBox = divBox.showBox('{tpl:$this.sign/}&ac=page.element.single.detail.add&element_id='+$('#element_id').val(), {title:'添加元素详情到'+$('#element_type_name').val(),width:500,height:250});
 		});
 	});
 
 	function pageElementDetailPop(pos){
 		msg = '是否删除?'
-		deletePageElementDetailBox = divBox.confirmBox({content:msg,ok:function(){location.href = '{tpl:$this.sign/}&ac=page.element.detail.pop&element_id=' + $('#element_id').val() + '&pos=' + pos;}});
+		deletePageElementDetailBox = divBox.confirmBox({content:msg,ok:function(){location.href = '{tpl:$this.sign/}&ac=page.element.single.detail.delete&element_id=' + $('#element_id').val() + '&pos=' + pos;}});
 	}
 
 	function pageElementDetailModify(pos){
-		modifyPageElementDetailBox = divBox.showBox('{tpl:$this.sign/}&ac=page.element.detail.modify&element_id=' + $('#element_id').val() + '&pos=' + pos, {title:'修改页面元素',width:600,height:350});
+		modifyPageElementDetailBox = divBox.showBox('{tpl:$this.sign/}&ac=page.element.single.detail.modify&element_id=' + $('#element_id').val() + '&pos=' + pos, {title:'修改页面元素',width:600,height:350});
 	}
 
 </script>
