@@ -16,13 +16,13 @@ function pageElementModify(e_id){
 }
 
 </script>
-
+<fieldset>
 [ <a href="{tpl:$this.sign/}&company_id={tpl:$pageInfo.company_id/}">返回</a> | <a href="javascript:;" id="add_page_element">添加页面元素</a> ]
 </fieldset>
 <input type="hidden" id="page_id" name="page_id" value="{tpl:$pageInfo.page_id/}" />
 <input type="hidden" id="page_name" name="page_name" value="{tpl:$pageInfo.page_name/}" />
 
-<fieldset><legend>页面{tpl:$pageInfo.page_name/}元素列表</legend>
+<fieldset><legend>页面{tpl:$pageInfo.page_name/}元素列表</legend></fieldset>
 <table width="99%" align="center" class="table table-bordered table-striped">
   <tr>
     <th align="center" class="rowtip">元素名称</th>

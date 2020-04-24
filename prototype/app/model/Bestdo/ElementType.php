@@ -34,15 +34,15 @@ class Bestdo_ElementType extends Base_Widget
 	}
 	/**
 	 * 获取单条记录
-	 * @param integer $element_id
+	 * @param string $element_type
 	 * @param string $fields
 	 * @return array
 	 */
-	public function getPageDetail($element_id, $fields = '*')
+	public function getElementType($element_type, $fields = '*')
 	{
-		$element_id = intval($element_id);
+        $element_type = trim($element_type);
         $table_to_process = Base_Widget::getDbTable($this->table);
-		return $this->db->selectRow($table_to_process, $fields, '`element_id` = ?', $element_id);
+		return $this->db->selectRow($table_to_process, $fields, '`element_type` = ?', $element_type);
 	}
 	/**
 	 * 更新

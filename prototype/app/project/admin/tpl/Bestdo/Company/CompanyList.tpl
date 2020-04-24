@@ -46,7 +46,7 @@ function companyModify(mid){
     <td align="center">{tpl:$companyInfo.company_name/}</td>
     <td align="center">{tpl:$companyInfo.parent_name/}</td>
     <td align="center">{tpl:$companyInfo.display_name/}</td>
-    <td align="center">{tpl:if($companyInfo.icon=="")}未定义{tpl:else}<img src="{tpl:$RootUrl/}{tpl:$companyInfo.icon/}" width='150' height='130'/>{/tpl:if}</td>    </td>
+    <td align="center">{tpl:if($companyInfo.icon=="")}未定义{tpl:else}<img src="{tpl:$RootUrl/}{tpl:$companyInfo.icon/}" width='150' height='130'/>{/tpl:if}</td>
     <td align="center">{tpl:$companyInfo.update_time/}</td>
       <td align="center"><a  href="javascript:;" onclick="companyDelete('{tpl:$companyInfo.company_id/}','{tpl:$companyInfo.parent_id/}','{tpl:$companyInfo.company_name/}')">删除</a>
  |  <a href="javascript:;" onclick="companyModify('{tpl:$companyInfo.company_id/}');">修改</a></td>
