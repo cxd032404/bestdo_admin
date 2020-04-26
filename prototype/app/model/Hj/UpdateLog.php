@@ -5,7 +5,7 @@
  */
 
 
-class Bestdo_UpdateLog extends Base_Widget
+class Hj_UpdateLog extends Base_Widget
 {
 	//声明所用到的表
 	protected $table = 'UpdateLog';

@@ -4,13 +4,13 @@
  * @author Chen<cxd032404@hotmail.com>
  */
 
-class Bestdo_PageController extends AbstractController
+class Hj_PageController extends AbstractController
 {
 	/**页面:SportsType
 	 * @var string
 	 */
-	protected $sign = '?ctl=bestdo/page';
-    protected $ctl = 'bestdo/page';
+	protected $sign = '?ctl=hj/page';
+    protected $ctl = 'hj/page';
 
     /**
 	 * game对象
@@ -28,10 +28,10 @@ class Bestdo_PageController extends AbstractController
 	public function init()
 	{
 		parent::init();
-		$this->oPage = new Bestdo_Page();
-		$this->oCompany = new Bestdo_Company();
-		$this->oPageElement = new Bestdo_PageElement();
-		$this->oElementType = new Bestdo_ElementType();
+		$this->oPage = new Hj_Page();
+		$this->oCompany = new Hj_Company();
+		$this->oPageElement = new Hj_PageElement();
+		$this->oElementType = new Hj_ElementType();
 
 	}
 	//页面配置列表页面
@@ -56,7 +56,7 @@ class Bestdo_PageController extends AbstractController
 				$pageList[$key]['element_count'] = $this->oPageElement->getElementCount(['page_id'=>$pageInfo['page_id']]);
             }
 			//渲染模版
-			include $this->tpl('Bestdo_Page_PageList');
+			include $this->tpl('Hj_Page_PageList');
 		}
 		else
 		{
@@ -74,7 +74,7 @@ class Bestdo_PageController extends AbstractController
 			//获取顶级页面列表
 			$companyList = $this->oCompany->getCompanyList([],"company_id,company_name");
 			//渲染模版
-			include $this->tpl('Bestdo_Page_PageAdd');
+			include $this->tpl('Hj_Page_PageAdd');
 		}
 		else
 		{
@@ -128,7 +128,7 @@ class Bestdo_PageController extends AbstractController
 			//获取企业列表
 			$companyList = $this->oCompany->getCompanyList([],"company_id,company_name");
             //渲染模版
-			include $this->tpl('Bestdo_Page_PageModify');
+			include $this->tpl('Hj_Page_PageModify');
 		}
 		else
 		{
@@ -210,7 +210,7 @@ class Bestdo_PageController extends AbstractController
             	$pageElementList[$elementSign]['element_type_name'] = $elementTypeList[$elementInfo['element_type']]['element_type_name']??"未知类型";
             }
             //渲染模版
-			include $this->tpl('Bestdo_Page_PageDetail');
+			include $this->tpl('Hj_Page_PageDetail');
 		}
 		else
 		{
@@ -230,7 +230,7 @@ class Bestdo_PageController extends AbstractController
 			//获取元素类型列表
 			$elementTypeList = $this->oElementType->getElementTypeList([],"element_type,element_type_name");
             //渲染模版
-			include $this->tpl('Bestdo_Page_PageElementAdd');
+			include $this->tpl('Hj_Page_PageElementAdd');
 		}
 		else
 		{
@@ -281,7 +281,7 @@ class Bestdo_PageController extends AbstractController
 			//获取元素类型列表
 			$elementTypeList = $this->oElementType->getElementTypeList([],"element_type,element_type_name");
             //渲染模版
-			include $this->tpl('Bestdo_Page_PageElementModify');
+			include $this->tpl('Hj_Page_PageElementModify');
 		}
 		else
 		{
@@ -341,7 +341,7 @@ class Bestdo_PageController extends AbstractController
             }
 			$elementTypeInfo = $this->oElementType->getElementType($elementInfo['element_type']);
 			//渲染模版
-			include $this->tpl('Bestdo_Page_PageElement_'.$elementInfo['element_type']);
+			include $this->tpl('Hj_Page_PageElement_'.$elementInfo['element_type']);
 		}
 		else
 		{
@@ -452,7 +452,7 @@ class Bestdo_PageController extends AbstractController
             //获取元素类型列表
             $elementInfo = $this->oPageElement->getPageElement($element_id,"element_type,element_id");
             //渲染模版
-            include $this->tpl('Bestdo_Page_PageElementDetail_Add_'.$elementInfo['element_type']);
+            include $this->tpl('Hj_Page_PageElementDetail_Add_'.$elementInfo['element_type']);
         }
         else
         {
@@ -502,7 +502,7 @@ class Bestdo_PageController extends AbstractController
         {
             $elementDetailInfo = $elementDetail['detail'][$pos];
             //渲染模版
-            include $this->tpl('Bestdo_Page_PageElementDetail_Modify_'.$elementDetail['element_type']);
+            include $this->tpl('Hj_Page_PageElementDetail_Modify_'.$elementDetail['element_type']);
         }
     }
     //删除页面单个元素详情

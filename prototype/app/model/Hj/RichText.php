@@ -5,7 +5,7 @@
  */
 
 
-class Bestdo_RichText extends Base_Widget
+class Hj_RichText extends Base_Widget
 {
 	//声明所用到的表
 	protected $table = 'rich_text_text';

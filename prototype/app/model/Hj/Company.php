@@ -5,7 +5,7 @@
  */
 
 
-class Bestdo_Company extends Base_Widget
+class Hj_Company extends Base_Widget
 {
 	//声明所用到的表
 	protected $table = 'config_company';

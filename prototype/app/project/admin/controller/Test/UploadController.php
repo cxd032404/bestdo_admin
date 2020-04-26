@@ -59,7 +59,7 @@ class Test_UploadController extends AbstractController
         $PermissionCheck = $this->manager->checkMenuPermission(0);
         if($PermissionCheck['return'])
         {
-            $oText = new Bestdo_RichText();
+            $oText = new Hj_RichText();
             $record = $oText->get();
             $comment = json_decode($record[1]['text']);
             $record2 = $oText->get(2);
@@ -77,7 +77,7 @@ class Test_UploadController extends AbstractController
     public function richUploadAction()
     {
 
-        $oText = new Bestdo_RichText();
+        $oText = new Hj_RichText();
         $comment = $this->request->comment;
         $comment = json_encode($comment);
         $save = $oText->save(1,$comment);

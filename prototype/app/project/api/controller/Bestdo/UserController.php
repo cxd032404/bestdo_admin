@@ -3,7 +3,7 @@
  *
  * 
  */
-class Bestdo_UserController extends AbstractController
+class Hj_UserController extends AbstractController
 {
     /**
      *对象声明
@@ -18,7 +18,7 @@ class Bestdo_UserController extends AbstractController
     public function init()
     {
         parent::init();
-        $this->oUser = new Bestdo_UserInfo();
+        $this->oUser = new Hj_UserInfo();
     }
 
     /**

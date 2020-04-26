@@ -1,13 +1,13 @@
 <?php
 /**用户管理*/
 
-class Bestdo_UserController extends AbstractController
+class Hj_UserController extends AbstractController
 {
 	/**用户管理相关:User
 	 * @var string
 	 */
-	protected $sign = '?ctl=bestdo/user';
-    protected $ctl = 'bestdo/user';
+	protected $sign = '?ctl=hj/user';
+    protected $ctl = 'hj/user';
 
     /**
 	 * game对象
@@ -24,7 +24,7 @@ class Bestdo_UserController extends AbstractController
 	public function init()
 	{
 		parent::init();
-        $this->oUserInfo = new Bestdo_UserInfo();
+        $this->oUserInfo = new Hj_UserInfo();
 	}
 	//用户列表
 	public function indexAction()
@@ -85,7 +85,7 @@ class Bestdo_UserController extends AbstractController
                 $UserList['UserList'][$UserId]['LoginSourceName'] = isset($LoginSourceList[$UserInfo['LastLoginSource']])?$LoginSourceList[$UserInfo['LastLoginSource']]:"未知";
 			}
 			//模板渲染
-			include $this->tpl('Bestdo_User_UserList');
+			include $this->tpl('Hj_User_UserList');
 		}
 		else
 		{
@@ -225,7 +225,7 @@ class Bestdo_UserController extends AbstractController
 				}
 			}
 			//渲染模板
-			include $this->tpl('Bestdo_User_UserDetail');
+			include $this->tpl('Hj_User_UserDetail');
 		}
 		else
 		{

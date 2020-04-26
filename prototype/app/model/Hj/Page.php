@@ -5,7 +5,7 @@
  */
 
 
-class Bestdo_Page extends Base_Widget
+class Hj_Page extends Base_Widget
 {
 	//声明所用到的表
 	protected $table = 'config_page';

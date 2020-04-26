@@ -1,48 +1,67 @@
 <?php
 /**
- * 页面元素类型配置相关mod层
+ * 页面元素相关mod层
  * @author 陈晓东 <cxd032404@hotmail.com>
  */
 
 
-class Bestdo_ElementType extends Base_Widget
+class Hj_PageElement extends Base_Widget
 {
 	//声明所用到的表
-	protected $table = 'config_element';
+	protected $table = 'config_page_element';
 
     /**
 	 * 查询全部
 	 * @param $fields
 	 * @return array
 	 */
-	public function getElementTypeList($params = [],$fields = "*")
+	public function getElementList($params = [],$fields = "*")
 	{
 		$table_to_process = Base_Widget::getDbTable($this->table);
-        $whereCondition = array();
+	    $wherePage = (isset($params['page_id']) && $params['page_id']>0)?" page_id = ".$params['page_id']:"";
+        $whereCondition = array($wherePage);
         $where = Base_common::getSqlWhere($whereCondition);
-		$sql = "SELECT $fields FROM " . $table_to_process . " where 1 ".$where." ORDER BY update_time DESC";
+		$sql = "SELECT $fields FROM " . $table_to_process . " where 1 ".$where." ORDER BY element_id ASC";
 		$return = $this->db->getAll($sql);
-		$ElementTypeList = array();
+		$ElementList = array();
 		if(count($return))
 		{
 			foreach($return as $key => $value)
 			{
-				$ElementTypeList[$value['element_type']] = $value;
+				$ElementList[$value['element_id']] = $value;
 			}
 		}
-		return $ElementTypeList;
+		return $ElementList;
+	}
+    /**
+	 * 查询全部
+	 * @param $fields
+	 * @return array
+	 */
+	public function getElementCount($params = [])
+	{
+		$fields = ["elementCount"=>'count(1)'];
+		        //生成查询列
+        $fields = Base_common::getSqlFields($fields);
+		$table_to_process = Base_Widget::getDbTable($this->table);
+	    $wherePage = (isset($params['page_id']) && $params['page_id']>0)?" page_id = ".$params['page_id']:"";
+        $whereCondition = array($wherePage);
+        $where = Base_common::getSqlWhere($whereCondition);
+		$sql = "SELECT $fields FROM " . $table_to_process . " where 1 ".$where;
+		$return = $this->db->getOne($sql);
+		return $return;
 	}
 	/**
 	 * 获取单条记录
-	 * @param string $element_type
+	 * @param integer $element_id
 	 * @param string $fields
 	 * @return array
 	 */
-	public function getElementType($element_type, $fields = '*')
+	public function getPageElement($element_id, $fields = '*')
 	{
-        $element_type = trim($element_type);
+		$element_id = intval($element_id);
         $table_to_process = Base_Widget::getDbTable($this->table);
-		return $this->db->selectRow($table_to_process, $fields, '`element_type` = ?', $element_type);
+		return $this->db->selectRow($table_to_process, $fields, '`element_id` = ?', $element_id);
 	}
 	/**
 	 * 更新
@@ -74,7 +93,7 @@ class Bestdo_ElementType extends Base_Widget
 	 * @param integer $element_id
 	 * @return boolean
 	 */
-	public function deletePage($page_id)
+	public function deletePageElement($element_id)
 	{
 		$element_id = intval($element_id);
 		$table_to_process = Base_Widget::getDbTable($this->table);

@@ -6,13 +6,13 @@
  * @author Chen<cxd032404@hotmail.com>
  */
 
-class Bestdo_SportsController extends AbstractController
+class Hj_SportsController extends AbstractController
 {
 	/**运动类型:SportsType
 	 * @var string
 	 */
-	protected $sign = '?ctl=bestdo/sports';
-    protected $ctl = 'bestdo/sports';
+	protected $sign = '?ctl=hj/sports';
+    protected $ctl = 'hj/sports';
 
     /**
 	 * game对象
@@ -28,7 +28,7 @@ class Bestdo_SportsController extends AbstractController
 	public function init()
 	{
 		parent::init();
-		$this->oSports = new Bestdo_Sports();
+		$this->oSports = new Hj_Sports();
 
 	}
 	//运动类型配置列表页面
@@ -47,7 +47,7 @@ class Bestdo_SportsController extends AbstractController
                 $SportTypeList[$key]['comment'] = json_decode($SportsTypeInfo['comment'],true);
             }
 			//渲染模版
-			include $this->tpl('Bestdo_Sports_SportsTypeList');
+			include $this->tpl('Hj_Sports_SportsTypeList');
 		}
 		else
 		{
@@ -65,7 +65,7 @@ class Bestdo_SportsController extends AbstractController
             //获取速度显示单位
             $SpeedDisplayTypeList = $this->oSports->getSpeedDisplayList();
 			//渲染模版
-			include $this->tpl('Bestdo_Sports_SportsTypeAdd');
+			include $this->tpl('Hj_Sports_SportsTypeAdd');
 		}
 		else
 		{
@@ -115,7 +115,7 @@ class Bestdo_SportsController extends AbstractController
 			//获取速度显示单位
             $SpeedDisplayTypeList = $this->oSports->getSpeedDisplayList();
             //渲染模版
-			include $this->tpl('Bestdo_Sports_SportsTypeModify');
+			include $this->tpl('Hj_Sports_SportsTypeModify');
 		}
 		else
 		{

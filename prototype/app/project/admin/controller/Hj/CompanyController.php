@@ -4,13 +4,13 @@
  * @author Chen<cxd032404@hotmail.com>
  */
 
-class Bestdo_CompanyController extends AbstractController
+class Hj_CompanyController extends AbstractController
 {
 	/**企业:SportsType
 	 * @var string
 	 */
-	protected $sign = '?ctl=bestdo/company';
-    protected $ctl = 'bestdo/company';
+	protected $sign = '?ctl=hj/company';
+    protected $ctl = 'hj/company';
 
     /**
 	 * game对象
@@ -26,7 +26,7 @@ class Bestdo_CompanyController extends AbstractController
 	public function init()
 	{
 		parent::init();
-		$this->oCompany = new Bestdo_Company();
+		$this->oCompany = new Hj_Company();
 
 	}
 	//企业配置列表页面
@@ -49,7 +49,7 @@ class Bestdo_CompanyController extends AbstractController
             }
             array_multisort(array_column($companyList, "sort"),$companyList);
 			//渲染模版
-			include $this->tpl('Bestdo_Company_CompanyList');
+			include $this->tpl('Hj_Company_CompanyList');
 		}
 		else
 		{
@@ -67,7 +67,7 @@ class Bestdo_CompanyController extends AbstractController
 			//获取顶级企业列表
 			$companyList = $this->oCompany->getCompanyList(['parent_id'=>0],"company_id,company_name");
 			//渲染模版
-			include $this->tpl('Bestdo_Company_CompanyAdd');
+			include $this->tpl('Hj_Company_CompanyAdd');
 		}
 		else
 		{
@@ -127,7 +127,7 @@ class Bestdo_CompanyController extends AbstractController
 			//获取顶级企业列表
 			$companyList = $this->oCompany->getCompanyList(['parent_id'=>0],"company_id,company_name");
             //渲染模版
-			include $this->tpl('Bestdo_Company_CompanyModify');
+			include $this->tpl('Hj_Company_CompanyModify');
 		}
 		else
 		{
