@@ -36,7 +36,7 @@ $('#page_element_detail_modify_submit').click(function(){
 				errors[9] = '入库失败，请修正后再次提交';
 				divBox.alertBox(errors[jsonResponse.errno],function(){});
 			} else {
-				var message = '添加图片成功';
+				var message = '修改图片成功';
 				divBox.confirmBox({content:message,ok:function(){windowParent.getRightHtml('{tpl:$this.sign/}' + '&ac=page.element.detail&element_id=' + $('#element_id').val());}});
 			}
 		}

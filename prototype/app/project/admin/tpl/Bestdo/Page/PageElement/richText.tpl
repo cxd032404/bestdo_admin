@@ -1,28 +1,11 @@
 {tpl:tpl contentHeader/}
-<script type="text/javascript">
-	$(document).ready(function(){
-		$('#add_page_element_detail').click(function(){
-			addPageElementDetailBox = divBox.showBox('{tpl:$this.sign/}&ac=page.element.single.detail.add&element_id='+$('#element_id').val(), {title:'添加元素详情到'+$('#element_type_name').val(),width:500,height:250});
-		});
-	});
-
-	function pageElementDetailDelete(pos){
-		msg = '是否删除?'
-		deletePageElementDetailBox = divBox.confirmBox({content:msg,ok:function(){location.href = '{tpl:$this.sign/}&ac=page.element.single.detail.delete&element_id=' + $('#element_id').val() + '&pos=' + pos;}});
-	}
-
-	function pageElementDetailModify(pos){
-		modifyPageElementDetailBox = divBox.showBox('{tpl:$this.sign/}&ac=page.element.single.detail.modify&element_id=' + $('#element_id').val() + '&pos=' + pos, {title:'修改页面元素',width:600,height:350});
-	}
-
-</script>
+<script src="js/ckeditor/ckeditor.js"></script>
 <div class="br_bottom"></div>
 <form id="page_element_detail_update_form" name="page_element_detail_update_form" action="{tpl:$this.sign/}&ac=page.element.detail.update" method="post">
 	<input type="hidden" id="element_type" name="element_type" value="{tpl:$elementInfo.element_type/}" />
-	<input type="hidden" id="element_type_name" name="element_type_name" value="{tpl:$elementTypeInfo.element_type_name/}" />
-	<input type="hidden" id="element_id" name="element_id" value="{tpl:$elementInfo.element_id/}" />
+	<input type="hidden" name="element_id" value="{tpl:$elementInfo.element_id/}" />
 	<fieldset>
-		[ <a href="{tpl:$this.sign/}&ac=page.detail&page_id={tpl:$elementInfo.page_id/}">返回</a> | <a href="javascript:;" id="add_page_element_detail">添加页面元素</a> ]
+		[ <a href="{tpl:$this.sign/}&ac=page.detail&page_id={tpl:$elementInfo.page_id/}">返回</a> ]
 	</fieldset>
 	<fieldset><legend>页面元素详情</legend>
 		<table width="99%" align="center" class="table table-bordered table-striped" >
@@ -39,13 +22,30 @@
 				<td align="left">{tpl:$elementTypeInfo.element_type_name/}</td>
 			</tr>
 			<tr class="hover"><td colspan="2">元素详情</td></tr>
-			{tpl:loop $elementInfo.detail $pos $picInfo}
 			<tr class="hover">
-				<td align="center"><img src="{tpl:$picInfo.img_url/}" width='150' height='130'/><p>{tpl:$picInfo.img_jump_url/}</td>
-				<td align="center"><a  href="javascript:;" onclick="pageElementDetailDelete('{tpl:$pos/}')">删除</a>
-					|  <a href="javascript:;" onclick="pageElementDetailModify('{tpl:$pos/}');">修改</a></td>
+				<td>导航图片上传：</td>
+				<td align="left"><input name="upload_img[1]" type="file" id="upload_img[1]" />
+					{tpl:if($elementInfo.detail.img_url!="")}
+					已选图片:<img src="{tpl:$elementInfo.detail.img_url/}" width="30px;" height="30px;"/>
+				<br>
+					{/tpl:if}
+				</td>
 			</tr>
-			{/tpl:loop}
+			<td>导航图片上传(选中)：</td>
+			<td align="left"><input name="upload_img[2]" type="file" id="upload_img[2]" />
+				{tpl:if($elementInfo.detail.selected_img_url!="")}
+				已选图片:<img src="{tpl:$elementInfo.detail.selected_img_url/}" width="30px;" height="30px;"/>
+			<br>
+				{/tpl:if}
+			</td>
+			</tr>
+			<tr class="hover"><td colspan = 2>文字及跳转路径：文字｜链接 每行一条</td></tr>
+			<tr class="hover"><td colspan = 2>
+					<textarea style="width:99%; height:200px" name="detail[jump_urls]" id="detail[jump_urls]" >{tpl:$t/}</textarea>
+				</td>
+			</tr>
+
+
 			<tr class="noborder"><td></td>
 				<td><button type="submit" id="page_element_detail_update_submit">提交</button></td>
 			</tr>
@@ -60,8 +60,6 @@
 			success:function(jsonResponse) {
 				if (jsonResponse.errno) {
 					var errors = [];
-					errors[1] = '页面元素名称不能为空，请修正后再次提交';
-					errors[2] = '必须上传图片，请修正后再次提交';
 					errors[9] = '入库失败，请修正后再次提交';
 					divBox.alertBox(errors[jsonResponse.errno],function(){});
 				} else {

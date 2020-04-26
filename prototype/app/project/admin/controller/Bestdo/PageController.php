@@ -406,6 +406,11 @@ class Bestdo_PageController extends AbstractController
             }
             $elementDetail['detail']['jump_urls'] = $a;
         }
+        elseif(in_array($elementDetail['element_type'],['richText']))
+        {
+            $text = $this->request->text;
+            $elementDetail['detail']['text'] = $text;
+        }
 	    if(!isset($response))
 	    {
 	        $elementDetail['detail'] = json_encode($elementDetail['detail']);
