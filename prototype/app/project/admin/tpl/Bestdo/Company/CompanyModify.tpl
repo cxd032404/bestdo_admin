@@ -11,7 +11,7 @@ function iconDelete(cid,name){
 <input type="hidden" name="company_id" value="{tpl:$companyInfo.company_id/}" />
 <input type="hidden" name="parent_id" value="{tpl:$companyInfo.parent_id/}" />
 
-<table width="99%" align="center" class="table table-bordered table-striped" widtd="99%">
+<table width="99%" align="center" class="table table-bordered table-striped" >
 <tr class="hover">
 <td>企业名称</td>
 <td align="left"><input name="company_name" type="text" class="span2" id="company_name" value="{tpl:$companyInfo.company_name/}" size="50" /></td>

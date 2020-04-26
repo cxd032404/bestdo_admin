@@ -8,7 +8,7 @@
 	[ <a href="{tpl:$this.sign/}&ac=page.detail&page_id={tpl:$elementInfo.page_id/}">返回</a> ]
 </fieldset>
 <fieldset><legend>页面元素详情</legend>
-<table width="99%" align="center" class="table table-bordered table-striped" >
+<table width="99%" align="center" class="table table-bordered table-striped" width="99%">
 <tr class="hover">
 <td>元素名称</td>
 <td align="left">{tpl:$elementInfo.element_name/}</td>
@@ -23,7 +23,7 @@
 </tr>
 <tr class="hover"><td colspan="2">元素详情</td></tr>
 <tr class="hover">
-<td>图片上传：</td>
+<td>导航图片上传：</td>
 	<td align="left"><input name="upload_img[1]" type="file" id="upload_img[1]" />
     {tpl:if($elementInfo.detail.img_url!="")}
     已选图片:<img src="{tpl:$elementInfo.detail.img_url/}" width="30px;" height="30px;"/>
@@ -31,10 +31,19 @@
     {/tpl:if}
     </td>
 </tr>
-<tr class="hover">
-<td>跳转路径</td>
-	<td align="left"><input type="text" class="span2" name="detail[img_jump_url]"  id="detail[img_jump_url]" value="{tpl:$elementInfo.detail.img_jump_url/}" size="50" /></td>
+<td>导航图片上传(选中)：</td>
+<td align="left"><input name="upload_img[2]" type="file" id="upload_img[2]" />
+	{tpl:if($elementInfo.detail.selected_img_url!="")}
+	已选图片:<img src="{tpl:$elementInfo.detail.selected_img_url/}" width="30px;" height="30px;"/>
+<br>
+	{/tpl:if}
+</td>
 </tr>
+	<tr class="hover"><td colspan = 2>文字及跳转路径：文字｜链接 每行一条</td></tr>
+	<tr class="hover"><td colspan = 2>
+			<textarea style="width:99%; height:200px" name="detail[jump_urls]" id="detail[jump_urls]" >{tpl:$t/}</textarea>
+		</td>
+	</tr>
 
 
 <tr class="noborder"><td></td>

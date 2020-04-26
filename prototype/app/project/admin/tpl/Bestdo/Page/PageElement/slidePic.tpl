@@ -26,7 +26,7 @@
 </fieldset>
 <fieldset><legend>页面元素详情</legend>
 
-<table width="99%" align="center" class="table table-bordered table-striped" widtd="99%">
+<table width="99%" align="center" class="table table-bordered table-striped" >
 <tr class="hover">
 <td>元素名称</td>
 <td align="left">{tpl:$elementInfo.element_name/}</td>
@@ -36,7 +36,7 @@
 <td align="left">{tpl:$elementInfo.element_sign/}</td>
 </tr>
 <tr class="hover">
-	<td>元素标识</td>
+	<td>元素类型</td>
 	<td align="left">{tpl:$elementTypeInfo.element_type_name/}</td>
 </tr>
 <tr class="hover"><td colspan="2">元素详情</td></tr>

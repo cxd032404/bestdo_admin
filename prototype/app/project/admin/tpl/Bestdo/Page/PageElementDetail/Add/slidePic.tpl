@@ -3,7 +3,7 @@
 <div class="br_bottom"></div>
 <form id="page_element_detail_push_form" name="page_element_detail_push_form" action="{tpl:$this.sign/}&ac=page.element.single.detail.insert" method="post">
 <input type="hidden" name="element_id" id="element_id" value="{tpl:$elementInfo.element_id/}" />
-<table width="99%" align="center" class="table table-bordered table-striped" widtd="99%">
+<table width="99%" align="center" class="table table-bordered table-striped" >
 <tr class="hover">
 <td>图片上传：</td>
 	<td align="left"><input name="upload_img[1]" type="file" id="upload_img[1]" />

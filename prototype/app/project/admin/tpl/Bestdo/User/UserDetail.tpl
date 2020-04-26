@@ -2,7 +2,7 @@
 <div class="br_bottom"></div>
 
 
-    <table width="99%" align="center" class="table table-bordered table-striped" widtd="99%">
+    <table width="99%" align="center" class="table table-bordered table-striped" >
         <tr class="hover">
             <th align="center" class="rowtip" rowspan="10" colspan="2"><img src="{tpl:$UserInfo.thumb/}" width='160' height='160'/></th>
         </tr>

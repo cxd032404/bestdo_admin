@@ -330,6 +330,15 @@ class Bestdo_PageController extends AbstractController
 			//获取元素类型列表
 			$elementInfo = $this->oPageElement->getPageElement($element_id);
 			$elementInfo['detail'] = json_decode($elementInfo['detail'],true);
+			$t = [];
+			if($elementInfo['element_type'] == "slideNavi")
+            {
+                foreach($elementInfo['detail']['jump_urls'] as $k => $d)
+                {
+                    $t[] = $k."|".$d;
+                }
+                $t = implode(',&#10;',$t);
+            }
 			$elementTypeInfo = $this->oElementType->getElementType($elementInfo['element_type']);
 			//渲染模版
 			include $this->tpl('Bestdo_Page_PageElement_'.$elementInfo['element_type']);
@@ -350,7 +359,7 @@ class Bestdo_PageController extends AbstractController
 	    $elementDetail['detail'] = json_decode($elementDetail['detail'],true);
 	    if(in_array($elementDetail['element_type'],['singlePic','backgroundPic']))
 	    {
-	   		//上传图片
+	        //上传图片
 	   		$oUpload = new Base_Upload('upload_img');
 	        $upload = $oUpload->upload('upload_img',$this->config->oss);
 	        $oss_urls = array_column($upload->resultArr,'oss');
@@ -367,6 +376,36 @@ class Bestdo_PageController extends AbstractController
 	        	$elementDetail['detail']['img_jump_url'] = $detail['img_jump_url'];
 	        }
 	    }
+	    elseif(in_array($elementDetail['element_type'],['slideNavi']))
+        {
+            //上传图片
+            $oUpload = new Base_Upload('upload_img');
+            $upload = $oUpload->upload('upload_img',$this->config->oss);
+            $oss_urls = array_column($upload->resultArr,'oss');
+            //如果以前没上传过且这次也没有成功上传
+            if((!isset($elementDetail['detail']['img_url']) || $elementDetail['detail']['img_url']=="") && (!isset($oss_urls['0']) || $oss_urls['0'] == ""))
+            {
+                $response = array('errno' => 2);
+            }
+            else
+            {
+                //这次传成功了就用这次，否则维持
+                $elementDetail['detail']['img_url'] = (isset($oss_urls['0']) && $oss_urls['0']!="")?($oss_urls['0']):($elementDetail['detail']['img_url']);
+            }
+            //这次传成功了就用这次，否则维持
+            $elementDetail['detail']['selected_img_url'] = (isset($oss_urls['1']) && $oss_urls['1']!="")?($oss_urls['1']):($elementDetail['detail']['selected_img_url']);
+            $t = explode(',',$detail['jump_urls']);
+            $a = [];
+            foreach($t as $key => $value)
+            {
+                $t2 = explode("|",$value);
+                if(trim($t2[0]!=""))
+                {
+                    $a[trim($t2[0])] = trim($t2[1]);
+                }
+            }
+            $elementDetail['detail']['jump_urls'] = $a;
+        }
 	    if(!isset($response))
 	    {
 	        $elementDetail['detail'] = json_encode($elementDetail['detail']);

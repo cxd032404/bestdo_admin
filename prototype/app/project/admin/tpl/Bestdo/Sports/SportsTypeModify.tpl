@@ -2,7 +2,7 @@
 <div class="br_bottom"></div>
 <form id="sports_type_update_form" name="sports_type_update_form" action="{tpl:$this.sign/}&ac=sports.type.update" method="post">
 <input type="hidden" name="SportsTypeId" value="{tpl:$SportsTypeInfo.SportsTypeId/}" />
-<table width="99%" align="center" class="table table-bordered table-striped" widtd="99%">
+<table width="99%" align="center" class="table table-bordered table-striped" >
 <tr class="hover">
 <td>运动类型名称</td>
 <td align="left"><input name="SportsTypeName" type="text" class="span2" id="SportsTypeName" value="{tpl:$SportsTypeInfo.SportsTypeName/}" size="50" /></td>

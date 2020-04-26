@@ -4,7 +4,7 @@
 <form id="page_update_form" name="page_update_form" action="{tpl:$this.sign/}&ac=page.update" method="post">
 <input type="hidden" name="page_id" value="{tpl:$pageInfo.page_id/}" />
 
-<table width="99%" align="center" class="table table-bordered table-striped" widtd="99%">
+<table width="99%" align="center" class="table table-bordered table-striped" >
 <tr class="hover">
 <td>页面名称</td>
 <td align="left"><input name="page_name" type="text" class="span2" id="page_name" value="{tpl:$pageInfo.page_name/}" size="50" /></td>
