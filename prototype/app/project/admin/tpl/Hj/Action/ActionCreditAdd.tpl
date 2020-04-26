@@ -4,12 +4,16 @@
 <input type="hidden" name="ActionId" value="{tpl:$ActionInfo.ActionId/}" />
 <table width="99%" align="center" class="table table-bordered table-striped" widtd="99%">
 <tr class="hover">
-<tr class="hover"><td>积分类目列表</td>
-	<td align="left">
-		<select name="CreditId" id="CreditId" size="1">
-		</select>
-	</td>
-</tr>
+	<tr class="hover"><td>积分类目列表</td>
+		<td align="left">
+			<select name="CreditId" id="CreditId" size="1">
+				{tpl:loop $CreditList $CreditInfo}
+				<option value="{tpl:$CreditInfo.CreditId/}" >{tpl:$CreditInfo.CreditName/}</option>
+				{/tpl:loop}
+			</select>
+		</td>
+	</tr>
+	</tr>
 	<tr class="hover"><th align="center" class="rowtip">时间范围</th>
 		<th align="center" class="rowtip"><input type="text" name="StartTime" class="input-medium"   onFocus="WdatePicker({isShowClear:false,readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})" >-<input type="text" name="EndTime" value="" class="input-medium"   onFocus="WdatePicker({isShowClear:false,readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})" ></th>
 	</tr>
@@ -54,25 +58,13 @@ $('#action_credit_add_submit').click(function(){
 	};
 	$('#action_credit_add_form').ajaxForm(options);
 });
-function getCreditByCatalog()
-{
-	catalog=$("#RaceCatalogId");
-	$.ajax
-	({
-		type: "GET",
-		url: "?ctl=xrace/credit&ac=get.credit.list.by.catalog&RaceCatalogId="+catalog.val(),
-		success: function(msg)
-		{
-			$("#CreditId").html(msg);
-		}});
-}
 function getFrequenceConditon()
 {
 	frequency=$("#Frequency");
 	$.ajax
 	({
 		type: "GET",
-		url: "?ctl=xrace/credit&ac=get.frequency.condition&Frequence="+frequency.val(),
+		url: "?ctl=hj/credit&ac=get.frequency.condition&Frequence="+frequency.val(),
 		success: function(msg)
 		{
 			$("#condition").html(msg);

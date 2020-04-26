@@ -204,6 +204,8 @@ class Hj_ActionController extends AbstractController
             $ActionInfo = $this->oAction->getAction($ActionId,'*');
             //获取可选频率列表
             $CreditFrequenceList  = $this->oCredit->getCreditFrequenceList();
+            //获取积分列表
+            $CreditList = $this->oCredit->getCreditList("CreditId,CreditName");
             //模板渲染
             include $this->tpl('Hj_Action_ActionCreditAdd');
         }
