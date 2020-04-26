@@ -4,18 +4,19 @@
  * @author Chen<cxd032404@hotmail.com>
  */
 
-class Xrace_CreditController extends AbstractController
+class Hj_CreditController extends AbstractController
 {
 	/**商品:Credit
 	 * @var string
 	 */
-	protected $sign = '?ctl=xrace/credit';
-	/**
+	protected $sign = '?ctl=hj/credit';
+    protected $ctl = 'hj/credit';
+
+    /**
 	 * game对象
 	 * @var object
 	 */
 	protected $oCredit;
-	protected $oRace;
 	/**
 	 * 初始化
 	 * (non-PHPdoc)
@@ -24,8 +25,7 @@ class Xrace_CreditController extends AbstractController
 	public function init()
 	{
 		parent::init();
-		$this->oCredit = new Xrace_Credit();
-		$this->oRace = new Xrace_Race();
+		$this->oCredit = new Hj_Credit();
 	}
 	//积分列表页面
 	public function indexAction()
@@ -34,34 +34,18 @@ class Xrace_CreditController extends AbstractController
 		$PermissionCheck = $this->manager->checkMenuPermission(0);
 		if($PermissionCheck['return'])
 		{
-			//对应赛事ID
-			$RaceCatalogId = isset($this->request->RaceCatalogId)?intval($this->request->RaceCatalogId):0;
-			//获取赛事列表
-			$RaceCatalogList  = $this->oRace->getRaceCatalogList(0,"*",0);
 			//获取积分列表
-			$CreditArr = $this->oCredit->getCreditList($RaceCatalogId);
+			$CreditArr = $this->oCredit->getCreditList();
 			//初始空的积分列表
 			$CreditList = array();
 			//循环积分列表
 			foreach($CreditArr as $CreditId => $CreditInfo)
 			{
 				//获取积分信息
-				$CreditList[$CreditInfo['RaceCatalogId']]['CreditList'][$CreditId] = $CreditInfo;
-				//计算积分数量
-				$CreditList[$CreditInfo['RaceCatalogId']]['CreditCount'] = isset($CreditList[$CreditInfo['RaceCatalogId']]['CreditCount'])?$CreditList[$CreditInfo['RaceCatalogId']]['CreditCount']+1:1;
-				//如果对应赛事有配置
-				if(isset($RaceCatalogList[$CreditInfo['RaceCatalogId']]))
-				{
-					//获取赛事名称
-					$CreditList[$CreditInfo['RaceCatalogId']]['RaceCatalogName'] = $RaceCatalogList[$CreditInfo['RaceCatalogId']]['RaceCatalogName'];
-				}
-				else
-				{
-					$CreditList[$CreditInfo['RaceCatalogId']]['RaceCatalogName'] = 	"未定义";
-				}
+				$CreditList[$CreditId] = $CreditInfo;
 			}
 			//模版渲染
-			include $this->tpl('Xrace_Credit_CreditList');
+			include $this->tpl('Hj_Credit_CreditList');
 		}
 		else
 		{
@@ -76,10 +60,8 @@ class Xrace_CreditController extends AbstractController
 		$PermissionCheck = $this->manager->checkMenuPermission("CreditInsert");
 		if($PermissionCheck['return'])
 		{
-			//赛事列表
-			$RaceCatalogList  = $this->oRace->getRaceCatalogList(0,"*",0);
 			//渲染模板
-			include $this->tpl('Xrace_Credit_CreditAdd');
+			include $this->tpl('Hj_Credit_CreditAdd');
 		}
 		else
 		{
@@ -95,22 +77,18 @@ class Xrace_CreditController extends AbstractController
 		if($PermissionCheck['return'])
 		{
 			//获取页面参数
-			$bind=$this->request->from('CreditName','RaceCatalogId','CreditRate');
+			$bind=$this->request->from('CreditName','CreditRate');
 			//积分名称不能为空
 			if(trim($bind['CreditName'])=="")
 			{
 				$response = array('errno' => 1);
 			}
-			//必须选择一个赛事
-			elseif(intval($bind['RaceCatalogId'])==0)
-			{
-				$response = array('errno' => 2);
-			}
 			else
 			{
                 //消费比例强制取正整数
                 $bind['CreditRate'] = abs(intval($bind['CreditRate']));
-				$res = $this->oCredit->insertCredit($bind);
+				$bind['comment'] = json_encode([]);
+                $res = $this->oCredit->insertCredit($bind);
 				$response = $res ? array('errno' => 0) : array('errno' => 9);
 			}
 			echo json_encode($response);
@@ -129,14 +107,12 @@ class Xrace_CreditController extends AbstractController
 		$PermissionCheck = $this->manager->checkMenuPermission("CreditModify");
 		if($PermissionCheck['return'])
 		{
-			//赛事列表
-			$RaceCatalogList  = $this->oRace->getRaceCatalogList(0,"*",0);
 			//积分ID
 			$CreditId = intval($this->request->CreditId);
 			//获取积分信息
 			$CreditInfo = $this->oCredit->getCredit($CreditId,'*');
 			//渲染模板
-			include $this->tpl('Xrace_Credit_CreditModify');
+			include $this->tpl('Hj_Credit_CreditModify');
 		}
 		else
 		{
@@ -153,22 +129,18 @@ class Xrace_CreditController extends AbstractController
 		{
 
 			//获取页面参数
-			$bind=$this->request->from('CreditId','CreditName','RaceCatalogId',"CreditRate");
+			$bind=$this->request->from('CreditId','CreditName',"CreditRate");
 			//积分名称不能为空
 			if(trim($bind['CreditName'])=="")
 			{
 				$response = array('errno' => 1);
 			}
-			//必须选择一个赛事
-			elseif(intval($bind['RaceCatalogId'])==0)
-			{
-				$response = array('errno' => 2);
-			}
 			else
 			{
 				//消费比例强制取正整数
 			    $bind['CreditRate'] = abs(intval($bind['CreditRate']));
-			    $res = $this->oCredit->updateCredit($bind['CreditId'],$bind);
+                $bind['comment'] = json_encode([]);
+                $res = $this->oCredit->updateCredit($bind['CreditId'],$bind);
 				$response = $res ? array('errno' => 0) : array('errno' => 9);
 			}
 			echo json_encode($response);
@@ -198,36 +170,13 @@ class Xrace_CreditController extends AbstractController
 		}
 	}
     //根据赛事获取积分类目列表
-    public function getCreditListByCatalogAction()
-    {
-        //检查权限
-        $PermissionCheck = $this->manager->checkMenuPermission("CreditModify");
-        if($PermissionCheck['return'])
-        {
-            //赛事ID
-            $RaceCatalogId = intval($this->request->RaceCatalogId);
-            //获取积分列表
-            $CreditList = $RaceCatalogId>0?$this->oCredit->getCreditList($RaceCatalogId,"CreditId,CreditName"):array();
-            //循环积分列表
-            foreach($CreditList as $CreditId => $CreditInfo)
-            {
-                echo  "<option value= '".$CreditId."'>".$CreditInfo['CreditName']."</option>";
-            }
-        }
-        else
-        {
-            $home = $this->sign;
-            include $this->tpl('403');
-        }
-    }
-    //根据赛事获取积分类目列表
     public function getFrequencyConditionAction()
     {
         //检查权限
         $PermissionCheck = $this->manager->checkMenuPermission("CreditModify");
         if($PermissionCheck['return'])
         {
-            $this->oAction = new Xrace_Action();
+            $this->oAction = new Hj_Action();
             //频率
             $Frequence = trim(urldecode($this->request->Frequence));
             //动作ID

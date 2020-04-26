@@ -5,7 +5,7 @@
  */
 
 
-class Xrace_Action extends Base_Widget
+class Hj_Action extends Base_Widget
 {
 	//声明所用到的表
 	protected $table = 'config_action';
@@ -15,9 +15,8 @@ class Xrace_Action extends Base_Widget
 	 * @param $fields
 	 * @return array
 	 */
-	public function getActionList($RaceCatalogId = 0,$fields = "*")
+	public function getActionList($fields = "*")
 	{
-		$RaceCatalogId = intval($RaceCatalogId);
 		//初始化查询条件
 		$whereCondition = array();
 		//生成条件列
@@ -110,7 +109,7 @@ class Xrace_Action extends Base_Widget
             $ActionInfo['CreditList'] = json_decode($ActionInfo['CreditList'],true);
             //初始化积分变更成功数量
             $Succeed = 0;
-            $oCredit = new Xrace_Credit();
+            $oCredit = new Hj_Credit();
             $CreditList = array();
             //循环积分数组
             foreach($ActionInfo['CreditList'] as $key => $CreditInfo)

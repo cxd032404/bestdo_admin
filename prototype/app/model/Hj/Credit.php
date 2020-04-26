@@ -5,7 +5,7 @@
  */
 
 
-class Xrace_Credit extends Base_Widget
+class Hj_Credit extends Base_Widget
 {
 	//声明所用到的表
 	protected $table = 'config_credit';
@@ -28,12 +28,10 @@ class Xrace_Credit extends Base_Widget
 	 * @param $fields
 	 * @return array
 	 */
-	public function getCreditList($RaceCatalogId = 0,$fields = "*")
+	public function getCreditList($fields = "*")
 	{
-		$RaceCatalogId = intval($RaceCatalogId);
 		//初始化查询条件
-		$whereCatalog = ($RaceCatalogId != 0)?" RaceCatalogId = $RaceCatalogId":"";
-		$whereCondition = array($whereCatalog);
+		$whereCondition = array();
 		//生成条件列
 		$where = Base_common::getSqlWhere($whereCondition);
 		$table_to_process = Base_Widget::getDbTable($this->table);
@@ -228,18 +226,14 @@ class Xrace_Credit extends Base_Widget
         $whereAction = (isset($params['ActionId']) && $params['ActionId']>0)?" ActionId = '".$params['ActionId']."' ":"";
         //积分
         $whereCredit = (isset($params['CreditId']) && $params['CreditId']>0)?" CreditId = '".$params['CreditId']."' ":"";
-        //比赛
-        $whereRace = (isset($params['RaceId']) && $params['RaceId']>0)?" RaceId = '".$params['RaceId']."' ":"";
         //开始时间
         $whereStartTime = isset($params['StartTime'])?" Time >= '".$params['StartTime']."' ":"";
         //结束时间
         $whereEndTime = isset($params['EndTime'])?" Time <= '".$params['EndTime']."' ":"";
         //订单
         $whereOrder = (isset($params['OrderId']) && $params['OrderId']!="")?" OrderId = '".$params['OrderId']."' ":"";
-        //订单
-        $whereUserApplied = (isset($params['UserApplied']) && $params['UserApplied']!=0)?" UserRaceId = '".$params['OrderId']."' ":"";
         //所有查询条件置入数组
-        $whereCondition = array($whereAction,$whereCredit,$whereRace,$whereUser,$whereStartTime,$whereEndTime,$whereOrder);
+        $whereCondition = array($whereAction,$whereCredit,$whereUser,$whereStartTime,$whereEndTime);
         //生成条件列
         $where = Base_common::getSqlWhere($whereCondition);
         //获取用户数量
@@ -297,16 +291,12 @@ class Xrace_Credit extends Base_Widget
         $whereAction = (isset($params['ActionId']) && $params['ActionId']>0)?" ActionId = '".$params['ActionId']."' ":"";
         //积分
         $whereCredit = (isset($params['CreditId']) && $params['CreditId']>0)?" CreditId = '".$params['CreditId']."' ":"";
-        //比赛
-        $whereRace = (isset($params['RaceId']) && $params['RaceId']>0)?" RaceId = '".$params['RaceId']."' ":"";
         //开始时间
         $whereStartTime = isset($params['StartTime'])?" Time >= '".$params['StartTime']."' ":"";
         //结束时间
         $whereEndTime = isset($params['EndTime'])?" Time <= '".$params['EndTime']."' ":"";
-        //订单
-        $whereOrder = (isset($params['OrderId']) && $params['OrderId']!="")?" OrderId = '".$params['OrderId']."' ":"";
         //所有查询条件置入数组
-        $whereCondition = array($whereAction,$whereCredit,$whereRace,$whereUser,$whereStartTime,$whereEndTime,$whereOrder);
+        $whereCondition = array($whereAction,$whereCredit,$whereUser,$whereStartTime,$whereEndTime);
         //生成条件列
         $where = Base_common::getSqlWhere($whereCondition);
         $sql = "SELECT $fields FROM $table_to_process where 1 ".$where;

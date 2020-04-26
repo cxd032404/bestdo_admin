@@ -4,19 +4,20 @@
  * @author Chen<cxd032404@hotmail.com>
  */
 
-class Xrace_ActionController extends AbstractController
+class Hj_ActionController extends AbstractController
 {
 	/**商品:Action
 	 * @var string
 	 */
-	protected $sign = '?ctl=xrace/action';
-	/**
+	protected $sign = '?ctl=hj/action';
+    protected $ctl = 'hj/action';
+
+    /**
 	 * game对象
 	 * @var object
 	 */
 	protected $oAction;
     protected $oCredit;
-    protected $oRace;
 	/**
 	 * 初始化
 	 * (non-PHPdoc)
@@ -25,9 +26,8 @@ class Xrace_ActionController extends AbstractController
 	public function init()
 	{
 		parent::init();
-		$this->oAction = new Xrace_Action();
-        $this->oRace = new Xrace_Race();
-        $this->oCredit = new Xrace_Credit();
+		$this->oAction = new Hj_Action();
+        $this->oCredit = new Hj_Credit();
     }
 	//动作列表页面
 	public function indexAction()
@@ -47,7 +47,7 @@ class Xrace_ActionController extends AbstractController
                 $ActionList[$ActionId]['CreditListHtml'] = $this->oCredit->ParthCreditListToHtml($ActionInfo['CreditList'],$ActionId,1,1);
 			}
 			//模版渲染
-			include $this->tpl('Xrace_Action_ActionList');
+			include $this->tpl('Hj_Action_ActionList');
 		}
 		else
 		{
@@ -63,7 +63,7 @@ class Xrace_ActionController extends AbstractController
 		if($PermissionCheck['return'])
 		{
 			//渲染模板
-			include $this->tpl('Xrace_Action_ActionAdd');
+			include $this->tpl('Hj_Action_ActionAdd');
 		}
 		else
 		{
@@ -130,7 +130,7 @@ class Xrace_ActionController extends AbstractController
             //转变为文本
             $CreditListHtml = $this->oCredit->ParthCreditListToHtml($ActionInfo['CreditList'],$ActionId,1,1);
             //渲染模板
-			include $this->tpl('Xrace_Action_ActionModify');
+			include $this->tpl('Hj_Action_ActionModify');
 		}
 		else
 		{
@@ -202,12 +202,10 @@ class Xrace_ActionController extends AbstractController
             $ActionId = intval($this->request->ActionId);
             //动作信息
             $ActionInfo = $this->oAction->getAction($ActionId,'*');
-            //获取赛事列表
-            $RaceCatalogList  = $this->oRace->getRaceCatalogList(0,"RaceCatalogId,RaceCatalogName",0);
             //获取可选频率列表
             $CreditFrequenceList  = $this->oCredit->getCreditFrequenceList();
             //模板渲染
-            include $this->tpl('Xrace_Action_ActionCreditAdd');
+            include $this->tpl('Hj_Action_ActionCreditAdd');
         }
         else
         {
@@ -233,16 +231,14 @@ class Xrace_ActionController extends AbstractController
             //获取当前选中的积分配置
             $Credit = $ActionInfo['CreditList'][$CId];
             //获取积分信息
-            $CreditInfo = $this->oCredit->getCredit($Credit['CreditId'],"RaceCatalogId,CreditId");
+            $CreditInfo = $this->oCredit->getCredit($Credit['CreditId'],"CreditId");
             //获取积分列表
-            $CreditList = $this->oCredit->getCreditList($CreditInfo['RaceCatalogId'],"CreditId,CreditName");
-            //获取赛事列表
-            $RaceCatalogList  = $this->oRace->getRaceCatalogList(0,"RaceCatalogId,RaceCatalogName",0);
+            $CreditList = $this->oCredit->getCreditList("CreditId,CreditName");
             //获取可选频率列表
             $CreditFrequenceList  = $this->oCredit->getCreditFrequenceList();
             $ConditionText = $this->oCredit->parthFrequenceConditioToHtml($CreditFrequenceList[$Credit['Frequency']],$Credit['ParamList']);
             //模板渲染
-            include $this->tpl('Xrace_Action_ActionCreditModify');
+            include $this->tpl('Hj_Action_ActionCreditModify');
         }
         else
         {
