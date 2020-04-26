@@ -4,7 +4,7 @@
 
 <form id="upload_form" name="upload_form" action="{tpl:$this.sign/}&ac=send																											" method="post">
 	<input type="hidden" name="SportsTypeId" value="1" />
-	<table width="99%" align="center" class="table table-bordered table-striped" widtd="99%">
+	<table width="99%" align="center" class="table table-bordered table-striped" >
 		<tr class="hover"><td>手机号码：</td>
 			<td align="left"><input name="mobile" type="text" id="mobile" /></td>
 		</tr>

@@ -24,7 +24,7 @@ class UpdateLogController extends AbstractController
 	public function init()
 	{
 		parent::init();
-		$this->oUpdateLog = new Bestdo_UpdateLog();
+		$this->oUpdateLog = new Hj_UpdateLog();
 	}
 	//更新记录列表页面
 	public function indexAction()

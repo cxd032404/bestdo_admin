@@ -43,7 +43,7 @@ class IndexController extends AbstractController
 
     public function homeAction()
     {
-        $oUpdateLog = new Bestdo_UpdateLog();
+        $oUpdateLog = new Hj_UpdateLog();
         //获取更新记录列表
         $UpdateLogList = $oUpdateLog->getUpdateLogList(1,8);
         //更新记录类型列表

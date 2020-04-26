@@ -4,7 +4,7 @@
 
 <form id="upload_form" name="upload_form" action="{tpl:$this.sign/}&ac=rich.upload" method="post">
 	<input type="hidden" name="SportsTypeId" value="1" />
-	<table width="99%" align="center" class="table table-bordered table-striped" widtd="99%">
+	<table width="99%" align="center" class="table table-bordered table-striped" >
 		<tr class="hover"><td>图片上传1：</td>
 			<td align="left"><input name="upload_img[1]" type="file" id="upload_img[1]" /></td>
 		</tr>

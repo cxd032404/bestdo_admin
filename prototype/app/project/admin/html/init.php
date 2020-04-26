@@ -5,7 +5,7 @@
  * $Id: init.php 15195 2014-07-23 07:18:26Z 334746 $
  */
 
-//error_reporting(e_all);
+//error_reporting();
 
 define('__APP_ROOT_DIR__', dirname(dirname(__FILE__)) . '/');
 define('__APP_VAR_DIR__',__APP_ROOT_DIR__ . 'var/');

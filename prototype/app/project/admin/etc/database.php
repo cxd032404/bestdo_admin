@@ -7,20 +7,20 @@ include dirname(dirname(dirname(dirname(dirname(dirname(__FILE__))))))."/CommonC
 
 $db = array();
 $db['isPersistent'] = 0;
-$db['bestdo_config'][0] = array(
+$db['hj_config'][0] = array(
 	'host' => HOST_LOCAL,
 	'user' => USER_LOCAL,
 	'password' => PASSWORD_LOCAL,
 	'port' => PORT_LOCAL,
-	'database' => 'bestdo_config',
+	'database' => 'hj_config',
 );
 
-$db['bestdo_user'][0] = array(
+$db['hj_user'][0] = array(
 	'host' => HOST_LOCAL,
 	'user' => USER_LOCAL,
 	'password' => PASSWORD_LOCAL,
 	'port' => PORT_LOCAL,
-	'database' => 'bestdo_user',
+	'database' => 'hj_user',
 );
 
 return $db;

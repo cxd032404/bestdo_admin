@@ -21,7 +21,7 @@ class Third_aliyun_oss_OssClientFile
         $returnArr = [];
         foreach($fileArr as $key => $file)
         {
-            if($file['error'] == 0)
+            if(!isset($file['error']) || $file['error'] == 0)
             {
                 $local_file = $file['path'];
                 $object = "public/xrace/images".$file['path_root'];

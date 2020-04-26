@@ -2,7 +2,7 @@
 <div class="br_bottom"></div>
 <form id="update_log_update_form" name="update_log_update_form" action="{tpl:$this.sign/}&ac=update.log.update" method="post">
 <input type="hidden" name="UpdateLogId" id="UpdateLogId" value="{tpl:$UpdateLogInfo.UpdateLogId/}" />
-<table width="99%" align="center" class="table table-bordered table-striped" widtd="99%">
+<table width="99%" align="center" class="table table-bordered table-striped" >
     <tr class="hover">
         <td>更新日期</td>
         <td align="left"><input type="text" name="UpdateDate" value="{tpl:$UpdateLogInfo.UpdateDate/}" class="input-medium"   onFocus="WdatePicker({isShowClear:false,readOnly:true,dateFmt:'yyyy-MM-dd'})" ></td>
