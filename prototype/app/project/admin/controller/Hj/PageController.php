@@ -87,7 +87,7 @@ class Hj_PageController extends AbstractController
 	public function pageInsertAction()
 	{
 		//检查权限
-		$bind=$this->request->from('page_name','page_url','company_id');
+		$bind=$this->request->from('page_name','page_url','company_id','page_sign');
 		//页面名称不能为空
 		if(trim($bind['page_name'])=="")
 		{
@@ -101,12 +101,19 @@ class Hj_PageController extends AbstractController
 			}
 			else
 			{
-				$bind['comment'] = [];
-				//数据打包
-	            $bind['comment'] = json_encode($bind['comment']);
-			    //添加页面
-				$res = $this->oPage->insertPage($bind);
-				$response = $res ? array('errno' => 0,'company_id'=>$bind['company_id']) : array('errno' => 9);
+                if(trim($bind['page_sign'])=="")
+                {
+                    $response = array('errno' => 3);
+                }
+                else
+                {
+                    $bind['comment'] = [];
+                    //数据打包
+                    $bind['comment'] = json_encode($bind['comment']);
+                    //添加页面
+                    $res = $this->oPage->insertPage($bind);
+                    $response = $res ? array('errno' => 0,'company_id'=>$bind['company_id']) : array('errno' => 9);
+                }
 			}
 
 		}
@@ -141,7 +148,7 @@ class Hj_PageController extends AbstractController
 	public function pageUpdateAction()
 	{
 	    //接收页面参数
-		$bind=$this->request->from('page_id','page_name','company_id','page_url');
+		$bind=$this->request->from('page_id','page_name','company_id','page_url','page_sign');
         //页面名称不能为空
 		if(trim($bind['page_name'])=="")
 		{
@@ -155,12 +162,19 @@ class Hj_PageController extends AbstractController
 			}
 			else
 			{
-	            //数据打包
-	            $bind['comment'] = json_encode([]);
-				$currentPageInfo = $this->oPage->getPage($bind['page_id'],"page_id,company_id");
-				//修改页面
-				$res = $this->oPage->updatePage($bind['page_id'],$bind);
-				$response = $res ? array('errno' => 0,'company_id'=>$bind['company_id']) : array('errno' => 9,'company_id'=>$currentPageInfo['company_id']);	
+                if(trim($bind['page_url'])=="")
+                {
+                    $response = array('errno' => 2);
+                }
+                else
+                {
+                    //数据打包
+                    $bind['comment'] = json_encode([]);
+                    $currentPageInfo = $this->oPage->getPage($bind['page_id'],"page_id,company_id");
+                    //修改页面
+                    $res = $this->oPage->updatePage($bind['page_id'],$bind);
+                    $response = $res ? array('errno' => 0,'company_id'=>$bind['company_id']) : array('errno' => 9,'company_id'=>$currentPageInfo['company_id']);
+                }
 			}
 		}
 		echo json_encode($response);

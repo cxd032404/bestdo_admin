@@ -12,6 +12,9 @@
 <td>页面url</td>
 	<td align="left"><input type="text" class="span4" name="page_url"  id="page_url" value="{tpl:$pageInfo.page_url/}" size="50" /></td>
 </tr>
+<td>页面标识</td>
+<td align="left"><input type="text" class="span4" name="page_sign"  id="page_sign" value="{tpl:$pageInfo.page_sign/}" size="50" /></td>
+</tr>
 <tr class="hover"><td>属于企业</td>
 	<td align="left">	<select name="company_id"  id="company_id" size="1">
 			{tpl:loop $companyList  $company_info}
@@ -36,6 +39,7 @@ $('#page_update_submit').click(function(){
 				var errors = [];
 				errors[1] = '页面名称不能为空，请修正后再次提交';
 				errors[2] = '页面url不能为空，请修正后再次提交';
+				errors[3] = '页面标识不能为空，请修正后再次提交';
 				errors[9] = '入库失败，请修正后再次提交';
 				divBox.alertBox(errors[jsonResponse.errno],function(){});
 			} else {
