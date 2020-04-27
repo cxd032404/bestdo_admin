@@ -2,7 +2,7 @@
 <script type="text/javascript">
 $(document).ready(function(){
   $('#add_activity').click(function(){
-    addactivityBox = divBox.showBox('{tpl:$this.sign/}&ac=activity.add', {title:'添加活动',width:600,height:400});
+    addactivityBox = divBox.showBox('{tpl:$this.sign/}&ac=activity.add', {title:'添加活动',width:600,height:500});
   });
 });
 
@@ -12,7 +12,7 @@ function activityDelete(p_id,p_name){
 }
 
 function activityModify(mid){
-  modifyactivityBox = divBox.showBox('{tpl:$this.sign/}&ac=activity.modify&activity_id=' + mid, {title:'修改活动',width:600,height:350});
+  modifyactivityBox = divBox.showBox('{tpl:$this.sign/}&ac=activity.modify&activity_id=' + mid, {title:'修改活动',width:600,height:500});
 }
 
 </script>

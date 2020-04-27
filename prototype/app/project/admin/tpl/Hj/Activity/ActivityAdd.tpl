@@ -24,6 +24,10 @@
 			{/tpl:loop}
 		</select></td>
 </tr>
+<tr class="hover">
+	<td>图片上传：</td>
+	<td align="left"><input name="upload_img[1]" type="file" id="upload_img[1]" /></td>
+</tr>
 	<tr class="noborder"><td></td>
 <td><button type="submit" id="activity_add_submit">提交</button></td>
 </tr>
@@ -38,6 +42,7 @@ $('#activity_add_submit').click(function(){
 			if (jsonResponse.errno) {
 				var errors = [];
 				errors[1] = '活动名称不能为空，请修正后再次提交';
+				errors[2] = '没有上传图片或上传失败，请修正后再次提交';
 				errors[3] = '活动标识不能为空，请修正后再次提交';
 				errors[4] = '活动标识'+$('#activity_sign').val()+'已重复，请修正后再次提交';
 				errors[9] = '入库失败，请修正后再次提交';

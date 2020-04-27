@@ -129,7 +129,7 @@ class Hj_CompanyController extends AbstractController
 			//获取企业信息
 			$companyInfo = $this->oCompany->getCompany($company_id,'*');
 			//数据解包
-			$companyInfo['comment'] = json_decode($company_info['comment'],true);
+			$companyInfo['comment'] = json_decode($companyInfo['comment'],true);
 			//获取顶级企业列表
 			$companyList = $this->oCompany->getCompanyList(['parent_id'=>0],"company_id,company_name");
             //渲染模版

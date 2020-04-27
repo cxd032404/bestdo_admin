@@ -376,15 +376,22 @@ class Hj_PageController extends AbstractController
 			//获取元素类型列表
 			$elementInfo = $this->oPageElement->getPageElement($element_id);
 			$elementInfo['detail'] = json_decode($elementInfo['detail'],true);
-			$t = [];
 			if($elementInfo['element_type'] == "slideNavi")
             {
+                $t = [];
                 foreach($elementInfo['detail']['jump_urls'] as $k => $d)
                 {
                     $t[] = $k."|".$d;
                 }
                 $t = implode(',&#10;',$t);
             }
+            elseif($elementInfo['element_type'] == "activityApply")
+            {
+                $pageInfo = (new Hj_Page())->getPage($elementInfo['page_id'],"page_id,company_id");
+                //获取活动列表
+                $activityList = (new Hj_Activity())->getActivityList(['company_id'=>$pageInfo['company_id']],"activity_id,activity_name");
+            }
+
 			$elementTypeInfo = $this->oElementType->getElementType($elementInfo['element_type']);
 			//渲染模版
 			include $this->tpl('Hj_Page_PageElement_'.$elementInfo['element_type']);
@@ -456,6 +463,10 @@ class Hj_PageController extends AbstractController
         {
             $text = $this->request->text;
             $elementDetail['detail']['text'] = $text;
+        }
+        elseif(in_array($elementDetail['element_type'],['activityApply']))
+        {
+            $elementDetail['detail']['activity_id'] = $detail['activity_id'];
         }
 	    if(!isset($response))
 	    {

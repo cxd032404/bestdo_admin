@@ -6,7 +6,7 @@
 
 class Hj_ActivityController extends AbstractController
 {
-	/**页面:Acitvity
+	/**活动:Acitvity
 	 * @var string
 	 */
 	protected $sign = '?ctl=hj/activity';
@@ -32,20 +32,20 @@ class Hj_ActivityController extends AbstractController
 		$this->oCompany = new Hj_Company();
 
 	}
-	//页面配置列表页面
+	//活动配置列表活动
 	public function indexAction()
 	{
 		//检查权限
 		$PermissionCheck = $this->manager->checkMenuPermission(0);
 		if($PermissionCheck['return'])
 		{
-			//页面ID
+			//活动ID
 			$company_id = intval($this->request->company_id??0);
-			//获取页面列表
+			//获取活动列表
 			$activityList = $this->oActivity->getActivityList(['company_id'=>$company_id]);
 			//获取企业列表
 			$companyList = $this->oCompany->getCompanyList([],"company_id,company_name");
-			//循环页面列表
+			//循环活动列表
 			foreach($activityList as $key => $activityInfo)
             {
                 //数据解包
@@ -61,14 +61,14 @@ class Hj_ActivityController extends AbstractController
 			include $this->tpl('403');
 		}
 	}
-	//添加页面类型填写配置页面
+	//添加活动类型填写配置活动
 	public function activityAddAction()
 	{
 		//检查权限
 		$PermissionCheck = $this->manager->checkMenuPermission("addActivity");
 		if($PermissionCheck['return'])
 		{
-			//获取顶级页面列表
+			//获取顶级活动列表
 			$companyList = $this->oCompany->getCompanyList([],"company_id,company_name");
 			//渲染模版
 			include $this->tpl('Hj_Activity_ActivityAdd');
@@ -79,13 +79,13 @@ class Hj_ActivityController extends AbstractController
 			include $this->tpl('403');
 		}
 	}
-	
-	//添加新页面
+
+	//添加新活动
 	public function activityInsertAction()
 	{
 		//检查权限
 		$bind=$this->request->from('activity_name','company_id','activity_sign','start_time','end_time','apply_start_time','apply_end_time');
-		//页面名称不能为空
+		//活动名称不能为空
 		if(trim($bind['activity_name'])=="")
 		{
 			$response = array('errno' => 1);
@@ -105,31 +105,41 @@ class Hj_ActivityController extends AbstractController
                 }
                 else
                 {
-                    $bind['comment'] = [];
-                    //数据打包
-                    $bind['comment'] = json_encode($bind['comment']);
-                    //添加页面
-                    $res = $this->oActivity->insertActivity($bind);
-                    $response = $res ? array('errno' => 0) : array('errno' => 9);
+                    $oUpload = new Base_Upload('upload_img');
+                    $upload = $oUpload->upload('upload_img',$this->config->oss);
+                    $oss_urls = array_column($upload->resultArr,'oss');
+                    $bind['icon'] = implode("",$oss_urls);
+                    if(trim($bind['icon'])=="")
+                    {
+                        $response = array('errno' => 2);
+                    }
+                    else
+                    {
+                        $bind['comment'] = [];
+                        //数据打包
+                        $bind['comment'] = json_encode($bind['comment']);
+                        //添加活动
+                        $res = $this->oActivity->insertActivity($bind);
+                        $response = $res ? array('errno' => 0) : array('errno' => 9);
+                    }
                 }
             }
 		}
 		echo json_encode($response);
 		return true;
 	}
-	
-	//修改页面信息页面
+
+	//修改活动信息活动
 	public function activityModifyAction()
 	{
 		//检查权限
 		$PermissionCheck = $this->manager->checkMenuPermission("updateActivity");
 		if($PermissionCheck['return'])
 		{
-			//页面ID
+			//活动ID
 			$activity_id= intval($this->request->activity_id);
-			//获取页面信息
+			//获取活动信息
 			$activityInfo = $this->oActivity->getActivity($activity_id,'*');
-			print_R($activityInfo);
 			//获取企业列表
 			$companyList = $this->oCompany->getCompanyList([],"company_id,company_name");
             //渲染模版
@@ -141,58 +151,64 @@ class Hj_ActivityController extends AbstractController
 			include $this->tpl('403');
 		}
 	}
-	
-	//更新页面信息
+
+	//更新活动信息
 	public function activityUpdateAction()
 	{
-	    //接收页面参数
+	    //接收活动参数
         $bind=$this->request->from('activity_id','activity_name','company_id','activity_sign','start_time','end_time','apply_start_time','apply_end_time');
-        //页面名称不能为空
+        //活动名称不能为空
 		if(trim($bind['activity_name'])=="")
 		{
 			$response = array('errno' => 1);
 		}
 		else
 		{
-
-                if(trim($bind['activity_sign'])=="")
+            if(trim($bind['activity_sign'])=="")
+            {
+                $response = array('errno' => 3);
+            }
+            else
+            {
+                $activityExists = $this->oActivity->getActivityList(['company_id'=>$bind['company_id'],'activity_sign'=>$bind['activity_sign'],'exclude_id'=>$bind['activity_id']],'activity_id,activity_sign');
+                if(count($activityExists)>0)
                 {
-                    $response = array('errno' => 3);
+                    $response = array('errno' => 4);
                 }
                 else
                 {
-                    $activityExists = $this->oActivity->getActivityList(['company_id'=>$bind['company_id'],'activity_sign'=>$bind['activity_sign'],'exclude_id'=>$bind['activity_id']],'activity_id,activity_sign');
-                    if(count($activityExists)>0)
+                    $oUpload = new Base_Upload('upload_img');
+                    $upload = $oUpload->upload('upload_img',$this->config->oss);
+                    $oss_urls = array_column($upload->resultArr,'oss');
+                    $bind['icon'] = implode("",$oss_urls);
+                    if(trim($bind['icon']) == "")
                     {
-                        $response = array('errno' => 4);
+                        unset($bind['icon']);
                     }
-                    else
-                    {
-                        //数据打包
-                        $bind['comment'] = json_encode([]);
-                        //修改页面
-                        $res = $this->oActivity->updateActivity($bind['activity_id'],$bind);
-                        $response = $res ? array('errno' => 0) : array('errno' => 9);
-                    }
+                    //数据打包
+                    $bind['comment'] = json_encode([]);
+                    //修改活动
+                    $res = $this->oActivity->updateActivity($bind['activity_id'],$bind);
+                    $response = $res ? array('errno' => 0) : array('errno' => 9);
                 }
-
+            }
 		}
 		echo json_encode($response);
 		return true;
 	}
-	
-	//删除页面
+
+	//删除活动
 	public function activityDeleteAction()
 	{
 		//检查权限
 		$PermissionCheck = $this->manager->checkMenuPermission("deleteActivity");
 		if($PermissionCheck['return'])
 		{
-			//页面ID
+			//活动ID
 			$activity_id = trim($this->request->activity_id);
-			//删除页面
+			//删除活动
 			$this->oActivity->deleteActivity($activity_id);
-			//返回之前的页面
+			//返回之前的活动
 			$this->response->goBack();
 		}
 		else
@@ -202,24 +218,24 @@ class Hj_ActivityController extends AbstractController
 		}
 	}
 
-	//修改页面详情（元素列表）页面
+	//修改活动详情（元素列表）活动
 	public function activityDetailAction()
 	{
 		//检查权限
 		$PermissionCheck = $this->manager->checkMenuPermission("updatePage");
 		if($PermissionCheck['return'])
 		{
-			//页面ID
+			//活动ID
 			$activity_id= intval($this->request->activity_id);
-			//获取页面信息
-			$activityInfo = $this->oActivity->getPage($activity_id,'*');			
+			//获取活动信息
+			$activityInfo = $this->oActivity->getPage($activity_id,'*');
 			//获取元素信息
 			$activityElementList = $this->oActivityElement->getElementList(['activity_id'=>$activity_id]);
 			//获取元素类型列表
 			$elementTypeList = $this->oElementType->getElementTypeList();
 			//获取企业列表
 			$companyList = $this->oCompany->getCompanyList([],"company_id,company_name");
-            foreach ($activityElementList as $elementSign => $elementInfo) 
+            foreach ($activityElementList as $elementSign => $elementInfo)
             {
             	$activityElementList[$elementSign]['element_type_name'] = $elementTypeList[$elementInfo['element_type']]['element_type_name']??"未知类型";
             }
@@ -232,14 +248,14 @@ class Hj_ActivityController extends AbstractController
 			include $this->tpl('403');
 		}
 	}
-	//添加页面元素信息页面
+	//添加活动元素信息活动
 	public function activityElementAddAction()
 	{
 		//检查权限
 		$PermissionCheck = $this->manager->checkMenuPermission("updatePage");
 		if($PermissionCheck['return'])
 		{
-			//页面ID
+			//活动ID
 			$activity_id= intval($this->request->activity_id);
 			//获取元素类型列表
 			$elementTypeList = $this->oElementType->getElementTypeList([],"element_type,element_type_name");
@@ -252,19 +268,19 @@ class Hj_ActivityController extends AbstractController
 			include $this->tpl('403');
 		}
 	}
-	//添加新页面元素
+	//添加新活动元素
 	public function activityElementInsertAction()
 	{
 		//检查权限
 		$bind=$this->request->from('element_name','element_type','activity_id','element_sign');
-		//页面元素名称不能为空
+		//活动元素名称不能为空
 		if(trim($bind['element_name'])=="")
 		{
 			$response = array('errno' => 1);
 		}
 		else
 		{
-			//页面元素名称不能为空
+			//活动元素名称不能为空
 			if(trim($bind['element_sign'])=="")
 			{
 				$response = array('errno' => 2);
@@ -279,7 +295,7 @@ class Hj_ActivityController extends AbstractController
                 else
                 {
                     $bind['detail'] = json_encode([]);
-                    //添加页面元素
+                    //添加活动元素
                     $res = $this->oActivityElement->insertPageElement($bind);
                     $response = $res ? array('errno' => 0) : array('errno' => 9);
                 }
@@ -288,14 +304,14 @@ class Hj_ActivityController extends AbstractController
 		echo json_encode($response);
 		return true;
 	}
-	//修改页面元素信息页面
+	//修改活动元素信息活动
 	public function activityElementModifyAction()
 	{
 		//检查权限
 		$PermissionCheck = $this->manager->checkMenuPermission("updatePage");
 		if($PermissionCheck['return'])
 		{
-			//页面ID
+			//活动ID
 			$element_id= intval($this->request->element_id);
 			//获取元素类型列表
 			$elementInfo = $this->oActivityElement->getPageElement($element_id);
@@ -310,19 +326,19 @@ class Hj_ActivityController extends AbstractController
 			include $this->tpl('403');
 		}
 	}
-	//修改页面元素
+	//修改活动元素
 	public function activityElementUpdateAction()
 	{
 		//检查权限
 		$bind=$this->request->from('element_id','element_name','element_type','element_sign');
-		//页面元素名称不能为空
+		//活动元素名称不能为空
 		if(trim($bind['element_name'])=="")
 		{
 			$response = array('errno' => 1);
 		}
 		else
 		{
-			//页面元素名称不能为空
+			//活动元素名称不能为空
 			if(trim($bind['element_sign'])=="")
 			{
 				$response = array('errno' => 2);
@@ -338,7 +354,7 @@ class Hj_ActivityController extends AbstractController
                 else
                 {
                     $bind['detail'] = json_encode([]);
-                    //添加页面元素
+                    //添加活动元素
                     $res = $this->oActivityElement->updatePageElement($bind['element_id'],$bind);
                     $response = $res ? array('errno' => 0) : array('errno' => 9);
                 }
@@ -348,7 +364,7 @@ class Hj_ActivityController extends AbstractController
 		echo json_encode($response);
 		return true;
 	}
-	//修改页面元素信息页面
+	//修改活动元素信息活动
 	public function activityElementDetailAction()
 	{
 		//检查权限
@@ -379,7 +395,7 @@ class Hj_ActivityController extends AbstractController
 			include $this->tpl('403');
 		}
 	}
-	//修改页面元素
+	//修改活动元素
 	public function activityElementDetailUpdateAction()
 	{
 		//元素ID
@@ -399,7 +415,7 @@ class Hj_ActivityController extends AbstractController
 				$response = array('errno' => 2);
 	        }
 	        else
-	        {	        	
+	        {
 	        	//这次传成功了就用这次，否则维持
 	        	$elementDetail['detail']['img_url'] = (isset($oss_urls['0']) && $oss_urls['0']!="")?($oss_urls['0']):($elementDetail['detail']['img_url']);
 	        	//保存跳转链接
@@ -450,18 +466,18 @@ class Hj_ActivityController extends AbstractController
 		echo json_encode($response);
 		return true;
 	}
-	//删除页面元素
+	//删除活动元素
 	public function activityElementDeleteAction()
 	{
 		//检查权限
 		$PermissionCheck = $this->manager->checkMenuPermission("updatePage");
 		if($PermissionCheck['return'])
 		{
-			//页面元素ID
+			//活动元素ID
 			$element_id = trim($this->request->element_id);
-			//删除页面元素
+			//删除活动元素
 			$this->oActivityElement->deletePageElement($element_id);
-			//返回之前的页面
+			//返回之前的活动
 			$this->response->goBack();
 		}
 		else
@@ -470,7 +486,7 @@ class Hj_ActivityController extends AbstractController
 			include $this->tpl('403');
 		}
 	}
-    //添加页面元素单个详情页面
+    //添加活动元素单个详情活动
     public function activityElementSingleDetailAddAction()
     {
         //检查权限
@@ -490,7 +506,7 @@ class Hj_ActivityController extends AbstractController
             include $this->tpl('403');
         }
     }
-    //添加页面单个元素详情
+    //添加活动单个元素详情
     public function activityElementSingleDetailInsertAction()
     {
         //元素ID
@@ -520,7 +536,7 @@ class Hj_ActivityController extends AbstractController
         echo json_encode($response);
         return true;
     }
-    //修改页面单个元素详情页面
+    //修改活动单个元素详情活动
     public function activityElementSingleDetailModifyAction()
     {
         //元素ID
@@ -535,7 +551,7 @@ class Hj_ActivityController extends AbstractController
             include $this->tpl('Hj_Activity_ActivityElementDetail_Modify_'.$elementDetail['element_type']);
         }
     }
-    //删除页面单个元素详情
+    //删除活动单个元素详情
     public function activityElementSingleDetailDeleteAction()
     {
         //元素ID
@@ -555,7 +571,7 @@ class Hj_ActivityController extends AbstractController
         }
         $this->response->goBack();
     }
-    //添加页面元素详情
+    //添加活动元素详情
     public function activityElementSingleDetailUpdateAction()
     {
         //元素ID
