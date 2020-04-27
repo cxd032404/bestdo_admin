@@ -18,8 +18,10 @@ class Hj_Company extends Base_Widget
 	public function getCompanyList($params = [],$fields = "*")
 	{
 		$table_to_process = Base_Widget::getDbTable($this->table);
-	    $whereParent = isset($params['parent_id'])?" parent_id = ".$params['parent_id']:"";
-        $whereCondition = array($whereParent);
+        $whereName = (isset($params['company_name']) && trim($params['company_name'])!="")?" company_name = '".$params['company_name']."'":"";
+        $whereParent = (isset($params['parent_id'])&& $params['parent_id']>0)?" parent_id = ".$params['parent_id']:"";
+        $whereExclude = (isset($params['exclude_id'])&& $params['exclude_id']>0)?" company_id != ".$params['exclude_id']:"";
+        $whereCondition = array($whereParent,$whereName,$whereExclude);
         $where = Base_common::getSqlWhere($whereCondition);
 		$sql = "SELECT $fields FROM " . $table_to_process . " where 1 ".$where." ORDER BY company_id ASC";
 		$return = $this->db->getAll($sql);

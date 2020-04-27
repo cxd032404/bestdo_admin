@@ -88,24 +88,30 @@ class Hj_CompanyController extends AbstractController
 		}
 		else
 		{
-            $oUpload = new Base_Upload('upload_img');
-	        $upload = $oUpload->upload('upload_img',$this->config->oss);
-	        $oss_urls = array_column($upload->resultArr,'oss');
-	        
-	        $bind['icon'] = implode("",$oss_urls);
-			if(trim($bind['icon'])=="")
-			{
-				$response = array('errno' => 2);
-			}
-			else
-			{
-				//数据打包
-	            $bind['comment'] = json_encode($bind['comment']);
-			    //添加企业
-				$res = $this->oCompany->insertCompany($bind);
-				$response = $res ? array('errno' => 0) : array('errno' => 9);
-			}
-
+            $companyExists = $this->oCompany->getCompanyList(['company_name'=>$bind['company_name']],'company_id,company_name');
+            if(count($companyExists)>0)
+            {
+                $response = array('errno' => 3);
+            }
+            else
+            {
+                $oUpload = new Base_Upload('upload_img');
+                $upload = $oUpload->upload('upload_img',$this->config->oss);
+                $oss_urls = array_column($upload->resultArr,'oss');
+                $bind['icon'] = implode("",$oss_urls);
+                if(trim($bind['icon'])=="")
+                {
+                    $response = array('errno' => 2);
+                }
+                else
+                {
+                    //数据打包
+                    $bind['comment'] = json_encode($bind['comment']);
+                    //添加企业
+                    $res = $this->oCompany->insertCompany($bind);
+                    $response = $res ? array('errno' => 0) : array('errno' => 9);
+                }
+            }
 		}
 		echo json_encode($response);
 		return true;
@@ -149,20 +155,28 @@ class Hj_CompanyController extends AbstractController
 		}
 		else
 		{
-            $oUpload = new Base_Upload('upload_img');
-	        $upload = $oUpload->upload('upload_img',$this->config->oss);
-	        $oss_urls = array_column($upload->resultArr,'oss');
-	        
-	        $bind['icon'] = implode("",$oss_urls);
-	        if(trim($bind['icon']) == "")
-	        {
-	        	unset($bind['icon']);
-	        } 
-            //数据打包
-            $bind['comment'] = json_encode($bind['comment']);
-			//修改企业
-			$res = $this->oCompany->updateCompany($bind['company_id'],$bind);
-			$response = $res ? array('errno' => 0) : array('errno' => 9);
+            $companyExists = $this->oCompany->getCompanyList(['company_name'=>$bind['company_name'],'exclude_id'=>$bind['company_id']],'company_id,company_name');
+            if(count($companyExists)>0)
+            {
+                $response = array('errno' => 3);
+            }
+            else
+            {
+                $oUpload = new Base_Upload('upload_img');
+                $upload = $oUpload->upload('upload_img',$this->config->oss);
+                $oss_urls = array_column($upload->resultArr,'oss');
+
+                $bind['icon'] = implode("",$oss_urls);
+                if(trim($bind['icon']) == "")
+                {
+                    unset($bind['icon']);
+                }
+                //数据打包
+                $bind['comment'] = json_encode($bind['comment']);
+                //修改企业
+                $res = $this->oCompany->updateCompany($bind['company_id'],$bind);
+                $response = $res ? array('errno' => 0) : array('errno' => 9);
+            }
 		}
 		echo json_encode($response);
 		return true;

@@ -55,6 +55,7 @@ $('#company_update_submit').click(function(){
 			if (jsonResponse.errno) {
 				var errors = [];
 				errors[1] = '企业名称不能为空，请修正后再次提交';
+				errors[3] = '企业名称'+$('#company_name').val()+'已重复，请修正后再次提交';
 				errors[9] = '入库失败，请修正后再次提交';
 				divBox.alertBox(errors[jsonResponse.errno],function(){});
 			} else {
