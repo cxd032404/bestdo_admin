@@ -300,13 +300,15 @@ class MenuController extends AbstractController
 	 * @author 张骥
 	 */
 	public function deleteAction()
-	{		
-		$this->manager->checkMenuPermission("DeleteMenu");
+	{
+        $PermissionCheck = $this->manager->checkMenuPermission("DeleteMenu");
 		if($PermissionCheck['return'])
 		{
 			$menu_id = intval($this->request->menu_id);
 			$Menu = new Widget_Menu();
 			$res = $Menu->delete($menu_id);
+			$Permission = new Widget_Menu_Permission();
+			$res = $Permission->deletePermissionByMenu($menu_id);
 			$this->response->goBack();
 		}
 		else
