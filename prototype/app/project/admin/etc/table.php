@@ -94,4 +94,8 @@ $table['config_page_element']['num'] = 1;
 #页面元素类型
 $table['config_element']['db'] = 'hj_config';
 $table['config_element']['num'] = 1;
+
+#活动相关
+$table['config_activity']['db'] = 'hj_config';
+$table['config_activity']['num'] = 1;
 return $table;

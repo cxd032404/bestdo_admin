@@ -45,7 +45,7 @@ $('#page_update_submit').click(function(){
 				divBox.alertBox(errors[jsonResponse.errno],function(){});
 			} else {
 				var message = '修改页面成功';
-				divBox.confirmBox({content:message,ok:function(){windowParent.getRightHtml('{tpl:$this.sign/}' + '&company_id=' + jsonResponse.company_id);}});
+				divBox.confirmBox({content:message,ok:function(){windowParent.getRightHtml('{tpl:$this.sign/}' + '&company_id=' + $('#company_id').val());}});
 			}
 		}
 	};

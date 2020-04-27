@@ -1,24 +1,24 @@
 <?php
 /**
- * 页面管理
+ * 活动管理
  * @author Chen<cxd032404@hotmail.com>
  */
 
-class Hj_PageController extends AbstractController
+class Hj_ActivityController extends AbstractController
 {
-	/**页面:Page
+	/**页面:Acitvity
 	 * @var string
 	 */
-	protected $sign = '?ctl=hj/page';
-    protected $ctl = 'hj/page';
+	protected $sign = '?ctl=hj/activity';
+    protected $ctl = 'hj/activity';
 
     /**
 	 * game对象
 	 * @var object
 	 */
-	protected $oPage;
+	protected $oActivity;
 	protected $oCompany;
-	protected $oPageElement;
+	protected $oActivityElement;
 
 	/**
 	 * 初始化
@@ -28,10 +28,8 @@ class Hj_PageController extends AbstractController
 	public function init()
 	{
 		parent::init();
-		$this->oPage = new Hj_Page();
+		$this->oActivity = new Hj_Activity();
 		$this->oCompany = new Hj_Company();
-		$this->oPageElement = new Hj_PageElement();
-		$this->oElementType = new Hj_ElementType();
 
 	}
 	//页面配置列表页面
@@ -44,19 +42,18 @@ class Hj_PageController extends AbstractController
 			//页面ID
 			$company_id = intval($this->request->company_id??0);
 			//获取页面列表
-			$pageList = $this->oPage->getPageList(['company_id'=>$company_id]);
+			$activityList = $this->oActivity->getActivityList(['company_id'=>$company_id]);
 			//获取企业列表
 			$companyList = $this->oCompany->getCompanyList([],"company_id,company_name");
 			//循环页面列表
-			foreach($pageList as $key => $pageInfo)
+			foreach($activityList as $key => $activityInfo)
             {
                 //数据解包
-                $pageList[$key]['comment'] = json_decode($pageInfo['comment'],true);
-				$pageList[$key]['company_name'] = ($pageInfo['company_id']==0)?"无对应":($companyList[$pageInfo['company_id']]['company_name']??"未知");
-				$pageList[$key]['element_count'] = $this->oPageElement->getElementCount(['page_id'=>$pageInfo['page_id']]);
+                $activityList[$key]['comment'] = json_decode($activityInfo['comment'],true);
+				$activityList[$key]['company_name'] = ($activityInfo['company_id']==0)?"无对应":($companyList[$activityInfo['company_id']]['company_name']??"未知");
             }
 			//渲染模版
-			include $this->tpl('Hj_Page_PageList');
+			include $this->tpl('Hj_Activity_ActivityList');
 		}
 		else
 		{
@@ -65,16 +62,16 @@ class Hj_PageController extends AbstractController
 		}
 	}
 	//添加页面类型填写配置页面
-	public function pageAddAction()
+	public function activityAddAction()
 	{
 		//检查权限
-		$PermissionCheck = $this->manager->checkMenuPermission("addPage");
+		$PermissionCheck = $this->manager->checkMenuPermission("addActivity");
 		if($PermissionCheck['return'])
 		{
 			//获取顶级页面列表
 			$companyList = $this->oCompany->getCompanyList([],"company_id,company_name");
 			//渲染模版
-			include $this->tpl('Hj_Page_PageAdd');
+			include $this->tpl('Hj_Activity_ActivityAdd');
 		}
 		else
 		{
@@ -82,68 +79,61 @@ class Hj_PageController extends AbstractController
 			include $this->tpl('403');
 		}
 	}
-
+	
 	//添加新页面
-	public function pageInsertAction()
+	public function activityInsertAction()
 	{
 		//检查权限
-		$bind=$this->request->from('page_name','page_url','company_id','page_sign');
+		$bind=$this->request->from('activity_name','company_id','activity_sign','start_time','end_time','apply_start_time','apply_end_time');
 		//页面名称不能为空
-		if(trim($bind['page_name'])=="")
+		if(trim($bind['activity_name'])=="")
 		{
 			$response = array('errno' => 1);
 		}
 		else
 		{
-			if(trim($bind['page_url'])=="")
-			{
-				$response = array('errno' => 2);
-			}
-			else
-			{
-                if(trim($bind['page_sign'])=="")
+            if(trim($bind['activity_sign'])=="")
+            {
+                $response = array('errno' => 3);
+            }
+            else
+            {
+                $activityExists = $this->oActivity->getActivityList(['company_id'=>$bind['company_id'],'activity_sign'=>$bind['activity_sign']],'activity_id,activity_sign');
+                if(count($activityExists)>0)
                 {
-                    $response = array('errno' => 3);
+                    $response = array('errno' => 4);
                 }
                 else
                 {
-                    $pageExists = $this->oPage->getPageList(['company_id'=>$bind['company_id'],'page_sign'=>$bind['page_sign']],'page_id,page_sign');
-                    if(count($pageExists)>0)
-                    {
-                        $response = array('errno' => 4);
-                    }
-                    else
-                    {
-                        $bind['comment'] = [];
-                        //数据打包
-                        $bind['comment'] = json_encode($bind['comment']);
-                        //添加页面
-                        $res = $this->oPage->insertPage($bind);
-                        $response = $res ? array('errno' => 0) : array('errno' => 9);
-                    }
+                    $bind['comment'] = [];
+                    //数据打包
+                    $bind['comment'] = json_encode($bind['comment']);
+                    //添加页面
+                    $res = $this->oActivity->insertActivity($bind);
+                    $response = $res ? array('errno' => 0) : array('errno' => 9);
                 }
-			}
-
+            }
 		}
 		echo json_encode($response);
 		return true;
 	}
 	
 	//修改页面信息页面
-	public function pageModifyAction()
+	public function activityModifyAction()
 	{
 		//检查权限
-		$PermissionCheck = $this->manager->checkMenuPermission("updatePage");
+		$PermissionCheck = $this->manager->checkMenuPermission("updateActivity");
 		if($PermissionCheck['return'])
 		{
 			//页面ID
-			$page_id= intval($this->request->page_id);
+			$activity_id= intval($this->request->activity_id);
 			//获取页面信息
-			$pageInfo = $this->oPage->getPage($page_id,'*');			
+			$activityInfo = $this->oActivity->getActivity($activity_id,'*');
+			print_R($activityInfo);
 			//获取企业列表
 			$companyList = $this->oCompany->getCompanyList([],"company_id,company_name");
             //渲染模版
-			include $this->tpl('Hj_Page_PageModify');
+			include $this->tpl('Hj_Activity_ActivityModify');
 		}
 		else
 		{
@@ -153,31 +143,26 @@ class Hj_PageController extends AbstractController
 	}
 	
 	//更新页面信息
-	public function pageUpdateAction()
+	public function activityUpdateAction()
 	{
 	    //接收页面参数
-		$bind=$this->request->from('page_id','page_name','company_id','page_url','page_sign');
+        $bind=$this->request->from('activity_id','activity_name','company_id','activity_sign','start_time','end_time','apply_start_time','apply_end_time');
         //页面名称不能为空
-		if(trim($bind['page_name'])=="")
+		if(trim($bind['activity_name'])=="")
 		{
 			$response = array('errno' => 1);
 		}
 		else
 		{
-			if(trim($bind['page_url'])=="")
-			{
-				$response = array('errno' => 2);
-			}
-			else
-			{
-                if(trim($bind['page_sign'])=="")
+
+                if(trim($bind['activity_sign'])=="")
                 {
                     $response = array('errno' => 3);
                 }
                 else
                 {
-                    $pageExists = $this->oPage->getPageList(['company_id'=>$bind['company_id'],'page_sign'=>$bind['page_sign'],'exclude_id'=>$bind['page_id']],'page_id,page_sign');
-                    if(count($pageExists)>0)
+                    $activityExists = $this->oActivity->getActivityList(['company_id'=>$bind['company_id'],'activity_sign'=>$bind['activity_sign'],'exclude_id'=>$bind['activity_id']],'activity_id,activity_sign');
+                    if(count($activityExists)>0)
                     {
                         $response = array('errno' => 4);
                     }
@@ -185,29 +170,28 @@ class Hj_PageController extends AbstractController
                     {
                         //数据打包
                         $bind['comment'] = json_encode([]);
-                        $currentPageInfo = $this->oPage->getPage($bind['page_id'],"page_id,company_id");
                         //修改页面
-                        $res = $this->oPage->updatePage($bind['page_id'],$bind);
-                        $response = $res ? array('errno' => 0) : array('errno' => 9,'company_id'=>$currentPageInfo['company_id']);
+                        $res = $this->oActivity->updateActivity($bind['activity_id'],$bind);
+                        $response = $res ? array('errno' => 0) : array('errno' => 9);
                     }
                 }
-			}
+
 		}
 		echo json_encode($response);
 		return true;
 	}
 	
 	//删除页面
-	public function pageDeleteAction()
+	public function activityDeleteAction()
 	{
 		//检查权限
-		$PermissionCheck = $this->manager->checkMenuPermission("deletePage");
+		$PermissionCheck = $this->manager->checkMenuPermission("deleteActivity");
 		if($PermissionCheck['return'])
 		{
 			//页面ID
-			$page_id = trim($this->request->page_id);
+			$activity_id = trim($this->request->activity_id);
 			//删除页面
-			$this->oPage->deletePage($page_id);
+			$this->oActivity->deleteActivity($activity_id);
 			//返回之前的页面
 			$this->response->goBack();
 		}
@@ -219,28 +203,28 @@ class Hj_PageController extends AbstractController
 	}
 
 	//修改页面详情（元素列表）页面
-	public function pageDetailAction()
+	public function activityDetailAction()
 	{
 		//检查权限
 		$PermissionCheck = $this->manager->checkMenuPermission("updatePage");
 		if($PermissionCheck['return'])
 		{
 			//页面ID
-			$page_id= intval($this->request->page_id);
+			$activity_id= intval($this->request->activity_id);
 			//获取页面信息
-			$pageInfo = $this->oPage->getPage($page_id,'*');			
+			$activityInfo = $this->oActivity->getPage($activity_id,'*');			
 			//获取元素信息
-			$pageElementList = $this->oPageElement->getElementList(['page_id'=>$page_id]);
+			$activityElementList = $this->oActivityElement->getElementList(['activity_id'=>$activity_id]);
 			//获取元素类型列表
 			$elementTypeList = $this->oElementType->getElementTypeList();
 			//获取企业列表
 			$companyList = $this->oCompany->getCompanyList([],"company_id,company_name");
-            foreach ($pageElementList as $elementSign => $elementInfo) 
+            foreach ($activityElementList as $elementSign => $elementInfo) 
             {
-            	$pageElementList[$elementSign]['element_type_name'] = $elementTypeList[$elementInfo['element_type']]['element_type_name']??"未知类型";
+            	$activityElementList[$elementSign]['element_type_name'] = $elementTypeList[$elementInfo['element_type']]['element_type_name']??"未知类型";
             }
             //渲染模版
-			include $this->tpl('Hj_Page_PageDetail');
+			include $this->tpl('Hj_Activity_ActivityDetail');
 		}
 		else
 		{
@@ -249,18 +233,18 @@ class Hj_PageController extends AbstractController
 		}
 	}
 	//添加页面元素信息页面
-	public function pageElementAddAction()
+	public function activityElementAddAction()
 	{
 		//检查权限
 		$PermissionCheck = $this->manager->checkMenuPermission("updatePage");
 		if($PermissionCheck['return'])
 		{
 			//页面ID
-			$page_id= intval($this->request->page_id);
+			$activity_id= intval($this->request->activity_id);
 			//获取元素类型列表
 			$elementTypeList = $this->oElementType->getElementTypeList([],"element_type,element_type_name");
             //渲染模版
-			include $this->tpl('Hj_Page_PageElementAdd');
+			include $this->tpl('Hj_Activity_ActivityElementAdd');
 		}
 		else
 		{
@@ -269,10 +253,10 @@ class Hj_PageController extends AbstractController
 		}
 	}
 	//添加新页面元素
-	public function pageElementInsertAction()
+	public function activityElementInsertAction()
 	{
 		//检查权限
-		$bind=$this->request->from('element_name','element_type','page_id','element_sign');
+		$bind=$this->request->from('element_name','element_type','activity_id','element_sign');
 		//页面元素名称不能为空
 		if(trim($bind['element_name'])=="")
 		{
@@ -287,8 +271,8 @@ class Hj_PageController extends AbstractController
 			}
 			else
 			{
-                $pageElementExists = $this->oPageElement->getElementList(['page_id'=>$bind['page_id'],'element_sign'=>$bind['element_sign']],'element_id,element_sign');
-                if(count($pageElementExists))
+                $activityElementExists = $this->oActivityElement->getElementList(['activity_id'=>$bind['activity_id'],'element_sign'=>$bind['element_sign']],'element_id,element_sign');
+                if(count($activityElementExists))
                 {
                     $response = array('errno' => 3);
                 }
@@ -296,7 +280,7 @@ class Hj_PageController extends AbstractController
                 {
                     $bind['detail'] = json_encode([]);
                     //添加页面元素
-                    $res = $this->oPageElement->insertPageElement($bind);
+                    $res = $this->oActivityElement->insertPageElement($bind);
                     $response = $res ? array('errno' => 0) : array('errno' => 9);
                 }
 			}
@@ -305,7 +289,7 @@ class Hj_PageController extends AbstractController
 		return true;
 	}
 	//修改页面元素信息页面
-	public function pageElementModifyAction()
+	public function activityElementModifyAction()
 	{
 		//检查权限
 		$PermissionCheck = $this->manager->checkMenuPermission("updatePage");
@@ -314,11 +298,11 @@ class Hj_PageController extends AbstractController
 			//页面ID
 			$element_id= intval($this->request->element_id);
 			//获取元素类型列表
-			$elementInfo = $this->oPageElement->getPageElement($element_id);
+			$elementInfo = $this->oActivityElement->getPageElement($element_id);
 			//获取元素类型列表
 			$elementTypeList = $this->oElementType->getElementTypeList([],"element_type,element_type_name");
             //渲染模版
-			include $this->tpl('Hj_Page_PageElementModify');
+			include $this->tpl('Hj_Activity_ActivityElementModify');
 		}
 		else
 		{
@@ -327,7 +311,7 @@ class Hj_PageController extends AbstractController
 		}
 	}
 	//修改页面元素
-	public function pageElementUpdateAction()
+	public function activityElementUpdateAction()
 	{
 		//检查权限
 		$bind=$this->request->from('element_id','element_name','element_type','element_sign');
@@ -345,9 +329,9 @@ class Hj_PageController extends AbstractController
 			}
 			else
 			{
-                $elementInfo = $this->oPageElement->getPageElement($bind['element_id'],"element_id,page_id");
-			    $pageElementExists = $this->oPageElement->getElementList(['page_id'=>$elementInfo['page_id'],'element_sign'=>$bind['element_sign'],'exclude_id'=>$bind['element_id']],'element_id,element_sign');
-                if(count($pageElementExists))
+                $elementInfo = $this->oActivityElement->getPageElement($bind['element_id'],"element_id,activity_id");
+			    $activityElementExists = $this->oActivityElement->getElementList(['activity_id'=>$elementInfo['activity_id'],'element_sign'=>$bind['element_sign'],'exclude_id'=>$bind['element_id']],'element_id,element_sign');
+                if(count($activityElementExists))
                 {
                     $response = array('errno' => 3);
                 }
@@ -355,7 +339,7 @@ class Hj_PageController extends AbstractController
                 {
                     $bind['detail'] = json_encode([]);
                     //添加页面元素
-                    $res = $this->oPageElement->updatePageElement($bind['element_id'],$bind);
+                    $res = $this->oActivityElement->updatePageElement($bind['element_id'],$bind);
                     $response = $res ? array('errno' => 0) : array('errno' => 9);
                 }
 			}
@@ -365,7 +349,7 @@ class Hj_PageController extends AbstractController
 		return true;
 	}
 	//修改页面元素信息页面
-	public function pageElementDetailAction()
+	public function activityElementDetailAction()
 	{
 		//检查权限
 		$PermissionCheck = $this->manager->checkMenuPermission("updatePage");
@@ -374,7 +358,7 @@ class Hj_PageController extends AbstractController
 		    //元素ID
 			$element_id= intval($this->request->element_id);
 			//获取元素类型列表
-			$elementInfo = $this->oPageElement->getPageElement($element_id);
+			$elementInfo = $this->oActivityElement->getPageElement($element_id);
 			$elementInfo['detail'] = json_decode($elementInfo['detail'],true);
 			$t = [];
 			if($elementInfo['element_type'] == "slideNavi")
@@ -387,7 +371,7 @@ class Hj_PageController extends AbstractController
             }
 			$elementTypeInfo = $this->oElementType->getElementType($elementInfo['element_type']);
 			//渲染模版
-			include $this->tpl('Hj_Page_PageElement_'.$elementInfo['element_type']);
+			include $this->tpl('Hj_Activity_ActivityElement_'.$elementInfo['element_type']);
 		}
 		else
 		{
@@ -396,12 +380,12 @@ class Hj_PageController extends AbstractController
 		}
 	}
 	//修改页面元素
-	public function pageElementDetailUpdateAction()
+	public function activityElementDetailUpdateAction()
 	{
 		//元素ID
 		$element_id = intval($this->request->element_id);
 		$detail = $this->request->detail;
-	    $elementDetail = $this->oPageElement->getPageElement($element_id,"detail,element_type");
+	    $elementDetail = $this->oActivityElement->getPageElement($element_id,"detail,element_type");
 	    $elementDetail['detail'] = json_decode($elementDetail['detail'],true);
 	    if(in_array($elementDetail['element_type'],['singlePic','backgroundPic']))
 	    {
@@ -460,14 +444,14 @@ class Hj_PageController extends AbstractController
 	    if(!isset($response))
 	    {
 	        $elementDetail['detail'] = json_encode($elementDetail['detail']);
-		    $res = $this->oPageElement->updatePageElement($element_id,$elementDetail);
+		    $res = $this->oActivityElement->updatePageElement($element_id,$elementDetail);
 			$response = $res ? array('errno' => 0) : array('errno' => 9);
 	    }
 		echo json_encode($response);
 		return true;
 	}
 	//删除页面元素
-	public function pageElementDeleteAction()
+	public function activityElementDeleteAction()
 	{
 		//检查权限
 		$PermissionCheck = $this->manager->checkMenuPermission("updatePage");
@@ -476,7 +460,7 @@ class Hj_PageController extends AbstractController
 			//页面元素ID
 			$element_id = trim($this->request->element_id);
 			//删除页面元素
-			$this->oPageElement->deletePageElement($element_id);
+			$this->oActivityElement->deletePageElement($element_id);
 			//返回之前的页面
 			$this->response->goBack();
 		}
@@ -487,7 +471,7 @@ class Hj_PageController extends AbstractController
 		}
 	}
     //添加页面元素单个详情页面
-    public function pageElementSingleDetailAddAction()
+    public function activityElementSingleDetailAddAction()
     {
         //检查权限
         $PermissionCheck = $this->manager->checkMenuPermission("updatePage");
@@ -496,9 +480,9 @@ class Hj_PageController extends AbstractController
             //元素ID
             $element_id= intval($this->request->element_id);
             //获取元素类型列表
-            $elementInfo = $this->oPageElement->getPageElement($element_id,"element_type,element_id");
+            $elementInfo = $this->oActivityElement->getPageElement($element_id,"element_type,element_id");
             //渲染模版
-            include $this->tpl('Hj_Page_PageElementDetail_Add_'.$elementInfo['element_type']);
+            include $this->tpl('Hj_Activity_ActivityElementDetail_Add_'.$elementInfo['element_type']);
         }
         else
         {
@@ -507,12 +491,12 @@ class Hj_PageController extends AbstractController
         }
     }
     //添加页面单个元素详情
-    public function pageElementSingleDetailInsertAction()
+    public function activityElementSingleDetailInsertAction()
     {
         //元素ID
         $element_id = intval($this->request->element_id);
         $detail = $this->request->detail;
-        $elementDetail = $this->oPageElement->getPageElement($element_id,"detail,element_type");
+        $elementDetail = $this->oActivityElement->getPageElement($element_id,"detail,element_type");
         $elementDetail['detail'] = json_decode($elementDetail['detail'],true);
         if(in_array($elementDetail['element_type'],['slidePic']))
         {
@@ -529,7 +513,7 @@ class Hj_PageController extends AbstractController
             {
                 $elementDetail['detail'][] = ['img_url'=>$oss_urls['0'],'img_jump_url'=>$detail['img_jump_url']];
                 $elementDetail['detail'] = json_encode($elementDetail['detail']);
-                $res = $this->oPageElement->updatePageElement($element_id,$elementDetail);
+                $res = $this->oActivityElement->updatePageElement($element_id,$elementDetail);
                 $response = $res ? array('errno' => 0) : array('errno' => 9);
             }
         }
@@ -537,27 +521,27 @@ class Hj_PageController extends AbstractController
         return true;
     }
     //修改页面单个元素详情页面
-    public function pageElementSingleDetailModifyAction()
+    public function activityElementSingleDetailModifyAction()
     {
         //元素ID
         $element_id = intval($this->request->element_id);
         $pos = intval($this->request->pos??0);
-        $elementDetail = $this->oPageElement->getPageElement($element_id,"detail,element_type");
+        $elementDetail = $this->oActivityElement->getPageElement($element_id,"detail,element_type");
         $elementDetail['detail'] = json_decode($elementDetail['detail'],true);
         if(in_array($elementDetail['element_type'],['slidePic']))
         {
             $elementDetailInfo = $elementDetail['detail'][$pos];
             //渲染模版
-            include $this->tpl('Hj_Page_PageElementDetail_Modify_'.$elementDetail['element_type']);
+            include $this->tpl('Hj_Activity_ActivityElementDetail_Modify_'.$elementDetail['element_type']);
         }
     }
     //删除页面单个元素详情
-    public function pageElementSingleDetailDeleteAction()
+    public function activityElementSingleDetailDeleteAction()
     {
         //元素ID
         $element_id = intval($this->request->element_id);
         $pos = intval($this->request->pos??0);
-        $elementDetail = $this->oPageElement->getPageElement($element_id,"detail,element_type");
+        $elementDetail = $this->oActivityElement->getPageElement($element_id,"detail,element_type");
         $elementDetail['detail'] = json_decode($elementDetail['detail'],true);
         if(in_array($elementDetail['element_type'],['slidePic']))
         {
@@ -566,18 +550,18 @@ class Hj_PageController extends AbstractController
                 unset($elementDetail['detail'][$pos]);
                 $elementDetail['detail'] = array_values($elementDetail['detail']);
                 $elementDetail['detail'] = json_encode($elementDetail['detail']);
-                $res = $this->oPageElement->updatePageElement($element_id,$elementDetail);
+                $res = $this->oActivityElement->updatePageElement($element_id,$elementDetail);
             }
         }
         $this->response->goBack();
     }
     //添加页面元素详情
-    public function pageElementSingleDetailUpdateAction()
+    public function activityElementSingleDetailUpdateAction()
     {
         //元素ID
         $element_id = intval($this->request->element_id);
         $detail = $this->request->detail;
-        $elementDetail = $this->oPageElement->getPageElement($element_id,"detail,element_type");
+        $elementDetail = $this->oActivityElement->getPageElement($element_id,"detail,element_type");
         $elementDetail['detail'] = json_decode($elementDetail['detail'],true);
         if(in_array($elementDetail['element_type'],['slidePic']))
         {
@@ -598,7 +582,7 @@ class Hj_PageController extends AbstractController
                 //保存跳转链接
                 $elementDetail['detail'][$pos]['img_jump_url'] = $detail['img_jump_url'];
                 $elementDetail['detail'] = json_encode($elementDetail['detail']);
-                $res = $this->oPageElement->updatePageElement($element_id,$elementDetail);
+                $res = $this->oActivityElement->updatePageElement($element_id,$elementDetail);
                 $response = $res ? array('errno' => 0) : array('errno' => 9);
             }
         }
