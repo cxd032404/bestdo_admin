@@ -40,6 +40,7 @@ $('#page_update_submit').click(function(){
 				errors[1] = '页面名称不能为空，请修正后再次提交';
 				errors[2] = '页面url不能为空，请修正后再次提交';
 				errors[3] = '页面标识不能为空，请修正后再次提交';
+				errors[4] = '页面标识'+$('#page_sign').val()+'已重复，请修正后再次提交';
 				errors[9] = '入库失败，请修正后再次提交';
 				divBox.alertBox(errors[jsonResponse.errno],function(){});
 			} else {

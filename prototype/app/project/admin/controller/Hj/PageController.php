@@ -107,12 +107,20 @@ class Hj_PageController extends AbstractController
                 }
                 else
                 {
-                    $bind['comment'] = [];
-                    //数据打包
-                    $bind['comment'] = json_encode($bind['comment']);
-                    //添加页面
-                    $res = $this->oPage->insertPage($bind);
-                    $response = $res ? array('errno' => 0,'company_id'=>$bind['company_id']) : array('errno' => 9);
+                    $pageExists = $this->oPage->getPageList(['company_id'=>$bind['company_id'],'page_sign'=>$bind['page_sign']],'page_id,page_sign');
+                    if(count($pageExists)>0)
+                    {
+                        $response = array('errno' => 4);
+                    }
+                    else
+                    {
+                        $bind['comment'] = [];
+                        //数据打包
+                        $bind['comment'] = json_encode($bind['comment']);
+                        //添加页面
+                        $res = $this->oPage->insertPage($bind);
+                        $response = $res ? array('errno' => 0,'company_id'=>$bind['company_id']) : array('errno' => 9);
+                    }
                 }
 			}
 
@@ -162,18 +170,26 @@ class Hj_PageController extends AbstractController
 			}
 			else
 			{
-                if(trim($bind['page_url'])=="")
+                if(trim($bind['page_sign'])=="")
                 {
-                    $response = array('errno' => 2);
+                    $response = array('errno' => 3);
                 }
                 else
                 {
-                    //数据打包
-                    $bind['comment'] = json_encode([]);
-                    $currentPageInfo = $this->oPage->getPage($bind['page_id'],"page_id,company_id");
-                    //修改页面
-                    $res = $this->oPage->updatePage($bind['page_id'],$bind);
-                    $response = $res ? array('errno' => 0,'company_id'=>$bind['company_id']) : array('errno' => 9,'company_id'=>$currentPageInfo['company_id']);
+                    $pageExists = $this->oPage->getPageList(['company_id'=>$bind['company_id'],'page_sign'=>$bind['page_sign'],'exclude_id'=>$bind['page_id']],'page_id,page_sign');
+                    if(count($pageExists)>0)
+                    {
+                        $response = array('errno' => 4);
+                    }
+                    else
+                    {
+                        //数据打包
+                        $bind['comment'] = json_encode([]);
+                        $currentPageInfo = $this->oPage->getPage($bind['page_id'],"page_id,company_id");
+                        //修改页面
+                        $res = $this->oPage->updatePage($bind['page_id'],$bind);
+                        $response = $res ? array('errno' => 0,'company_id'=>$bind['company_id']) : array('errno' => 9,'company_id'=>$currentPageInfo['company_id']);
+                    }
                 }
 			}
 		}
@@ -271,12 +287,19 @@ class Hj_PageController extends AbstractController
 			}
 			else
 			{
-			    $bind['detail'] = "";
-			    //添加页面元素
-				$res = $this->oPageElement->insertPageElement($bind);
-				$response = $res ? array('errno' => 0) : array('errno' => 9);
+                $pageElementExists = $this->oPageElement->getElementList(['page_id'=>$bind['page_id'],'element_sign'=>$bind['element_sign']],'element_id,element_sign');
+                if(count($pageElementExists))
+                {
+                    $response = array('errno' => 3);
+                }
+                else
+                {
+                    $bind['detail'] = json_encode([]);
+                    //添加页面元素
+                    $res = $this->oPageElement->insertPageElement($bind);
+                    $response = $res ? array('errno' => 0) : array('errno' => 9);
+                }
 			}
-
 		}
 		echo json_encode($response);
 		return true;
@@ -322,10 +345,19 @@ class Hj_PageController extends AbstractController
 			}
 			else
 			{
-			    $bind['detail'] = "";
-			    //添加页面元素
-				$res = $this->oPageElement->updatePageElement($bind['element_id'],$bind);
-				$response = $res ? array('errno' => 0) : array('errno' => 9);
+                $elementInfo = $this->oPageElement->getPageElement($bind['element_id'],"element_id,page_id");
+			    $pageElementExists = $this->oPageElement->getElementList(['page_id'=>$elementInfo['page_id'],'element_sign'=>$bind['element_sign'],'exclude_id'=>$bind['element_id']],'element_id,element_sign');
+                if(count($pageElementExists))
+                {
+                    $response = array('errno' => 3);
+                }
+                else
+                {
+                    $bind['detail'] = json_encode([]);
+                    //添加页面元素
+                    $res = $this->oPageElement->updatePageElement($bind['element_id'],$bind);
+                    $response = $res ? array('errno' => 0) : array('errno' => 9);
+                }
 			}
 
 		}

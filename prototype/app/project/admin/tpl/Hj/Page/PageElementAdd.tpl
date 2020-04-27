@@ -32,6 +32,7 @@ $('#page_element_add_submit').click(function(){
 				var errors = [];
 				errors[1] = '页面元素名称不能为空，请修正后再次提交';
 				errors[2] = '页面元素标识不能为空，请修正后再次提交';
+				errors[3] = '页面元素标识'+ $('#element_sign').val() +'已重复，请修正后再次提交';
 				errors[9] = '入库失败，请修正后再次提交';
 				divBox.alertBox(errors[jsonResponse.errno],function(){});
 			} else {

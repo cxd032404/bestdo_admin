@@ -17,9 +17,11 @@ class Hj_PageElement extends Base_Widget
 	 */
 	public function getElementList($params = [],$fields = "*")
 	{
-		$table_to_process = Base_Widget::getDbTable($this->table);
+	    $table_to_process = Base_Widget::getDbTable($this->table);
 	    $wherePage = (isset($params['page_id']) && $params['page_id']>0)?" page_id = ".$params['page_id']:"";
-        $whereCondition = array($wherePage);
+        $whereSign = (isset($params['element_sign']) && trim($params['element_sign'])!="")?" element_sign = '".$params['element_sign']."'":"";
+        $whereExclude = (isset($params['exclude_id']) && $params['exclude_id'])>0?" element_id != ".$params['exclude_id']:"";
+        $whereCondition = array($wherePage,$whereSign,$whereExclude);
         $where = Base_common::getSqlWhere($whereCondition);
 		$sql = "SELECT $fields FROM " . $table_to_process . " where 1 ".$where." ORDER BY element_id ASC";
 		$return = $this->db->getAll($sql);

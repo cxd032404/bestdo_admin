@@ -19,7 +19,9 @@ class Hj_Page extends Base_Widget
 	{
 		$table_to_process = Base_Widget::getDbTable($this->table);
 	    $whereCompany = (isset($params['company_id']) && $params['company_id']>0)?" company_id = ".$params['company_id']:"";
-        $whereCondition = array($whereCompany);
+        $whereSign = (isset($params['page_sign']) && trim($params['page_sign'])!="")?" page_sign = '".$params['page_sign']."'":"";
+        $whereExclude = (isset($params['exclude_id']) && $params['exclude_id'])>0?" page_id != ".$params['exclude_id']:"";
+        $whereCondition = array($whereCompany,$whereSign,$whereExclude);
         $where = Base_common::getSqlWhere($whereCondition);
 		$sql = "SELECT $fields FROM " . $table_to_process . " where 1 ".$where." ORDER BY page_id ASC";
 		$return = $this->db->getAll($sql);
