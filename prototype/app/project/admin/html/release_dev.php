@@ -1,5 +1,5 @@
 <?php
-$command = "git status  && git pull";
+$command = "git checkout dev && git status  && git pull";
 (exec($command,$return));
 echo implode("\n",$return)."\n";
 unset($return);
