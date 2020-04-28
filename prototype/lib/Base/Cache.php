@@ -13,7 +13,7 @@ class Base_Cache
      * 缓存类型
      * @var array
      */
-	protected static $types = array('File', 'File_Hash', /*'Memcache', 'Memcachedb',*/'Redis');
+	protected static $types = array('File', 'File_Hash', /*'Memcache', 'Memcachedb',*/'Redis','Elasticsearch');
 
 	/**
 	 * 工厂方法

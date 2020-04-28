@@ -27,4 +27,7 @@ $config['sms'] = array_merge($config['aliConfig'],
         "regionId"=>"cn-hangzhou"
     ]);
 $config['alipay'] = ['appid'=>'2021001156616661'];
+$config['elasticsearch'] = [
+    "company_user_list" => ["index"=>"company_user","type"=>"company_user"]
+];
 return $config;

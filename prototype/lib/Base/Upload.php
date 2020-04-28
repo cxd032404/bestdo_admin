@@ -19,14 +19,19 @@ class Base_Upload
 	 * 允许的文件后缀
 	 * @var array
 	 */
-	protected $allowFileExtArr = array('gif', 'jpg', 'jpeg', 'png', 'bmp', 'rar', 'zip', 'txt','log');
+	//protected $allowFileExtArr = array('gif', 'jpg', 'jpeg', 'png', 'bmp', 'rar', 'zip', 'txt','log');
 
 	/**
 	 * 允许的图片后缀
 	 * @var array
 	 */
-	protected $allowImageExtArr = array('gif', 'jpg', 'jpeg', 'png', 'bmp');
+	//protected $allowImageExtArr = array('gif', 'jpg', 'jpeg', 'png', 'bmp');
 
+	protected $allowFileExtArr = [
+	    "txt" => ["txt"],
+        "img" => ['gif', 'jpg', 'jpeg', 'png', 'bmp'],
+        "video" => []
+    ];
 	/**
 	 * 最大文件
 	 * @var integer
@@ -104,6 +109,8 @@ class Base_Upload
 		if (!is_dir($this->fileDir . $this->savePath) && !mkdir($this->fileDir . $this->savePath)) {
 			throw new Base_Exception(sprintf('目录 %s 不存在', $this->fileDir . $this->savePath), 403);
 		}
+		$t = explode("_",$path);
+		$fileType = $t[count($t)-1];
 
 		@chmod($this->fileDir . $this->savePath);
 
@@ -118,16 +125,11 @@ class Base_Upload
 				continue;
 			}
 			$suffix = Base_Common::fileSuffix($file['name']);
-			$isImage = in_array($suffix, $this->allowImageExtArr);
-//			if ($this->onlyAllowImage && !$isImage) {
-//				$this->resultArr[$k]['errno'] = 2;
-//				$this->resultArr[$k]['description'] = '不允许上传非图片类型文件';
-//				continue;
-//			}
+			$fileTypeCheck = in_array($suffix, $this->allowFileExtArr[$fileType]??[]);
 
-			if (!in_array($suffix, $this->allowFileExtArr)) {
-				$this->resultArr[$k]['errno'] = 3;
-				$this->resultArr[$k]['description'] = '类型文件不允许';
+			if (!$fileTypeCheck ) {
+				$this->resultArr[$k]['errno'] = 2;
+				$this->resultArr[$k]['description'] = '不允许上传非允许类型文件';
 				continue;
 			}
 

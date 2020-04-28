@@ -72,11 +72,11 @@ $table['config_action']['db'] = 'hj_config';
 $table['config_action']['num'] = 1;
 
 #用户信息状态
-$table['user_info']['db'] = 'Hj_user';
+$table['user_info']['db'] = 'hj_user';
 $table['user_info']['num'] = 1;
 
 #富文本测试表
-$table['rich_text_text']['db'] = 'Hj_user';
+$table['rich_text_text']['db'] = 'hj_user';
 $table['rich_text_text']['num'] = 1;
 
 #企业
@@ -98,4 +98,8 @@ $table['config_element']['num'] = 1;
 #活动相关
 $table['config_activity']['db'] = 'hj_config';
 $table['config_activity']['num'] = 1;
+
+#活动相关
+$table['company_user_list']['db'] = 'hj_user';
+$table['company_user_list']['num'] = 1;
 return $table;
