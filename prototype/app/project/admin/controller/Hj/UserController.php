@@ -290,6 +290,7 @@ class Hj_UserController extends AbstractController
             $upload = $upload->resultArr;
             if($upload[1]['errno']==0)
             {
+                $index = (new Base_Cache_Elasticsearch())->checkIndex("company_user_list",['company_id'=>$company_id]);
                 $file_path = $upload[1]['path'];
                 $handle = fopen($file_path, 'r');
                 $error = 0;

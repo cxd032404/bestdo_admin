@@ -28,6 +28,6 @@ $config['sms'] = array_merge($config['aliConfig'],
     ]);
 $config['alipay'] = ['appid'=>'2021001156616661'];
 $config['elasticsearch'] = [
-    "company_user_list" => ["index"=>"company_user","type"=>"company_user"]
+    "company_user_list" => ["index"=>"company_user_list","type"=>"company_user_list"]
 ];
 return $config;
