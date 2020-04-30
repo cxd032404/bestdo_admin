@@ -22,26 +22,10 @@
 				<td align="left">{tpl:$elementTypeInfo.element_type_name/}</td>
 			</tr>
 			<tr class="hover"><td colspan="2">元素详情</td></tr>
-			<tr class="hover">
-				<td>导航图片上传：</td>
-				<td align="left"><input name="upload_img[1]" type="file" id="upload_img[1]" />
-					{tpl:if($elementInfo.detail.img_url!="")}
-					已选图片:<img src="{tpl:$elementInfo.detail.img_url/}" width="30px;" height="30px;"/>
-				<br>
-					{/tpl:if}
-				</td>
 			</tr>
-			<td>导航图片上传(选中)：</td>
-			<td align="left"><input name="upload_img[2]" type="file" id="upload_img[2]" />
-				{tpl:if($elementInfo.detail.selected_img_url!="")}
-				已选图片:<img src="{tpl:$elementInfo.detail.selected_img_url/}" width="30px;" height="30px;"/>
-			<br>
-				{/tpl:if}
-			</td>
-			</tr>
-			<tr class="hover"><td colspan = 2>文字及跳转路径：文字｜链接 每行一条</td></tr>
+			<tr class="hover"><td colspan = 2>富文本编辑器</td></tr>
 			<tr class="hover"><td colspan = 2>
-					<textarea style="width:99%; height:200px" name="detail[jump_urls]" id="detail[jump_urls]" >{tpl:$t/}</textarea>
+					<textarea name="text" id="text" >{tpl:$elementInfo.detail.text/}</textarea>
 				</td>
 			</tr>
 
