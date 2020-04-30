@@ -60,6 +60,7 @@ class Base_Cache_Elasticsearch implements Base_Cache_Interface
                 $name_properties = ($indexDetail[$index_name]['mappings'][$type]['properties']['name']['fields'])??[];
                 {
                     //字段缺失 删除
+                    //if(1)
                     if(!isset($name_properties['analyzer']))
                     {
                         $delete = $this->client->indices()->delete(["index"=>$index]);
@@ -84,10 +85,39 @@ class Base_Cache_Elasticsearch implements Base_Cache_Interface
                     'body' => [
                         'settings' => [
                             'number_of_shards' => 1,
-                            'number_of_replicas' => 0
-                        ]
-                    ]
-                ];
+                            'number_of_replicas' => 0,
+                            'analysis'=>[
+                                'analyzer'=>[
+                                    'ik_smart_pinyin'=>[
+                                        'type'=>'custom',
+                                        'tokenizer'=>'ik_smart',
+                                        'filter'=>['my_pinyin','word_delimiter']
+                                    ],
+                                    'ik_max_word_pinyin'=>[
+                                            'type'=>'custom',
+                                            'tokenizer'=>'ik_max_word',
+                                            'filter'=>['my_pinyin','word_delimiter']
+
+                                    ]
+                                ],
+                                'filter'=>[
+                                    'my_pinyin'=>[
+                                        'type'=>'pinyin',
+                                        'keep_separate_first_letter'=>true,
+                                        'keep_full_pinyin'=>true,
+                                        'keep_original'=>true,
+                                        'limit_first_letter_length'=>16,
+                                        'lowercase'=>true,
+                                        'remove_duplicated_term'=>true,
+
+                                    ]
+                                ]
+
+                            ]
+                        ],
+
+                ]
+            ];
                 $create = $this->client->indices()->create($params);
                 $params = ["index"=>$index,"type"=>$type,
                     'body'=>[
@@ -96,8 +126,8 @@ class Base_Cache_Elasticsearch implements Base_Cache_Interface
                             "user_id"=>["type"=>"integer"],
                             "company_id"=>["type"=>"integer"],
                             "name"=>["type"=>"text",
-                                "analyzer"=>"ik_max_word",
-                                "search_analyzer"=>"ik_max_word"],
+                                "analyzer"=>"ik_smart_pinyin",
+                                "search_analyzer"=>"ik_smart_pinyin"],
                             "worker_id"=>["type"=>"text",
                                 "analyzer"=>"ik_max_word",
                                 "search_analyzer"=>"ik_max_word"],
