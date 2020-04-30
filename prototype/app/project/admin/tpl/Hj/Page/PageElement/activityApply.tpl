@@ -3,7 +3,9 @@
 <div class="br_bottom"></div>
 <form id="page_element_detail_update_form" name="page_element_detail_update_form" action="{tpl:$this.sign/}&ac=page.element.detail.update" method="post">
 <input type="hidden" id="element_type" name="element_type" value="{tpl:$elementInfo.element_type/}" />
-<input type="hidden" name="element_id" value="{tpl:$elementInfo.element_id/}" />
+<input type="hidden" name="element_id" id="element_id" value="{tpl:$elementInfo.element_id/}" />
+<input type="hidden" name="page_id" id="page_id" value="{tpl:$pageInfo.page_id/}" />
+
 <fieldset>
 	[ <a href="{tpl:$this.sign/}&ac=page.detail&page_id={tpl:$elementInfo.page_id/}">返回</a> ]
 </fieldset>
@@ -24,8 +26,16 @@
 </tr>
 <tr class="hover"><td colspan="2">元素详情</td></tr>
 <tr class="hover">
-<td>对应活动：</td>
+<td>来自参数：</td>
 	<td align="left">
+		<input type="radio" name="detail[id_from]" id="detail[id_from]" value="from_params" {tpl:if(isset($elementInfo.detail.from_params))}checked{/tpl:if}
+		 /> 来自参数: <input type="text" class="span2" name="detail[from_params]"  id="detail[from_params]" value="{tpl:$elementInfo.detail.from_params/}" size="50" />
+    </td>
+</tr>
+<tr class="hover">
+<td>对应活动：</td>
+	<td align="left">		<input type="radio" name="detail[id_from]" id="detail[id_from]" value="from_id" {tpl:if(isset($elementInfo.detail.activity_id))}checked{/tpl:if}
+		 />
 		<select name="detail[activity_id]"  id="detail[activity_id]" size="1">
 			{tpl:loop $activityList  $activityInfo}
 			<option value="{tpl:$activityInfo.activity_id/}"{tpl:if($activityInfo.activity_id==$elementInfo.detail.activity_id)}selected="selected"{/tpl:if} >{tpl:$activityInfo.activity_name/}</option>

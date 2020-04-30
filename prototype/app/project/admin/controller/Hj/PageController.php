@@ -472,7 +472,17 @@ class Hj_PageController extends AbstractController
         }
         elseif(in_array($elementDetail['element_type'],['activityApply']))
         {
-            $elementDetail['detail']['activity_id'] = $detail['activity_id'];
+            if($detail['id_from']=="from_params")
+            {
+            	$elementDetail['detail']['from_params'] = $detail['from_params'];
+            	unset($elementDetail['detail']['activity_id']);	
+            }
+            elseif($detail['id_from']=="from_id")
+            {
+            	$elementDetail['detail']['activity_id'] = $detail['activity_id'];
+            	unset($elementDetail['detail']['from_params']);	
+
+            }
         }
 	    if(!isset($response))
 	    {
