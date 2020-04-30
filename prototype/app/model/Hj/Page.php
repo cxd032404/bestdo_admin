@@ -83,5 +83,49 @@ class Hj_Page extends Base_Widget
 		$table_to_process = Base_Widget::getDbTable($this->table);
 		return $this->db->delete($table_to_process, '`page_id` = ?', $page_id);
 	}
+    /**
+     * 解包页面参数数组
+     * @param string $string
+     * @return array
+     */
+	public function unpackPageParams($string = "")
+    {
+        $return = [];
+        $string = trim($string);
+        if ($string != "")
+        {
+            $return = [];
+            $t1 = explode("|", $string);
+            foreach ($t1 as $k => $v)
+            {
+                $t2 = explode(":", trim($v));
+                if (isset($t2[0]) && $t2[0] != "")
+                {
+                    $return[] = ['name' => trim($t2[0]), 'type' => trim($t2[1] ?? "int")];
+                }
+            }
+
+        }
+        return $return;
+    }
+    /**
+     * 打包页面参数数组
+     * @param array $array
+     * @return string
+     */
+    public function packPageParams($array = [])
+    {
+        $return = "";
+        $t = [];
+        if(count($array)>=1)
+        {
+            foreach($array as $k => $v)
+            {
+                $t[] = implode(":",$v);
+            }
+        }
+        $return = implode("|",$t);
+        return $return;
+    }
 
 }

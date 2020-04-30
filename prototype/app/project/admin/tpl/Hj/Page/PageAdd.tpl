@@ -19,6 +19,9 @@
 			{/tpl:loop}
 		</select></td>
 </tr>
+	<td>页面参数<br>string数组<br>int整数<br>string字符串
+	<td align="left"><input type="text" class="span4" name="detail[params]"  id="detail[params]" value="" size="50" /></td>
+	</tr>
 	<tr class="noborder"><td></td>
 <td><button type="submit" id="page_add_submit">提交</button></td>
 </tr>

@@ -2,7 +2,7 @@
 <script type="text/javascript">
 $(document).ready(function(){
   $('#add_page').click(function(){
-    addPageBox = divBox.showBox('{tpl:$this.sign/}&ac=page.add', {title:'添加页面',width:600,height:300});
+    addPageBox = divBox.showBox('{tpl:$this.sign/}&ac=page.add', {title:'添加页面',width:600,height:450});
   });
 });
 
@@ -12,7 +12,7 @@ function pageDelete(p_id,p_name){
 }
 
 function pageModify(mid){
-  modifyPageBox = divBox.showBox('{tpl:$this.sign/}&ac=page.modify&page_id=' + mid, {title:'修改页面',width:600,height:350});
+  modifyPageBox = divBox.showBox('{tpl:$this.sign/}&ac=page.modify&page_id=' + mid, {title:'修改页面',width:600,height:450});
 }
 
 </script>

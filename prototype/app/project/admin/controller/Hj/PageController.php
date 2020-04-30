@@ -51,9 +51,9 @@ class Hj_PageController extends AbstractController
 			foreach($pageList as $key => $pageInfo)
             {
                 //数据解包
-                $pageList[$key]['comment'] = json_decode($pageInfo['comment'],true);
 				$pageList[$key]['company_name'] = ($pageInfo['company_id']==0)?"无对应":($companyList[$pageInfo['company_id']]['company_name']??"未知");
 				$pageList[$key]['element_count'] = $this->oPageElement->getElementCount(['page_id'=>$pageInfo['page_id']]);
+                $pageList[$key]['detail'] = json_decode($pageInfo['detail'],true);
             }
 			//渲染模版
 			include $this->tpl('Hj_Page_PageList');
@@ -87,7 +87,7 @@ class Hj_PageController extends AbstractController
 	public function pageInsertAction()
 	{
 		//检查权限
-		$bind=$this->request->from('page_name','page_url','company_id','page_sign');
+		$bind=$this->request->from('page_name','page_url','company_id','page_sign','detail');
 		//页面名称不能为空
 		if(trim($bind['page_name'])=="")
 		{
@@ -114,9 +114,10 @@ class Hj_PageController extends AbstractController
                     }
                     else
                     {
-                        $bind['comment'] = [];
+                        //处理页面必备参数
+                        $bind['detail']['params'] = $this->oPage->unpackPageParams($bind['detail']['params']);
                         //数据打包
-                        $bind['comment'] = json_encode($bind['comment']);
+                        $bind['detail'] = json_encode($bind['detail']);
                         //添加页面
                         $res = $this->oPage->insertPage($bind);
                         $response = $res ? array('errno' => 0) : array('errno' => 9);
@@ -139,8 +140,11 @@ class Hj_PageController extends AbstractController
 			//页面ID
 			$page_id= intval($this->request->page_id);
 			//获取页面信息
-			$pageInfo = $this->oPage->getPage($page_id,'*');			
-			//获取企业列表
+			$pageInfo = $this->oPage->getPage($page_id,'*');
+			//数据解包
+            $pageInfo['detail'] = json_decode($pageInfo['detail'],true);
+            $pageInfo['detail']['params'] = $this->oPage->packPageParams($pageInfo['detail']['params']);
+            //获取企业列表
 			$companyList = $this->oCompany->getCompanyList([],"company_id,company_name");
             //渲染模版
 			include $this->tpl('Hj_Page_PageModify');
@@ -156,7 +160,7 @@ class Hj_PageController extends AbstractController
 	public function pageUpdateAction()
 	{
 	    //接收页面参数
-		$bind=$this->request->from('page_id','page_name','company_id','page_url','page_sign');
+		$bind=$this->request->from('page_id','page_name','company_id','page_url','page_sign','detail');
         //页面名称不能为空
 		if(trim($bind['page_name'])=="")
 		{
@@ -183,8 +187,10 @@ class Hj_PageController extends AbstractController
                     }
                     else
                     {
+                        //处理页面必备参数
+                        $bind['detail']['params'] = $this->oPage->unpackPageParams($bind['detail']['params']);
                         //数据打包
-                        $bind['comment'] = json_encode([]);
+                        $bind['detail'] = json_encode($bind['detail']);
                         $currentPageInfo = $this->oPage->getPage($bind['page_id'],"page_id,company_id");
                         //修改页面
                         $res = $this->oPage->updatePage($bind['page_id'],$bind);
