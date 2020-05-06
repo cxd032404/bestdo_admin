@@ -562,14 +562,13 @@ class Widget_Manager extends Base_Widget
 	}
 	public function getPermissionList($group_id)
     {
-        $oRace = new Xrace_Race();
-        $RaceCatalogList  = $oRace->getRaceCatalogList(0,"RaceCatalogId,RaceCatalogName",0);
+        $companyList = (new Hj_Company())->getCompanyList([],"company_id,company_name");
         $PermissionList = $this->getDataPermissionByGroup($group_id);
         foreach($PermissionList as $key => $PermissionInfo)
         {
-            $RaceCatalogList[$PermissionInfo['RaceCatalogId']]['Permission'] = 1;
+            $companyList[$PermissionInfo['company_id']]['Permission'] = 1;
         }
-        return $RaceCatalogList;
+        return $companyList;
     }
     public function getDataPermissionByGroup($group_ids,$fields = "*")
     {
@@ -579,6 +578,7 @@ class Widget_Manager extends Base_Widget
     }
     public function updateDataPermissionByGroup($bind)
     {
+
         //获取已有权限
         $PermissionList = $this->getDataPermissionByGroup($bind['group_id']);
         $dataArr = array("ToDelete"=>array(),"ToInsert"=>array());
@@ -586,14 +586,14 @@ class Widget_Manager extends Base_Widget
         foreach($PermissionList as $key => $PermissionInfo)
         {
             //如果不能存在于选定的权限列表
-            if(!isset($bind['RaceCatalogList'][$PermissionInfo['RaceCatalogId']]))
+            if(!isset($bind['company_list'][$PermissionInfo['company_id']]))
             {
                 //待删除
-                $dataArr['ToDelete'][$PermissionInfo['RaceCatalogId']] = 1;
+                $dataArr['ToDelete'][$PermissionInfo['company_id']] = 1;
             }
         }
         //循环选定的权限
-        foreach($bind['RaceCatalogList'] as $key => $PermissionInfo)
+        foreach($bind['company_list'] as $key => $PermissionInfo)
         {
             //假定未找到
             $found = 0;
@@ -601,7 +601,7 @@ class Widget_Manager extends Base_Widget
             foreach($PermissionList as $key2 => $PermissionInfo2)
             {
                 //如果找到
-                if($PermissionInfo['Permission']==$PermissionInfo2['RaceCatalogId'])
+                if($PermissionInfo['Permission']==$PermissionInfo2['company_id'])
                 {
                     // 跳出循环
                     $found  = 1;
@@ -622,10 +622,10 @@ class Widget_Manager extends Base_Widget
             //初始成功标签
             $flag = 1;
             //循环待加入列表
-            foreach($dataArr['ToInsert'] as $RaceCatalogId => $Permission)
+            foreach($dataArr['ToInsert'] as $company_id => $Permission)
             {
                 //添加记录
-                $flag = $this->insertDataPermission($bind['group_id'],$RaceCatalogId);
+                $flag = $this->insertDataPermission($bind['group_id'],$company_id);
                 //如果失败
                 if(!$flag)
                 {
@@ -635,10 +635,10 @@ class Widget_Manager extends Base_Widget
                 }
             }
             //循环待删除列表
-            foreach($dataArr['ToDelete'] as $RaceCatalogId => $Permission)
+            foreach($dataArr['ToDelete'] as $company_id => $Permission)
             {
                 //删除记录
-                $flag = $this->deleteDataPermission($bind['group_id'],$RaceCatalogId);
+                $flag = $this->deleteDataPermission($bind['group_id'],$company_id);
                 //如果失败
                 if(!$flag)
                 {
@@ -664,48 +664,48 @@ class Widget_Manager extends Base_Widget
         }
     }
     //新增单个数据权限
-    public function insertDataPermission($group_id,$RaceCatalogId)
+    public function insertDataPermission($group_id,$company_id)
     {
         if($group_id == 0)
         {
             $group_id = $this->data_groups;
         }
-        $bind = array("group_id"=>abs(intval($group_id)),"RaceCatalogId"=>abs(intval($RaceCatalogId)));
+        $bind = array("group_id"=>abs(intval($group_id)),"company_id"=>abs(intval($company_id)));
         $table_to_process = Base_Widget::getDbTable($this->table_data_permission);
         return $this->db->insert($table_to_process, $bind);
     }
     //删除单个数据权限
-    public function deleteDataPermission($group_id,$RaceCatalogId)
+    public function deleteDataPermission($group_id,$company_id)
     {
         $group_id = abs(intval($group_id));
-        $RaceCatalogId = abs(intval($RaceCatalogId));
+        $company_id = abs(intval($company_id));
         $table_to_process = Base_Widget::getDbTable($this->table_data_permission);
-        return $this->db->delete($table_to_process, '`group_id` = ? and `RaceCatalogId` = ?', array($group_id,$RaceCatalogId));
+        return $this->db->delete($table_to_process, '`group_id` = ? and `company_id` = ?', array($group_id,$company_id));
     }
     public function getDataPermissionByGroupWhere($data_groups = "")
     {
         if($data_groups == "")
         {
-            $PermissionList = $this->getDataPermissionByGroup($this->data_groups,"RaceCatalogId");
+            $PermissionList = $this->getDataPermissionByGroup($this->data_groups,"company_id");
         }
         else
         {
-            $PermissionList = $this->getDataPermissionByGroup($data_groups,"RaceCatalogId");
+            $PermissionList = $this->getDataPermissionByGroup($data_groups,"company_id");
         }
         if(count($PermissionList>=1))
         {
             $t = array();
-            foreach($PermissionList as $key => $RaceCatalogInfo)
+            foreach($PermissionList as $key => $CompanyInfo)
             {
-                $t[$RaceCatalogInfo['RaceCatalogId']] = $RaceCatalogInfo['RaceCatalogId'];
+                $t[$CompanyInfo['company_id']] = $CompanyInfo['company_id'];
             }
             if($t == "")
             {
-                return " RaceCatalogId in (0)";
+                return " company_id in (0)";
             }
             else
             {
-                return " RaceCatalogId in (".implode(',',$t).")";
+                return " company_id in (".implode(',',$t).")";
             }
         }
         else

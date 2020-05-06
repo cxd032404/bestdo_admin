@@ -27,30 +27,22 @@ class DataGroupController extends AbstractController
 	
 	public function addAction()
 	{
-		/**
-		 * 记录日志
-		 */
-		$log = "数据用户组添加\n\nServerIp:\n" . $this->request->getServer('SERVER_ADDR') . "\n\nGET:\n" . var_export($_GET, true) . "\n\nPOST:\n" . var_export($_POST, true);
-		$this->oLogManager->push('log', $log);
-				
-		//检查权限
-		$this->manager->checkMenuPermission($this->sign, Widget_Manager::MENU_PURVIEW_INSERT);
-		
-		include $this->tpl();
+        $PermissionCheck = $this->manager->checkMenuPermission("AddDataGroup");
+        if($PermissionCheck['return'])
+        {
+            include $this->tpl();
+        }
+        else
+        {
+            $home = $this->sign;
+            include $this->tpl('403');
+        }
+
 	}
 	
 	public function insertAction()
 	{
-		/**
-		 * 记录日志
-		 */
-		$log = "数据用户组添加入库\n\nServerIp:\n" . $this->request->getServer('SERVER_ADDR') . "\n\nGET:\n" . var_export($_GET, true) . "\n\nPOST:\n" . var_export($_POST, true);
-		$this->oLogManager->push('log', $log);
-				
-		//检查权限
-		$this->manager->checkMenuPermission($this->sign, Widget_Manager::MENU_PURVIEW_INSERT);
-		
-		$data = $this->request->from('name', 'ClassId');
+	    $data = $this->request->from('name', 'ClassId');
 		$oGroup = new Widget_Group();
 		if(empty($data['name']))
 		{
@@ -71,33 +63,23 @@ class DataGroupController extends AbstractController
 	
 	public function modifyAction()
 	{
-		/**
-		 * 记录日志
-		 */
-		$log = "数据用户组修改\n\nServerIp:\n" . $this->request->getServer('SERVER_ADDR') . "\n\nGET:\n" . var_export($_GET, true) . "\n\nPOST:\n" . var_export($_POST, true);
-		$this->oLogManager->push('log', $log);
-				
-		//检查权限
-		$this->manager->checkMenuPermission($this->sign, Widget_Manager::MENU_PURVIEW_UPDATE);
-		
-		$group_id = $this->request->group_id;
-		$oGroup = new Widget_Group();
-		$group = $oGroup->get($group_id);
-		
-		include $this->tpl();
+        $PermissionCheck = $this->manager->checkMenuPermission("UpdateDataGroup");
+        if($PermissionCheck['return'])
+        {
+            $group_id = $this->request->group_id;
+            $oGroup = new Widget_Group();
+            $group = $oGroup->get($group_id);
+            include $this->tpl();
+        }
+        else
+        {
+            $home = $this->sign;
+            include $this->tpl('403');
+        }
 	}
 	
 	public function updateAction()
 	{
-		/**
-		 * 记录日志
-		 */
-		$log = "数据用户组修改入库\n\nServerIp:\n" . $this->request->getServer('SERVER_ADDR') . "\n\nGET:\n" . var_export($_GET, true) . "\n\nPOST:\n" . var_export($_POST, true);
-		$this->oLogManager->push('log', $log);
-				
-		//检查权限
-		$this->manager->checkMenuPermission($this->sign, Widget_Manager::MENU_PURVIEW_UPDATE);
-		
 		$data = $this->request->from('name', 'ClassId');
 		$group_id = $this->request->group_id;
 		if(!intVal($group_id))
@@ -105,13 +87,11 @@ class DataGroupController extends AbstractController
 			echo json_encode(array('errno' => 1));
 			return false;
 		}
-		
 		if(empty($data['name']))
 		{
 			echo json_encode(array('errno' => 2));
 			return false;
 		}
-		
 		$oGroup = new Widget_Group();
 		$res = $oGroup->update($group_id, $data);
 		if (!$res)
@@ -119,31 +99,31 @@ class DataGroupController extends AbstractController
 			echo json_encode(array('errno' => 9));
 			return false;
 		}
-
 		echo  json_encode(array('errno' => 0));
 		return true;
 	}
 	
 	public function deleteAction()
 	{
-		/**
-		 * 记录日志
-		 */
-		$log = "数据用户组删除\n\nServerIp:\n" . $this->request->getServer('SERVER_ADDR') . "\n\nGET:\n" . var_export($_GET, true) . "\n\nPOST:\n" . var_export($_POST, true);
-		$this->oLogManager->push('log', $log);
-				
-		//检查权限
-		$this->manager->checkMenuPermission($this->sign, Widget_Manager::MENU_PURVIEW_DELETE);
-		
-		$group_id = intval($this->request->group_id);
-		$oGroup = new Widget_Group();
-		$res = $oGroup->delete($group_id);
-		if ($res)
-		{
-			$Widget_Menu_Permission = new Widget_Menu_Permission();
-			$Widget_Menu_Permission->deleteByGroup($group_id);
-		}
-		$this->response->goBack();
+        $PermissionCheck = $this->manager->checkMenuPermission("DeleteDataGroup");
+        if($PermissionCheck['return'])
+        {
+            $group_id = intval($this->request->group_id);
+            $oGroup = new Widget_Group();
+            $res = $oGroup->delete($group_id);
+            if ($res)
+            {
+                $Widget_Menu_Permission = new Widget_Menu_Permission();
+                $Widget_Menu_Permission->deleteByGroup($group_id);
+            }
+            $this->response->goBack();
+        }
+        else
+        {
+            $home = $this->sign;
+            include $this->tpl('403');
+        }
+
 	}
 
     /**
@@ -179,7 +159,7 @@ class DataGroupController extends AbstractController
         if($PermissionCheck['return'])
         {
             //获取 页面参数
-            $bind=$this->request->from('group_id','RaceCatalogList');
+            $bind=$this->request->from('group_id','company_list');
             $update = $this->manager->updateDataPermissionByGroup($bind);
             //返回之前页面
             $this->response->goBack();

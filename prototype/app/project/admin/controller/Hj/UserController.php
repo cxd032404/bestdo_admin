@@ -78,7 +78,7 @@ class Hj_UserController extends AbstractController
 	//用户列表下载
 	public function userListDownloadAction()
 	{
-		//检查权限ƒ
+		//检查权限
 		$PermissionCheck = $this->manager->checkMenuPermission("UserListDownload");
 		if($PermissionCheck['return'])
 		{
