@@ -25,7 +25,7 @@ class Hj_List extends Base_Widget
 	{
 		$table_to_process = Base_Widget::getDbTable($this->table);
 	    $whereCompany = (isset($params['company_id']) && $params['company_id']>0)?" company_id = ".$params['company_id']:"";
-        $whereName = (isset($params['list_name']) && trim($params['list_name'])!="")?" list_name = ".trim($params['list_name']):"";
+        $whereName = (isset($params['list_name']) && trim($params['list_name'])!="")?" list_name = '".trim($params['list_name'])."'":"";
         $whereExclude = (isset($params['exclude_id']) && $params['exclude_id'])>0?" list_id != ".$params['exclude_id']:"";
         $whereCondition = array($whereCompany,$whereExclude,$whereName);
         $where = Base_common::getSqlWhere($whereCondition);
