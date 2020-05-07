@@ -2,17 +2,17 @@
 <script type="text/javascript">
 $(document).ready(function(){
   $('#add_list').click(function(){
-    addactivityBox = divBox.showBox('{tpl:$this.sign/}&ac=activity.add', {title:'添加活动',width:600,height:500});
+    addactivityBox = divBox.showBox('{tpl:$this.sign/}&ac=list.add', {title:'添加列表',width:600,height:500});
   });
 });
 
 function activityDelete(p_id,p_name){
     msg = '是否删除 ' + p_name + '?'
-  deleteactivityBox = divBox.confirmBox({content:msg,ok:function(){location.href = '{tpl:$this.sign/}&ac=activity.delete&activity_id=' + p_id;}});
+  deleteactivityBox = divBox.confirmBox({content:msg,ok:function(){location.href = '{tpl:$this.sign/}&ac=activity.delete&list_id=' + p_id;}});
 }
 
 function activityModify(mid){
-  modifyactivityBox = divBox.showBox('{tpl:$this.sign/}&ac=activity.modify&activity_id=' + mid, {title:'修改活动',width:600,height:500});
+  modifyactivityBox = divBox.showBox('{tpl:$this.sign/}&ac=activity.modify&list_id=' + mid, {title:'修改列表',width:600,height:500});
 }
 
 </script>
@@ -21,7 +21,7 @@ function activityModify(mid){
 [ <a href="javascript:;" id="add_list">添加列表</a> ]
 </fieldset>
 
-<fieldset><legend>活动列表 </legend>
+<fieldset><legend>列表列表 </legend>
 <form action="{tpl:$this.sign/}" name="form" id="form" method="post">
 <select name="company_id"  id="company_id" size="1">
       <option value="0"{tpl:if(0==$company_id)}selected="selected"{/tpl:if} >全部</option>
@@ -40,27 +40,24 @@ function activityModify(mid){
 </form>
 <table width="99%" align="center" class="table table-bordered table-striped">
   <tr>
-    <th align="center" class="rowtip">活动ID</th>
-    <th align="center" class="rowtip">活动名称</th>
-    <th align="center" class="rowtip">活动标识</th>
+    <th align="center" class="rowtip">列表ID</th>
+    <th align="center" class="rowtip">列表名称</th>
     <th align="center" class="rowtip">对应企业</th>
-    <th align="center" class="rowtip">活动时间</th>
-    <th align="center" class="rowtip">报名时间</th>
+    <th align="center" class="rowtip">列表分类</th>
     <th align="center" class="rowtip">更新时间</th>
     <th align="center" class="rowtip">操作</th>
   </tr>
 
 {tpl:loop $listList $listInfo}
   <tr class="hover">
-    <td align="center">{tpl:$listInfo.activity_id/}</td>
-    <td align="center">{tpl:$listInfo.activity_name/}</td>
-      <td align="center">{tpl:$listInfo.activity_sign/}</td>
+    <td align="center">{tpl:$listInfo.list_id/}</td>
+    <td align="center">{tpl:$listInfo.list_name/}</td>
       <td align="center">{tpl:$listInfo.company_name/}</td>
-      <td align="center">{tpl:$listInfo.start_time/}<P>{tpl:$listInfo.end_time/}</td>
-      <td align="center">{tpl:$listInfo.apply_start_time/}<P>{tpl:$listInfo.apply_end_time/}</td>
+    <td align="center">{tpl:$listInfo.list_type_name/}</td>
+
       <td align="center">{tpl:$listInfo.update_time/}</td>
-      <td align="center"><a  href="javascript:;" onclick="activityDelete('{tpl:$listInfo.activity_id/}','{tpl:$listInfo.activity_name/}')">删除</a>
- |  <a href="javascript:;" onclick="activityModify('{tpl:$listInfo.activity_id/}');">修改</a></td>
+      <td align="center"><a  href="javascript:;" onclick="activityDelete('{tpl:$listInfo.list_id/}','{tpl:$listInfo.list_name/}')">删除</a>
+ |  <a href="javascript:;" onclick="activityModify('{tpl:$listInfo.list_id/}');">修改</a></td>
   </tr>
 {/tpl:loop}
 </table>

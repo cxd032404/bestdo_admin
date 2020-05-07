@@ -6,6 +6,7 @@
 <td>活动名称</td>
 	<td align="left"><input type="text" class="span2" name="activity_name"  id="activity_name" value="" size="50" /></td>
 </tr>
+<tr class="hover">
 <td>活动时间</td>
 	<th align="center" class="rowtip">
 		<input type="text" name="start_time"  id="start_time" class="input-medium"   onFocus="WdatePicker({isShowClear:false,readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})" >-<input type="text" name="end_time" id="end_time" class="input-medium"   onFocus="WdatePicker({isShowClear:false,readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})" ></th></tr>
