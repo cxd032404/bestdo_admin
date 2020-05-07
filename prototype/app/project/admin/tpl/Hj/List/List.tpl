@@ -8,11 +8,11 @@ $(document).ready(function(){
 
 function activityDelete(p_id,p_name){
     msg = '是否删除 ' + p_name + '?'
-  deleteactivityBox = divBox.confirmBox({content:msg,ok:function(){location.href = '{tpl:$this.sign/}&ac=activity.delete&list_id=' + p_id;}});
+  deleteactivityBox = divBox.confirmBox({content:msg,ok:function(){location.href = '{tpl:$this.sign/}&ac=list.delete&list_id=' + p_id;}});
 }
 
 function activityModify(mid){
-  modifyactivityBox = divBox.showBox('{tpl:$this.sign/}&ac=activity.modify&list_id=' + mid, {title:'修改列表',width:600,height:500});
+  modifyactivityBox = divBox.showBox('{tpl:$this.sign/}&ac=list.modify&list_id=' + mid, {title:'修改列表',width:600,height:500});
 }
 
 </script>

@@ -98,7 +98,7 @@ class Hj_ListController extends AbstractController
 		}
 		else
 		{
-            $listExists = $this->oList->getListList(['company_id'=>$bind['company_id'],'list_name'=>trim($bind['activity_sign'])],'list_id');
+            $listExists = $this->oList->getListList(['company_id'=>$bind['company_id'],'list_name'=>trim($bind['list_name'])],'list_id');
             if(count($listExists)>0)
             {
                 $response = array('errno' => 2);
@@ -117,21 +117,25 @@ class Hj_ListController extends AbstractController
 		return true;
 	}
 
-	//修改页面信息页面
-	public function activityModifyAction()
+	//修改列表信息页面
+	public function listModifyAction()
 	{
 		//检查权限
-		$PermissionCheck = $this->manager->checkMenuPermission("updateActivity");
+		$PermissionCheck = $this->manager->checkMenuPermission("updateList");
 		if($PermissionCheck['return'])
 		{
-			//页面ID
-			$list_id= intval($this->request->activity_id);
-			//获取页面信息
-			$listInfo = $this->oList->getActivity($list_id,'*');
+			//列表ID
+			$list_id= intval($this->request->list_id);
+			//获取列表信息
+			$listInfo = $this->oList->getList($list_id,'*');
 			//获取企业列表
 			$companyList = $this->oCompany->getCompanyList([],"company_id,company_name");
+            //获取列表类型列表
+            $listTypeList = $this->oList->getListType();
+            //数据解包
+            $listInfo['detail'] = json_decode($listInfo['detail'],true);
             //渲染模版
-			include $this->tpl('Hj_List_ActivityModify');
+			include $this->tpl('Hj_List_ListModify');
 		}
 		else
 		{
@@ -140,45 +144,30 @@ class Hj_ListController extends AbstractController
 		}
 	}
 
-	//更新页面信息
-	public function activityUpdateAction()
+	//更新列表信息
+	public function listUpdateAction()
 	{
 	    //接收页面参数
-        $bind=$this->request->from('activity_id','activity_name','company_id','activity_sign','start_time','end_time','apply_start_time','apply_end_time');
+        $bind=$this->request->from('list_id','list_name','company_id','list_type','detail');
         //页面名称不能为空
-		if(trim($bind['activity_name'])=="")
+		if(trim($bind['list_name'])=="")
 		{
 			$response = array('errno' => 1);
 		}
 		else
 		{
-            if(trim($bind['activity_sign'])=="")
+            $listExists = $this->oList->getListList(['company_id'=>$bind['company_id'],'list_name'=>$bind['list_name'],'exclude_id'=>$bind['list_id']],'list_id');
+            if(count($listExists)>0)
             {
-                $response = array('errno' => 3);
+                $response = array('errno' => 2);
             }
             else
             {
-                $listExists = $this->oList->getActivityList(['company_id'=>$bind['company_id'],'activity_sign'=>$bind['activity_sign'],'exclude_id'=>$bind['activity_id']],'activity_id,activity_sign');
-                if(count($listExists)>0)
-                {
-                    $response = array('errno' => 4);
-                }
-                else
-                {
-                    $oUpload = new Base_Upload('upload_img');
-                    $upload = $oUpload->upload('upload_img',$this->config->oss);
-                    $oss_urls = array_column($upload->resultArr,'oss');
-                    $bind['icon'] = implode("",$oss_urls);
-                    if(trim($bind['icon']) == "")
-                    {
-                        unset($bind['icon']);
-                    }
-                    //数据打包
-                    $bind['comment'] = json_encode([]);
-                    //修改页面
-                    $res = $this->oList->updateActivity($bind['activity_id'],$bind);
-                    $response = $res ? array('errno' => 0) : array('errno' => 9);
-                }
+                //数据打包
+                $bind['detail'] = json_encode($bind['detail']);
+                //修改页面
+                $res = $this->oList->updateList($bind['list_id'],$bind);
+                $response = $res ? array('errno' => 0) : array('errno' => 9);
             }
 		}
 		echo json_encode($response);
@@ -186,16 +175,16 @@ class Hj_ListController extends AbstractController
 	}
 
 	//删除页面
-	public function activityDeleteAction()
+	public function listDeleteAction()
 	{
 		//检查权限
-		$PermissionCheck = $this->manager->checkMenuPermission("deleteActivity");
+		$PermissionCheck = $this->manager->checkMenuPermission("deleteList");
 		if($PermissionCheck['return'])
 		{
 			//页面ID
-			$list_id = trim($this->request->activity_id);
+			$list_id = trim($this->request->list_id);
 			//删除页面
-			$this->oList->deleteActivity($list_id);
+			$this->oList->deleteList($list_id);
 			//返回之前的页面
 			$this->response->goBack();
 		}
@@ -205,392 +194,4 @@ class Hj_ListController extends AbstractController
 			include $this->tpl('403');
 		}
 	}
-
-	//修改页面详情（元素列表）页面
-	public function activityDetailAction()
-	{
-		//检查权限
-		$PermissionCheck = $this->manager->checkMenuPermission("updatePage");
-		if($PermissionCheck['return'])
-		{
-			//页面ID
-			$list_id= intval($this->request->activity_id);
-			//获取页面信息
-			$listInfo = $this->oList->getPage($list_id,'*');
-			//获取元素信息
-			$listElementList = $this->oListElement->getElementList(['activity_id'=>$list_id]);
-			//获取元素类型列表
-			$elementTypeList = $this->oElementType->getElementTypeList();
-			//获取企业列表
-			$companyList = $this->oCompany->getCompanyList([],"company_id,company_name");
-            foreach ($listElementList as $elementSign => $elementInfo)
-            {
-            	$listElementList[$elementSign]['element_type_name'] = $elementTypeList[$elementInfo['element_type']]['element_type_name']??"未知类型";
-            }
-            //渲染模版
-			include $this->tpl('Hj_List_ActivityDetail');
-		}
-		else
-		{
-			$home = $this->sign;
-			include $this->tpl('403');
-		}
-	}
-	//添加页面元素信息页面
-	public function activityElementAddAction()
-	{
-		//检查权限
-		$PermissionCheck = $this->manager->checkMenuPermission("updatePage");
-		if($PermissionCheck['return'])
-		{
-			//页面ID
-			$list_id= intval($this->request->activity_id);
-			//获取元素类型列表
-			$elementTypeList = $this->oElementType->getElementTypeList([],"element_type,element_type_name");
-            //渲染模版
-			include $this->tpl('Hj_List_ActivityElementAdd');
-		}
-		else
-		{
-			$home = $this->sign;
-			include $this->tpl('403');
-		}
-	}
-	//添加新页面元素
-	public function activityElementInsertAction()
-	{
-		//检查权限
-		$bind=$this->request->from('element_name','element_type','activity_id','element_sign');
-		//页面元素名称不能为空
-		if(trim($bind['element_name'])=="")
-		{
-			$response = array('errno' => 1);
-		}
-		else
-		{
-			//页面元素名称不能为空
-			if(trim($bind['element_sign'])=="")
-			{
-				$response = array('errno' => 2);
-			}
-			else
-			{
-                $listElementExists = $this->oListElement->getElementList(['activity_id'=>$bind['activity_id'],'element_sign'=>$bind['element_sign']],'element_id,element_sign');
-                if(count($listElementExists))
-                {
-                    $response = array('errno' => 3);
-                }
-                else
-                {
-                    $bind['detail'] = json_encode([]);
-                    //添加页面元素
-                    $res = $this->oListElement->insertPageElement($bind);
-                    $response = $res ? array('errno' => 0) : array('errno' => 9);
-                }
-			}
-		}
-		echo json_encode($response);
-		return true;
-	}
-	//修改页面元素信息页面
-	public function activityElementModifyAction()
-	{
-		//检查权限
-		$PermissionCheck = $this->manager->checkMenuPermission("updatePage");
-		if($PermissionCheck['return'])
-		{
-			//页面ID
-			$element_id= intval($this->request->element_id);
-			//获取元素类型列表
-			$elementInfo = $this->oListElement->getPageElement($element_id);
-			//获取元素类型列表
-			$elementTypeList = $this->oElementType->getElementTypeList([],"element_type,element_type_name");
-            //渲染模版
-			include $this->tpl('Hj_List_ActivityElementModify');
-		}
-		else
-		{
-			$home = $this->sign;
-			include $this->tpl('403');
-		}
-	}
-	//修改页面元素
-	public function activityElementUpdateAction()
-	{
-		//检查权限
-		$bind=$this->request->from('element_id','element_name','element_type','element_sign');
-		//页面元素名称不能为空
-		if(trim($bind['element_name'])=="")
-		{
-			$response = array('errno' => 1);
-		}
-		else
-		{
-			//页面元素名称不能为空
-			if(trim($bind['element_sign'])=="")
-			{
-				$response = array('errno' => 2);
-			}
-			else
-			{
-                $elementInfo = $this->oListElement->getPageElement($bind['element_id'],"element_id,activity_id");
-			    $listElementExists = $this->oListElement->getElementList(['activity_id'=>$elementInfo['activity_id'],'element_sign'=>$bind['element_sign'],'exclude_id'=>$bind['element_id']],'element_id,element_sign');
-                if(count($listElementExists))
-                {
-                    $response = array('errno' => 3);
-                }
-                else
-                {
-                    $bind['detail'] = json_encode([]);
-                    //添加页面元素
-                    $res = $this->oListElement->updatePageElement($bind['element_id'],$bind);
-                    $response = $res ? array('errno' => 0) : array('errno' => 9);
-                }
-			}
-
-		}
-		echo json_encode($response);
-		return true;
-	}
-	//修改页面元素信息页面
-	public function activityElementDetailAction()
-	{
-		//检查权限
-		$PermissionCheck = $this->manager->checkMenuPermission("updatePage");
-		if($PermissionCheck['return'])
-		{
-		    //元素ID
-			$element_id= intval($this->request->element_id);
-			//获取元素类型列表
-			$elementInfo = $this->oListElement->getPageElement($element_id);
-			$elementInfo['detail'] = json_decode($elementInfo['detail'],true);
-			$t = [];
-			if($elementInfo['element_type'] == "slideNavi")
-            {
-                foreach($elementInfo['detail']['jump_urls'] as $k => $d)
-                {
-                    $t[] = $k."|".$d;
-                }
-                $t = implode(',&#10;',$t);
-            }
-			$elementTypeInfo = $this->oElementType->getElementType($elementInfo['element_type']);
-			//渲染模版
-			include $this->tpl('Hj_List_ActivityElement_'.$elementInfo['element_type']);
-		}
-		else
-		{
-			$home = $this->sign;
-			include $this->tpl('403');
-		}
-	}
-	//修改页面元素
-	public function activityElementDetailUpdateAction()
-	{
-		//元素ID
-		$element_id = intval($this->request->element_id);
-		$detail = $this->request->detail;
-	    $elementDetail = $this->oListElement->getPageElement($element_id,"detail,element_type");
-	    $elementDetail['detail'] = json_decode($elementDetail['detail'],true);
-	    if(in_array($elementDetail['element_type'],['singlePic','backgroundPic']))
-	    {
-	        //上传图片
-	   		$oUpload = new Base_Upload('upload_img');
-	        $upload = $oUpload->upload('upload_img',$this->config->oss);
-	        $oss_urls = array_column($upload->resultArr,'oss');
-	        //如果以前没上传过且这次也没有成功上传
-	        if((!isset($elementDetail['detail']['img_url']) || $elementDetail['detail']['img_url']=="") && (!isset($oss_urls['0']) || $oss_urls['0'] == ""))
-	        {
-				$response = array('errno' => 2);
-	        }
-	        else
-	        {
-	        	//这次传成功了就用这次，否则维持
-	        	$elementDetail['detail']['img_url'] = (isset($oss_urls['0']) && $oss_urls['0']!="")?($oss_urls['0']):($elementDetail['detail']['img_url']);
-	        	//保存跳转链接
-	        	$elementDetail['detail']['img_jump_url'] = $detail['img_jump_url'];
-	        }
-	    }
-	    elseif(in_array($elementDetail['element_type'],['slideNavi']))
-        {
-            //上传图片
-            $oUpload = new Base_Upload('upload_img');
-            $upload = $oUpload->upload('upload_img',$this->config->oss);
-            $oss_urls = array_column($upload->resultArr,'oss');
-            //如果以前没上传过且这次也没有成功上传
-            if((!isset($elementDetail['detail']['img_url']) || $elementDetail['detail']['img_url']=="") && (!isset($oss_urls['0']) || $oss_urls['0'] == ""))
-            {
-                $response = array('errno' => 2);
-            }
-            else
-            {
-                //这次传成功了就用这次，否则维持
-                $elementDetail['detail']['img_url'] = (isset($oss_urls['0']) && $oss_urls['0']!="")?($oss_urls['0']):($elementDetail['detail']['img_url']);
-            }
-            //这次传成功了就用这次，否则维持
-            $elementDetail['detail']['selected_img_url'] = (isset($oss_urls['1']) && $oss_urls['1']!="")?($oss_urls['1']):($elementDetail['detail']['selected_img_url']);
-            $t = explode(',',$detail['jump_urls']);
-            $a = [];
-            foreach($t as $key => $value)
-            {
-                $t2 = explode("|",$value);
-                if(trim($t2[0]!=""))
-                {
-                    $a[trim($t2[0])] = trim($t2[1]);
-                }
-            }
-            $elementDetail['detail']['jump_urls'] = $a;
-        }
-        elseif(in_array($elementDetail['element_type'],['richText']))
-        {
-            $text = $this->request->text;
-            $elementDetail['detail']['text'] = $text;
-        }
-	    if(!isset($response))
-	    {
-	        $elementDetail['detail'] = json_encode($elementDetail['detail']);
-		    $res = $this->oListElement->updatePageElement($element_id,$elementDetail);
-			$response = $res ? array('errno' => 0) : array('errno' => 9);
-	    }
-		echo json_encode($response);
-		return true;
-	}
-	//删除页面元素
-	public function activityElementDeleteAction()
-	{
-		//检查权限
-		$PermissionCheck = $this->manager->checkMenuPermission("updatePage");
-		if($PermissionCheck['return'])
-		{
-			//页面元素ID
-			$element_id = trim($this->request->element_id);
-			//删除页面元素
-			$this->oListElement->deletePageElement($element_id);
-			//返回之前的页面
-			$this->response->goBack();
-		}
-		else
-		{
-			$home = $this->sign;
-			include $this->tpl('403');
-		}
-	}
-    //添加页面元素单个详情页面
-    public function activityElementSingleDetailAddAction()
-    {
-        //检查权限
-        $PermissionCheck = $this->manager->checkMenuPermission("updatePage");
-        if($PermissionCheck['return'])
-        {
-            //元素ID
-            $element_id= intval($this->request->element_id);
-            //获取元素类型列表
-            $elementInfo = $this->oListElement->getPageElement($element_id,"element_type,element_id");
-            //渲染模版
-            include $this->tpl('Hj_List_ActivityElementDetail_Add_'.$elementInfo['element_type']);
-        }
-        else
-        {
-            $home = $this->sign;
-            include $this->tpl('403');
-        }
-    }
-    //添加页面单个元素详情
-    public function activityElementSingleDetailInsertAction()
-    {
-        //元素ID
-        $element_id = intval($this->request->element_id);
-        $detail = $this->request->detail;
-        $elementDetail = $this->oListElement->getPageElement($element_id,"detail,element_type");
-        $elementDetail['detail'] = json_decode($elementDetail['detail'],true);
-        if(in_array($elementDetail['element_type'],['slidePic']))
-        {
-            //上传图片
-            $oUpload = new Base_Upload('upload_img');
-            $upload = $oUpload->upload('upload_img',$this->config->oss);
-            $oss_urls = array_column($upload->resultArr,'oss');
-            //如果没有成功上传
-            if(!isset($oss_urls['0']) || $oss_urls['0'] == "")
-            {
-                $response = array('errno' => 1);
-            }
-            else
-            {
-                $elementDetail['detail'][] = ['img_url'=>$oss_urls['0'],'img_jump_url'=>$detail['img_jump_url']];
-                $elementDetail['detail'] = json_encode($elementDetail['detail']);
-                $res = $this->oListElement->updatePageElement($element_id,$elementDetail);
-                $response = $res ? array('errno' => 0) : array('errno' => 9);
-            }
-        }
-        echo json_encode($response);
-        return true;
-    }
-    //修改页面单个元素详情页面
-    public function activityElementSingleDetailModifyAction()
-    {
-        //元素ID
-        $element_id = intval($this->request->element_id);
-        $pos = intval($this->request->pos??0);
-        $elementDetail = $this->oListElement->getPageElement($element_id,"detail,element_type");
-        $elementDetail['detail'] = json_decode($elementDetail['detail'],true);
-        if(in_array($elementDetail['element_type'],['slidePic']))
-        {
-            $elementDetailInfo = $elementDetail['detail'][$pos];
-            //渲染模版
-            include $this->tpl('Hj_List_ActivityElementDetail_Modify_'.$elementDetail['element_type']);
-        }
-    }
-    //删除页面单个元素详情
-    public function activityElementSingleDetailDeleteAction()
-    {
-        //元素ID
-        $element_id = intval($this->request->element_id);
-        $pos = intval($this->request->pos??0);
-        $elementDetail = $this->oListElement->getPageElement($element_id,"detail,element_type");
-        $elementDetail['detail'] = json_decode($elementDetail['detail'],true);
-        if(in_array($elementDetail['element_type'],['slidePic']))
-        {
-            if(isset($elementDetail['detail'][$pos]))
-            {
-                unset($elementDetail['detail'][$pos]);
-                $elementDetail['detail'] = array_values($elementDetail['detail']);
-                $elementDetail['detail'] = json_encode($elementDetail['detail']);
-                $res = $this->oListElement->updatePageElement($element_id,$elementDetail);
-            }
-        }
-        $this->response->goBack();
-    }
-    //添加页面元素详情
-    public function activityElementSingleDetailUpdateAction()
-    {
-        //元素ID
-        $element_id = intval($this->request->element_id);
-        $detail = $this->request->detail;
-        $elementDetail = $this->oListElement->getPageElement($element_id,"detail,element_type");
-        $elementDetail['detail'] = json_decode($elementDetail['detail'],true);
-        if(in_array($elementDetail['element_type'],['slidePic']))
-        {
-            $pos = intval($this->request->pos??0);
-            //上传图片
-            $oUpload = new Base_Upload('upload_img');
-            $upload = $oUpload->upload('upload_img',$this->config->oss);
-            $oss_urls = array_column($upload->resultArr,'oss');
-            //如果以前没上传过且这次也没有成功上传
-            if((!isset($elementDetail['detail'][$pos]['img_url']) || $elementDetail['detail'][$pos]['img_url']=="") && (!isset($oss_urls['0']) || $oss_urls['0'] == ""))
-            {
-                $response = array('errno' => 2);
-            }
-            else
-            {
-                //这次传成功了就用这次，否则维持
-                $elementDetail['detail'][$pos]['img_url'] = (isset($oss_urls['0']) && $oss_urls['0']!="")?($oss_urls['0']):($elementDetail['detail'][$pos]['img_url']);
-                //保存跳转链接
-                $elementDetail['detail'][$pos]['img_jump_url'] = $detail['img_jump_url'];
-                $elementDetail['detail'] = json_encode($elementDetail['detail']);
-                $res = $this->oListElement->updatePageElement($element_id,$elementDetail);
-                $response = $res ? array('errno' => 0) : array('errno' => 9);
-            }
-        }
-        echo json_encode($response);
-        return true;
-    }
 }

@@ -43,23 +43,23 @@ class Hj_List extends Base_Widget
 	}
 	/**
 	 * 获取单条记录
-	 * @param integer $activity_id
+	 * @param integer $list_id
 	 * @param string $fields
 	 * @return array
 	 */
-	public function getActivity($activity_id, $fields = '*')
+	public function getList($list_id, $fields = '*')
 	{
-		$activity_id = intval($activity_id);
+		$list_id = intval($list_id);
         $table_to_process = Base_Widget::getDbTable($this->table);
-		return $this->db->selectRow($table_to_process, $fields, '`activity_id` = ?', $activity_id);
+		return $this->db->selectRow($table_to_process, $fields, '`list_id` = ?', $list_id);
 	}
 	/**
 	 * 更新
-	 * @param integer $activity_id
+	 * @param integer $list_id
 	 * @param array $bind
 	 * @return boolean
 	 */
-	public function updatList($list_id, array $bind)
+	public function updateList($list_id, array $bind)
 	{
         $list_id = intval($list_id);
 		$bind['update_time'] = date("Y-m-d H:i:s");
@@ -80,14 +80,14 @@ class Hj_List extends Base_Widget
 
 	/**
 	 * 删除
-	 * @param integer $activity_id
+	 * @param integer $list_id
 	 * @return boolean
 	 */
-	public function deleteActivity($activity_id)
+	public function deleteList($list_id)
 	{
-		$activity_id = intval($activity_id);
+		$list_id = intval($list_id);
 		$table_to_process = Base_Widget::getDbTable($this->table);
-		return $this->db->delete($table_to_process, '`activity_id` = ?', $activity_id);
+		return $this->db->delete($table_to_process, '`list_id` = ?', $list_id);
 	}
 
 }
