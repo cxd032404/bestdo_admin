@@ -30,7 +30,7 @@ class Hj_UserInfo extends Base_Widget
     //用户签到短信发送状态
     protected $user_checkin_sms_sent_status = array('3'=>"不需发送",'1'=>"待发送",'2'=>"已发送");
 
-    //获取性别列表
+    //获取用户验证方式列表
 	public function getCompanyUserAuthType()
     {
         return $this->companyUserAuthType;

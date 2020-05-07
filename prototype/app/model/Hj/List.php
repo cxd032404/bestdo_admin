@@ -5,23 +5,28 @@
  */
 
 
-class Hj_Activity extends Base_Widget
+class Hj_List extends Base_Widget
 {
 	//声明所用到的表
-	protected $table = 'config_activity';
-
+	protected $table = 'config_list';
+    protected $list_type = array("text"=>"文本","pic"=>"图片","video"=>"视频",
+        "rankingFromKudo"=>"点赞排名",'rankingFromUpload'=>"用户上传排名");
+    //获取列表类型
+    public function getListType()
+    {
+        return $this->list_type;
+    }
     /**
 	 * 查询全部
 	 * @param $fields
 	 * @return array
 	 */
-	public function getActivityList($params = [],$fields = "*")
+	public function getListList($params = [],$fields = "*")
 	{
 		$table_to_process = Base_Widget::getDbTable($this->table);
 	    $whereCompany = (isset($params['company_id']) && $params['company_id']>0)?" company_id = ".$params['company_id']:"";
-        $whereSign = (isset($params['activity_sign']) && trim($params['activity_sign'])!="")?" activity_sign = '".$params['activity_sign']."'":"";
-        $whereExclude = (isset($params['exclude_id']) && $params['exclude_id'])>0?" activity_id != ".$params['exclude_id']:"";
-        $whereCondition = array($whereCompany,$whereSign,$whereExclude);
+        $whereExclude = (isset($params['exclude_id']) && $params['exclude_id'])>0?" list_id != ".$params['exclude_id']:"";
+        $whereCondition = array($whereCompany,$whereExclude);
         $where = Base_common::getSqlWhere($whereCondition);
 		$sql = "SELECT $fields FROM " . $table_to_process . " where 1 ".$where." ORDER BY activity_id ASC";
 		$return = $this->db->getAll($sql);

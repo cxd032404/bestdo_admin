@@ -4,21 +4,20 @@
  * @author Chen<cxd032404@hotmail.com>
  */
 
-class Hj_ActivityController extends AbstractController
+class Hj_ListController extends AbstractController
 {
 	/**活动:Acitvity
 	 * @var string
 	 */
-	protected $sign = '?ctl=hj/activity';
-    protected $ctl = 'hj/activity';
+	protected $sign = '?ctl=hj/list';
+    protected $ctl = 'hj/list';
 
     /**
 	 * game对象
 	 * @var object
 	 */
-	protected $oActivity;
+	protected $oList;
 	protected $oCompany;
-	protected $oActivityElement;
 
 	/**
 	 * 初始化
@@ -28,7 +27,7 @@ class Hj_ActivityController extends AbstractController
 	public function init()
 	{
 		parent::init();
-		$this->oActivity = new Hj_Activity();
+		$this->oList = new Hj_List();
 		$this->oCompany = new Hj_Company();
 
 	}
@@ -41,19 +40,23 @@ class Hj_ActivityController extends AbstractController
 		{
 			//企业ID
 			$company_id = intval($this->request->company_id??0);
+            //列表分类
+            $list_type = trim($this->request->list_type??0);
 			//获取活动列表
-			$activityList = $this->oActivity->getActivityList(['company_id'=>$company_id]);
+			$listList = $this->oList->getActivityList(['company_id'=>$company_id]);
 			//获取企业列表
 			$companyList = $this->oCompany->getCompanyList([],"company_id,company_name");
+            //获取企业列表
+            $listTypeList = $this->oList->getListType();
 			//循环活动列表
-			foreach($activityList as $key => $activityInfo)
+			foreach($listList as $key => $listInfo)
             {
                 //数据解包
-                $activityList[$key]['comment'] = json_decode($activityInfo['comment'],true);
-				$activityList[$key]['company_name'] = ($activityInfo['company_id']==0)?"无对应":($companyList[$activityInfo['company_id']]['company_name']??"未知");
+                $listList[$key]['comment'] = json_decode($listInfo['comment'],true);
+				$listList[$key]['company_name'] = ($listInfo['company_id']==0)?"无对应":($companyList[$listInfo['company_id']]['company_name']??"未知");
             }
 			//渲染模版
-			include $this->tpl('Hj_Activity_ActivityList');
+			include $this->tpl('Hj_List_List');
 		}
 		else
 		{
@@ -71,7 +74,7 @@ class Hj_ActivityController extends AbstractController
 			//获取顶级活动列表
 			$companyList = $this->oCompany->getCompanyList([],"company_id,company_name");
 			//渲染模版
-			include $this->tpl('Hj_Activity_ActivityAdd');
+			include $this->tpl('Hj_List_ActivityAdd');
 		}
 		else
 		{
@@ -98,8 +101,8 @@ class Hj_ActivityController extends AbstractController
             }
             else
             {
-                $activityExists = $this->oActivity->getActivityList(['company_id'=>$bind['company_id'],'activity_sign'=>$bind['activity_sign']],'activity_id,activity_sign');
-                if(count($activityExists)>0)
+                $listExists = $this->oList->getActivityList(['company_id'=>$bind['company_id'],'activity_sign'=>$bind['activity_sign']],'activity_id,activity_sign');
+                if(count($listExists)>0)
                 {
                     $response = array('errno' => 4);
                 }
@@ -119,7 +122,7 @@ class Hj_ActivityController extends AbstractController
                         //数据打包
                         $bind['comment'] = json_encode($bind['comment']);
                         //添加活动
-                        $res = $this->oActivity->insertActivity($bind);
+                        $res = $this->oList->insertActivity($bind);
                         $response = $res ? array('errno' => 0) : array('errno' => 9);
                     }
                 }
@@ -137,13 +140,13 @@ class Hj_ActivityController extends AbstractController
 		if($PermissionCheck['return'])
 		{
 			//活动ID
-			$activity_id= intval($this->request->activity_id);
+			$list_id= intval($this->request->activity_id);
 			//获取活动信息
-			$activityInfo = $this->oActivity->getActivity($activity_id,'*');
+			$listInfo = $this->oList->getActivity($list_id,'*');
 			//获取企业列表
 			$companyList = $this->oCompany->getCompanyList([],"company_id,company_name");
             //渲染模版
-			include $this->tpl('Hj_Activity_ActivityModify');
+			include $this->tpl('Hj_List_ActivityModify');
 		}
 		else
 		{
@@ -170,8 +173,8 @@ class Hj_ActivityController extends AbstractController
             }
             else
             {
-                $activityExists = $this->oActivity->getActivityList(['company_id'=>$bind['company_id'],'activity_sign'=>$bind['activity_sign'],'exclude_id'=>$bind['activity_id']],'activity_id,activity_sign');
-                if(count($activityExists)>0)
+                $listExists = $this->oList->getActivityList(['company_id'=>$bind['company_id'],'activity_sign'=>$bind['activity_sign'],'exclude_id'=>$bind['activity_id']],'activity_id,activity_sign');
+                if(count($listExists)>0)
                 {
                     $response = array('errno' => 4);
                 }
@@ -188,7 +191,7 @@ class Hj_ActivityController extends AbstractController
                     //数据打包
                     $bind['comment'] = json_encode([]);
                     //修改活动
-                    $res = $this->oActivity->updateActivity($bind['activity_id'],$bind);
+                    $res = $this->oList->updateActivity($bind['activity_id'],$bind);
                     $response = $res ? array('errno' => 0) : array('errno' => 9);
                 }
             }
@@ -205,9 +208,9 @@ class Hj_ActivityController extends AbstractController
 		if($PermissionCheck['return'])
 		{
 			//活动ID
-			$activity_id = trim($this->request->activity_id);
+			$list_id = trim($this->request->activity_id);
 			//删除活动
-			$this->oActivity->deleteActivity($activity_id);
+			$this->oList->deleteActivity($list_id);
 			//返回之前的活动
 			$this->response->goBack();
 		}
@@ -226,21 +229,21 @@ class Hj_ActivityController extends AbstractController
 		if($PermissionCheck['return'])
 		{
 			//活动ID
-			$activity_id= intval($this->request->activity_id);
+			$list_id= intval($this->request->activity_id);
 			//获取活动信息
-			$activityInfo = $this->oActivity->getPage($activity_id,'*');
+			$listInfo = $this->oList->getPage($list_id,'*');
 			//获取元素信息
-			$activityElementList = $this->oActivityElement->getElementList(['activity_id'=>$activity_id]);
+			$listElementList = $this->oListElement->getElementList(['activity_id'=>$list_id]);
 			//获取元素类型列表
 			$elementTypeList = $this->oElementType->getElementTypeList();
 			//获取企业列表
 			$companyList = $this->oCompany->getCompanyList([],"company_id,company_name");
-            foreach ($activityElementList as $elementSign => $elementInfo)
+            foreach ($listElementList as $elementSign => $elementInfo)
             {
-            	$activityElementList[$elementSign]['element_type_name'] = $elementTypeList[$elementInfo['element_type']]['element_type_name']??"未知类型";
+            	$listElementList[$elementSign]['element_type_name'] = $elementTypeList[$elementInfo['element_type']]['element_type_name']??"未知类型";
             }
             //渲染模版
-			include $this->tpl('Hj_Activity_ActivityDetail');
+			include $this->tpl('Hj_List_ActivityDetail');
 		}
 		else
 		{
@@ -256,11 +259,11 @@ class Hj_ActivityController extends AbstractController
 		if($PermissionCheck['return'])
 		{
 			//活动ID
-			$activity_id= intval($this->request->activity_id);
+			$list_id= intval($this->request->activity_id);
 			//获取元素类型列表
 			$elementTypeList = $this->oElementType->getElementTypeList([],"element_type,element_type_name");
             //渲染模版
-			include $this->tpl('Hj_Activity_ActivityElementAdd');
+			include $this->tpl('Hj_List_ActivityElementAdd');
 		}
 		else
 		{
@@ -287,8 +290,8 @@ class Hj_ActivityController extends AbstractController
 			}
 			else
 			{
-                $activityElementExists = $this->oActivityElement->getElementList(['activity_id'=>$bind['activity_id'],'element_sign'=>$bind['element_sign']],'element_id,element_sign');
-                if(count($activityElementExists))
+                $listElementExists = $this->oListElement->getElementList(['activity_id'=>$bind['activity_id'],'element_sign'=>$bind['element_sign']],'element_id,element_sign');
+                if(count($listElementExists))
                 {
                     $response = array('errno' => 3);
                 }
@@ -296,7 +299,7 @@ class Hj_ActivityController extends AbstractController
                 {
                     $bind['detail'] = json_encode([]);
                     //添加活动元素
-                    $res = $this->oActivityElement->insertPageElement($bind);
+                    $res = $this->oListElement->insertPageElement($bind);
                     $response = $res ? array('errno' => 0) : array('errno' => 9);
                 }
 			}
@@ -314,11 +317,11 @@ class Hj_ActivityController extends AbstractController
 			//活动ID
 			$element_id= intval($this->request->element_id);
 			//获取元素类型列表
-			$elementInfo = $this->oActivityElement->getPageElement($element_id);
+			$elementInfo = $this->oListElement->getPageElement($element_id);
 			//获取元素类型列表
 			$elementTypeList = $this->oElementType->getElementTypeList([],"element_type,element_type_name");
             //渲染模版
-			include $this->tpl('Hj_Activity_ActivityElementModify');
+			include $this->tpl('Hj_List_ActivityElementModify');
 		}
 		else
 		{
@@ -345,9 +348,9 @@ class Hj_ActivityController extends AbstractController
 			}
 			else
 			{
-                $elementInfo = $this->oActivityElement->getPageElement($bind['element_id'],"element_id,activity_id");
-			    $activityElementExists = $this->oActivityElement->getElementList(['activity_id'=>$elementInfo['activity_id'],'element_sign'=>$bind['element_sign'],'exclude_id'=>$bind['element_id']],'element_id,element_sign');
-                if(count($activityElementExists))
+                $elementInfo = $this->oListElement->getPageElement($bind['element_id'],"element_id,activity_id");
+			    $listElementExists = $this->oListElement->getElementList(['activity_id'=>$elementInfo['activity_id'],'element_sign'=>$bind['element_sign'],'exclude_id'=>$bind['element_id']],'element_id,element_sign');
+                if(count($listElementExists))
                 {
                     $response = array('errno' => 3);
                 }
@@ -355,7 +358,7 @@ class Hj_ActivityController extends AbstractController
                 {
                     $bind['detail'] = json_encode([]);
                     //添加活动元素
-                    $res = $this->oActivityElement->updatePageElement($bind['element_id'],$bind);
+                    $res = $this->oListElement->updatePageElement($bind['element_id'],$bind);
                     $response = $res ? array('errno' => 0) : array('errno' => 9);
                 }
 			}
@@ -374,7 +377,7 @@ class Hj_ActivityController extends AbstractController
 		    //元素ID
 			$element_id= intval($this->request->element_id);
 			//获取元素类型列表
-			$elementInfo = $this->oActivityElement->getPageElement($element_id);
+			$elementInfo = $this->oListElement->getPageElement($element_id);
 			$elementInfo['detail'] = json_decode($elementInfo['detail'],true);
 			$t = [];
 			if($elementInfo['element_type'] == "slideNavi")
@@ -387,7 +390,7 @@ class Hj_ActivityController extends AbstractController
             }
 			$elementTypeInfo = $this->oElementType->getElementType($elementInfo['element_type']);
 			//渲染模版
-			include $this->tpl('Hj_Activity_ActivityElement_'.$elementInfo['element_type']);
+			include $this->tpl('Hj_List_ActivityElement_'.$elementInfo['element_type']);
 		}
 		else
 		{
@@ -401,7 +404,7 @@ class Hj_ActivityController extends AbstractController
 		//元素ID
 		$element_id = intval($this->request->element_id);
 		$detail = $this->request->detail;
-	    $elementDetail = $this->oActivityElement->getPageElement($element_id,"detail,element_type");
+	    $elementDetail = $this->oListElement->getPageElement($element_id,"detail,element_type");
 	    $elementDetail['detail'] = json_decode($elementDetail['detail'],true);
 	    if(in_array($elementDetail['element_type'],['singlePic','backgroundPic']))
 	    {
@@ -460,7 +463,7 @@ class Hj_ActivityController extends AbstractController
 	    if(!isset($response))
 	    {
 	        $elementDetail['detail'] = json_encode($elementDetail['detail']);
-		    $res = $this->oActivityElement->updatePageElement($element_id,$elementDetail);
+		    $res = $this->oListElement->updatePageElement($element_id,$elementDetail);
 			$response = $res ? array('errno' => 0) : array('errno' => 9);
 	    }
 		echo json_encode($response);
@@ -476,7 +479,7 @@ class Hj_ActivityController extends AbstractController
 			//活动元素ID
 			$element_id = trim($this->request->element_id);
 			//删除活动元素
-			$this->oActivityElement->deletePageElement($element_id);
+			$this->oListElement->deletePageElement($element_id);
 			//返回之前的活动
 			$this->response->goBack();
 		}
@@ -496,9 +499,9 @@ class Hj_ActivityController extends AbstractController
             //元素ID
             $element_id= intval($this->request->element_id);
             //获取元素类型列表
-            $elementInfo = $this->oActivityElement->getPageElement($element_id,"element_type,element_id");
+            $elementInfo = $this->oListElement->getPageElement($element_id,"element_type,element_id");
             //渲染模版
-            include $this->tpl('Hj_Activity_ActivityElementDetail_Add_'.$elementInfo['element_type']);
+            include $this->tpl('Hj_List_ActivityElementDetail_Add_'.$elementInfo['element_type']);
         }
         else
         {
@@ -512,7 +515,7 @@ class Hj_ActivityController extends AbstractController
         //元素ID
         $element_id = intval($this->request->element_id);
         $detail = $this->request->detail;
-        $elementDetail = $this->oActivityElement->getPageElement($element_id,"detail,element_type");
+        $elementDetail = $this->oListElement->getPageElement($element_id,"detail,element_type");
         $elementDetail['detail'] = json_decode($elementDetail['detail'],true);
         if(in_array($elementDetail['element_type'],['slidePic']))
         {
@@ -529,7 +532,7 @@ class Hj_ActivityController extends AbstractController
             {
                 $elementDetail['detail'][] = ['img_url'=>$oss_urls['0'],'img_jump_url'=>$detail['img_jump_url']];
                 $elementDetail['detail'] = json_encode($elementDetail['detail']);
-                $res = $this->oActivityElement->updatePageElement($element_id,$elementDetail);
+                $res = $this->oListElement->updatePageElement($element_id,$elementDetail);
                 $response = $res ? array('errno' => 0) : array('errno' => 9);
             }
         }
@@ -542,13 +545,13 @@ class Hj_ActivityController extends AbstractController
         //元素ID
         $element_id = intval($this->request->element_id);
         $pos = intval($this->request->pos??0);
-        $elementDetail = $this->oActivityElement->getPageElement($element_id,"detail,element_type");
+        $elementDetail = $this->oListElement->getPageElement($element_id,"detail,element_type");
         $elementDetail['detail'] = json_decode($elementDetail['detail'],true);
         if(in_array($elementDetail['element_type'],['slidePic']))
         {
             $elementDetailInfo = $elementDetail['detail'][$pos];
             //渲染模版
-            include $this->tpl('Hj_Activity_ActivityElementDetail_Modify_'.$elementDetail['element_type']);
+            include $this->tpl('Hj_List_ActivityElementDetail_Modify_'.$elementDetail['element_type']);
         }
     }
     //删除活动单个元素详情
@@ -557,7 +560,7 @@ class Hj_ActivityController extends AbstractController
         //元素ID
         $element_id = intval($this->request->element_id);
         $pos = intval($this->request->pos??0);
-        $elementDetail = $this->oActivityElement->getPageElement($element_id,"detail,element_type");
+        $elementDetail = $this->oListElement->getPageElement($element_id,"detail,element_type");
         $elementDetail['detail'] = json_decode($elementDetail['detail'],true);
         if(in_array($elementDetail['element_type'],['slidePic']))
         {
@@ -566,7 +569,7 @@ class Hj_ActivityController extends AbstractController
                 unset($elementDetail['detail'][$pos]);
                 $elementDetail['detail'] = array_values($elementDetail['detail']);
                 $elementDetail['detail'] = json_encode($elementDetail['detail']);
-                $res = $this->oActivityElement->updatePageElement($element_id,$elementDetail);
+                $res = $this->oListElement->updatePageElement($element_id,$elementDetail);
             }
         }
         $this->response->goBack();
@@ -577,7 +580,7 @@ class Hj_ActivityController extends AbstractController
         //元素ID
         $element_id = intval($this->request->element_id);
         $detail = $this->request->detail;
-        $elementDetail = $this->oActivityElement->getPageElement($element_id,"detail,element_type");
+        $elementDetail = $this->oListElement->getPageElement($element_id,"detail,element_type");
         $elementDetail['detail'] = json_decode($elementDetail['detail'],true);
         if(in_array($elementDetail['element_type'],['slidePic']))
         {
@@ -598,7 +601,7 @@ class Hj_ActivityController extends AbstractController
                 //保存跳转链接
                 $elementDetail['detail'][$pos]['img_jump_url'] = $detail['img_jump_url'];
                 $elementDetail['detail'] = json_encode($elementDetail['detail']);
-                $res = $this->oActivityElement->updatePageElement($element_id,$elementDetail);
+                $res = $this->oListElement->updatePageElement($element_id,$elementDetail);
                 $response = $res ? array('errno' => 0) : array('errno' => 9);
             }
         }

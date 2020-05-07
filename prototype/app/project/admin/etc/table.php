@@ -99,7 +99,11 @@ $table['config_element']['num'] = 1;
 $table['config_activity']['db'] = 'hj_config';
 $table['config_activity']['num'] = 1;
 
-#活动相关
+#企业导入的用户列表
 $table['company_user_list']['db'] = 'hj_user';
 $table['company_user_list']['num'] = 1;
+
+#列表
+$table['config_list']['db'] = 'hj_config';
+$table['config_list']['num'] = 1;
 return $table;
