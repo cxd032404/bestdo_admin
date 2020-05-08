@@ -12,7 +12,13 @@ $config['companyName'] = "合伽体育";
 $config['companyUrl'] = "http://www.bestdo.com";
 $config['projectName'] = "Bestdo控制台";
 $config['currentVersion'] = "1.0";
-$config['apiUrl'] = "http://api.bestdo.cn";
+$config['api'] = ['root'=>"http://api.bestdo.cn",
+    'list'=>[
+        'post'=>'/list/post/'
+    ]
+
+];
+
 $config['adminUrl'] = "http://admin.bestdo.cn";
 $config['aliConfig'] = $keyConfig['aliyun'];
 $config['oss'] = array_merge($config['aliConfig'],

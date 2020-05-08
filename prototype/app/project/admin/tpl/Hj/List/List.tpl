@@ -6,13 +6,17 @@ $(document).ready(function(){
   });
 });
 
-function activityDelete(p_id,p_name){
+function listDelete(p_id,p_name){
     msg = '是否删除 ' + p_name + '?'
   deleteactivityBox = divBox.confirmBox({content:msg,ok:function(){location.href = '{tpl:$this.sign/}&ac=list.delete&list_id=' + p_id;}});
 }
 
-function activityModify(mid){
-  modifyactivityBox = divBox.showBox('{tpl:$this.sign/}&ac=list.modify&list_id=' + mid, {title:'修改列表',width:600,height:500});
+function listModify(lid){
+  modifyactivityBox = divBox.showBox('{tpl:$this.sign/}&ac=list.modify&list_id=' + lid, {title:'修改列表',width:600,height:500});
+}
+
+function post(lid){
+  postBox = divBox.showBox('{tpl:$this.sign/}&ac=post&list_id=' + lid, {title:'提交',width:600,height:800});
 }
 
 </script>
@@ -56,8 +60,8 @@ function activityModify(mid){
     <td align="center">{tpl:$listInfo.list_type_name/}</td>
 
       <td align="center">{tpl:$listInfo.update_time/}</td>
-      <td align="center"><a  href="javascript:;" onclick="activityDelete('{tpl:$listInfo.list_id/}','{tpl:$listInfo.list_name/}')">删除</a>
- |  <a href="javascript:;" onclick="activityModify('{tpl:$listInfo.list_id/}');">修改</a></td>
+      <td align="center"><a  href="javascript:;" onclick="listDelete('{tpl:$listInfo.list_id/}','{tpl:$listInfo.list_name/}')">删除</a>
+ |  <a href="javascript:;" onclick="listModify('{tpl:$listInfo.list_id/}');">修改</a> |  <a href="javascript:;" onclick="post('{tpl:$listInfo.list_id/}');">上传</a></td>
   </tr>
 {/tpl:loop}
 </table>

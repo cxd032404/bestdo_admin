@@ -194,4 +194,26 @@ class Hj_ListController extends AbstractController
 			include $this->tpl('403');
 		}
 	}
+    //添加页面元素单个详情页面
+    public function postAction()
+    {
+        //检查权限
+        $PermissionCheck = $this->manager->checkMenuPermission("updateList");
+        if($PermissionCheck['return'])
+        {
+            //列表ID
+            $list_id = intval($this->request->list_id);
+            //获取元素类型列表
+            $listInfo = $this->oList->getList($list_id);
+            $listInfo['detail'] = json_decode($listInfo['detail'],true);
+            $postUrl = $this->config->api['root'].$this->config->api['list']['post'];
+            //渲染模版
+            include $this->tpl('Hj_List_Post');
+        }
+        else
+        {
+            $home = $this->sign;
+            include $this->tpl('403');
+        }
+    }
 }
