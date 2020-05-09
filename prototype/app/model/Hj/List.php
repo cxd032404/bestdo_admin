@@ -9,8 +9,13 @@ class Hj_List extends Base_Widget
 {
 	//声明所用到的表
 	protected $table = 'config_list';
-    protected $list_type = array("text"=>"文本","pic"=>"图片","video"=>"视频",
-        "rankingFromKudo"=>"点赞排名",'rankingFromUpload'=>"用户上传排名");
+    protected $list_type =
+    ["text"=>['name'=>"文本",'textarea'=>1],
+        "pic"=>['name'=>"图片",'upload'=>['pic'=>10],'textarea'=>1],
+        "video"=>['name'=>"视频",'upload'=>['video'=>3],'textarea'=>1],
+        "rankingFromKudo"=>['name'=>"点赞排名"],
+        "rankingFromUpload"=>['name'=>"用户上传排名",'upload'=>['txt'=>1]]
+    ];
     //获取列表类型
     public function getListType()
     {

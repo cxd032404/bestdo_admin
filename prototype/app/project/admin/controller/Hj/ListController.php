@@ -56,7 +56,7 @@ class Hj_ListController extends AbstractController
                 //数据解包
                 $listList[$key]['detail'] = json_decode($listInfo['detail'],true);
                 $listList[$key]['company_name'] = ($listInfo['company_id']==0)?"无对应":($companyList[$listInfo['company_id']]['company_name']??"未知");
-                $listList[$key]['list_type_name'] = ($listInfo['company_id']==0)?"无对应":($listTypeList[$listInfo['list_type']]??"未知");
+                $listList[$key]['list_type_name'] = ($listInfo['company_id']==0)?"无对应":($listTypeList[$listInfo['list_type']]['name']??"未知");
             }
 			//渲染模版
 			include $this->tpl('Hj_List_index');
@@ -208,6 +208,9 @@ class Hj_ListController extends AbstractController
             //获取元素类型列表
             $listInfo = $this->oList->getList($list_id);
             $listInfo['detail'] = json_decode($listInfo['detail'],true);
+            //获取列表类型列表
+            $listTypeList = $this->oList->getListType();
+            $typeInfo  = $listTypeList[$listInfo['list_type']];
             $postUrl = $this->config->api['root'].$this->config->api['list']['post'];
             //渲染模版
             include $this->tpl('Hj_List_Post');
@@ -232,7 +235,7 @@ class Hj_ListController extends AbstractController
             $params['PageSize'] = 5;
             //获取列表时需要获得记录总数
             $params['getCount'] = 1;
-            //获取元素类型列表
+            //获取列表信息
             $listInfo = $this->oList->getList($list_id);
             $listInfo['detail'] = json_decode($listInfo['detail'],true);
             $params['list_id'] = $listInfo['list_id'];
@@ -257,6 +260,28 @@ class Hj_ListController extends AbstractController
             $page_content =  base_common::multi($list['postsCount'], $page_url, $params['Page'], $params['PageSize'], 10, $maxpage = 100, $prevWord = '上一页', $nextWord = '下一页');
             //渲染模版
             include $this->tpl('Hj_List_List');
+        }
+        else
+        {
+            $home = $this->sign;
+            include $this->tpl('403');
+        }
+    }
+    //列表页面
+    public function postsDetailAction()
+    {
+        //检查权限
+        $PermissionCheck = $this->manager->checkMenuPermission(0);
+        if($PermissionCheck['return'])
+        {
+            //文章ID
+            $post_id = intval($this->request->post_id??0);
+            //获取文章详情
+            $postsInfo = $this->oPosts->getPosts($post_id);
+            //数据解包
+            $postsInfo['source'] = json_decode($postsInfo['source'],true);
+            //渲染模版
+            include $this->tpl('Hj_List_PostsDetail');
         }
         else
         {

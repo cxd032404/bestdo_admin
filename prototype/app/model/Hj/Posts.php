@@ -60,15 +60,15 @@ class Hj_Posts extends Base_Widget
 
 	/**
 	 * 获取单条记录
-	 * @param integer $list_id
+	 * @param integer $post_id
 	 * @param string $fields
 	 * @return array
 	 */
-	public function getList($list_id, $fields = '*')
+	public function getPosts($post_id, $fields = '*')
 	{
-		$list_id = intval($list_id);
+        $post_id = intval($post_id);
         $table_to_process = Base_Widget::getDbTable($this->table);
-		return $this->db->selectRow($table_to_process, $fields, '`list_id` = ?', $list_id);
+		return $this->db->selectRow($table_to_process, $fields, '`post_id` = ?', $post_id);
 	}
 	/**
 	 * 更新

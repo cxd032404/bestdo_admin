@@ -2,18 +2,20 @@
 
 <div class="br_bottom"></div>
 <form id="post_form" name="post_form" enctype="multipart/form-data" action="{tpl:$postUrl/}" method="post">
-<input type="hidden" name="list_id" id="list_id" value="{tpl:$listInfo.list_id/}" />
+<input type="hidden" name="list_id" id="list_id" value="{tpl:$postsInfo.post_id/}" />
 <table width="99%" align="center" class="table table-bordered table-striped" >
+
+
 	{tpl:if(isset($typeInfo.upload.pic))}
 	<?php for($i=1;$i<=$typeInfo['upload']['pic'];$i++)
 		{
 		?>
-		<tr class="hover">
-			{tpl:if($i==1)}<td rowspan="{tpl:$typeInfo.upload.pic/}">图片上传：</td>{/tpl:if}
+	<tr class="hover">
+		{tpl:if($i==1)}<td rowspan="{tpl:$typeInfo.upload.pic/}">图片上传：</td>{/tpl:if}
 		<td align="left"><input name="upload_img[{tpl:$i/}]" type="file" id="upload_img[{tpl:$i/}]" />
 		</td>
 	</tr>
-		<?php
+	<?php
 		}?>
 	{/tpl:if}
 	{tpl:if(isset($typeInfo.upload.video))}
@@ -29,14 +31,9 @@
 		}?>
 	{/tpl:if}
 
-	<tr class="hover">
-	<td>文本：</td>
-	<td align="left"><input name="upload_txt[1]" type="file" id="upload_txt[1]" />
-	</td>
-</tr>
 <tr class="hover"><td colspan = 2>文本</td></tr>
 <tr class="hover"><td colspan = 2>
-		<textarea style="width:500px; height:200px" name="detail[comment]" id="detail[comment]" ></textarea>
+		<textarea style="width:500px; height:200px" name="detail[comment]" id="detail[comment]" >{tpl:$postsInfo.content/}</textarea>
 	</td>
 </tr>
 <tr class="noborder"><td></td>

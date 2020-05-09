@@ -45,7 +45,7 @@ function post(lid){
     <td align="center">{tpl:$postsInfo.create_time/}</td>
     <td align="center">{tpl:$postsInfo.update_time/}</td>
       <td align="center"><a  href="javascript:;" onclick="listDelete('{tpl:$listInfo.list_id/}','{tpl:$listInfo.list_name/}')">删除</a>
- |  <a href="javascript:;" onclick="listModify('{tpl:$listInfo.list_id/}');">修改</a> | <a href="javascript:;" onclick="post('{tpl:$listInfo.list_id/}');">上传</a> | <a href="{tpl:$this.sign/}&ac=list&list_id={tpl:$listInfo.list_id/}">列表</a></td>
+ | <a href="{tpl:$this.sign/}&ac=posts.detail&post_id={tpl:$postsInfo.post_id/}">详情</a> | <a href="{tpl:$this.sign/}&ac=list&list_id={tpl:$listInfo.list_id/}">列表</a></td>
   </tr>
 {/tpl:loop}
   <tr><th colspan="10" align="center" class="rowtip">{tpl:$page_content/}</th></tr>

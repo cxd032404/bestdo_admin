@@ -19,8 +19,8 @@
 <tr class="hover"><td>列表分类</td>
 	<td align="left">
 		<select name="list_type"  id="list_type" size="1">
-			{tpl:loop $listTypeList  $type $name}
-			<option value="{tpl:$type/}"{tpl:if($type==$listInfo.list_type)}selected="selected"{/tpl:if} >{tpl:$name/}</option>
+			{tpl:loop $listTypeList  $type $type_info}
+			<option value="{tpl:$type/}"{tpl:if($type==$listInfo.list_type)}selected="selected"{/tpl:if} >{tpl:$type_info.name/}</option>
 			{/tpl:loop}
 		</select></td>
 </tr>

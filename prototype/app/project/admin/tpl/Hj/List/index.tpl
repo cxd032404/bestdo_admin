@@ -36,8 +36,8 @@ function post(lid){
 
   <select name="list_type"  id="list_type" size="1">
     <option value="0"{tpl:if(0==$list_type)}selected="selected"{/tpl:if} >全部</option>
-    {tpl:loop $listTypeList  $type $name}
-    <option value="{tpl:$type/}"{tpl:if($type==$list_type)}selected="selected"{/tpl:if} >{tpl:$name/}</option>
+    {tpl:loop $listTypeList  $type $type_info}
+    <option value="{tpl:$type/}"{tpl:if($type==$list_type)}selected="selected"{/tpl:if} >{tpl:$type_info.name/}</option>
     {/tpl:loop}
   </select>
   <input type="submit" name="Submit" value="查询" />
