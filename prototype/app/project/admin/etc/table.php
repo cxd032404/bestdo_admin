@@ -106,4 +106,8 @@ $table['company_user_list']['num'] = 1;
 #列表
 $table['config_list']['db'] = 'hj_config';
 $table['config_list']['num'] = 1;
+
+#文章
+$table['user_posts']['db'] = 'hj_user';
+$table['user_posts']['num'] = 1;
 return $table;

@@ -41,7 +41,7 @@
 					//divBox.alertBox(jsonResponse.msg,function(){});
 				} else {
 					var message = '发布成功';
-					divBox.confirmBox({content:message,ok:function(){windowParent.getRightHtml('{tpl:$this.sign/}');}});
+					divBox.confirmBox({content:message,ok:function(){windowParent.getRightHtml('{tpl:$this.sign/}'+'&ac=list&list_id='+$('#list_id').val());}});
 				}
 			}
 		};

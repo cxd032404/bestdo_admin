@@ -29,9 +29,11 @@ class Hj_ListController extends AbstractController
 		parent::init();
 		$this->oList = new Hj_List();
 		$this->oCompany = new Hj_Company();
+        $this->oPosts = new Hj_Posts();
 
-	}
-	//页面配置列表页面
+
+    }
+	//列表页面
 	public function indexAction()
 	{
 		//检查权限
@@ -57,7 +59,7 @@ class Hj_ListController extends AbstractController
                 $listList[$key]['list_type_name'] = ($listInfo['company_id']==0)?"无对应":($listTypeList[$listInfo['list_type']]??"未知");
             }
 			//渲染模版
-			include $this->tpl('Hj_List_List');
+			include $this->tpl('Hj_List_index');
 		}
 		else
 		{
@@ -209,6 +211,52 @@ class Hj_ListController extends AbstractController
             $postUrl = $this->config->api['root'].$this->config->api['list']['post'];
             //渲染模版
             include $this->tpl('Hj_List_Post');
+        }
+        else
+        {
+            $home = $this->sign;
+            include $this->tpl('403');
+        }
+    }
+    //列表页面
+    public function listAction()
+    {
+        //检查权限
+        $PermissionCheck = $this->manager->checkMenuPermission(0);
+        if($PermissionCheck['return'])
+        {
+            //列表ID
+            $list_id = intval($this->request->list_id??0);
+            //分页参数
+            $params['Page'] = abs(intval($this->request->Page??1));
+            $params['PageSize'] = 5;
+            //获取列表时需要获得记录总数
+            $params['getCount'] = 1;
+            //获取元素类型列表
+            $listInfo = $this->oList->getList($list_id);
+            $listInfo['detail'] = json_decode($listInfo['detail'],true);
+            $params['list_id'] = $listInfo['list_id'];
+            //获取文章列表
+            $list = $this->oPosts->getPostsList($params);
+            $userList = [];
+            //循环页面列表
+            foreach($list['postsList'] as $key => $listDetail)
+            {
+                //数据解包
+                if(!isset($userList[$listDetail['user_id']]))
+                {
+                    $userInfo = (new Hj_UserInfo())->getUser($listDetail['user_id'],'user_id,true_name');
+                    if(isset($userInfo['user_id']))
+                    {
+                        $userList[$listDetail['user_id']] = $userInfo;
+                    }
+                }
+                $list['postsList'][$key]['user_name'] = $userList[$listDetail['user_id']]['true_name']??"未知用户";
+            }
+            $page_url = Base_Common::getUrl('',$this->ctl,'list',$params)."&Page=~page~";
+            $page_content =  base_common::multi($list['postsCount'], $page_url, $params['Page'], $params['PageSize'], 10, $maxpage = 100, $prevWord = '上一页', $nextWord = '下一页');
+            //渲染模版
+            include $this->tpl('Hj_List_List');
         }
         else
         {
