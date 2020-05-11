@@ -110,4 +110,8 @@ $table['config_list']['num'] = 1;
 #文章
 $table['user_posts']['db'] = 'hj_user';
 $table['user_posts']['num'] = 1;
+
+#活动相关
+$table['config_vote']['db'] = 'hj_config';
+$table['config_vote']['num'] = 1;
 return $table;
