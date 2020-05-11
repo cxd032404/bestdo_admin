@@ -280,6 +280,14 @@ class Hj_ListController extends AbstractController
             $postsInfo = $this->oPosts->getPosts($post_id);
             //数据解包
             $postsInfo['source'] = json_decode($postsInfo['source'],true);
+            //获取列表数据
+            $listInfo = $this->oList->getList($postsInfo['list_id'],'list_id,list_type');
+            //获取列表类型列表
+            $listTypeList = $this->oList->getListType();
+            $typeInfo  = $listTypeList[$listInfo['list_type']];
+            $postUrl = $this->config->api['root'].$this->config->api['list']['post'];
+            $sourceRemoveUrl = $this->config->api['root'].$this->config->api['list']['source_remove'];
+
             //渲染模版
             include $this->tpl('Hj_List_PostsDetail');
         }

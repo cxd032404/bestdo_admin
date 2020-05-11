@@ -14,8 +14,10 @@ $config['projectName'] = "Bestdo控制台";
 $config['currentVersion'] = "1.0";
 $config['api'] = ['root'=>"http://api.bestdo.cn",
     'list'=>[
-        'post'=>'/list/post/'
+        'post'=>'/list/post/',
+        'source_remove'=>'/list/source_remove'
     ]
+
 
 ];
 
