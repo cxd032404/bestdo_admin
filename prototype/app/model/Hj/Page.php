@@ -140,7 +140,7 @@ class Hj_Page extends Base_Widget
         {
             foreach($array as $k => $v)
             {
-                $t[$v['name']] = $v['default']??1;
+                $t[$v['name']] = ($v['type']=="int")?intval($v['default']??1):$v['default']??1;
             }
         }
         $return = (count($t)>0)?"params=".urlencode(json_encode($t)):"";
