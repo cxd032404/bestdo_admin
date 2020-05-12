@@ -32,15 +32,21 @@
 		}?>
 	{/tpl:if}
 	{tpl:if(isset($typeInfo.upload.video))}
-	<?php for($i=1;$i<=$typeInfo['upload']['video'];$i++)
-		{
+		<?php for($i=1;$i<=$typeInfo['upload']['video'];$i++)
+		{	$name="upload_video";
 		?>
-	<tr class="hover">
-		{tpl:if($i==1)}<td rowspan="{tpl:$typeInfo.upload.video/}">视频上传：</td>{/tpl:if}
-		<td align="left"><input name="upload_video[{tpl:$i/}]" type="file" id="upload_video[{tpl:$i/}]" />
-		</td>
-	</tr>
-	<?php
+		<tr class="hover">
+			{tpl:if($i==1)}<td rowspan="{tpl:$typeInfo.upload.video/}">视频上传：</td>{/tpl:if}
+			<td align="left">
+				<?php if(isset($postsInfo['source'][$name.".".$i])){?>
+				已选视频:<img src="<?php echo $postsInfo['source'][$name.".".$i].$video_suffix;?>" width="30px;" height="30px;"/> <a  href="javascript:;" onclick="sourceDelete('{tpl:$postsInfo.post_id/}','{tpl:$name/}.{tpl:$i/}')">删除</a>
+				<br>更改视频：
+				<br>
+				<?php }?>
+				<input name="{tpl:$name/}[{tpl:$i/}]" type="file" id="{tpl:$name/}[{tpl:$i/}]" />
+			</td>
+		</tr>
+		<?php
 		}?>
 	{/tpl:if}
 

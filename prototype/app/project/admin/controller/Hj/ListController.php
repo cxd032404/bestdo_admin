@@ -288,7 +288,10 @@ class Hj_ListController extends AbstractController
             $typeInfo  = $listTypeList[$listInfo['list_type']];
             $postUrl = $this->config->api['root'].$this->config->api['list']['post'];
             $sourceRemoveUrl = $this->config->api['root'].$this->config->api['list']['source_remove'];
-
+            if($listInfo['list_type']=="video")
+            {
+                $video_suffix = "?x-oss-process=video/snapshot,t_1000,f_jpg,w_300,h_300,m_fast";
+            }
             //渲染模版
             include $this->tpl('Hj_List_PostsDetail');
         }
