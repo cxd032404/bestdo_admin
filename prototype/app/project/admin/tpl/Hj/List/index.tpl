@@ -40,7 +40,7 @@ function post(lid){
     <option value="{tpl:$type/}"{tpl:if($type==$list_type)}selected="selected"{/tpl:if} >{tpl:$type_info.name/}</option>
     {/tpl:loop}
   </select>
-  <input type="submit" name="Submit" value="查询" />
+  <input type="submit" name="submit" value="查询" />
 </form>
 <table width="99%" align="center" class="table table-bordered table-striped">
   <tr>

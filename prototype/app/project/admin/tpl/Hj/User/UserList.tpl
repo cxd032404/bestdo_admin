@@ -35,7 +35,7 @@
         {/tpl:loop}
     </select>
 
-    <input type="submit" name="Submit" value="查询" />{tpl:$export_var/}
+    <input type="submit" name="submit" value="查询" />{tpl:$export_var/}
 </form>
 <fieldset><legend>用户列表</legend>
 <table width="99%" align="center" class="table table-bordered table-striped">

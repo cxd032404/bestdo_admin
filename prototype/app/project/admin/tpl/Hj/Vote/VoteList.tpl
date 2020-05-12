@@ -29,7 +29,7 @@ function voteModify(mid){
       <option value="{tpl:$activity_info.activity_id/}"{tpl:if($activity_info.activity_id==$activity_id)}selected="selected"{/tpl:if} >{tpl:$activity_info.activity_name/}</option>
       {/tpl:loop}
     </select>
-  <input type="submit" name="Submit" value="查询" />
+  <input type="submit" name="submit" value="查询" />
 </form>
 <table width="99%" align="center" class="table table-bordered table-striped">
   <tr>
@@ -51,7 +51,7 @@ function voteModify(mid){
       <td align="center">{tpl:$voteInfo.start_time/}<P>{tpl:$voteInfo.end_time/}</td>
       <td align="center">{tpl:$voteInfo.update_time/}</td>
       <td align="center"><a  href="javascript:;" onclick="voteDelete('{tpl:$voteInfo.vote_id/}','{tpl:$voteInfo.vote_name/}')">删除</a>
- |  <a href="javascript:;" onclick="voteModify('{tpl:$voteInfo.vote_id/}');">修改</a></td>
+ |  <a href="javascript:;" onclick="voteModify('{tpl:$voteInfo.vote_id/}');">修改</a> |  <a href="{tpl:$this.sign/}&ac=vote.detail&vote_id={tpl:$voteInfo.vote_id/}">详情</a></td>
   </tr>
 {/tpl:loop}
 </table>
