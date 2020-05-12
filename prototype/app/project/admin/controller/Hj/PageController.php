@@ -54,6 +54,8 @@ class Hj_PageController extends AbstractController
 				$pageList[$key]['company_name'] = ($pageInfo['company_id']==0)?"无对应":($companyList[$pageInfo['company_id']]['company_name']??"未知");
 				$pageList[$key]['element_count'] = $this->oPageElement->getElementCount(['page_id'=>$pageInfo['page_id']]);
                 $pageList[$key]['detail'] = json_decode($pageInfo['detail'],true);
+                $pageList[$key]['page_url'] = $this->config->api['root'].$this->config->api['list']['get_page'].$pageInfo['company_id']."/".$pageInfo['page_sign'];
+                $pageList[$key]['page_params'] = $this->oPage->processDefaultParams($pageList[$key]['detail']['params']);
             }
 			//渲染模版
 			include $this->tpl('Hj_Page_PageList');

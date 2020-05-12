@@ -51,7 +51,7 @@ function pageModify(mid){
       <td align="center">{tpl:$pageInfo.company_name/}</td>
     <td align="center">{tpl:$pageInfo.update_time/}</td>
       <td align="center"><a  href="javascript:;" onclick="pageDelete('{tpl:$pageInfo.page_id/}','{tpl:$pageInfo.page_name/}')">删除</a>
- |  <a href="javascript:;" onclick="pageModify('{tpl:$pageInfo.page_id/}');">修改</a> |  <a href="{tpl:$this.sign/}&ac=page.detail&page_id={tpl:$pageInfo.page_id/}">页面元素 ({tpl:$pageInfo.element_count/})</a></td>
+ |  <a href="javascript:;" onclick="pageModify('{tpl:$pageInfo.page_id/}');">修改</a> | <a href="{tpl:$this.sign/}&ac=page.detail&page_id={tpl:$pageInfo.page_id/}">页面元素 ({tpl:$pageInfo.element_count/})</a> | <a target="_blank" href="{tpl:$pageInfo.page_url/}?{tpl:$pageInfo.page_params/}">测试页面</a></td>
   </tr>
 {/tpl:loop}
 </table>

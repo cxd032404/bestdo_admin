@@ -101,7 +101,7 @@ class Hj_Page extends Base_Widget
                 $t2 = explode(":", trim($v));
                 if (isset($t2[0]) && $t2[0] != "")
                 {
-                    $return[] = ['name' => trim($t2[0]), 'type' => trim($t2[1] ?? "int")];
+                    $return[] = ['name' => trim($t2[0]), 'type' => trim($t2[1] ?? "int"),'default' => trim($t2[2] ?? 1)];
                 }
             }
 
@@ -125,6 +125,25 @@ class Hj_Page extends Base_Widget
             }
         }
         $return = implode("|",$t);
+        return $return;
+    }
+    /**
+     * 打包页面参数数组
+     * @param array $array
+     * @return string
+     */
+    public function processDefaultParams($array = [])
+    {
+        $return = "";
+        $t = [];
+        if(count($array)>=1)
+        {
+            foreach($array as $k => $v)
+            {
+                $t[$v['name']] = $v['default']??1;
+            }
+        }
+        $return = (count($t)>0)?"params=".urlencode(json_encode($t)):"";
         return $return;
     }
 
