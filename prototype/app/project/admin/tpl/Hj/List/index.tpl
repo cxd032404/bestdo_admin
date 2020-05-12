@@ -1,10 +1,5 @@
 {tpl:tpl contentHeader/}
 <script type="text/javascript">
-$(document).ready(function(){
-  $('#add_list').click(function(){
-    addactivityBox = divBox.showBox('{tpl:$this.sign/}&ac=list.add', {title:'添加列表',width:600,height:500});
-  });
-});
 
 function listDelete(p_id,p_name){
     msg = '是否删除 ' + p_name + '?'
@@ -61,7 +56,7 @@ function post(lid){
 
       <td align="center">{tpl:$listInfo.update_time/}</td>
       <td align="center"><a  href="javascript:;" onclick="listDelete('{tpl:$listInfo.list_id/}','{tpl:$listInfo.list_name/}')">删除</a>
- |  <a href="javascript:;" onclick="listModify('{tpl:$listInfo.list_id/}');">修改</a> | <a href="javascript:;" onclick="post('{tpl:$listInfo.list_id/}');">上传</a> | <a href="{tpl:$this.sign/}&ac=list&list_id={tpl:$listInfo.list_id/}">列表</a></td>
+ |  <a href="javascript:;" onclick="listModify('{tpl:$listInfo.list_id/}');">修改</a> | <a href="{tpl:$this.sign/}&ac=list&list_id={tpl:$listInfo.list_id/}">列表 {tpl:if($listInfo.posts_count>0)}({tpl:$listInfo.posts_count/}){/tpl:if} </a></td>
   </tr>
 {/tpl:loop}
 </table>

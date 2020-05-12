@@ -40,12 +40,12 @@ class Hj_ListController extends AbstractController
 		$PermissionCheck = $this->manager->checkMenuPermission(0);
 		if($PermissionCheck['return'])
 		{
-			//企业ID
+		    //企业ID
 			$company_id = intval($this->request->company_id??0);
             //列表分类
             $list_type = trim($this->request->list_type??0);
 			//获取页面列表
-			$listList = $this->oList->getListList(['company_id'=>$company_id]);
+			$listList = $this->oList->getListList(['company_id'=>$company_id,'list_type'=>$list_type]);
 			//获取企业列表
 			$companyList = $this->oCompany->getCompanyList([],"company_id,company_name");
             //获取列表类型列表
@@ -57,6 +57,7 @@ class Hj_ListController extends AbstractController
                 $listList[$key]['detail'] = json_decode($listInfo['detail'],true);
                 $listList[$key]['company_name'] = ($listInfo['company_id']==0)?"无对应":($companyList[$listInfo['company_id']]['company_name']??"未知");
                 $listList[$key]['list_type_name'] = ($listInfo['company_id']==0)?"无对应":($listTypeList[$listInfo['list_type']]['name']??"未知");
+                $listList[$key]['posts_count'] = $this->oPosts->getPostCountByList($listInfo['list_id']);
             }
 			//渲染模版
 			include $this->tpl('Hj_List_index');

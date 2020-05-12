@@ -1,15 +1,16 @@
 {tpl:tpl contentHeader/}
 <script type="text/javascript">
-
 	function sourceDelete(pid,sid){
 		souceDeleteBox = divBox.confirmBox({content:'是否确认删除吗?删除后将不可恢复，需要重新上传',ok:function(){location.href = '{tpl:$sourceRemoveUrl/}&post_id=' + pid + '&sid='+ sid;}});
 	}
 </script>
-
+[ <a href="{tpl:$this.sign/}&ac=list&list_id={tpl:$postsInfo.list_id/}">返回</a> ]
 <div class="br_bottom"></div>
 <form id="post_form" name="post_form" enctype="multipart/form-data" action="{tpl:$postUrl/}" method="post">
 <input type="hidden" name="post_id" id="post_id" value="{tpl:$postsInfo.post_id/}" />
-<table width="99%" align="center" class="table table-bordered table-striped" >
+	<input type="hidden" name="list_id" id="list_id" value="{tpl:$postsInfo.list_id/}" />
+
+	<table width="99%" align="center" class="table table-bordered table-striped" >
 
 
 	{tpl:if(isset($typeInfo.upload.pic))}

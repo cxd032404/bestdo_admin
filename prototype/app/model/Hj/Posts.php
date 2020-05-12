@@ -44,12 +44,29 @@ class Hj_Posts extends Base_Widget
 	}
     /**
      * 获取记录数量
-     * @param $fields  所要获取的数据列
-     * @param $params 传入的条件列表
+     * @param $where  查询条件
      * @return integer
      */
     public function getPostCount($where)
     {
+        //获取需要用到的表名
+        $table_to_process = Base_Widget::getDbTable($this->table);
+        //生成查询列
+        $fields = Base_common::getSqlFields(array("postsCount"=>"count(post_id)"));
+        $sql = "SELECT $fields FROM $table_to_process where 1 ".$where;
+        return $this->db->getOne($sql);
+    }
+    /**
+     * 获取单个列表下的记录数量
+     * @param $list_id  列表ID
+     * @return integer
+     */
+    public function getPostCountByList($list_id)
+    {
+        $list_id = intval($list_id);
+        $whereList = " list_id = ".$list_id;
+        $whereCondition = array($whereList);
+        $where = Base_common::getSqlWhere($whereCondition);
         //获取需要用到的表名
         $table_to_process = Base_Widget::getDbTable($this->table);
         //生成查询列
