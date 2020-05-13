@@ -171,7 +171,7 @@ class Hj_VoteController extends AbstractController
             }
             else
             {
-                $voteExists = $this->oVote->getVoteList(['company_id'=>$bind['company_id'],'vote_sign'=>$bind['vote_sign'],'exclude_id'=>$bind['vote_id']],'vote_id,vote_sign');
+                $voteExists = $this->oVote->getVoteList(['activity_id'=>$bind['activity_id'],'vote_sign'=>$bind['vote_sign'],'exclude_id'=>$bind['vote_id']],'vote_id,vote_sign');
                 if(count($voteExists)>0)
                 {
                     $response = array('errno' => 4);
@@ -329,7 +329,6 @@ class Hj_VoteController extends AbstractController
                 //获取投票信息
                 $voteInfo = $this->oVote->getVote($bind['vote_id'],'vote_id,detail');
                 $voteInfo['detail'] = json_decode($voteInfo['detail'],true);
-                $voteExists = $this->oVote->getVoteList(['company_id'=>$bind['company_id'],'vote_sign'=>$bind['vote_sign'],'exclude_id'=>$bind['vote_id']],'vote_id,vote_sign');
                 if($bind['detail']['source_from'] == "from_list")
                 {
                     $optionInfo  = ['vote_option_name'=>$bind['vote_option_name'],'source_from'=>"from_list","list_id"=>$bind['detail']['list_id']];

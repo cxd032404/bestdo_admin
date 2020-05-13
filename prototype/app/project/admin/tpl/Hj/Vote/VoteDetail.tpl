@@ -24,7 +24,6 @@ function voteOptionModify(mid){
 <fieldset><legend>投票选项列表 </legend>
     <form id="vote_update_form" name="vote_update_form" action="{tpl:$this.sign/}&ac=vote.option.update" method="post">
     <input type="hidden" name="vote_id" id="vote_id" value="{tpl:$voteInfo.vote_id/}" />
-    <input type="submit" name="submit" value="查询" />
 </form>
 <table width="99%" align="center" class="table table-bordered table-striped">
   <tr>

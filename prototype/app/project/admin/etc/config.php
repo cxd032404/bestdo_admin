@@ -17,6 +17,7 @@ $config['api'] = ['root'=>"http://api.bestdo.cn",
         'post'=>'/list/post/',
         'source_remove'=>'/list/source_remove',
         'get_page'=>'/page/getPage/',
+
     ]
 
 
