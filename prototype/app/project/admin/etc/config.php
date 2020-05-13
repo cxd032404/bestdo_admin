@@ -15,7 +15,8 @@ $config['currentVersion'] = "1.0";
 $config['api'] = ['root'=>"http://api.bestdo.cn",
     'list'=>[
         'post'=>'/list/post/',
-        'source_remove'=>'/list/source_remove'
+        'source_remove'=>'/list/source_remove',
+                'get_page'=>'/oage/get_page/'
     ]
 
 
