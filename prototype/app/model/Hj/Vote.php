@@ -18,10 +18,12 @@ class Hj_Vote extends Base_Widget
 	public function getVoteList($params = [],$fields = "*")
 	{
 		$table_to_process = Base_Widget::getDbTable($this->table);
-	    $whereCompany = (isset($params['company_id']) && $params['company_id']>0)?" company_id = ".$params['company_id']:"";
+	    $whereActivity = (isset($params['acitivity_id']) && $params['acitivity_id']>0)?" acitivity_id = ".$params['acitivity_id']:"";
+        $whereActivitys = (isset($params['acitivity_ids']) && is_array($params['acitivity_ids']))?" acitivity_id in (".implode(",",$params['acitivity_id']).")":"";
+
         $whereSign = (isset($params['vote_sign']) && trim($params['vote_sign'])!="")?" vote_sign = '".$params['vote_sign']."'":"";
         $whereExclude = (isset($params['exclude_id']) && $params['exclude_id'])>0?" vote_id != ".$params['exclude_id']:"";
-        $whereCondition = array($whereCompany,$whereSign,$whereExclude);
+        $whereCondition = array($whereActivity,$whereSign,$whereExclude,$whereActivitys);
         $where = Base_common::getSqlWhere($whereCondition);
 		$sql = "SELECT $fields FROM " . $table_to_process . " where 1 ".$where." ORDER BY vote_id ASC";
 		$return = $this->db->getAll($sql);
