@@ -464,6 +464,7 @@ class Hj_PageController extends AbstractController
             $elementDetail['detail']['selected_img_url'] = (isset($oss_urls['1']) && $oss_urls['1']!="")?($oss_urls['1']):($elementDetail['detail']['selected_img_url']);
             if($detail['source_from'] == "from_vote")
             {
+                $elementDetail['detail']['type'] = $detail['type'];
                 $elementDetail['detail']['source_from'] = "from_vote";
                 $elementDetail['detail']['vote_id'] = $detail['vote_id'];
                 unset($elementDetail['detail']['jump_urls']);
@@ -480,6 +481,7 @@ class Hj_PageController extends AbstractController
                         $a[trim($t2[0])] = trim($t2[1]);
                     }
                 }
+                $elementDetail['detail']['type'] = $detail['type'];
                 $elementDetail['detail']['source_from'] = "from_text";
                 $elementDetail['detail']['jump_urls'] = $a;
                 unset($elementDetail['detail']['vote_id']);

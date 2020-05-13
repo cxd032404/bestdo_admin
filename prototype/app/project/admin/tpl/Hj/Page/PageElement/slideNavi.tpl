@@ -25,13 +25,19 @@
 </tr>
 <tr class="hover"><td colspan="2">元素详情</td></tr>
 <tr class="hover">
-<td>导航图片上传：</td>
-	<td align="left"><input name="upload_img[1]" type="file" id="upload_img[1]" />
-    {tpl:if($elementInfo.detail.img_url!="")}
-    已选图片:<img src="{tpl:$elementInfo.detail.img_url/}" width="30px;" height="30px;"/>
-    <br>       
-    {/tpl:if}
+<td>跳转方式：</td>
+	<td align="left"><input type="radio" name="detail[type]" id="detail[type]" value="switch" {tpl:if($elementInfo.detail.type=="switch")}checked{/tpl:if}/> 标签页切换
+		<input type="radio" name="detail[type]" id="detail[type]" value="href" {tpl:if($elementInfo.detail.type=="href")}checked{/tpl:if}/> 页面间跳转
     </td>
+</tr>
+<tr class="hover">
+	<td>导航图片上传：</td>
+	<td align="left"><input name="upload_img[1]" type="file" id="upload_img[1]" />
+		{tpl:if($elementInfo.detail.img_url!="")}
+		已选图片:<img src="{tpl:$elementInfo.detail.img_url/}" width="30px;" height="30px;"/>
+	<br>
+		{/tpl:if}
+	</td>
 </tr>
 <td>导航图片上传(选中)：</td>
 <td align="left"><input name="upload_img[2]" type="file" id="upload_img[2]" />
