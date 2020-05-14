@@ -606,7 +606,7 @@ class Hj_PageController extends AbstractController
         $pos = intval($this->request->pos??0);
         $elementDetail = $this->oPageElement->getPageElement($element_id,"detail,element_type");
         $elementDetail['detail'] = json_decode($elementDetail['detail'],true);
-        if(in_array($elementDetail['element_type'],['slidePic']))
+        if(in_array($elementDetail['element_type'],['slidePic','picList']))
         {
             $elementDetailInfo = $elementDetail['detail'][$pos];
             //渲染模版
@@ -621,7 +621,7 @@ class Hj_PageController extends AbstractController
         $pos = intval($this->request->pos??0);
         $elementDetail = $this->oPageElement->getPageElement($element_id,"detail,element_type");
         $elementDetail['detail'] = json_decode($elementDetail['detail'],true);
-        if(in_array($elementDetail['element_type'],['slidePic']))
+        if(in_array($elementDetail['element_type'],['slidePic','picList']))
         {
             if(isset($elementDetail['detail'][$pos]))
             {
@@ -641,7 +641,7 @@ class Hj_PageController extends AbstractController
         $detail = $this->request->detail;
         $elementDetail = $this->oPageElement->getPageElement($element_id,"detail,element_type");
         $elementDetail['detail'] = json_decode($elementDetail['detail'],true);
-        if(in_array($elementDetail['element_type'],['slidePic']))
+        if(in_array($elementDetail['element_type'],['slidePic','picList']))
         {
             $pos = intval($this->request->pos??0);
             //上传图片
