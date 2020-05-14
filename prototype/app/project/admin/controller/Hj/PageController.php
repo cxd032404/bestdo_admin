@@ -576,7 +576,7 @@ class Hj_PageController extends AbstractController
         $detail = $this->request->detail;
         $elementDetail = $this->oPageElement->getPageElement($element_id,"detail,element_type");
         $elementDetail['detail'] = json_decode($elementDetail['detail'],true);
-        if(in_array($elementDetail['element_type'],['slidePic']))
+        if(in_array($elementDetail['element_type'],['slidePic','picList']))
         {
             //上传图片
             $oUpload = new Base_Upload('upload_img');

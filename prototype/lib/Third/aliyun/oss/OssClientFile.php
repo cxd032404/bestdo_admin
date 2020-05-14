@@ -24,7 +24,7 @@ class Third_aliyun_oss_OssClientFile
             if(!isset($file['error']) || $file['error'] == 0)
             {
                 $local_file = $file['path'];
-                $object = "public/xrace/images".$file['path_root'];
+                $object = "fu/images".$file['path_root'];
                 try {
                     $res = $client->uploadFile($bucket, $object, $local_file);
                     $returnArr[$key] = $res;

@@ -27,8 +27,10 @@ $config['adminUrl'] = "http://admin.bestdo.cn";
 $config['aliConfig'] = $keyConfig['aliyun'];
 $config['oss'] = array_merge($config['aliConfig'],
     [
-         'END_POINT'=>'oss-cn-shanghai.aliyuncs.com',
-         'BUCKET'=>'xrace-pic'
+        // 'END_POINT'=>'oss-cn-shanghai.aliyuncs.com',
+        // 'BUCKET'=>'xrace-pic'
+                 'END_POINT'=>'oss-cn-shanghai.aliyuncs.com',
+         'BUCKET'=>'fu-company-home'
     ]);
 $config['sms'] = array_merge($config['aliConfig'],
     [
