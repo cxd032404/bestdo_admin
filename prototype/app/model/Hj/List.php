@@ -14,7 +14,8 @@ class Hj_List extends Base_Widget
         "pic"=>['name'=>"图片",'upload'=>['pic'=>10],'textarea'=>1],
         "video"=>['name'=>"视频",'upload'=>['video'=>3],'textarea'=>1],
         "rankingFromKudo"=>['name'=>"点赞排名"],
-        "rankingFromUpload"=>['name'=>"用户上传排名",'upload'=>['txt'=>1]]
+        "rankingFromUpload"=>['name'=>"用户上传排名",'upload'=>['txt'=>1]],
+        "custom"=>['name'=>"自定义",'custom'=>1],
     ];
     //获取列表类型
     public function getListType()

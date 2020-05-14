@@ -101,20 +101,34 @@ class Hj_ListController extends AbstractController
 		}
 		else
 		{
-            $listExists = $this->oList->getListList(['company_id'=>$bind['company_id'],'list_name'=>trim($bind['list_name'])],'list_id');
-            if(count($listExists)>0)
+            //获取列表类型列表
+            $listTypeList = $this->oList->getListType();
+            if(isset($listTypeList[$bind['list_type']]['custom'])  &&
+            ($bind['detail']['limit']['pic'] + $bind['detail']['limit']['video'] +$bind['detail']['limit']['textarea'])==0)
             {
-                $response = array('errno' => 2);
+                $response = array('errno' => 3);
             }
             else
             {
-                //数据打包
-                $bind['detail'] = json_encode($bind['detail']);
-                //添加列表
-                $res = $this->oList->insertList($bind);
-                $response = $res ? array('errno' => 0) : array('errno' => 9);
+                $listExists = $this->oList->getListList(['company_id'=>$bind['company_id'],'list_name'=>trim($bind['list_name'])],'list_id');
+                if(count($listExists)>0)
+                {
+                    $response = array('errno' => 2);
+                }
+                else
+                {
+                    //如果不是可以自定义的字段，删除相关数据
+                    if(!isset($listTypeList[$bind['list_type']]['custom']))
+                    {
+                        unset($bind['detail']['limit']);
+                    }
+                    //数据打包
+                    $bind['detail'] = json_encode($bind['detail']);
+                    //添加列表
+                    $res = $this->oList->insertList($bind);
+                    $response = $res ? array('errno' => 0) : array('errno' => 9);
+                }
             }
-
 		}
 		echo json_encode($response);
 		return true;
@@ -159,18 +173,34 @@ class Hj_ListController extends AbstractController
 		}
 		else
 		{
-            $listExists = $this->oList->getListList(['company_id'=>$bind['company_id'],'list_name'=>$bind['list_name'],'exclude_id'=>$bind['list_id']],'list_id');
-            if(count($listExists)>0)
+            //获取列表类型列表
+            $listTypeList = $this->oList->getListType();
+            if(isset($listTypeList[$bind['list_type']]['custom'])  &&
+                ($bind['detail']['limit']['pic'] + $bind['detail']['limit']['video'] +$bind['detail']['limit']['textarea'])==0)
             {
-                $response = array('errno' => 2);
+                $response = array('errno' => 3);
             }
             else
             {
-                //数据打包
-                $bind['detail'] = json_encode($bind['detail']);
-                //修改页面
-                $res = $this->oList->updateList($bind['list_id'],$bind);
-                $response = $res ? array('errno' => 0) : array('errno' => 9);
+                $listExists = $this->oList->getListList(['company_id'=>$bind['company_id'],'list_name'=>$bind['list_name'],'exclude_id'=>$bind['list_id']],'list_id');
+                if(count($listExists)>0)
+                {
+                    $response = array('errno' => 2);
+                }
+                else
+                {
+                    //如果不是可以自定义的字段，删除相关数据
+                    if(!isset($listTypeList[$bind['list_type']]['custom']))
+                    {
+                        unset($bind['detail']['limit']);
+                    }
+
+                    //数据打包
+                    $bind['detail'] = json_encode($bind['detail']);
+                    //修改页面
+                    $res = $this->oList->updateList($bind['list_id'],$bind);
+                    $response = $res ? array('errno' => 0) : array('errno' => 9);
+                }
             }
 		}
 		echo json_encode($response);
@@ -282,7 +312,9 @@ class Hj_ListController extends AbstractController
             //数据解包
             $postsInfo['source'] = json_decode($postsInfo['source'],true);
             //获取列表数据
-            $listInfo = $this->oList->getList($postsInfo['list_id'],'list_id,list_type');
+            $listInfo = $this->oList->getList($postsInfo['list_id'],'list_id,list_type,detail');
+            //数据解包
+            $listInfo['detail'] = json_decode($listInfo['detail'],true);
             //获取列表类型列表
             $listTypeList = $this->oList->getListType();
             $typeInfo  = $listTypeList[$listInfo['list_type']];

@@ -1,5 +1,10 @@
 {tpl:tpl contentHeader/}
 <script type="text/javascript">
+    $(document).ready(function(){
+        $('#add_list').click(function(){
+            addListBox = divBox.showBox('{tpl:$this.sign/}&ac=list.add', {title:'添加列表',width:600,height:600});
+        });
+    });
 
 function listDelete(p_id,p_name){
     msg = '是否删除 ' + p_name + '?'

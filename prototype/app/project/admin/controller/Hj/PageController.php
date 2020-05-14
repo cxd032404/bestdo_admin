@@ -361,7 +361,6 @@ class Hj_PageController extends AbstractController
                 }
                 else
                 {
-                    $bind['detail'] = json_encode([]);
                     //添加页面元素
                     $res = $this->oPageElement->updatePageElement($bind['element_id'],$bind);
                     $response = $res ? array('errno' => 0) : array('errno' => 9);

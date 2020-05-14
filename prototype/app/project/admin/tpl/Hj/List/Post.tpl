@@ -4,24 +4,42 @@
 <form id="post_form" name="post_form" enctype="multipart/form-data" action="{tpl:$postUrl/}" method="post">
 <input type="hidden" name="list_id" id="list_id" value="{tpl:$listInfo.list_id/}" />
 <table width="99%" align="center" class="table table-bordered table-striped" >
-	{tpl:if(isset($typeInfo.upload.pic))}
-	<?php for($i=1;$i<=$typeInfo['upload']['pic'];$i++)
+	{tpl:if(isset($typeInfo.upload.pic)||isset($listInfo.detail.limit.pic))}
+	<?php
+		if(isset($typeInfo['custom']))
+		{
+			$limit = $listInfo['detail']['limit']['pic']??0;
+		}
+		else
+		{
+			$limit = $typeInfo['upload']['pic']??0;
+		}
+		for($i=1;$i<=$limit;$i++)
 		{
 		?>
 		<tr class="hover">
-			{tpl:if($i==1)}<td rowspan="{tpl:$typeInfo.upload.pic/}">图片上传：</td>{/tpl:if}
+			{tpl:if($i==1)}<td rowspan="{tpl:$limit/}">图片上传：</td>{/tpl:if}
 		<td align="left"><input name="upload_img[{tpl:$i/}]" type="file" id="upload_img[{tpl:$i/}]" />
 		</td>
 	</tr>
 		<?php
 		}?>
 	{/tpl:if}
-	{tpl:if(isset($typeInfo.upload.video))}
-	<?php for($i=1;$i<=$typeInfo['upload']['video'];$i++)
+	{tpl:if(isset($typeInfo.upload.video)||isset($listInfo.detail.limit.video))}
+	<?php
+		if(isset($typeInfo['custom']))
+		{
+			$limit = $listInfo['detail']['limit']['video']??0;
+		}
+		else
+		{
+			$limit = $typeInfo['upload']['video']??0;
+		}
+		for($i=1;$i<=$limit;$i++)
 		{
 		?>
 	<tr class="hover">
-		{tpl:if($i==1)}<td rowspan="{tpl:$typeInfo.upload.video/}">视频上传：</td>{/tpl:if}
+		{tpl:if($i==1)}<td rowspan="{tpl:$limit/}">视频上传：</td>{/tpl:if}
 		<td align="left"><input name="upload_video[{tpl:$i/}]" type="file" id="upload_video[{tpl:$i/}]" />
 		</td>
 	</tr>
@@ -29,17 +47,36 @@
 		}?>
 	{/tpl:if}
 
+	{tpl:if(isset($typeInfo.upload.txt)||isset($listInfo.detail.limit.txt))}
+	<?php
+		if(isset($typeInfo['custom']))
+		{
+			$limit = $listInfo['detail']['limit']['txt']??0;
+		}
+		else
+		{
+			$limit = $typeInfo['upload']['txt']??0;
+		}
+		for($i=1;$i<=$limit;$i++)
+		{
+		?>
 	<tr class="hover">
-	<td>文本：</td>
-	<td align="left"><input name="upload_txt[1]" type="file" id="upload_txt[1]" />
-	</td>
+		{tpl:if($i==1)}<td rowspan="{tpl:$limit/}">文本上传：</td>{/tpl:if}
+		<td align="left"><input name="upload_txt[{tpl:$i/}]" type="file" id="upload_txt[{tpl:$i/}]" />
+		</td>
+	</tr>
+	<?php
+		}?>
+	{/tpl:if}
 </tr>
+	{tpl:if($listInfo.detail.limit.textarea==1)}
 <tr class="hover"><td colspan = 2>文本</td></tr>
 <tr class="hover"><td colspan = 2>
 		<textarea style="width:500px; height:200px" name="detail[comment]" id="detail[comment]" ></textarea>
 	</td>
 </tr>
-<tr class="noborder"><td></td>
+	{/tpl:if}
+	<tr class="noborder"><td></td>
 <td><button type="submit" id="post_submit">提交</button></td>
 </tr>
 </table>

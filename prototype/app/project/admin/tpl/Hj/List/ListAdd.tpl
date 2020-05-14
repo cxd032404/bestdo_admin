@@ -21,6 +21,32 @@
 				{/tpl:loop}
 		</select></td>
 </tr>
+<tr class="hover"><td>自定义数量</td>
+	<td align="left">图片：
+		<select name="detail[limit][pic]"  id="detail[limit][pic]" size="1" class="span2">
+			<?php for($i=0;$i<=10;$i++){?>
+			<option value="{tpl:$i/}">{tpl:$i/}</option>
+					<?php }?>
+		</select>
+		视频：
+		<select name="detail[limit][video]"  id="detail[limit][video]" size="1" class="span2">
+			<?php for($i=0;$i<=3;$i++){?>
+			<option value="{tpl:$i/}">{tpl:$i/}</option>
+			<?php }?>
+		</select>
+		文本文件：
+		<select name="detail[limit][txt]"  id="detail[limit][txt]" size="1" class="span2">
+			<?php for($i=0;$i<=3;$i++){?>
+			<option value="{tpl:$i/}">{tpl:$i/}</option>
+			<?php }?>
+		</select>
+		文本域：
+		<select name="detail[limit][textarea]"  id="detail[limit][textarea]" size="1" class="span2">
+			<option value="1">需要</option>
+			<option value="0">不需要</option>
+		</select>
+	</td>
+</tr>
 	<tr class="hover"><td colspan = 2>备注</td></tr>
 	<tr class="hover"><td colspan = 2>
 			<textarea style="width:500px; height:200px" name="detail[comment]" id="detail[comment]" ></textarea>
@@ -41,6 +67,7 @@ $('#list_add_submit').click(function(){
 				var errors = [];
 				errors[1] = '列表名称不能为空，请修正后再次提交';
 				errors[2] = '列表名称'+$('#list_name').val()+'已重复，请修正后再次提交';
+				errors[3] = '至少要选择一个可上传资源，请修正后再次提交';
 				errors[9] = '入库失败，请修正后再次提交';
 				divBox.alertBox(errors[jsonResponse.errno],function(){});
 			} else {

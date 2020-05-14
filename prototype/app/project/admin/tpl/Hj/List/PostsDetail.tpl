@@ -11,14 +11,21 @@
 	<input type="hidden" name="list_id" id="list_id" value="{tpl:$postsInfo.list_id/}" />
 
 	<table width="99%" align="center" class="table table-bordered table-striped" >
-
-
-	{tpl:if(isset($typeInfo.upload.pic))}
-	<?php for($i=1;$i<=$typeInfo['upload']['pic'];$i++)
+		{tpl:if(isset($typeInfo.upload.pic)||isset($listInfo.detail.limit.pic))}
+		<?php
+		if(isset($typeInfo['custom']))
+		{
+			$limit = $listInfo['detail']['limit']['pic']??0;
+		}
+		else
+		{
+			$limit = $typeInfo['upload']['pic']??0;
+		}
+		for($i=1;$i<=$limit;$i++)
 		{	$name="upload_img";
 		?>
 	<tr class="hover">
-		{tpl:if($i==1)}<td rowspan="{tpl:$typeInfo.upload.pic/}">图片上传：</td>{/tpl:if}
+		{tpl:if($i==1)}<td rowspan="{tpl:$limit/}">图片上传：</td>{/tpl:if}
 		<td align="left">
 			<?php if(isset($postsInfo['source'][$name.".".$i])){?>
 			已选图片:<img src="<?php echo $postsInfo['source'][$name.".".$i];?>" width="30px;" height="30px;"/> <a  href="javascript:;" onclick="sourceDelete('{tpl:$postsInfo.post_id/}','{tpl:$name/}.{tpl:$i/}')">删除</a>
@@ -31,12 +38,21 @@
 	<?php
 		}?>
 	{/tpl:if}
-	{tpl:if(isset($typeInfo.upload.video))}
-		<?php for($i=1;$i<=$typeInfo['upload']['video'];$i++)
+		{tpl:if(isset($typeInfo.upload.video)||isset($listInfo.detail.limit.video))}
+		<?php
+		if(isset($typeInfo['custom']))
+		{
+			$limit = $listInfo['detail']['limit']['video']??0;
+		}
+		else
+		{
+			$limit = $typeInfo['upload']['video']??0;
+		}
+		for($i=1;$i<=$limit;$i++)
 		{	$name="upload_video";
 		?>
 		<tr class="hover">
-			{tpl:if($i==1)}<td rowspan="{tpl:$typeInfo.upload.video/}">视频上传：</td>{/tpl:if}
+			{tpl:if($i==1)}<td rowspan="{tpl:$limit/}">视频上传：</td>{/tpl:if}
 			<td align="left">
 				<?php if(isset($postsInfo['source'][$name.".".$i])){?>
 				已选视频:<img src="<?php echo $postsInfo['source'][$name.".".$i].$video_suffix;?>" width="30px;" height="30px;"/> <a  href="javascript:;" onclick="sourceDelete('{tpl:$postsInfo.post_id/}','{tpl:$name/}.{tpl:$i/}')">删除</a>
@@ -49,12 +65,36 @@
 		<?php
 		}?>
 	{/tpl:if}
+		{tpl:if(isset($typeInfo.upload.txt)||isset($listInfo.detail.limit.txt))}
+		<?php
+		if(isset($typeInfo['custom']))
+		{
+			$limit = $listInfo['detail']['limit']['txt']??0;
+		}
+		else
+		{
+			$limit = $typeInfo['upload']['txt']??0;
+		}
+		for($i=1;$i<=$limit;$i++)
+		{	$name="upload_txt";
+		?>
+		<tr class="hover">
+			{tpl:if($i==1)}<td rowspan="{tpl:$limit/}">文本上传：</td>{/tpl:if}
+			<td align="left">
+				<input name="{tpl:$name/}[{tpl:$i/}]" type="file" id="{tpl:$name/}[{tpl:$i/}]" />
+			</td>
+		</tr>
+		<?php
+		}?>
+		{/tpl:if}
+		{tpl:if($listInfo.detail.limit.textarea==1)}
+			<tr class="hover"><td colspan = 2>文本</td></tr>
+			<tr class="hover"><td colspan = 2>
+					<textarea style="width:500px; height:200px" name="detail[comment]" id="detail[comment]" >{tpl:$postsInfo.content/}</textarea>
+				</td>
+			</tr>
+		{/tpl:if}
 
-<tr class="hover"><td colspan = 2>文本</td></tr>
-<tr class="hover"><td colspan = 2>
-		<textarea style="width:500px; height:200px" name="detail[comment]" id="detail[comment]" >{tpl:$postsInfo.content/}</textarea>
-	</td>
-</tr>
 <tr class="noborder"><td></td>
 <td><button type="submit" id="post_submit">提交</button></td>
 </tr>
