@@ -111,7 +111,11 @@ $table['config_list']['num'] = 1;
 $table['user_posts']['db'] = 'hj_user';
 $table['user_posts']['num'] = 1;
 
-#活动相关
+#投票相关
 $table['config_vote']['db'] = 'hj_config';
 $table['config_vote']['num'] = 1;
+
+#提问相关
+$table['config_question']['db'] = 'hj_config';
+$table['config_question']['num'] = 1;
 return $table;

@@ -6,7 +6,7 @@
 
 class Hj_VoteController extends AbstractController
 {
-	/**投票:Acitvity
+	/**投票:Vote
 	 * @var string
 	 */
 	protected $sign = '?ctl=hj/vote';

@@ -16,7 +16,7 @@
 <td>投票标识</td>
 <td align="left"><input type="text" class="span4" name="vote_sign"  id="vote_sign" value="{tpl:$voteInfo.vote_sign/}" size="50" /></td>
 </tr>
-<tr class="hover"><td>属于活动</td>
+<tr class="hover"><td>活动</td>
 	<td align="left">	<select name="activity_id"  id="activity_id" size="1">
 			{tpl:loop $activityList  $activity_info}
 			<option value="{tpl:$activity_info.activity_id/}"{tpl:if($activity_info.activity_id==$voteInfo.activity_id)}selected="selected"{/tpl:if} >{tpl:$activity_info.activity_name/}</option>

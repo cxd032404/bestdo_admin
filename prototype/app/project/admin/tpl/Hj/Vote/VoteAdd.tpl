@@ -14,7 +14,7 @@
 	<td>投票标识</td>
 <td align="left"><input type="text" class="span4" name="vote_sign"  id="vote_sign" value="" size="50" /></td>
 </tr>
-<tr class="hover"><td>属于活动</td>
+<tr class="hover"><td>活动</td>
 	<td align="left">	<select name="activity_id"  id="activity_id" size="1">
 			{tpl:loop $activityList  $activityInfo}
 			<option value="{tpl:$activityInfo.activity_id/}">{tpl:$activityInfo.activity_name/}</option>
