@@ -39,7 +39,11 @@ function pageElementModify(e_id){
     <td align="center">{tpl:$elementInfo.element_type_name/}</td>
     <td align="center">{tpl:$elementInfo.update_time/}</td>
       <td align="center"><a  href="javascript:;" onclick="pageElementDelete('{tpl:$elementInfo.element_id/}','{tpl:$elementInfo.element_name/}')">删除</a>
- |  <a href="javascript:;" onclick="pageElementModify('{tpl:$elementInfo.element_id/}');">修改</a> |  <a href="{tpl:$this.sign/}&ac=page.element.detail&element_id={tpl:$elementInfo.element_id/}">元素详情</a></td>
+ |  <a href="javascript:;" onclick="pageElementModify('{tpl:$elementInfo.element_id/}');">修改</a>
+        {tpl:if($elementInfo.editable==1)}
+        |  <a href="{tpl:$this.sign/}&ac=page.element.detail&element_id={tpl:$elementInfo.element_id/}">元素详情</a>
+        {/tpl:if}
+      </td>
   </tr>
 {/tpl:loop}
 </table>

@@ -246,6 +246,7 @@ class Hj_PageController extends AbstractController
             foreach ($pageElementList as $elementSign => $elementInfo)
             {
                 $pageElementList[$elementSign]['element_type_name'] = $elementTypeList[$elementInfo['element_type']]['element_type_name']??"未知类型";
+                $pageElementList[$elementSign]['editable'] = $elementTypeList[$elementInfo['element_type']]['editable'];
             }
             //渲染模版
             include $this->tpl('Hj_Page_PageDetail');
