@@ -104,6 +104,9 @@ class Hj_QuestionController extends AbstractController
                 $bind['detail'] = json_encode($bind['detail']);
                 //添加提问
                 $res = $this->oQuestion->insertQuestion($bind);
+                $bind['question_id'] = $res;
+                $bind['detail'] = json_decode($bind['detail'],true);
+                $index  = (new Base_Cache_Elasticsearch())->questionIndex($bind,$this->config->elasticsearch);
                 $response = $res ? array('errno' => 0) : array('errno' => 9);
             }
 		}
@@ -159,6 +162,8 @@ class Hj_QuestionController extends AbstractController
                 $bind['detail'] = json_encode($bind['detail']);
                 //修改提问
                 $res = $this->oQuestion->updateQuestion($bind['question_id'],$bind);
+                $bind['detail'] = json_decode($bind['detail'],true);
+                $index  = (new Base_Cache_Elasticsearch())->questionIndex($bind,$this->config->elasticsearch);
                 $response = $res ? array('errno' => 0) : array('errno' => 9);
             }
 		}
