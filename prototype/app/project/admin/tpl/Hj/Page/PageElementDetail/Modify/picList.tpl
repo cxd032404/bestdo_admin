@@ -15,9 +15,17 @@
     </td>
 </tr>
 <tr class="hover">
+	<td>文字</td>
+	<td align="left"><input type="text" class="span2" name="detail[text]"  id="detail[text]" value="{tpl:$elementDetailInfo.text/}" size="50" /></td>
+</tr>
+<tr class="hover">
 <td>跳转路径</td>
 	<td align="left"><input type="text" class="span4" name="detail[img_jump_url]"  id="detail[img_jump_url]" value="{tpl:$elementDetailInfo.img_jump_url/}" size="50" /></td>
 </tr>
+	<tr class="hover">
+		<td>标签</td>
+		<td align="left"><input type="text" class="span2" name="detail[title]"  id="detail[title]" value="{tpl:$elementDetailInfo.title/}" size="50" /></td>
+	</tr>
 <tr class="noborder"><td></td>
 <td><button type="submit" id="page_element_detail_modify_submit">提交</button></td>
 </tr>

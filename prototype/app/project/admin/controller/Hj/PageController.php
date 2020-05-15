@@ -589,7 +589,7 @@ class Hj_PageController extends AbstractController
             }
             else
             {
-                $elementDetail['detail'][] = ['img_url'=>$oss_urls['0'],'img_jump_url'=>$detail['img_jump_url']];
+                $elementDetail['detail'][] = ['img_url'=>$oss_urls['0'],'img_jump_url'=>$detail['img_jump_url'],'text'=>trim($detail['text']??""),'title'=>trim($detail['title']??"")];
                 $elementDetail['detail'] = json_encode($elementDetail['detail']);
                 $res = $this->oPageElement->updatePageElement($element_id,$elementDetail);
                 $response = $res ? array('errno' => 0) : array('errno' => 9);
@@ -658,7 +658,9 @@ class Hj_PageController extends AbstractController
                 //这次传成功了就用这次，否则维持
                 $elementDetail['detail'][$pos]['img_url'] = (isset($oss_urls['0']) && $oss_urls['0']!="")?($oss_urls['0']):($elementDetail['detail'][$pos]['img_url']);
                 //保存跳转链接
-                $elementDetail['detail'][$pos]['img_jump_url'] = $detail['img_jump_url'];
+                $elementDetail['detail'][$pos]['img_jump_url'] = trim($detail['img_jump_url']??"");
+                $elementDetail['detail'][$pos]['text'] = trim($detail['text']??"");
+                $elementDetail['detail'][$pos]['title'] = trim($detail['title']??"");
                 $elementDetail['detail'] = json_encode($elementDetail['detail']);
                 $res = $this->oPageElement->updatePageElement($element_id,$elementDetail);
                 $response = $res ? array('errno' => 0) : array('errno' => 9);

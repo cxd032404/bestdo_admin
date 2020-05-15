@@ -2,7 +2,7 @@
 <script type="text/javascript">
 	$(document).ready(function(){
 		$('#add_page_element_detail').click(function(){
-			addPageElementDetailBox = divBox.showBox('{tpl:$this.sign/}&ac=page.element.single.detail.add&element_id='+$('#element_id').val(), {title:'添加元素详情到'+$('#element_type_name').val(),width:500,height:250});
+			addPageElementDetailBox = divBox.showBox('{tpl:$this.sign/}&ac=page.element.single.detail.add&element_id='+$('#element_id').val(), {title:'添加元素详情到'+$('#element_type_name').val(),width:500,height:400});
 		});
 	});
 
@@ -41,7 +41,7 @@
 			<tr class="hover"><td colspan="2">元素详情</td></tr>
 			{tpl:loop $elementInfo.detail $pos $picInfo}
 			<tr class="hover">
-				<td align="center"><img src="{tpl:$picInfo.img_url/}" width='150' height='130'/><p>{tpl:$picInfo.img_jump_url/}</td>
+				<td align="center"><img src="{tpl:$picInfo.img_url/}" width='150' height='130'/><p>文字：{tpl:$picInfo.text/}<p>跳转：{tpl:$picInfo.img_jump_url/}<p>标签：{tpl:$picInfo.title/}</td>
 				<td align="center"><a  href="javascript:;" onclick="pageElementDetailDelete('{tpl:$pos/}')">删除</a>
 					|  <a href="javascript:;" onclick="pageElementDetailModify('{tpl:$pos/}');">修改</a></td>
 			</tr>
