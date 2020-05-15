@@ -169,14 +169,14 @@ class Base_Cache_Elasticsearch implements Base_Cache_Interface
                             "question_id"=>["type"=>"integer"],
                             "activity_id"=>["type"=>"integer"],
                             "question"=>["type"=>"text",
-                                "analyzer"=>"ik_smart_pinyin",
-                                "search_analyzer"=>"ik_smart_pinyin"],
+                                "analyzer"=>"ik_max_word_pinyin",
+                                "search_analyzer"=>"ik_max_word_pinyin"],
                             "answer"=>["type"=>"text",
-                                "analyzer"=>"ik_max_word",
-                                "search_analyzer"=>"ik_max_word"],
+                                "analyzer"=>"ik_max_word_pinyin",
+                                "search_analyzer"=>"ik_max_word_pinyin"],
                             "keywords"=>["type"=>"text",
-                                "analyzer"=>"ik_max_word",
-                                "search_analyzer"=>"ik_max_word"],
+                                "analyzer"=>"ik_max_word_pinyin",
+                                "search_analyzer"=>"ik_max_word_pinyin"],
                         ]
                     ]];
                 $map = $this->client->indices()->putMapping($params);
@@ -215,10 +215,8 @@ class Base_Cache_Elasticsearch implements Base_Cache_Interface
                             'limit_first_letter_length'=>16,
                             'lowercase'=>true,
                             'remove_duplicated_term'=>true,
-
                         ]
                     ]
-
                 ]
             ]
         ];
