@@ -34,11 +34,11 @@
 </tr>
 <tr class="hover">
 <td>对应列表：</td>
-	<td align="left">		<input type="radio" name="detail[id_from]" id="detail[id_from]" value="from_id" {tpl:if(isset($elementInfo.detail.activity_id))}checked{/tpl:if}
+	<td align="left">		<input type="radio" name="detail[id_from]" id="detail[id_from]" value="from_id" {tpl:if(isset($elementInfo.detail.list_id))}checked{/tpl:if}
 		 />
-		<select name="detail[activity_id]"  id="detail[activity_id]" size="1">
-			{tpl:loop $activityList  $activityInfo}
-			<option value="{tpl:$activityInfo.activity_id/}"{tpl:if($activityInfo.activity_id==$elementInfo.detail.activity_id)}selected="selected"{/tpl:if} >{tpl:$activityInfo.activity_name/}</option>
+		<select name="detail[list_id]"  id="detail[list_id]" size="1">
+			{tpl:loop $listList  $listInfo}
+			<option value="{tpl:$listInfo.list_id/}"{tpl:if($listInfo.list_id==$elementInfo.detail.list_id)}selected="selected"{/tpl:if} >{tpl:$listInfo.list_name/}</option>
 			{/tpl:loop}
 		</select>
     </td>
