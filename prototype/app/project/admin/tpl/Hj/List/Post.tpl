@@ -3,7 +3,8 @@
 <div class="br_bottom"></div>
 <form id="post_form" name="post_form" enctype="multipart/form-data" action="{tpl:$postUrl/}" method="post">
 <input type="hidden" name="list_id" id="list_id" value="{tpl:$listInfo.list_id/}" />
-<table width="99%" align="center" class="table table-bordered table-striped" >
+	<input type="hidden" name="UserToken" id="UserToken" value="{tpl:$token/}" />
+	<table width="99%" align="center" class="table table-bordered table-striped" >
 	{tpl:if(isset($typeInfo.upload.pic)||isset($listInfo.detail.limit.pic))}
 	<?php
 		if(isset($typeInfo['custom']))

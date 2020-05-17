@@ -389,29 +389,6 @@ class Hj_UserInfo extends Base_Widget
         return $this->db->selectRow($table_to_process, $fields, '`user_id` = ?', $user_id);
     }
     /**
-     * 获取单个用户记录
-     * @param char $user_id 用户ID
-     * @param string $fields 所要获取的数据列
-     * @return array
-     */
-    public function deleteUserByMobile($Mobile)
-    {
-        $table_to_process = Base_Widget::getDbTable($this->table);
-        return $this->db->delete($table_to_process, '`Mobile` = ?', $Mobile);
-    }
-    /**
-     * 获取单个比赛用户记录
-     * @param char $user_id 用户ID
-     * @param string $fields 所要获取的数据列
-     * @return array
-     */
-    public function getRaceUser($Raceuser_id, $fields = '*')
-    {
-        $Raceuser_id = intval($Raceuser_id);
-        $table_to_process = Base_Widget::getDbTable($this->table_race_user);
-        return $this->db->selectRow($table_to_process, $fields, '`Raceuser_id` = ?', $Raceuser_id);
-    }
-    /**
      * 新增单个用户记录
      * @param array $bind 所要添加的数据列
      * @return boolean
@@ -419,16 +396,6 @@ class Hj_UserInfo extends Base_Widget
     public function insertUser($bind)
     {
         $table_to_process = Base_Widget::getDbTable($this->table);
-        return $this->db->insert($table_to_process, $bind);
-    }
-    /**
-     * 新增单个用户记录
-     * @param array $bind 所要添加的数据列
-     * @return boolean
-     */
-    public function insertRaceUser($bind)
-    {
-        $table_to_process = Base_Widget::getDbTable($this->table_race_user);
         return $this->db->insert($table_to_process, $bind);
     }
     /**
@@ -442,47 +409,6 @@ class Hj_UserInfo extends Base_Widget
         $user_id = intval($user_id);
         $table_to_process = Base_Widget::getDbTable($this->table);
         return $this->db->update($table_to_process, $bind, '`user_id` = ?', $user_id);
-    }
-    public function updateRaceUser($Raceuser_id, array $bind)
-    {
-        $Raceuser_id = intval($Raceuser_id);
-        $table_to_process = Base_Widget::getDbTable($this->table_race_user);
-        return $this->db->update($table_to_process, $bind, '`Raceuser_id` = ?', $Raceuser_id);
-    }
-    /**
-     * 根据指定字段获取单个用户记录
-     * @param char $Column 字段列名
-     * @param char $Column 字段值
-     * @param string $fields 所要获取的数据列
-     * @return array
-     */
-    public function getUserByColumn($Column,$Value, $fields = '*')
-    {
-        $table_to_process = Base_Widget::getDbTable($this->table);
-        return $this->db->selectRow($table_to_process, $fields, '`'.$Column.'` = ?', $Value);
-    }
-    /**
-     * 根据指定字段获取单个比赛用户记录
-     * @param char $Column 字段列名
-     * @param char $Column 字段值
-     * @param string $fields 所要获取的数据列
-     * @return array
-     */
-    public function getRaceUserByColumn($Column,$Value, $fields = '*')
-    {
-        $table_to_process = Base_Widget::getDbTable($this->table_race_user);
-        return $this->db->selectRow($table_to_process, $fields, '`'.$Column.'` = ?', $Value);
-    }
-    /**
-     * 根据指定字段获取单个用户注册记录
-     * @param char $user_id 用户ID
-     * @param string $fields 所要获取的数据列
-     * @return array
-     */
-    public function getUserRegByColumn($Column,$Value, $fields = '*')
-    {
-        $table_to_process = Base_Widget::getDbTable($this->table_reg_info);
-        return $this->db->select($table_to_process, $fields, '`'.$Column.'` = ?', $Value);
     }
     /**
      * 获取用户列表
@@ -668,6 +594,14 @@ class Hj_UserInfo extends Base_Widget
     {
         $table_to_process = Base_Widget::getDbTable($this->table_company_user);
         return $this->db->insert($table_to_process, $bind);
+    }
+
+    public function getTokenForManager($manager_id)
+    {
+        $tokenUrl = $this->config->api['root'].$this->config->api['list']['get_token_for_manager']."?manager_id=".$manager_id;
+        $tokenInfo  = file_get_contents($tokenUrl);
+        $tokenInfo = json_decode($tokenInfo,true);
+        return $tokenInfo['data']['user_token']??"";
     }
 
 }

@@ -266,6 +266,7 @@ class Hj_ListController extends AbstractController
             $listTypeList = $this->oList->getListType();
             $typeInfo  = $listTypeList[$listInfo['list_type']];
             $postUrl = $this->config->api['root'].$this->config->api['list']['post'];
+            $token = (new Hj_UserInfo())->getTokenForManager($this->manager->id);
             //渲染模版
             include $this->tpl('Hj_List_Post');
         }
