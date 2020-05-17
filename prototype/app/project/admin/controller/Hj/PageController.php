@@ -407,13 +407,13 @@ class Hj_PageController extends AbstractController
                 //获取列表列表
                 $listList = (new Hj_List())->getListList(['company_id'=>$pageInfo['company_id']],"list_id,list_name");
             }
-            /*
+
             elseif($elementInfo['element_type'] == "post")
             {
-                //获取活动列表
-                $activityList = (new Hj_Activity())->getActivityList(['company_id'=>$pageInfo['company_id']],"activity_id,activity_name");
+                //获取列表
+                $listList = (new Hj_List())->getListList(['company_id'=>$pageInfo['company_id']],'list_id,list_name');
             }
-            */
+
             $elementTypeInfo = $this->oElementType->getElementType($elementInfo['element_type']);
             //渲染模版
             include $this->tpl('Hj_Page_PageElement_'.$elementInfo['element_type']);
@@ -509,6 +509,20 @@ class Hj_PageController extends AbstractController
             elseif($detail['id_from']=="from_id")
             {
                 $elementDetail['detail']['activity_id'] = $detail['activity_id'];
+                unset($elementDetail['detail']['from_params']);
+
+            }
+        }
+        elseif(in_array($elementDetail['element_type'],['post']))
+        {
+            if($detail['id_from']=="from_params")
+            {
+                $elementDetail['detail']['from_params'] = $detail['from_params'];
+                unset($elementDetail['detail']['list_id']);
+            }
+            elseif($detail['id_from']=="from_id")
+            {
+                $elementDetail['detail']['list_id'] = $detail['list_id'];
                 unset($elementDetail['detail']['from_params']);
 
             }

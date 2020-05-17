@@ -30,6 +30,8 @@ class Hj_ListController extends AbstractController
 		$this->oList = new Hj_List();
 		$this->oCompany = new Hj_Company();
         $this->oPosts = new Hj_Posts();
+        $this->oActivity = new Hj_Activity();
+
 
 
     }
@@ -50,6 +52,8 @@ class Hj_ListController extends AbstractController
 			$companyList = $this->oCompany->getCompanyList([],"company_id,company_name");
             //获取列表类型列表
             $listTypeList = $this->oList->getListType();
+            //初始化空的活动列表
+            $activityList = [];
 			//循环页面列表
 			foreach($listList as $key => $listInfo)
             {
@@ -58,6 +62,23 @@ class Hj_ListController extends AbstractController
                 $listList[$key]['company_name'] = ($listInfo['company_id']==0)?"无对应":($companyList[$listInfo['company_id']]['company_name']??"未知");
                 $listList[$key]['list_type_name'] = ($listInfo['company_id']==0)?"无对应":($listTypeList[$listInfo['list_type']]['name']??"未知");
                 $listList[$key]['posts_count'] = $this->oPosts->getPostCountByList($listInfo['list_id']);
+                if($listInfo['activity_id']==0)
+                {
+                    $listList[$key]['activity_name'] = "未指定";
+                }
+                else
+                {
+                    if(!isset($activityList[$listInfo['activity_id']]))
+                    {
+                        $activityInfo = $this->oActivity->getActivity($listInfo['activity_id'],"activity_name,activity_id");
+                        if(isset($activityInfo['activity_id']))
+                        {
+                            $activityList[$listInfo['activity_id']] = $activityInfo;
+                        }
+                    }
+                    $listList[$key]['activity_name'] = $activityList[$listInfo['activity_id']]['activity_name']??"未指定";
+                }
+
             }
 			//渲染模版
 			include $this->tpl('Hj_List_index');

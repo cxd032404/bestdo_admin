@@ -47,7 +47,8 @@ function post(lid){
     <th align="center" class="rowtip">列表ID</th>
     <th align="center" class="rowtip">列表名称</th>
     <th align="center" class="rowtip">对应企业</th>
-    <th align="center" class="rowtip">列表分类</th>
+      <th align="center" class="rowtip">对应活动</th>
+      <th align="center" class="rowtip">列表分类</th>
     <th align="center" class="rowtip">更新时间</th>
     <th align="center" class="rowtip">操作</th>
   </tr>
@@ -57,7 +58,9 @@ function post(lid){
     <td align="center">{tpl:$listInfo.list_id/}</td>
     <td align="center">{tpl:$listInfo.list_name/}</td>
       <td align="center">{tpl:$listInfo.company_name/}</td>
-    <td align="center">{tpl:$listInfo.list_type_name/}</td>
+      <td align="center">{tpl:$listInfo.activity_name/}</td>
+
+      <td align="center">{tpl:$listInfo.list_type_name/}</td>
 
       <td align="center">{tpl:$listInfo.update_time/}</td>
       <td align="center"><a  href="javascript:;" onclick="listDelete('{tpl:$listInfo.list_id/}','{tpl:$listInfo.list_name/}')">删除</a>
