@@ -407,6 +407,13 @@ class Hj_PageController extends AbstractController
                 //获取列表列表
                 $listList = (new Hj_List())->getListList(['company_id'=>$pageInfo['company_id']],"list_id,list_name");
             }
+            /*
+            elseif($elementInfo['element_type'] == "post")
+            {
+                //获取活动列表
+                $activityList = (new Hj_Activity())->getActivityList(['company_id'=>$pageInfo['company_id']],"activity_id,activity_name");
+            }
+            */
             $elementTypeInfo = $this->oElementType->getElementType($elementInfo['element_type']);
             //渲染模版
             include $this->tpl('Hj_Page_PageElement_'.$elementInfo['element_type']);

@@ -93,7 +93,7 @@ class Hj_ListController extends AbstractController
 	public function listInsertAction()
 	{
 		//检查权限
-		$bind=$this->request->from('list_name','company_id','list_type','detail');
+		$bind=$this->request->from('list_name','company_id','activity_id','list_type','detail');
 		//页面名称不能为空
 		if(trim($bind['list_name'])=="")
 		{
@@ -151,6 +151,8 @@ class Hj_ListController extends AbstractController
             $listTypeList = $this->oList->getListType();
             //数据解包
             $listInfo['detail'] = json_decode($listInfo['detail'],true);
+            //获取活动列表
+            $activityList = (new Hj_Activity())->getActivityList(['company_id'=>$listInfo['company_id']],"activity_id,activity_name");
             //渲染模版
 			include $this->tpl('Hj_List_ListModify');
 		}
@@ -165,7 +167,7 @@ class Hj_ListController extends AbstractController
 	public function listUpdateAction()
 	{
 	    //接收页面参数
-        $bind=$this->request->from('list_id','list_name','company_id','list_type','detail');
+        $bind=$this->request->from('list_id','list_name','company_id','activity_id','list_type','detail');
         //页面名称不能为空
 		if(trim($bind['list_name'])=="")
 		{
@@ -282,6 +284,7 @@ class Hj_ListController extends AbstractController
                     $userInfo = (new Hj_UserInfo())->getUser($listDetail['user_id'],'user_id,true_name');
                     if(isset($userInfo['user_id']))
                     {
+                        $userList[$listDetail['user_id']] = $userInfo;
                         $userList[$listDetail['user_id']] = $userInfo;
                     }
                 }
