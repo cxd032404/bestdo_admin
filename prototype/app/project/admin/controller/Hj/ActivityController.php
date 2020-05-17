@@ -248,4 +248,32 @@ class Hj_ActivityController extends AbstractController
 			include $this->tpl('403');
 		}
 	}
+    //获取企业获取活动列表
+    public function getActivityByCompanyAction()
+    {
+        //企业ID
+        $company_id = intval($this->request->company_id);
+        //获取活动列表
+        $activityList = $this->oActivity->getActivityList(['company_id'=>$company_id],"activity_id,activity_name");
+        $text = '';
+        $text .= '<option value="0">不指定</option>';
+        //循环赛事分站列表
+        foreach($activityList as $activityInfo)
+        {
+            //初始化选中状态
+            $selected = "";
+            /*
+            //如果分站ID与传入的分站ID相符
+            if($RaceStageInfo['RaceStageId'] == $StageId)
+            {
+                //选中拼接
+                $selected = 'selected="selected"';
+            }
+            */
+            //字符串拼接
+            $text .= '<option value="'.$activityInfo['activity_id'].'">'.$activityInfo['activity_name'].'</option>';
+        }
+        echo $text;
+        die();
+    }
 }
