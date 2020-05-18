@@ -524,7 +524,6 @@ class Hj_PageController extends AbstractController
             {
                 $elementDetail['detail']['list_id'] = $detail['list_id'];
                 unset($elementDetail['detail']['from_params']);
-
             }
         }
         elseif(in_array($elementDetail['element_type'],['list']))
@@ -538,8 +537,11 @@ class Hj_PageController extends AbstractController
             {
                 $elementDetail['detail']['list_id'] = $detail['list_id'];
                 unset($elementDetail['detail']['from_params']);
-
             }
+        }
+        elseif(in_array($elementDetail['element_type'],['postsDetail']))
+        {
+            $elementDetail['detail']['from_params'] = $detail['from_params'];
         }
         if(!isset($response))
         {
