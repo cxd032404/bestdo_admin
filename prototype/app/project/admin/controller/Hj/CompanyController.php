@@ -17,8 +17,9 @@ class Hj_CompanyController extends AbstractController
 	 * @var object
 	 */
 	protected $oCompany;
+    protected $oProtocal;
 
-	/**
+    /**
 	 * 初始化
 	 * (non-PHPdoc)
 	 * @see AbstractController#init()
@@ -27,6 +28,7 @@ class Hj_CompanyController extends AbstractController
 	{
 		parent::init();
 		$this->oCompany = new Hj_Company();
+        $this->oProtocal = new Hj_Protocal();
 
 	}
 	//企业配置列表页面
@@ -212,4 +214,55 @@ class Hj_CompanyController extends AbstractController
 			include $this->tpl('403');
 		}
 	}
+    //修改协议信息页面
+    public function protocalModifyAction()
+    {
+        //检查权限
+        $PermissionCheck = $this->manager->checkMenuPermission("updateCompany");
+        if($PermissionCheck['return'])
+        {
+            //企业ID
+            $company_id = intval($this->request->company_id);
+            //类型
+            $type = trim($this->request->type??'privacy');
+            $protocalTypeList = $this->oProtocal->getPrototcalType();
+            $type = isset($protocalTypeList[$type])?$type:"user";
+            //获取企业信息
+            $companyInfo = $this->oCompany->getCompany($company_id,'*');
+            //获取协议信息
+            $protocal = $this->oProtocal->getProtocalByType($company_id,$type,'*');
+            //渲染模版
+            include $this->tpl('Hj_Company_ProtocalModify');
+        }
+        else
+        {
+            $home = $this->sign;
+            include $this->tpl('403');
+        }
+
+    }
+    //更新协议信息
+    public function protocalUpdateAction()
+    {
+        //接收页面参数
+        $bind=$this->request->from('company_id','type','content');
+        $protocalTypeList = $this->oProtocal->getPrototcalType();
+        $bind['type'] = isset($protocalTypeList[$bind['type']])?$bind['type']:"user";
+
+        //获取协议信息
+        $protocal = $this->oProtocal->getProtocalByType($bind['company_id'],$bind['type'],'*');
+        if(!isset($protocal['protocal_id']))
+        {
+            //新增
+            $res = $this->oProtocal->insertProtocal($bind);
+        }
+        else
+        {
+            //更新
+            $res = $this->oProtocal->updateProtocal($protocal['protocal_id'],$bind);
+        }
+        $response = $res ? array('errno' => 0) : array('errno' => 9);
+        echo json_encode($response);
+        return true;
+    }
 }

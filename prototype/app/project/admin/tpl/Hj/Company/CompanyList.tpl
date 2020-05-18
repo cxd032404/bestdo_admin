@@ -21,7 +21,9 @@ function companyDelete(c_id,p_id,p_name){
 function companyModify(mid){
   modifycompanyBox = divBox.showBox('{tpl:$this.sign/}&ac=company.modify&company_id=' + mid, {title:'修改企业',width:600,height:350});
 }
-
+function protocalModify(mid,type){
+  modifycompanyBox = divBox.showBox('{tpl:$this.sign/}&ac=protocal.modify&company_id=' + mid + '&type=' + type, {title:'协议',width:600,height:600});
+}
 </script>
 
 <fieldset><legend>操作</legend>
@@ -49,7 +51,7 @@ function companyModify(mid){
     <td align="center">{tpl:if($companyInfo.icon=="")}未定义{tpl:else}<img src="{tpl:$RootUrl/}{tpl:$companyInfo.icon/}" width='150' height='130'/>{/tpl:if}</td>
     <td align="center">{tpl:$companyInfo.update_time/}</td>
       <td align="center"><a  href="javascript:;" onclick="companyDelete('{tpl:$companyInfo.company_id/}','{tpl:$companyInfo.parent_id/}','{tpl:$companyInfo.company_name/}')">删除</a>
- |  <a href="javascript:;" onclick="companyModify('{tpl:$companyInfo.company_id/}');">修改</a></td>
+ |  <a href="javascript:;" onclick="companyModify('{tpl:$companyInfo.company_id/}');">修改</a> | <a href="javascript:;" onclick="protocalModify('{tpl:$companyInfo.company_id/}','privacy');">隐私政策</a> | <a href="javascript:;" onclick="protocalModify('{tpl:$companyInfo.company_id/}','user');">用户政策</a></td>
   </tr>
 {/tpl:loop}
 </table>
