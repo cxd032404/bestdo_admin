@@ -124,8 +124,7 @@ class Hj_ListController extends AbstractController
 		{
             //获取列表类型列表
             $listTypeList = $this->oList->getListType();
-            if(isset($listTypeList[$bind['list_type']]['custom'])  &&
-            ($bind['detail']['limit']['pic'] + $bind['detail']['limit']['video'] +$bind['detail']['limit']['textarea'])==0)
+            if(($bind['detail']['limit']['pic'] + $bind['detail']['limit']['video'] +$bind['detail']['limit']['textarea'])==0)
             {
                 $response = array('errno' => 3);
             }
@@ -138,11 +137,6 @@ class Hj_ListController extends AbstractController
                 }
                 else
                 {
-                    //如果不是可以自定义的字段，删除相关数据
-                    if(!isset($listTypeList[$bind['list_type']]['custom']))
-                    {
-                        unset($bind['detail']['limit']);
-                    }
                     //数据打包
                     $bind['detail'] = json_encode($bind['detail']);
                     //添加列表
@@ -198,8 +192,7 @@ class Hj_ListController extends AbstractController
 		{
             //获取列表类型列表
             $listTypeList = $this->oList->getListType();
-            if(isset($listTypeList[$bind['list_type']]['custom'])  &&
-                ($bind['detail']['limit']['pic'] + $bind['detail']['limit']['video'] +$bind['detail']['limit']['textarea'])==0)
+            if(($bind['detail']['limit']['pic'] + $bind['detail']['limit']['video'] +$bind['detail']['limit']['textarea'])==0)
             {
                 $response = array('errno' => 3);
             }
@@ -212,12 +205,6 @@ class Hj_ListController extends AbstractController
                 }
                 else
                 {
-                    //如果不是可以自定义的字段，删除相关数据
-                    if(!isset($listTypeList[$bind['list_type']]['custom']))
-                    {
-                        unset($bind['detail']['limit']);
-                    }
-
                     //数据打包
                     $bind['detail'] = json_encode($bind['detail']);
                     //修改页面
