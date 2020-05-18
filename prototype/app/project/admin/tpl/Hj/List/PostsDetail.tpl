@@ -9,62 +9,29 @@
 <form id="post_form" name="post_form" enctype="multipart/form-data" action="{tpl:$postUrl/}" method="post">
 <input type="hidden" name="post_id" id="post_id" value="{tpl:$postsInfo.post_id/}" />
 	<input type="hidden" name="list_id" id="list_id" value="{tpl:$postsInfo.list_id/}" />
-
+	<input type="hidden" name="UserToken" id="UserToken" value="{tpl:$token/}" />
 	<table width="99%" align="center" class="table table-bordered table-striped" >
-		{tpl:if(isset($typeInfo.upload.pic)||isset($listInfo.detail.limit.pic))}
+		<?php $i = 1;foreach($postsInfo['source'] as $key => $file)
+		{
+		?>
+		<tr class="hover">
+			{tpl:if($i==1)}<td rowspan="{tpl:$postsInfo.source func="count(@@)"/}">已上传：</td>{/tpl:if}
+			<td align="left">
+				<img src="<?php echo $file.(strpos($key,'video')>0?$video_suffix:'');?>" width="30px;" height="30px;"/> <a  href="javascript:;" onclick="sourceDelete('{tpl:$postsInfo.post_id/}','{tpl:$key/}')">删除</a></td>
+		</tr>
+		<?php $i++;}?>
 		<?php
-		if(isset($typeInfo['custom']))
-		{
-			$limit = $listInfo['detail']['limit']['pic']??0;
-		}
-		else
-		{
-			$limit = $typeInfo['upload']['pic']??0;
-		}
-		for($i=1;$i<=$limit;$i++)
-		{	$name="upload_img";
+		for($i=1;$i<=$max_files;$i++)
+		{	$name="upload_files";
 		?>
 	<tr class="hover">
-		{tpl:if($i==1)}<td rowspan="{tpl:$limit/}">图片上传：</td>{/tpl:if}
+		{tpl:if($i==1)}<td rowspan="{tpl:$max_files/}">上传：</td>{/tpl:if}
 		<td align="left">
-			<?php if(isset($postsInfo['source'][$name.".".$i])){?>
-			已选图片:<img src="<?php echo $postsInfo['source'][$name.".".$i];?>" width="30px;" height="30px;"/> <a  href="javascript:;" onclick="sourceDelete('{tpl:$postsInfo.post_id/}','{tpl:$name/}.{tpl:$i/}')">删除</a>
-			<br>更改图片：
-		<br>
-			<?php }?>
 			<input name="{tpl:$name/}[{tpl:$i/}]" type="file" id="{tpl:$name/}[{tpl:$i/}]" />
 		</td>
 	</tr>
 	<?php
 		}?>
-	{/tpl:if}
-		{tpl:if(isset($typeInfo.upload.video)||isset($listInfo.detail.limit.video))}
-		<?php
-		if(isset($typeInfo['custom']))
-		{
-			$limit = $listInfo['detail']['limit']['video']??0;
-		}
-		else
-		{
-			$limit = $typeInfo['upload']['video']??0;
-		}
-		for($i=1;$i<=$limit;$i++)
-		{	$name="upload_video";
-		?>
-		<tr class="hover">
-			{tpl:if($i==1)}<td rowspan="{tpl:$limit/}">视频上传：</td>{/tpl:if}
-			<td align="left">
-				<?php if(isset($postsInfo['source'][$name.".".$i])){?>
-				已选视频:<img src="<?php echo $postsInfo['source'][$name.".".$i].$video_suffix;?>" width="30px;" height="30px;"/> <a  href="javascript:;" onclick="sourceDelete('{tpl:$postsInfo.post_id/}','{tpl:$name/}.{tpl:$i/}')">删除</a>
-				<br>更改视频：
-				<br>
-				<?php }?>
-				<input name="{tpl:$name/}[{tpl:$i/}]" type="file" id="{tpl:$name/}[{tpl:$i/}]" />
-			</td>
-		</tr>
-		<?php
-		}?>
-	{/tpl:if}
 		{tpl:if(isset($typeInfo.upload.txt)||isset($listInfo.detail.limit.txt))}
 		<?php
 		if(isset($typeInfo['custom']))

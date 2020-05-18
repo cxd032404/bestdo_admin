@@ -331,6 +331,7 @@ class Hj_ListController extends AbstractController
         $PermissionCheck = $this->manager->checkMenuPermission(0);
         if($PermissionCheck['return'])
         {
+            $token = (new Hj_UserInfo())->getTokenForManager($this->manager->id);
             //文章ID
             $post_id = intval($this->request->post_id??0);
             //获取文章详情
@@ -341,15 +342,13 @@ class Hj_ListController extends AbstractController
             $listInfo = $this->oList->getList($postsInfo['list_id'],'list_id,list_type,detail');
             //数据解包
             $listInfo['detail'] = json_decode($listInfo['detail'],true);
+            $max_files = 10;
             //获取列表类型列表
             $listTypeList = $this->oList->getListType();
             $typeInfo  = $listTypeList[$listInfo['list_type']];
             $postUrl = $this->config->api['root'].$this->config->api['list']['post'];
             $sourceRemoveUrl = $this->config->api['root'].$this->config->api['list']['source_remove'];
-            if($listInfo['list_type']=="video")
-            {
-                $video_suffix = "?x-oss-process=video/snapshot,t_1000,f_jpg,w_300,h_300,m_fast";
-            }
+            $video_suffix = "?x-oss-process=video/snapshot,t_1000,f_jpg,w_300,h_300,m_fast";
             //渲染模版
             include $this->tpl('Hj_List_PostsDetail');
         }
