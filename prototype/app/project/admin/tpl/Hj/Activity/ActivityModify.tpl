@@ -9,15 +9,18 @@
 <td>活动名称</td>
 <td align="left"><input name="activity_name" type="text" class="span2" id="activity_name" value="{tpl:$activityInfo.activity_name/}" size="50" /></td>
 </tr>
-<td>活动时间</td>
+<tr class="hover">
+	<td>活动时间</td>
 <th align="center" class="rowtip">
 	<input type="text" name="start_time"  id="start_time" class="input-medium" value="{tpl:$activityInfo.start_time/}"  onFocus="WdatePicker({isShowClear:false,readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})" >-<input type="text" name="end_time" id="end_time" class="input-medium" value="{tpl:$activityInfo.end_time/}"   onFocus="WdatePicker({isShowClear:false,readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})" ></th></tr>
 </tr>
-<td>报名时间</td>
+<tr class="hover">
+	<td>报名时间</td>
 <th align="center" class="rowtip">
 	<input type="text" name="apply_start_time "  id="apply_start_time " class="input-medium" value="{tpl:$activityInfo.apply_start_time/}"   onFocus="WdatePicker({isShowClear:false,readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})" >-<input type="text" name="apply_end_time" id="apply_end_time" class="input-medium"  value="{tpl:$activityInfo.apply_end_time/}" onFocus="WdatePicker({isShowClear:false,readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})" ></th></tr>
 </tr>
-<td>活动标识</td>
+<tr class="hover">
+	<td>活动标识</td>
 <td align="left"><input type="text" class="span4" name="activity_sign"  id="activity_sign" value="{tpl:$activityInfo.activity_sign/}" size="50" /></td>
 </tr>
 <tr class="hover"><td>属于企业</td>
@@ -36,6 +39,10 @@
 			更改图片:<input name="upload_img[1]" type="file" class="span4" id="upload_img[1]"/>
 		</td>
 	</tr>
+<tr class="hover">
+	<td>自动跳转</td>
+	<td align="left"><input type="text" class="span4" name="detail[jump_url]"  id="detail[jump_url]" value="{tpl:$activityInfo.detail.jump_url/}" size="50" /></td>
+</tr>
 <tr class="noborder"><td></td>
 <td><button type="submit" id="activity_update_submit">提交</button></td>
 </tr>

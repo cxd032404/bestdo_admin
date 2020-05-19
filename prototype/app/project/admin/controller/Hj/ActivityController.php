@@ -84,7 +84,7 @@ class Hj_ActivityController extends AbstractController
 	public function activityInsertAction()
 	{
 		//检查权限
-		$bind=$this->request->from('activity_name','company_id','activity_sign','start_time','end_time','apply_start_time','apply_end_time');
+		$bind=$this->request->from('activity_name','company_id','activity_sign','start_time','end_time','apply_start_time','apply_end_time','detail');
 		//活动名称不能为空
 		if(trim($bind['activity_name'])=="")
 		{
@@ -115,7 +115,6 @@ class Hj_ActivityController extends AbstractController
                     }
                     else
                     {
-                        $bind['detail'] = [];
                         //数据打包
                         $bind['detail'] = json_encode($bind['detail']);
                         //添加活动
@@ -140,6 +139,8 @@ class Hj_ActivityController extends AbstractController
 			$activity_id= intval($this->request->activity_id);
 			//获取活动信息
 			$activityInfo = $this->oActivity->getActivity($activity_id,'*');
+			//数据解包
+            $activityInfo['detail'] = json_decode($activityInfo['detail'],true);
 			//获取企业列表
 			$companyList = $this->oCompany->getCompanyList([],"company_id,company_name");
             //渲染模版
@@ -156,7 +157,7 @@ class Hj_ActivityController extends AbstractController
 	public function activityUpdateAction()
 	{
 	    //接收活动参数
-        $bind=$this->request->from('activity_id','activity_name','company_id','activity_sign','start_time','end_time','apply_start_time','apply_end_time');
+        $bind=$this->request->from('activity_id','activity_name','company_id','activity_sign','start_time','end_time','apply_start_time','apply_end_time','detail');
         //活动名称不能为空
 		if(trim($bind['activity_name'])=="")
 		{
@@ -186,7 +187,7 @@ class Hj_ActivityController extends AbstractController
                         unset($bind['icon']);
                     }
                     //数据打包
-                    $bind['detail'] = json_encode([]);
+                    $bind['detail'] = json_encode($bind['detail']);
                     //修改活动
                     $res = $this->oActivity->updateActivity($bind['activity_id'],$bind);
                     $response = $res ? array('errno' => 0) : array('errno' => 9);
