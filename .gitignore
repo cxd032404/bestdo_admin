@@ -4,6 +4,7 @@
 /CommonConfig/CacheConfig.php
 /CommonConfig/databaseConfig.php
 /CommonConfig/keyConfig.php
+/CommonConfig/urlConfig.php
 /prototype/app/project/vendor/
 /prototype/app/project/composer.lock
 
