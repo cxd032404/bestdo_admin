@@ -5,14 +5,16 @@
  */
 $file = __APP_ROOT_DIR__."../../../../CommonConfig/keyConfig.php";
 $keyConfig = require $file;
+$file = __APP_ROOT_DIR__."../../../../CommonConfig/urlConfig.php";
+$urlConfig = require $file;
 $config = array();
 $config['js'] = '/js/';
 $config['style'] = '/style/';
 $config['companyName'] = "合伽体育";
-$config['companyUrl'] = "http://www.bestdo.com";
+$config['companyUrl'] = $urlConfig['companyUrl'];
 $config['projectName'] = "Bestdo控制台";
 $config['currentVersion'] = "1.0";
-$config['api'] = ['root'=>"http://api.bestdo.cn",
+$config['api'] = ['root'=>$urlConfig['apiUrl'],
     'list'=>[
         'post'=>'/list/post/',
         'source_remove'=>'/list/source_remove',
@@ -24,7 +26,7 @@ $config['api'] = ['root'=>"http://api.bestdo.cn",
 
 ];
 
-$config['adminUrl'] = "http://admin.bestdo.cn";
+$config['adminUrl'] = $urlConfig['adminUrl'];
 $config['aliConfig'] = $keyConfig['aliyun'];
 $config['oss'] = array_merge($config['aliConfig'],
     [
