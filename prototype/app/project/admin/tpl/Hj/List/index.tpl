@@ -12,7 +12,7 @@ function listDelete(p_id,p_name){
 }
 
 function listModify(lid){
-  modifyactivityBox = divBox.showBox('{tpl:$this.sign/}&ac=list.modify&list_id=' + lid, {title:'修改列表',width:600,height:500});
+  modifyactivityBox = divBox.showBox('{tpl:$this.sign/}&ac=list.modify&list_id=' + lid, {title:'修改列表',width:600,height:700});
 }
 
 function post(lid){

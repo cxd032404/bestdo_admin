@@ -34,6 +34,19 @@
 			{/tpl:loop}
 		</select></td>
 </tr>
+	<tr class="hover"><td>提交后动作</td>
+		<td align="left">
+			<select name="detail[after_action]"  id="after_action" size="1">
+				{tpl:loop $afterActionList $action $action_info}
+				<option value="{tpl:$action/}" {tpl:if($listInfo.detail.after_action==$action)}selected="selected"{/tpl:if} >{tpl:$action_info.name/}</option>
+				{/tpl:loop}
+			</select>
+		</td>
+	</tr>
+	<tr class="hover">
+		<td>提交后跳转链接</td>
+		<td align="left"><input name="detail[after_url]" type="text" class="span4" id="detail[after_url]" value="{tpl:$listInfo.detail.after_url/}" size="50" /></td>
+	</tr>
 	<tr class="hover"><td>自定义数量</td>
 		<td align="left">图片：
 			<select name="detail[limit][pic]"  id="detail[limit][pic]" size="1" class="span2">

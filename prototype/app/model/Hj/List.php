@@ -16,10 +16,21 @@ class Hj_List extends Base_Widget
         "rankingFromKudo"=>['name'=>"点赞排名"],
         "rankingFromUpload"=>['name'=>"用户上传排名",'upload'=>['txt'=>1]],
     ];
+    protected $after_action =
+        [   "0"=>['name'=>"无动作"],
+            "self"=>['name'=>"本人提交列表"],
+            "this"=>['name'=>"当前详情"],
+            "all"=>['name'=>"当前列表"],
+        ];
     //获取列表类型
     public function getListType()
     {
         return $this->list_type;
+    }
+    //获取列表类型
+    public function getAfterAction()
+    {
+        return $this->after_action;
     }
     /**
 	 * 查询全部
