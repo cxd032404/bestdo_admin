@@ -52,6 +52,15 @@ class Hj_ActivityController extends AbstractController
                 //数据解包
                 $activityList[$key]['detail'] = json_decode($activityInfo['detail'],true);
 				$activityList[$key]['company_name'] = ($activityInfo['company_id']==0)?"无对应":($companyList[$activityInfo['company_id']]['company_name']??"未知");
+                //分页参数
+                $params['Page'] = 1;
+                $params['PageSize'] = 1;
+                //获取列表时需要获得记录总数
+                $params['getCount'] = 1;
+                $params['activity_id'] = $activityInfo['activity_id'];
+                //获取文章列表
+                $List = $this->oUserInfo->getUserActivityLog($params);
+                $activityList[$key]['count'] = $List['UserCount']??0;
             }
 			//渲染模版
 			include $this->tpl('Hj_Activity_ActivityList');
