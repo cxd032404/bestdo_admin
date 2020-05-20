@@ -8,8 +8,8 @@ return array
 //	'MEMECACHE_PORT'   => '11211',
 
 
-    'REDIS_SERVER' => array('127.0.0.1'),
+    'REDIS_SERVER' => array('r-uf6nx1m4r5ed4djrcgpd.redis.rds.aliyuncs.com'),
 	'REDIS_PORT'   => '6379',
-    'REDIS_PASSWORD' => 'Never4eveR'
+    'REDIS_PASSWORD' => 'unionfit@2020'
 )
 ?>
