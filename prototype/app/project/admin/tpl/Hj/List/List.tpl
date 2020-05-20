@@ -33,6 +33,7 @@ function post(lid){
   <tr>
     <th align="center" class="rowtip">文章Id</th>
     <th align="center" class="rowtip">提交人</th>
+    <th align="center" class="rowtip">可见</th>
     <th align="center" class="rowtip">创建时间</th>
     <th align="center" class="rowtip">更新时间</th>
     <th align="center" class="rowtip">操作</th>
@@ -42,6 +43,7 @@ function post(lid){
   <tr class="hover">
     <td align="center">{tpl:$postsInfo.post_id/}</td>
     <td align="center">{tpl:$postsInfo.user_name/}</td>
+    <td align="center">{tpl:$postsInfo.visible/}</td>
     <td align="center">{tpl:$postsInfo.create_time/}</td>
     <td align="center">{tpl:$postsInfo.update_time/}</td>
       <td align="center"><a  href="javascript:;" onclick="listDelete('{tpl:$listInfo.list_id/}','{tpl:$listInfo.list_name/}')">删除</a>

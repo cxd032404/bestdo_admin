@@ -277,7 +277,7 @@ class Hj_ListController extends AbstractController
             $list_id = intval($this->request->list_id??0);
             //分页参数
             $params['Page'] = abs(intval($this->request->Page??1));
-            $params['PageSize'] = 5;
+            $params['PageSize'] = 20;
             //获取列表时需要获得记录总数
             $params['getCount'] = 1;
             //获取列表信息
@@ -301,6 +301,8 @@ class Hj_ListController extends AbstractController
                     }
                 }
                 $list['postsList'][$key]['user_name'] = $userList[$listDetail['user_id']]['true_name']??"未知用户";
+                $list['postsList'][$key]['visible'] = $listDetail['visible']==1?"可见":"隐藏";
+
             }
             $page_url = Base_Common::getUrl('',$this->ctl,'list',$params)."&Page=~page~";
             $page_content =  base_common::multi($list['postsCount'], $page_url, $params['Page'], $params['PageSize'], 10, $maxpage = 100, $prevWord = '上一页', $nextWord = '下一页');
