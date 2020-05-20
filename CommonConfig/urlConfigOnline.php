@@ -1,9 +1,9 @@
 <?php
 return array
 (
-    'apiUrl' => 'http://api.bestdo.cn',
+    'apiUrl' => 'http://api.staffhome.cn',
     'companyUrl' => 'http://www.bestdo.com',
-    'adminUrl' => 'http://admin.bestdo.cn',
+    'adminUrl' => 'http://admin.staffhome.cn',
 
 )
 ?>
