@@ -12,9 +12,10 @@ class Hj_UserInfo extends Base_Widget
     protected $table_company_user = 'company_user_list';
     protected $table_reg_info = 'UserReg';
     protected $table_reg_log = 'UserRegLog';
-    protected $table_login = 'UserLogin';
     protected $table_reset = 'UserResetPassword';
     protected $table_reset_log = 'UserResetPasswordLog';
+    protected $table_activity_log = 'user_activity_log';
+
 
     protected $companyUserAuthType = array("mobile"=>"手机号","worker_id"=>"工号");
     //登录方式列表
@@ -602,6 +603,74 @@ class Hj_UserInfo extends Base_Widget
         $tokenInfo  = file_get_contents($tokenUrl);
         $tokenInfo = json_decode($tokenInfo,true);
         return $tokenInfo['data']['user_token']??"";
+    }
+    /**
+     * 获取用户报名列表
+     * @param $fields  所要获取的数据列
+     * @param $params 传入的条件列表
+     * @return array
+     */
+    public function getUserActivityLog($params,$fields = array("*"))
+    {
+        //生成查询列
+        $fields = Base_common::getSqlFields($fields);
+        //获取需要用到的表名
+        $table_to_process = Base_Widget::getDbTable($this->table_activity_log);
+        $order = " ORDER BY id desc";
+        //企业
+        $whereCompany = (isset($params['company_id']) && ($params['company_id']>0))?" company_id = '".$params['company_id']."' ":"";
+        //活动
+        $whereActivity = (isset($params['activity_id']) && ($params['activity_id']>0))?" activity_id = '".$params['activity_id']."' ":"";
+        //用户
+        $whereUser = (isset($params['user_id']) && ($params['user_id']>0))?" user_id = '".$params['user_id']."' ":"";
+        //所有查询条件置入数组
+        $whereCondition = array($whereCompany,$whereActivity,$whereUser);
+        //生成条件列
+        $where = Base_common::getSqlWhere($whereCondition);
+        //获取用户数量
+        if(isset($params['getCount'])&&$params['getCount']==1)
+        {
+            $UserCount = $this->getUserActivityLogCount($whereCondition);
+        }
+        else
+        {
+            $UserCount = 0;
+        }
+        $limit  = isset($params['Page'])&&$params['Page']?" limit ".($params['Page']-1)*$params['PageSize'].",".$params['PageSize']." ":"";
+        $sql = "SELECT $fields FROM $table_to_process where 1 ".$where." ".$order." ".$limit;
+        $return = $this->db->getAll($sql);
+        $UserList = array('UserList'=>array(),'UserCount'=>$UserCount);
+        if(count($return))
+        {
+            foreach($return as $key => $value)
+            {
+                $UserList['UserList'][$value['user_id']] = $value;
+            }
+        }
+        else
+        {
+            return $UserList;
+        }
+        return $UserList;
+    }
+    /**
+     * 获取用户报名记录数量
+     * @param $fields  所要获取的数据列
+     * @param $params 传入的条件列表
+     * @return integer
+     */
+    public function getUserActivityLogCount($whereCondition)
+    {
+        //获取需要用到的表名
+        $table_to_process = Base_Widget::getDbTable($this->table_activity_log);
+        //生成查询列
+        $fields = Base_common::getSqlFields(array("UserCount"=>"count(user_id)"));
+        //生成条件列
+        $where = Base_common::getSqlWhere($whereCondition);
+        //生成条件列
+        $where = Base_common::getSqlWhere($whereCondition);
+        $sql = "SELECT $fields FROM $table_to_process where 1 ".$where;
+        return $this->db->getOne($sql);
     }
 
 }

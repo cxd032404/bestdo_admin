@@ -119,8 +119,11 @@ $table['config_vote']['num'] = 1;
 $table['config_question']['db'] = 'hj_config';
 $table['config_question']['num'] = 1;
 
-#提问相关
+#协议相关
 $table['config_protocal']['db'] = 'hj_config';
 $table['config_protocal']['num'] = 1;
 
+#活动报名记录
+$table['user_activity_log']['db'] = 'hj_user';
+$table['user_activity_log']['num'] = 1;
 return $table;

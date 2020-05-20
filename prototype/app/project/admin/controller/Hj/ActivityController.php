@@ -19,6 +19,7 @@ class Hj_ActivityController extends AbstractController
 	protected $oActivity;
 	protected $oCompany;
 	protected $oActivityElement;
+    protected $oUserInfo;
 
 	/**
 	 * 初始化
@@ -30,9 +31,9 @@ class Hj_ActivityController extends AbstractController
 		parent::init();
 		$this->oActivity = new Hj_Activity();
 		$this->oCompany = new Hj_Company();
-
+        $this->oUserInfo = new Hj_UserInfo();
 	}
-	//活动配置列表活动
+	//活动配置列表页面
 	public function indexAction()
 	{
 		//检查权限
@@ -276,5 +277,54 @@ class Hj_ActivityController extends AbstractController
         }
         echo $text;
         die();
+    }
+    //活动配置列表活动
+    public function activityLogAction()
+    {
+        //检查权限
+        $PermissionCheck = $this->manager->checkMenuPermission(0);
+        if($PermissionCheck['return'])
+        {
+            //列表ID
+            $activity_id = intval($this->request->activity_id??0);
+            //分页参数
+            $params['Page'] = abs(intval($this->request->Page??1));
+            $params['PageSize'] = 20;
+            //获取列表时需要获得记录总数
+            $params['getCount'] = 1;
+            //获取列表信息
+            //获取活动信息
+            $activityInfo = $this->oActivity->getActivity($activity_id,'*');
+            //数据解包
+            $activityInfo['detail'] = json_decode($activityInfo['detail'],true);
+            $params['activity_id'] = $activityInfo['activity_id'];
+            //获取文章列表
+            $activityList = $this->oUserInfo->getUserActivityLog($params);
+            $userList = [];
+            //循环页面列表
+            foreach($activityList['UserList'] as $key => $listDetail)
+            {
+                //数据解包
+                if(!isset($userList[$listDetail['user_id']]))
+                {
+                    $userInfo = $this->oUserInfo->getUser($listDetail['user_id'],'user_id,true_name');
+                    if(isset($userInfo['user_id']))
+                    {
+                        $userList[$listDetail['user_id']] = $userInfo;
+                        $userList[$listDetail['user_id']] = $userInfo;
+                    }
+                }
+                $activityList['UserList'][$key]['user_name'] = $userList[$listDetail['user_id']]['true_name']??"未知用户";
+            }
+            $page_url = Base_Common::getUrl('',$this->ctl,'activity.log',$params)."&Page=~page~";
+            $page_content =  base_common::multi($activityList['UserCount'], $page_url, $params['Page'], $params['PageSize'], 10, $maxpage = 100, $prevWord = '上一页', $nextWord = '下一页');
+            //渲染模版
+            include $this->tpl('Hj_Activity_ActivityLog');
+        }
+        else
+        {
+            $home = $this->sign;
+            include $this->tpl('403');
+        }
     }
 }
