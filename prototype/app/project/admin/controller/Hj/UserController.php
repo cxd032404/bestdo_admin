@@ -290,7 +290,7 @@ class Hj_UserController extends AbstractController
             $upload = $upload->resultArr;
             if($upload[1]['errno']==0)
             {
-                $index = (new Base_Cache_Elasticsearch())->checkIndex("company_user_list",['company_id'=>$company_id]);
+                //$index = (new Base_Cache_Elasticsearch())->checkIndex("company_user_list",['company_id'=>$company_id]);
                 $file_path = $upload[1]['path'];
                 $handle = fopen($file_path, 'r');
                 $error = 0;
@@ -335,8 +335,9 @@ class Hj_UserController extends AbstractController
                     }
                 }
             }
-            $userToEs = $this->oUserInfo->getCompanyUserList(["idList"=>$successList],["id","company_id","name","mobile","worker_id","user_id"])['UserList'];
-            $index = (new Base_Cache_Elasticsearch())->companyUserIndex($userToEs,$this->config->elasticsearch);
+            //$userToEs = $this->oUserInfo->getCompanyUserList(["idList"=>$successList],["id","company_id","name","mobile","worker_id","user_id"])['UserList'];
+            //$index = (new Base_Cache_Elasticsearch())->companyUserIndex($userToEs,$this->config->elasticsearch);
+            $index = 1;
             $response = array('errno' => 0,'result'=>["success"=>$success,"error"=>$error,"exist"=>$exist,"index"=>$index]);
         }
         echo json_encode($response);

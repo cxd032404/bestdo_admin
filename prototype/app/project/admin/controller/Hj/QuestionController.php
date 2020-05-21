@@ -106,7 +106,7 @@ class Hj_QuestionController extends AbstractController
                 $res = $this->oQuestion->insertQuestion($bind);
                 $bind['question_id'] = $res;
                 $bind['detail'] = json_decode($bind['detail'],true);
-                $index  = (new Base_Cache_Elasticsearch())->questionIndex($bind,$this->config->elasticsearch);
+                //$index  = (new Base_Cache_Elasticsearch())->questionIndex($bind,$this->config->elasticsearch);
                 $response = $res ? array('errno' => 0) : array('errno' => 9);
             }
 		}
