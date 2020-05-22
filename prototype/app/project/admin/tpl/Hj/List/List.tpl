@@ -43,11 +43,16 @@ function post(lid){
   <tr class="hover">
     <td align="center">{tpl:$postsInfo.post_id/}</td>
     <td align="center">{tpl:$postsInfo.user_name/}</td>
-    <td align="center">{tpl:$postsInfo.visible/}</td>
+    <td align="center">{tpl:$postsInfo.visible_name/}</td>
     <td align="center">{tpl:$postsInfo.create_time/}</td>
     <td align="center">{tpl:$postsInfo.update_time/}</td>
-      <td align="center"><a  href="javascript:;" onclick="listDelete('{tpl:$listInfo.list_id/}','{tpl:$listInfo.list_name/}')">删除</a>
- | <a href="{tpl:$this.sign/}&ac=posts.detail&post_id={tpl:$postsInfo.post_id/}">详情</a></td>
+      <td align="center">
+        {tpl:if($postsInfo.visible==1)}
+        <a href="{tpl:$display_url/}&post_id={tpl:$postsInfo.post_id/}">隐藏</a>
+        {tpl:else}
+        <a href="{tpl:$display_url/}&post_id={tpl:$postsInfo.post_id/}&display=1">显示</a>
+        {/tpl:if}
+        | <a href="{tpl:$this.sign/}&ac=posts.detail&post_id={tpl:$postsInfo.post_id/}">详情</a></td>
   </tr>
 {/tpl:loop}
   <tr><th colspan="10" align="center" class="rowtip">{tpl:$page_content/}</th></tr>

@@ -20,10 +20,8 @@ $config['api'] = ['root'=>$urlConfig['apiUrl'],
         'source_remove'=>'/list/source_remove',
         'get_page'=>'/page/getPage/',
         'get_token_for_manager'=>'/user/createTokenForManager',
-
+        'display'=>'/list/post_display',
     ]
-
-
 ];
 
 $config['adminUrl'] = $urlConfig['adminUrl'];
@@ -32,7 +30,7 @@ $config['oss'] = array_merge($config['aliConfig'],
     [
         // 'END_POINT'=>'oss-cn-shanghai.aliyuncs.com',
         // 'BUCKET'=>'xrace-pic'
-                 'END_POINT'=>'oss-cn-shanghai.aliyuncs.com',
+         'END_POINT'=>'oss-cn-shanghai.aliyuncs.com',
          'BUCKET'=>'fu-company-home'
     ]);
 $config['sms'] = array_merge($config['aliConfig'],

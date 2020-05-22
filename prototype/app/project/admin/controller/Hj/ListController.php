@@ -301,9 +301,9 @@ class Hj_ListController extends AbstractController
                     }
                 }
                 $list['postsList'][$key]['user_name'] = $userList[$listDetail['user_id']]['true_name']??"未知用户";
-                $list['postsList'][$key]['visible'] = $listDetail['visible']==1?"可见":"隐藏";
-
+                $list['postsList'][$key]['visible_name'] = $listDetail['visible']==1?"可见":"隐藏";
             }
+            $display_url = $this->config->api['root'].$this->config->api['list']['display'];
             $page_url = Base_Common::getUrl('',$this->ctl,'list',$params)."&Page=~page~";
             $page_content =  base_common::multi($list['postsCount'], $page_url, $params['Page'], $params['PageSize'], 10, $maxpage = 100, $prevWord = '上一页', $nextWord = '下一页');
             //渲染模版
