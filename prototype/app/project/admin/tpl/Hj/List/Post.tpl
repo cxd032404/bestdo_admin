@@ -20,9 +20,12 @@
 	{tpl:if($listInfo.detail.limit.textarea==1)}
 <tr class="hover"><td colspan = 2>文本</td></tr>
 <tr class="hover"><td colspan = 2>
-		<textarea style="width:500px; height:200px" name="detail[comment]" id="detail[comment]" ></textarea>
+		<textarea style="width:500px; height:200px" name="comment" id="comment" ></textarea>
 	</td>
 </tr>
+		<script src="js/ckeditor/ckeditor.js"></script>
+
+		<?php Third_ckeditor_ckeditor::render("comment")?>
 	{/tpl:if}
 	<tr class="noborder"><td></td>
 <td><button type="submit" id="post_submit">提交</button></td>
