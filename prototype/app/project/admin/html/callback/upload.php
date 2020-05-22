@@ -54,7 +54,12 @@ function uploadfile()
 		//$filetype=$filearr[count($filearr)-1];
 		$file_abso=$config[$type."_dir"]."/".$config['name'].".".$filetype;//文件相对路径
 		$file_host=$config['base_url'].$file_abso;//文件绝对路径
-		if(move_uploaded_file($_FILES['upload']['tmp_name'],$file_host))
+		$file_path = $config['base_url'].'/'.$config[$type."_dir"]."/";
+        if (!is_dir($file_path) && !mkdir($file_path)) {
+            mkhtml($fn,"","文件上传失败，请检查上传目录设置和目录读写权限".$file_path);
+        }
+
+        if(move_uploaded_file($_FILES['upload']['tmp_name'],$file_host))
 		{
 
 		    if(isset($config['oss']) && count($config['oss'])>=1)
@@ -71,7 +76,7 @@ function uploadfile()
 		}
 		else
 		{
-			mkhtml($fn,"","文件上传失败，请检查上传目录设置和目录读写权限".$file_host);
+			mkhtml($fn,"","文件上传失败，请检查上传目录设置和目录读写权限".$file_path);
 		}
 	}
 }
