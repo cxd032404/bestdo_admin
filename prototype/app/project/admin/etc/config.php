@@ -14,18 +14,23 @@ $config['companyName'] = "合伽体育";
 $config['companyUrl'] = $urlConfig['companyUrl'];
 $config['projectName'] = "Bestdo控制台";
 $config['currentVersion'] = "1.0";
-$config['api'] = ['root'=>$urlConfig['apiUrl'],
-    'list'=>[
+$config['api'] = [
+    'api'=>[
         'post'=>'/list/post/',
         'source_remove'=>'/list/source_remove',
         'get_page'=>'/page/getPage/',
         'get_token_for_manager'=>'/user/createTokenForManager',
         'display'=>'/list/post_display',
+    ],
+        'site'=>[
+    'company_user_reg'=>'loginhome',
     ]
 ];
-
+$config['apiUrl'] = $urlConfig['apiUrl'];
+$config['siteUrl'] = $urlConfig['siteUrl'];
 $config['adminUrl'] = $urlConfig['adminUrl'];
 $config['aliConfig'] = $keyConfig['aliyun'];
+
 $config['oss'] = array_merge($config['aliConfig'],
     [
         // 'END_POINT'=>'oss-cn-shanghai.aliyuncs.com',

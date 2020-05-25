@@ -255,7 +255,7 @@ class Hj_ListController extends AbstractController
             $listTypeList = $this->oList->getListType();
             $typeInfo  = $listTypeList[$listInfo['list_type']];
             $max_files = 10;
-            $postUrl = $this->config->api['root'].$this->config->api['list']['post'];
+            $postUrl = $this->config->apiUrl.$this->config->api['api']['post'];
             $token = (new Hj_UserInfo())->getTokenForManager($this->manager->id);
             //渲染模版
             include $this->tpl('Hj_List_Post');
@@ -303,7 +303,7 @@ class Hj_ListController extends AbstractController
                 $list['postsList'][$key]['user_name'] = $userList[$listDetail['user_id']]['true_name']??"未知用户";
                 $list['postsList'][$key]['visible_name'] = $listDetail['visible']==1?"可见":"隐藏";
             }
-            $display_url = $this->config->api['root'].$this->config->api['list']['display'];
+            $display_url = $this->config->apiUrl.$this->config->api['api']['display'];
             $page_url = Base_Common::getUrl('',$this->ctl,'list',$params)."&Page=~page~";
             $page_content =  base_common::multi($list['postsCount'], $page_url, $params['Page'], $params['PageSize'], 10, $maxpage = 100, $prevWord = '上一页', $nextWord = '下一页');
             //渲染模版
@@ -337,8 +337,8 @@ class Hj_ListController extends AbstractController
             //获取列表类型列表
             $listTypeList = $this->oList->getListType();
             $typeInfo  = $listTypeList[$listInfo['list_type']];
-            $postUrl = $this->config->api['root'].$this->config->api['list']['post'];
-            $sourceRemoveUrl = $this->config->api['root'].$this->config->api['list']['source_remove'];
+            $postUrl = $this->config->apiUrl.$this->config->api['api']['post'];
+            $sourceRemoveUrl = $this->config->apiUrl.$this->config->api['api']['source_remove'];
             $video_suffix = "?x-oss-process=video/snapshot,t_1000,f_jpg,w_300,h_300,m_fast";
             //渲染模版
             include $this->tpl('Hj_List_PostsDetail');

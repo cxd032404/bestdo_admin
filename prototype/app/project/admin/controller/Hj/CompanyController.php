@@ -48,6 +48,7 @@ class Hj_CompanyController extends AbstractController
 				$companyList[$key]['parent_name'] = ($companyInfo['parent_id']==0)?"无上级":($companyList[$companyInfo['parent_id']]['company_name']??"未知");
 				$companyList[$key]['display_name'] = ($companyInfo['display']==0)?"隐藏":"显示";
 				$companyList[$key]['sort'] = $companyInfo['parent_id']==0?($companyInfo['company_id']."_0"):($companyInfo["parent_id"]."_".$companyInfo['company_id']);
+                $companyList[$key]['reg_url'] = $this->config->siteUrl.'/'.$this->config->api['site']['company_user_reg']."?company_id=".$companyInfo['company_id'];
             }
             array_multisort(array_column($companyList, "sort"),$companyList);
 			//渲染模版

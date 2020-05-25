@@ -599,7 +599,7 @@ class Hj_UserInfo extends Base_Widget
 
     public function getTokenForManager($manager_id)
     {
-        $tokenUrl = $this->config->api['root'].$this->config->api['list']['get_token_for_manager']."?manager_id=".$manager_id;
+        $tokenUrl = $this->config->apiUrl.$this->config->api['api']['get_token_for_manager']."?manager_id=".$manager_id;
         $tokenInfo  = file_get_contents($tokenUrl);
         $tokenInfo = json_decode($tokenInfo,true);
         return $tokenInfo['data']['user_token']??"";
