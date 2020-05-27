@@ -16,7 +16,7 @@
 			{/tpl:loop}
 		</td>
 </tr>
-<td>文件上传：<p>姓名｜验证方式</td>
+<td>文件上传：<p>姓名,验证方式</td>
 <td align="left"><input name="upload_txt[1]" type="file" id="upload_txt[1]" />
 
 </td>

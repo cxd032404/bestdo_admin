@@ -304,7 +304,7 @@ class Hj_UserController extends AbstractController
                     $content = fgets($handle, 8080);
                     if(trim($content)!="" && !is_null($content))
                     {
-                        $text = explode("｜",$content);
+                        $text = explode(",",$content);
                         if(count($text)>=2)
                         {
                             $existUser = $this->oUserInfo->getCompanyUserByColumn($company_id,trim($text['0']),$auth_type,trim($text[1]),"id,name");
