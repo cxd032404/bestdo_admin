@@ -43,6 +43,12 @@
 		</select>
     </td>
 </tr>
+<td>自动报名：</td>
+<td align="left">
+	自动: <input type="radio" name="detail[auto]" id="detail[auto]" value="1" {tpl:if($elementInfo.detail.auto==1)}checked{/tpl:if}/>
+	手动: <input type="radio" name="detail[auto]" id="detail[auto]" value="0" {tpl:if($elementInfo.detail.auto==0)}checked{/tpl:if}/>
+</td>
+</tr>
 <tr class="noborder"><td></td>
 <td><button type="submit" id="page_element_detail_update_submit">提交</button></td>
 </tr>
