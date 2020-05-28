@@ -505,8 +505,8 @@ class Hj_PageController extends AbstractController
             {
                 $elementDetail['detail']['activity_id'] = $detail['activity_id'];
                 unset($elementDetail['detail']['from_params']);
-
             }
+            $elementDetail['detail']['auto'] = $detail['auto']??0;
         }
         elseif(in_array($elementDetail['element_type'],['list','rankByKudos','post']))
         {
