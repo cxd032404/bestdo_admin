@@ -34,6 +34,16 @@
 			{/tpl:loop}
 		</select></td>
 </tr>
+	<tr class="hover"><td>关联列表</td>
+		<td align="left">
+			<select name="detail[connect]"  id="detail[connect]" size="1">
+				<option value="0" {tpl:if($listInfo.detail.connect==0)}selected="selected"{/tpl:if} >不关联</option>
+				{tpl:loop $listList $list_id $list_info}
+				<option value="{tpl:$list_id/}" {tpl:if($list_id==$listInfo.detail.connect)}selected="selected"{/tpl:if} >{tpl:$list_info.list_name/}</option>
+				{/tpl:loop}
+			</select>
+		</td>
+	</tr>
 	<tr class="hover"><td>提交后动作</td>
 		<td align="left">
 			<select name="detail[after_action]"  id="after_action" size="1">

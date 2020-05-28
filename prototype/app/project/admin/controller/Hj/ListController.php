@@ -168,6 +168,8 @@ class Hj_ListController extends AbstractController
             $listInfo['detail'] = json_decode($listInfo['detail'],true);
             //获取活动列表
             $activityList = (new Hj_Activity())->getActivityList(['company_id'=>$listInfo['company_id']],"activity_id,activity_name");
+            //本企业下的列表
+            $listList = $this->oList->getListList(['company_id'=>$listInfo['company_id']],'list_id,list_name');
             //提交后跳转
             $afterActionList = $this->oList->getAfterAction();
             //渲染模版
