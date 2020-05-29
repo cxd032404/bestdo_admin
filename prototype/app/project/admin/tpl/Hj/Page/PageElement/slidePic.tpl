@@ -18,9 +18,11 @@
 </script>
 <div class="br_bottom"></div>
 <form id="page_element_detail_update_form" name="page_element_detail_update_form" action="{tpl:$this.sign/}&ac=page.element.detail.update" method="post">
-	<input type="hidden" id="element_type" name="element_type" value="{tpl:$elementInfo.element_type/}" />
-	<input type="hidden" id="element_type_name" name="element_type_name" value="{tpl:$elementTypeInfo.element_type_name/}" />
-	<input type="hidden" id="element_id" name="element_id" value="{tpl:$elementInfo.element_id/}" />
+<input type="hidden" id="element_type" name="element_type" value="{tpl:$elementInfo.element_type/}" />
+<input type="hidden" id="element_type_name" name="element_type_name" value="{tpl:$elementTypeInfo.element_type_name/}" />
+<input type="hidden" id="element_id" name="element_id" value="{tpl:$elementInfo.element_id/}" />
+<input type="hidden" name="page_id" id="page_id" value="{tpl:$pageInfo.page_id/}" />
+
 	<fieldset>
 		[ <a href="{tpl:$this.sign/}&ac=page.detail&page_id={tpl:$elementInfo.page_id/}">返回</a> | <a href="javascript:;" id="add_page_element_detail">添加页面元素</a> ]
 	</fieldset>
