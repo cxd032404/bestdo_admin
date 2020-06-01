@@ -6,6 +6,12 @@
 <td>列表名称</td>
 	<td align="left"><input type="text" class="span2" name="list_name"  id="list_name" value="" size="50" /></td>
 </tr>
+<tr class="hover"><td>类型</td>
+	<td align="left">	<select name="type"  id="type" size="1">
+			<option value="vote">投票</option>
+			<option value="kudo">点赞</option>
+		</select></td>
+</tr>
 <tr class="hover"><td>属于企业</td>
 	<td align="left">	<select name="company_id"  id="company_id" size="1" onchange="getActivityByCompany()">
 			{tpl:loop $companyList  $companyInfo}

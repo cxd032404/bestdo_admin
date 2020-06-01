@@ -114,7 +114,7 @@ class Hj_ListController extends AbstractController
 	public function listInsertAction()
 	{
 		//检查权限
-		$bind=$this->request->from('list_name','company_id','activity_id','list_type','detail');
+		$bind=$this->request->from('list_name','company_id','activity_id','list_type','detail','type');
 		//页面名称不能为空
 		if(trim($bind['list_name'])=="")
 		{
@@ -137,6 +137,8 @@ class Hj_ListController extends AbstractController
                 }
                 else
                 {
+                    $bind['detail']['type'] = $bind['type'];
+                    unset($bind['type']);
                     //数据打包
                     $bind['detail'] = json_encode($bind['detail']);
                     //添加列表
@@ -186,7 +188,7 @@ class Hj_ListController extends AbstractController
 	public function listUpdateAction()
 	{
 	    //接收页面参数
-        $bind=$this->request->from('list_id','list_name','company_id','activity_id','list_type','detail');
+        $bind=$this->request->from('list_id','list_name','company_id','activity_id','list_type','detail','type');
         //页面名称不能为空
 		if(trim($bind['list_name'])=="")
 		{
@@ -213,6 +215,8 @@ class Hj_ListController extends AbstractController
                     {
                         $bind['detail']['connect_name'] = "";
                     }
+                    $bind['detail']['type'] = $bind['type'];
+                    unset($bind['type']);
                     //数据打包
                     $bind['detail'] = json_encode($bind['detail']);
                     //修改页面

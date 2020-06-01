@@ -9,6 +9,12 @@
 <td>列表名称</td>
 <td align="left"><input name="list_name" type="text" class="span2" id="list_name" value="{tpl:$listInfo.list_name/}" size="50" /></td>
 </tr>
+<tr class="hover"><td>类型</td>
+	<td align="left">	<select name="type"  id="type" size="1">
+			<option value="vote" {tpl:if("vote"==$listInfo.detail.type)}selected="selected"{/tpl:if}>投票</option>
+			<option value="kudo" {tpl:if("kudo"==$listInfo.detail.type)}selected="selected"{/tpl:if}>点赞</option>
+		</select></td>
+</tr>
 <tr class="hover"><td>属于企业</td>
 	<td align="left">	<select name="company_id"  id="company_id" size="1" onchange="getActivityByCompany()">
 			{tpl:loop $companyList  $company_info}
