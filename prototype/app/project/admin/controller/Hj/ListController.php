@@ -209,6 +209,10 @@ class Hj_ListController extends AbstractController
                 }
                 else
                 {
+                    if($bind['detail']['connect'] == 0)
+                    {
+                        $bind['detail']['connect_name'] = "";
+                    }
                     //数据打包
                     $bind['detail'] = json_encode($bind['detail']);
                     //修改页面

@@ -44,6 +44,9 @@
 			</select>
 		</td>
 	</tr>
+	<td>关联列表名称</td>
+	<td align="left"><input name="detail[connect_name]" type="text" class="span2" id="detail[connect_name]" value="{tpl:$listInfo.detail.connect_name/}" size="50" /></td>
+	</tr>
 	<tr class="hover"><td>提交后动作</td>
 		<td align="left">
 			<select name="detail[after_action]"  id="after_action" size="1">
