@@ -506,6 +506,23 @@ class Hj_PageController extends AbstractController
                 $elementDetail['detail']['activity_id'] = $detail['activity_id'];
                 unset($elementDetail['detail']['from_params']);
             }
+            //上传图片
+            $oUpload = new Base_Upload('upload_img');
+            $upload = $oUpload->upload('upload_img',$this->config->oss);
+            $oss_urls = array_column($upload->resultArr,'oss');
+            //如果以前没上传过且这次也没有成功上传
+            if((!isset($elementDetail['detail']['apply_img_url']) || $elementDetail['detail']['apply_img_url']=="") && (!isset($oss_urls['0']) || $oss_urls['0'] == ""))
+            {
+                $response = array('errno' => 2);
+            }
+            else
+            {
+                //这次传成功了就用这次，否则维持
+                $elementDetail['detail']['apply_img_url'] = (isset($oss_urls['0']) && $oss_urls['0']!="")?($oss_urls['0']):($elementDetail['detail']['apply_img_url']);
+            }
+            //这次传成功了就用这次，否则维持
+            $elementDetail['detail']['applied_img_url'] = (isset($oss_urls['1']) && $oss_urls['1']!="")?($oss_urls['1']):($elementDetail['detail']['applied_img_url']);
+            $elementDetail['detail']['applied_url'] = $detail['applied_url']??0;
             $elementDetail['detail']['auto'] = $detail['auto']??0;
         }
         elseif(in_array($elementDetail['element_type'],['list','rankByKudos','post']))

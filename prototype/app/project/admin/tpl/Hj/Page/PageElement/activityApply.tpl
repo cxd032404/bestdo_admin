@@ -49,6 +49,29 @@
 	手动: <input type="radio" name="detail[auto]" id="detail[auto]" value="0" {tpl:if($elementInfo.detail.auto==0)}checked{/tpl:if}/>
 </td>
 </tr>
+<tr class="hover">
+	<td>报名按钮图片：</td>
+	<td align="left"><input name="upload_img[1]" type="file" id="upload_img[1]" />
+		{tpl:if($elementInfo.detail.apply_img_url!="")}
+		已选图片:<img src="{tpl:$elementInfo.detail.apply_img_url/}" width="30px;" height="30px;"/>
+	<br>
+		{/tpl:if}
+	</td>
+</tr>
+<tr class="hover">
+	<td rowspan="2">报名完成按钮图片：</td>
+	<td align="left"><input name="upload_img[2]" type="file" id="upload_img[2]" />
+		{tpl:if($elementInfo.detail.applied_img_url!="")}
+		已选图片:<img src="{tpl:$elementInfo.detail.applied_img_url/}" width="30px;" height="30px;"/>
+	<br>
+		{/tpl:if}
+	</td>
+</tr>
+<tr class="hover">
+	<td align="left">
+		跳转链接：<input type="text" class="span4" name="detail[applied_url]"  id="detail[applied_url]" value="{tpl:$elementInfo.detail.from_params/}" size="50" />
+	</td>
+</tr>
 <tr class="noborder"><td></td>
 <td><button type="submit" id="page_element_detail_update_submit">提交</button></td>
 </tr>
