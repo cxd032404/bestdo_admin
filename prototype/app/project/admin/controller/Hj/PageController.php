@@ -90,7 +90,7 @@ class Hj_PageController extends AbstractController
     public function pageInsertAction()
     {
         //检查权限
-        $bind=$this->request->from('page_name','page_url','company_id','page_sign','detail');
+        $bind=$this->request->from('page_name','page_url','company_id','page_sign','need_login','detail');
         //页面名称不能为空
         if(trim($bind['page_name'])=="")
         {
@@ -163,7 +163,7 @@ class Hj_PageController extends AbstractController
     public function pageUpdateAction()
     {
         //接收页面参数
-        $bind=$this->request->from('page_id','page_name','company_id','page_url','page_sign','detail');
+        $bind=$this->request->from('page_id','page_name','company_id','page_url','need_login','page_sign','detail');
         //页面名称不能为空
         if(trim($bind['page_name'])=="")
         {

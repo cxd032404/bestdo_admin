@@ -15,6 +15,12 @@
 <td>页面标识</td>
 <td align="left"><input type="text" class="span4" name="page_sign"  id="page_sign" value="{tpl:$pageInfo.page_sign/}" size="50" /></td>
 </tr>
+<tr class="hover"><td>需要登录</td>
+	<td align="left">	<select name="need_login"  id="need_login" size="1">
+			<option value="0"{tpl:if(0==$pageInfo.need_login)}selected="selected"{/tpl:if} >不需要</option>
+			<option value="1"{tpl:if(1==$pageInfo.need_login)}selected="selected"{/tpl:if} >需要</option>
+		</select></td>
+</tr>
 <tr class="hover"><td>属于企业</td>
 	<td align="left">	<select name="company_id"  id="company_id" size="1">
 			{tpl:loop $companyList  $company_info}
