@@ -53,7 +53,7 @@
             <link rel="stylesheet" href="style/style.css"  />
             
         <!-- favicon -->
-            <link rel="shortcut icon" href="favicon.ico" />            
+            <link rel="shortcut icon" href="staffhome.ico" />
 		
         <!--[if lte IE 8]>
             <link rel="stylesheet" href="style/ie.css"  />
