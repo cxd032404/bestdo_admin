@@ -1,4 +1,5 @@
 {tpl:tpl contentHeader/}
+<script src="js/ckeditor/ckeditor.js"></script>
 
 <div class="br_bottom"></div>
 <form id="protocal_update_form" name="protocal_update_form" action="{tpl:$this.sign/}&ac=protocal.update" method="post">
@@ -16,7 +17,7 @@
 </tr>
 </table>
 </form>
-
+<?php Third_ckeditor_ckeditor::render("content")?>
 <script type="text/javascript">
 $('#protocal_update_submit').click(function(){
 	var options = {
