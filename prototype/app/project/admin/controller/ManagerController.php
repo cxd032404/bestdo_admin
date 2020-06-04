@@ -142,18 +142,19 @@ class ManagerController extends AbstractController
 			$menu_group_id = $this->request->menu_group_id;//用户组
 			$data_groups = $this->request->data_groups ?  implode(',',$this->request->data_groups) : 0;
 			$is_partner = $this->request->is_partner;
-			$nowtime = date("Y:m:d H:i:s");
+			$current_time = time();
+			$nowtime = date("Y:m:d H:i:s",$current_time);
+			$bind['openid'] = "";
 			$bind['name'] = $name;
 			$bind['password'] = md5($password);
 			$bind['menu_group_id'] = $menu_group_id;
 			$bind['data_groups'] = $data_groups;
 			$bind['is_partner']  = $is_partner;
-			$bind['last_login'] = $nowtime;
-			$bind['last_active'] = $nowtime;
-			$bind['reg_date'] = $nowtime;
+			$bind['last_login'] = $current_time;
+			$bind['last_active'] = $current_time;
+			$bind['reg_time'] = $current_time;
 			$bind['reg_ip'] = $this->request->getIp();
 			$bind['reset_password']=1;
-
 			//验证
 			if (empty($name)) 
 			{
