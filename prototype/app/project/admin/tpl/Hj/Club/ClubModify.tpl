@@ -10,20 +10,19 @@
 <td align="left"><input name="club_name" type="text" class="span2" id="club_name" value="{tpl:$clubInfo.club_name/}" size="50" /></td>
 </tr>
 <tr class="hover">
-	<td>俱乐部时间</td>
-<th align="center" class="rowtip">
-	<input type="text" name="start_time"  id="start_time" class="input-medium" value="{tpl:$clubInfo.start_time/}"  onFocus="WdatePicker({isShowClear:false,readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})" >-<input type="text" name="end_time" id="end_time" class="input-medium" value="{tpl:$clubInfo.end_time/}"   onFocus="WdatePicker({isShowClear:false,readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})" ></th></tr>
-</tr>
-<tr class="hover">
-	<td>报名时间</td>
-<th align="center" class="rowtip">
-	<input type="text" name="apply_start_time "  id="apply_start_time " class="input-medium" value="{tpl:$clubInfo.apply_start_time/}"   onFocus="WdatePicker({isShowClear:false,readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})" >-<input type="text" name="apply_end_time" id="apply_end_time" class="input-medium"  value="{tpl:$clubInfo.apply_end_time/}" onFocus="WdatePicker({isShowClear:false,readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})" ></th></tr>
-</tr>
-<tr class="hover">
 	<td>俱乐部标识</td>
 <td align="left"><input type="text" class="span4" name="club_sign"  id="club_sign" value="{tpl:$clubInfo.club_sign/}" size="50" /></td>
 </tr>
-<tr class="hover"><td>属于企业</td>
+<td>人数限制</td>
+<td align="left"><input type="text" class="span2" name="member_limit"  id="member_limit" value="{tpl:$clubInfo.member_limit/}" size="50" /></td>
+</tr>
+<td>当前允许加入</td>
+<td align="left">
+	允许: <input type="radio" name="allow_enter" id="allow_enter" value="1" {tpl:if($clubInfo.allow_enter==1)}checked{/tpl:if}/>
+	拒绝: <input type="radio" name="allow_enter" id="allow_enter" value="0" {tpl:if($clubInfo.allow_enter==0)}checked{/tpl:if}/></td>
+</tr>
+
+	<tr class="hover"><td>属于企业</td>
 	<td align="left">	<select name="company_id"  id="company_id" size="1">
 			{tpl:loop $companyList  $company_info}
 			<option value="{tpl:$company_info.company_id/}"{tpl:if($company_info.company_id==$clubInfo.company_id)}selected="selected"{/tpl:if} >{tpl:$company_info.company_name/}</option>
@@ -39,10 +38,6 @@
 			更改图片:<input name="upload_img[1]" type="file" class="span4" id="upload_img[1]"/>
 		</td>
 	</tr>
-<tr class="hover">
-	<td>自动跳转</td>
-	<td align="left"><input type="text" class="span4" name="detail[jump_url]"  id="detail[jump_url]" value="{tpl:$clubInfo.detail.jump_url/}" size="50" /></td>
-</tr>
 <tr class="noborder"><td></td>
 <td><button type="submit" id="club_update_submit">提交</button></td>
 </tr>

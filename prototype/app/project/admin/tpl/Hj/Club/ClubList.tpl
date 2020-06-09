@@ -37,8 +37,8 @@ function clubModify(mid){
     <th align="center" class="rowtip">俱乐部名称</th>
     <th align="center" class="rowtip">俱乐部标识</th>
     <th align="center" class="rowtip">对应企业</th>
-    <th align="center" class="rowtip">俱乐部时间</th>
-    <th align="center" class="rowtip">报名时间</th>
+    <th align="center" class="rowtip">人数限制</th>
+    <th align="center" class="rowtip">是否允许加入</th>
     <th align="center" class="rowtip">更新时间</th>
     <th align="center" class="rowtip">操作</th>
   </tr>
@@ -49,8 +49,8 @@ function clubModify(mid){
     <td align="center">{tpl:$clubInfo.club_name/}</td>
       <td align="center">{tpl:$clubInfo.club_sign/}</td>
       <td align="center">{tpl:$clubInfo.company_name/}</td>
-      <td align="center">{tpl:$clubInfo.start_time/}<P>{tpl:$clubInfo.end_time/}</td>
-      <td align="center">{tpl:$clubInfo.apply_start_time/}<P>{tpl:$clubInfo.apply_end_time/}</td>
+      <td align="center">{tpl:$clubInfo.member_limit/}</td>
+      <td align="center">{tpl:if($clubInfo.allow_enter==1)}允许{tpl:else}拒绝{/tpl:if}</td>
       <td align="center">{tpl:$clubInfo.update_time/}</td>
       <td align="center"><a  href="javascript:;" onclick="clubDelete('{tpl:$clubInfo.club_id/}','{tpl:$clubInfo.club_name/}')">删除</a>
  | <a href="javascript:;" onclick="clubModify('{tpl:$clubInfo.club_id/}');">修改</a> | <a href="{tpl:$this.sign/}&ac=club.log&club_id={tpl:$clubInfo.club_id/}">报名记录{tpl:if($clubInfo.count>0)}({tpl:$clubInfo.count/}){/tpl:if}</a></td>

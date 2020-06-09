@@ -14,7 +14,7 @@
 </tr>
 <td>当前允许加入</td>
 <td align="left">
-	允许: <input type="radio" name="allow_enter" id="allow_enter" value="1" />
+	允许: <input type="radio" name="allow_enter" id="allow_enter" value="1" checked/>
 	拒绝: <input type="radio" name="allow_enter" id="allow_enter" value="0" /></td>
 </tr>
 
