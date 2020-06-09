@@ -481,8 +481,10 @@ class ManagerController extends AbstractController
         include('Third/phpqrcode/phpqrcode.php');
         //分站ID
         $id = intval($this->request->id);
-        $url = urlencode('http://admin.xrace.cn/callback/WxOpenidBind.php?id='.$id);
-        include $this->tpl('Xrace_Race_QR');
+        $url = $this->config->adminUrl.'/callback/WxOpenidBind.php?id='.$id;
+        echo $url;
+        $url = urlencode($url);
+        include $this->tpl('manager_QR');
     }
 
 }

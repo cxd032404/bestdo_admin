@@ -7,7 +7,8 @@ if(empty($openid))
 {
     $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
     $path = "$protocol$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
-
+    echo $path;
+    die();
     $url = "http://enroll.xrace.cn/auth/getWeixinOpenid2?redirect_uri=".urlencode($path);
     header("Location: $url");
 }
