@@ -126,4 +126,8 @@ $table['config_protocal']['num'] = 1;
 #活动报名记录
 $table['user_activity_log']['db'] = 'hj_user';
 $table['user_activity_log']['num'] = 1;
+
+#俱乐部相关
+$table['config_club']['db'] = 'hj_config';
+$table['config_club']['num'] = 1;
 return $table;
