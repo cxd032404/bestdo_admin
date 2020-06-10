@@ -15,36 +15,49 @@ if(empty($openid))
 else
 {
     $oManager = new Widget_Manager();
+    $oUser = new Hj_UserInfo();
+
     $managerInfo = $oManager->getRow($id);
-    if($managerInfo["openid"]=="")
+    $userInfo = $oUser->getUserByWechat($openid,'user_id,nick_name,manager_id');
+    if(!$userInfo['user_id'])
     {
-        $managerInfo["openid"] = trim($openid);
-        $update = $oManager->update($id,$managerInfo);
-        if($update)
-        {
-            echo "绑定成功";
-        }
-        else
-        {
-            echo "绑定失败";
-        }
-    }
-    elseif($managerInfo["openid"]==trim($openid))
-    {
-        $managerInfo["openid"] = "";
-        $update = $oManager->update($id,$managerInfo);
-        if($update)
-        {
-            echo "解绑成功";
-        }
-        else
-        {
-            echo "解绑失败";
-        }
+        echo "此微信尚未绑定某个用户，请先注册绑定后再关联管理员";
     }
     else
     {
-        echo "非本人不能操作";
+        if($managerInfo["openid"]=="")
+        {
+            $managerInfo["openid"] = trim($openid);
+            $updateManager = $oManager->update($id,$managerInfo);
+            $updateUser = $oUser->updateUser($userInfo['user_id'],['manager_id'=>$id]);
+            if($updateManager && $updateUser)
+            {
+                echo "用户".$userInfo['nick_name']."绑定成功";
+            }
+            else
+            {
+                echo "用户".$userInfo['nick_name']."绑定失败";
+            }
+        }
+        elseif($managerInfo["openid"]==trim($openid))
+        {
+            $managerInfo["openid"] = "";
+            $updateManager = $oManager->update($id,$managerInfo);
+            $updateUser = $oUser->updateUser($userInfo['user_id'],['manager_id'=>0]);
+            if($updateManager && $updateUser)
+            {
+                echo "用户".$userInfo['nick_name']."解绑成功";
+            }
+            else
+            {
+                echo "用户".$userInfo['nick_name']."解绑失败";
+            }
+        }
+        else
+        {
+            echo "非本人不能操作";
+        }
     }
+
 }
 

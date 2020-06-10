@@ -390,6 +390,18 @@ class Hj_UserInfo extends Base_Widget
         return $this->db->selectRow($table_to_process, $fields, '`user_id` = ?', $user_id);
     }
     /**
+     * 获取单个用户记录
+     * @param char $wechatid 用户微信openid
+     * @param string $fields 所要获取的数据列
+     * @return array
+     */
+    public function getUserByWechat($wechat_id, $fields = '*')
+    {
+        $wechat_id = trim($wechat_id);
+        $table_to_process = Base_Widget::getDbTable($this->table);
+        return $this->db->selectRow($table_to_process, $fields, '`wechatid` = ?', $wechat_id);
+    }
+    /**
      * 新增单个用户记录
      * @param array $bind 所要添加的数据列
      * @return boolean
