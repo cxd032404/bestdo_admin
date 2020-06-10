@@ -33,9 +33,9 @@ class Widget_Log extends Base_Widget
 		$this->log();
 	}
 
-	public function push($key, $value)
+	public function pushLog($key, $value)
 	{
-		$this->row[$key] = $value;
+        $this->row[$key] = $value;
 
 		return $this;
 	}

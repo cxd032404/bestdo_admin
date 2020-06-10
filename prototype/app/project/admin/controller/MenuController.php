@@ -20,7 +20,7 @@ class MenuController extends AbstractController
 		 * 记录日志
 		 */
 		$log = "菜单管理主页面\n\nServerIp:\n" . $this->request->getServer('SERVER_ADDR') . "\n\nGET:\n" . var_export($_GET, true) . "\n\nPOST:\n" . var_export($_POST, true);
-		$this->oLogManager->push('log', $log);
+		$this->oLogManager->pushLog('log', $log);
 				
 		//检查权限
 		$CheckPermission = $this->manager->checkMenuPermission(0);
@@ -68,7 +68,7 @@ class MenuController extends AbstractController
 	{
 		
 		/*
-		$this->oLogManager->push('log', $log);
+		$this->oLogManager->pushLog('log', $log);
 		*/		
 		$PermissionCheck = $this->manager->checkMenuPermission("AddMenu");
 		if($PermissionCheck['return'])
@@ -97,7 +97,7 @@ class MenuController extends AbstractController
 		 */
 		/*()
 		$log = "添加菜单执行页面\n\nServerIp:\n" . $this->request->getServer('SERVER_ADDR') . "\n\nGET:\n" . var_export($_GET, true) . "\n\nPOST:\n" . var_export($_POST, true);
-		$this->oLogManager->push('log', $log);
+		$this->oLogManager->pushLog('log', $log);
         */
 		$name = $this->request->name;
 		$link = $this->request->link;
@@ -162,7 +162,7 @@ class MenuController extends AbstractController
 		 */
 		/*
 		$log = "修改菜单表单页面\n\nServerIp:\n" . $this->request->getServer('SERVER_ADDR') . "\n\nGET:\n" . var_export($_GET, true) . "\n\nPOST:\n" . var_export($_POST, true);
-		$this->oLogManager->push('log', $log);
+		$this->oLogManager->pushLog('log', $log);
 		*/
 		$PermissionCheck = $this->manager->checkMenuPermission("UpdateMenu");
 		if($PermissionCheck['return'])
@@ -225,7 +225,7 @@ class MenuController extends AbstractController
 		 */
 		/*
 		$log = "修改菜单执行页面\n\nServerIp:\n" . $this->request->getServer('SERVER_ADDR') . "\n\nGET:\n" . var_export($_GET, true) . "\n\nPOST:\n" . var_export($_POST, true);
-		$this->oLogManager->push('log', $log);
+		$this->oLogManager->pushLog('log', $log);
 		*/		
 		//$PermissionCheck = $this->manager->checkMenuPermission("UpdateMenu");
 		$menu_id = $this->request->menu_id;

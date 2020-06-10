@@ -515,7 +515,7 @@ class Widget_Manager extends Base_Widget
      */    
     public function logUserMenuOperation($bind) {
         //$this->oLogManager = new Log_LogsManager();
-        //$this->oLogManager->push('log', json_encode($return));
+        //$this->oLogManager->pushLog('log', json_encode($return));
         //return true;
         $insertStruct = array(
             'user_name' => $bind['user_name'],

@@ -21,7 +21,7 @@ class Log_Web extends Base_Widget
 		}
 	}
 
-	public function push($key, $value)
+	public function pushLog($key, $value)
 	{
 		if (empty($value)) {
 			$value = '';

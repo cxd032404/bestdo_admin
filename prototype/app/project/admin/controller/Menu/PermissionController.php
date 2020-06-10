@@ -194,7 +194,7 @@ class Menu_PermissionController extends AbstractController
 		 * 记录日志
 		 */
 		$log = "修改一个菜单对应的管理员组的权限执行页面\n\nServerIp:\n" . $this->request->getServer('SERVER_ADDR') . "\n\nGET:\n" . var_export($_GET, true) . "\n\nPOST:\n" . var_export($_POST, true);
-		$this->oLogManager->push('log', $log);
+		$this->oLogManager->pushLog('log', $log);
 				
 		$this->manager->checkMenuPermission($this->sign, Widget_Manager::MENU_PURVIEW_DELETE);
 
@@ -219,7 +219,7 @@ class Menu_PermissionController extends AbstractController
 		 * 记录日志
 		 */
 		$log = "修改一个管理员组对应的菜单权限执行页面\n\nServerIp:\n" . $this->request->getServer('SERVER_ADDR') . "\n\nGET:\n" . var_export($_GET, true) . "\n\nPOST:\n" . var_export($_POST, true);
-		$this->oLogManager->push('log', $log);
+		$this->oLogManager->pushLog('log', $log);
 				
 		$this->manager->checkMenuPermission($this->sign, Widget_Manager::MENU_PURVIEW_DELETE);
 

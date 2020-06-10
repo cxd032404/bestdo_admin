@@ -24,7 +24,7 @@ class ModifyPwdController extends AbstractController
 		 * 记录日志
 		 */
 		$log = "强制修改密码表单页面\n\nServerIp:\n" . $this->request->getServer('SERVER_ADDR') . "\n\nGET:\n" . var_export($_GET, true) . "\n\nPOST:\n" . var_export($_POST, true);
-		$this->oLogManager->push('log', $log);
+		$this->oLogManager->pushLog('log', $log);
 				
 		$id = $this->request->id;
 		$admin = $this->manager->getRow($id);
@@ -41,7 +41,7 @@ class ModifyPwdController extends AbstractController
 		 * 记录日志
 		 */
 		$log = "强制修改密码执行页面\n\nServerIp:\n" . $this->request->getServer('SERVER_ADDR') . "\n\nGET:\n" . var_export($_GET, true) . "\n\nPOST:\n" . var_export($_POST, true);
-		$this->oLogManager->push('log', $log);
+		$this->oLogManager->pushLog('log', $log);
 				
 		
 		$id = trim($this->request->id);//用户ID

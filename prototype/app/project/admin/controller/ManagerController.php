@@ -101,7 +101,7 @@ class ManagerController extends AbstractController
 		 * 记录日志
 		 */
 		$log = "插入/新增一个管理员表单页面\n\nServerIp:\n" . $this->request->getServer('SERVER_ADDR') . "\n\nGET:\n" . var_export($_GET, true) . "\n\nPOST:\n" . var_export($_POST, true);
-		$this->oLogManager->push('log', $log);
+		$this->oLogManager->pushLog('log', $log);
 				
 		$PermissionCheck = $this->manager->checkMenuPermission("AddManager");
 		if($PermissionCheck['return'])
@@ -131,7 +131,7 @@ class ManagerController extends AbstractController
 		 * 记录日志
 		 */
 		$log = "插入/新增一个管理员执行页面\n\nServerIp:\n" . $this->request->getServer('SERVER_ADDR') . "\n\nGET:\n" . var_export($_GET, true) . "\n\nPOST:\n" . var_export($_POST, true);
-		$this->oLogManager->push('log', $log);
+		$this->oLogManager->pushLog('log', $log);
 				
 		$PermissionCheck = $this->manager->checkMenuPermission("AddManager");
 		if($PermissionCheck['return'])
@@ -211,7 +211,7 @@ class ManagerController extends AbstractController
 		 * 记录日志
 		 */
 		$log = "修改管理员表单页面\n\nServerIp:\n" . $this->request->getServer('SERVER_ADDR') . "\n\nGET:\n" . var_export($_GET, true) . "\n\nPOST:\n" . var_export($_POST, true);
-		$this->oLogManager->push('log', $log);
+		$this->oLogManager->pushLog('log', $log);
 
 		$PermissionCheck = $this->manager->checkMenuPermission("UpdateManager");
 		if($PermissionCheck['return'])
@@ -242,7 +242,7 @@ class ManagerController extends AbstractController
 		 * 记录日志
 		 */
 		$log = "修改管理员执行页面\n\nServerIp:\n" . $this->request->getServer('SERVER_ADDR') . "\n\nGET:\n" . var_export($_GET, true) . "\n\nPOST:\n" . var_export($_POST, true);
-		$this->oLogManager->push('log', $log);
+		$this->oLogManager->pushLog('log', $log);
 				
 		$PermissionCheck = $this->manager->checkMenuPermission("UpdateManager");
 		if($PermissionCheck['return'])
@@ -312,7 +312,7 @@ class ManagerController extends AbstractController
 		 * 记录日志
 		 */
 		$log = "删除管理员执行页面\n\nServerIp:\n" . $this->request->getServer('SERVER_ADDR') . "\n\nGET:\n" . var_export($_GET, true) . "\n\nPOST:\n" . var_export($_POST, true);
-		$this->oLogManager->push('log', $log);
+		$this->oLogManager->pushLog('log', $log);
 				
 		$PermissionCheck = $this->manager->checkMenuPermission("DeleteManager");
 		if($PermissionCheck['return'])
@@ -340,7 +340,7 @@ class ManagerController extends AbstractController
 		 * 记录日志
 		 */
 		$log = "修改密码表单页面\n\nServerIp:\n" . $this->request->getServer('SERVER_ADDR') . "\n\nGET:\n" . var_export($_GET, true) . "\n\nPOST:\n" . var_export($_POST, true);
-		$this->oLogManager->push('log', $log);
+		$this->oLogManager->pushLog('log', $log);
 				
 		$id = $this->request->id;
 		$Widget_Manager=new Widget_Manager();
@@ -358,7 +358,7 @@ class ManagerController extends AbstractController
 		 * 记录日志
 		 */
 		$log = "修改密码执行页面\n\nServerIp:\n" . $this->request->getServer('SERVER_ADDR') . "\n\nGET:\n" . var_export($_GET, true) . "\n\nPOST:\n" . var_export($_POST, true);
-		$this->oLogManager->push('log', $log);
+		$this->oLogManager->pushLog('log', $log);
 				
 		
 		$id = trim($this->request->id);//用户ID
@@ -418,7 +418,7 @@ class ManagerController extends AbstractController
 		 * 记录日志
 		 */
 		$log = "密码重置表单页面\n\nServerIp:\n" . $this->request->getServer('SERVER_ADDR') . "\n\nGET:\n" . var_export($_GET, true) . "\n\nPOST:\n" . var_export($_POST, true);
-		$this->oLogManager->push('log', $log);
+		$this->oLogManager->pushLog('log', $log);
 				
 		$this->manager->checkMenuPermission($this->sign, Widget_Manager::MENU_PURVIEW_DELETE);
 
@@ -437,7 +437,7 @@ class ManagerController extends AbstractController
 		 * 记录日志
 		 */
 		$log = "密码重置执行页面\n\nServerIp:\n" . $this->request->getServer('SERVER_ADDR') . "\n\nGET:\n" . var_export($_GET, true) . "\n\nPOST:\n" . var_export($_POST, true);
-		$this->oLogManager->push('log', $log);
+		$this->oLogManager->pushLog('log', $log);
 				
 		$this->manager->checkMenuPermission($this->sign, Widget_Manager::MENU_PURVIEW_DELETE);
 

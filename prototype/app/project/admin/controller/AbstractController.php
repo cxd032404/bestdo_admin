@@ -38,14 +38,14 @@ abstract class AbstractController extends Base_Controller_Action
 	{
 		$this->manager = new Widget_Manager();
 		$this->oLogManager = new Log_LogsManager();
-		$this->oLogManager->push('ip', $this->request->getIp());
-		$this->oLogManager->push('addtime', time());
-		$this->oLogManager->push('manager_id', $this->manager->id);
-		$this->oLogManager->push('name', $this->manager->name);
-		$this->oLogManager->push('url', $this->request->getServer('REQUEST_URI'));
-		$this->oLogManager->push('referer', $this->request->getReferer() ? $this->request->getReferer() : 'referer');
-		$this->oLogManager->push('agent', $this->request->getAgent());
-				$this->oLogManager->push('log', "");
+		$this->oLogManager->pushLog('ip', $this->request->getIp());
+		$this->oLogManager->pushLog('addtime', time());
+		$this->oLogManager->pushLog('manager_id', $this->manager->id);
+		$this->oLogManager->pushLog('name', $this->manager->name);
+		$this->oLogManager->pushLog('url', $this->request->getServer('REQUEST_URI'));
+		$this->oLogManager->pushLog('referer', $this->request->getReferer() ? $this->request->getReferer() : 'referer');
+		$this->oLogManager->pushLog('agent', $this->request->getAgent());
+				$this->oLogManager->pushLog('log', "");
 		$config = (@include Base_Common::$config['config_file']);
 		//$appConfig = (@include dirname(dirname(__FILE__)) . '/etc/config.php');
 		//is_array($appConfig) && $config = $config + $appConfig;

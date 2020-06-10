@@ -21,7 +21,7 @@ class GroupController extends AbstractController
 		 * 记录日志
 		 */
 		$log = "管理员组管理首页\n\nServerIp:\n" . $this->request->getServer('SERVER_ADDR') . "\n\nGET:\n" . var_export($_GET, true) . "\n\nPOST:\n" . var_export($_POST, true);
-		$this->oLogManager->push('log', $log);
+		$this->oLogManager->pushLog('log', $log);
 				
 		//检查权限
 		$this->manager->checkMenuPermission($this->sign, Widget_Manager::MENU_PURVIEW_SELECT);
@@ -42,7 +42,7 @@ class GroupController extends AbstractController
 		 * 记录日志
 		 */
 		$log = "添加管理员组表单页面\n\nServerIp:\n" . $this->request->getServer('SERVER_ADDR') . "\n\nGET:\n" . var_export($_GET, true) . "\n\nPOST:\n" . var_export($_POST, true);
-		$this->oLogManager->push('log', $log);
+		$this->oLogManager->pushLog('log', $log);
 				
 		$this->manager->checkMenuPermission($this->sign, Widget_Manager::MENU_PURVIEW_INSERT);
 		include $this->tpl('group_add');
@@ -58,7 +58,7 @@ class GroupController extends AbstractController
 		 * 记录日志
 		 */
 		$log = "添加管理员组执行页面\n\nServerIp:\n" . $this->request->getServer('SERVER_ADDR') . "\n\nGET:\n" . var_export($_GET, true) . "\n\nPOST:\n" . var_export($_POST, true);
-		$this->oLogManager->push('log', $log);
+		$this->oLogManager->pushLog('log', $log);
 				
 		$this->manager->checkMenuPermission($this->sign, Widget_Manager::MENU_PURVIEW_INSERT);
 
@@ -96,7 +96,7 @@ class GroupController extends AbstractController
 		 * 记录日志
 		 */
 		$log = "修改管理员组表单页面\n\nServerIp:\n" . $this->request->getServer('SERVER_ADDR') . "\n\nGET:\n" . var_export($_GET, true) . "\n\nPOST:\n" . var_export($_POST, true);
-		$this->oLogManager->push('log', $log);
+		$this->oLogManager->pushLog('log', $log);
 				
 		$this->manager->checkMenuPermission($this->sign, Widget_Manager::MENU_PURVIEW_UPDATE);
 		$group_id = $this->request->group_id;
@@ -117,7 +117,7 @@ class GroupController extends AbstractController
 		 * 记录日志
 		 */
 		$log = "修改管理员组执行页面\n\nServerIp:\n" . $this->request->getServer('SERVER_ADDR') . "\n\nGET:\n" . var_export($_GET, true) . "\n\nPOST:\n" . var_export($_POST, true);
-		$this->oLogManager->push('log', $log);
+		$this->oLogManager->pushLog('log', $log);
 				
 		$this->manager->checkMenuPermission($this->sign, Widget_Manager::MENU_PURVIEW_UPDATE);
 
@@ -158,7 +158,7 @@ class GroupController extends AbstractController
 		 * 记录日志
 		 */
 		$log = "删除管理员执行页面\n\nServerIp:\n" . $this->request->getServer('SERVER_ADDR') . "\n\nGET:\n" . var_export($_GET, true) . "\n\nPOST:\n" . var_export($_POST, true);
-		$this->oLogManager->push('log', $log);
+		$this->oLogManager->pushLog('log', $log);
 				
 		$this->manager->checkMenuPermission($this->sign, Widget_Manager::MENU_PURVIEW_DELETE);
 

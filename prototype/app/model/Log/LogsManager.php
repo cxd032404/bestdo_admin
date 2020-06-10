@@ -26,7 +26,7 @@ class Log_LogsManager extends Base_Widget
 		return $this->db->insert($this->table, $this->logArr);
 	}
 	
-	public function push($key, $value)
+	public function pushLog($key, $value)
 	{
 		$this->logArr[$key] = $value;
 	}

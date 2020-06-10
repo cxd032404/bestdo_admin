@@ -14,7 +14,7 @@ class MenuGroupController extends AbstractController
 		 * 记录日志
 		 */
 		$log = "菜单用户组管理\n\nServerIp:\n" . $this->request->getServer('SERVER_ADDR') . "\n\nGET:\n" . var_export($_GET, true) . "\n\nPOST:\n" . var_export($_POST, true);
-		$this->oLogManager->push('log', $log);
+		$this->oLogManager->pushLog('log', $log);
 				
 		//检查权限
 		$PermissionCheck = $this->manager->checkMenuPermission(0);
