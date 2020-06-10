@@ -9,7 +9,7 @@ if(empty($openid))
     $config  = (@include dirname(dirname(__FILE__)) . '/../etc/config.php');
     $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
     $path = "$protocol$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
-    $url = $config['apiUrl']."/wechat/bind4Manager?redirect_uri=".urlencode($path);
+    $url = $config['apiUrl']."/wechat/bind4Manager?redirect=".urlencode($path);
     header("Location: $url");
 }
 else
