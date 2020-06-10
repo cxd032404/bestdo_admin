@@ -1,20 +1,19 @@
 <?php
+include dirname(dirname(__FILE__)) . '/init.php';
 
 $openid = isset($_GET['openid']) ? $_GET['openid'] : '';
 $id = $_GET['id'];
 
 if(empty($openid))
 {
+    $config  = (@include dirname(dirname(__FILE__)) . '/../etc/config.php');
     $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
     $path = "$protocol$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
-    echo $path;
-    die();
-    $url = "http://enroll.xrace.cn/auth/getWeixinOpenid2?redirect_uri=".urlencode($path);
+    $url = $config['apiUrl']."/wechat/bind4Manager?redirect_uri=".urlencode($path);
     header("Location: $url");
 }
 else
 {
-    include dirname(dirname(__FILE__)) . '/init.php';
     $oManager = new Widget_Manager();
     $managerInfo = $oManager->getRow($id);
     if($managerInfo["openid"]=="")
