@@ -214,20 +214,20 @@ class Widget_Manager extends Base_Widget
             $id = $this->id;
         }
 
-        $sql = "SELECT $fields FROM {$this->table} WHERE `id` = ?";
+        $sql = "SELECT $fields FROM ".Base_Widget::getDbTable($this->table)." WHERE `id` = ?";
         return $this->db->getRow($sql, $id);
     }
 
     public function getRowByName($name, $fields = '*')
     {
-        $sql = "SELECT $fields FROM {$this->table} WHERE `name` = ?";
+        $sql = "SELECT $fields FROM ".Base_Widget::getDbTable($this->table)." WHERE `name` = ?";
         $row = $this->db->getRow($sql, $name);
         return $row;
     }
 
     public function getRowByOpenId($openid, $fields = '*')
     {
-        $sql = "SELECT $fields FROM {$this->table} WHERE `openid` = ?";
+        $sql = "SELECT $fields FROM ".Base_Widget::getDbTable($this->table)." WHERE `openid` = ?";
         $row = $this->db->getRow($sql, $openid);
         return $row;
     }
@@ -260,7 +260,7 @@ class Widget_Manager extends Base_Widget
     		$condition.=" and is_partner = ? ";
     	}
     	
-        $sql = "SELECT $fields FROM {$this->table} WHERE $condition ";
+        $sql = "SELECT $fields FROM ".Base_Widget::getDbTable($this->table)." WHERE $condition ";
         $row = $this->db->getAll($sql,$param);
 
         return $row;
@@ -268,13 +268,13 @@ class Widget_Manager extends Base_Widget
     
     public function getOne($id, $field)
     {
-        $sql = "SELECT $field FROM {$this->table} WHERE `id` = ?";;
-        return $this->db->getOne($sql, $id);
+        $sql = "SELECT $field FROM ".Base_Widget::getDbTable($this->table)." WHERE `id` = ?";
+        return $this->db->getOne($sql, [$id]);
     }
 
     public function getOneByName($name, $field)
     {
-        $sql = "SELECT $field FROM {$this->table} WHERE `name` = ?";
+        $sql = "SELECT $field FROM ".Base_Widget::getDbTable($this->table)." WHERE `name` = ?";
         return $this->db->getOne($sql, $name);
     }
 
@@ -285,7 +285,7 @@ class Widget_Manager extends Base_Widget
      */
     public function getAll($fields = '*')
     {
-        $sql = "SELECT $fields FROM {$this->table} ";
+        $sql = "SELECT $fields FROM ".Base_Widget::getDbTable($this->table);
         $return =  $this->db->getAll($sql);
         $ManagerList = array();
         foreach($return as $key => $value)
@@ -302,7 +302,7 @@ class Widget_Manager extends Base_Widget
      */
     public function nameExists($name)
     {
-        $sql = "SELECT `id` FROM `{$this->table}` WHERE `name` = ?";
+        $sql = "SELECT `id` FROM ".Base_Widget::getDbTable($this->table)." WHERE `name` = ?";
         $id = $this->db->getOne($sql, $name);
         return $id > 0;
     }
@@ -552,12 +552,12 @@ class Widget_Manager extends Base_Widget
 		if (empty($id)) {
 			$id = $this->id;
 		}
-		$sql = "SELECT $fields FROM {$this->table} WHERE `id` = ?";
+		$sql = "SELECT $fields FROM ".Base_Widget::getDbTable($this->table)." WHERE `id` = ?";
 		return $this->db->getRow($sql, $id);
 	}
 	public function getByName($name, $fields = '*')
 	{				
-		$sql = "SELECT $fields FROM {$this->table} WHERE `name` = ?";
+		$sql = "SELECT $fields FROM ".Base_Widget::getDbTable($this->table)." WHERE `name` = ?";
 		return $this->db->getRow($sql, $name);
 	}
 	public function getPermissionList($group_id)
