@@ -56,6 +56,7 @@ $('#club_update_submit').click(function(){
 				errors[1] = '俱乐部名称不能为空，请修正后再次提交';
 				errors[3] = '俱乐部标识不能为空，请修正后再次提交';
 				errors[4] = '俱乐部标识'+$('#club_sign').val()+'已重复，请修正后再次提交';
+				errors[8] = '尚未绑定管理员用户，请修正后再次提交';
 				errors[9] = '入库失败，请修正后再次提交';
 				divBox.alertBox(errors[jsonResponse.errno],function(){});
 			} else {

@@ -130,4 +130,12 @@ $table['user_activity_log']['num'] = 1;
 #俱乐部相关
 $table['config_club']['db'] = 'hj_config';
 $table['config_club']['num'] = 1;
+
+#俱乐部相关
+$table['club_member']['db'] = 'hj_user';
+$table['club_member']['num'] = 1;
+
+#俱乐部相关
+$table['club_member_log']['db'] = 'hj_user';
+$table['club_member_log']['num'] = 1;
 return $table;

@@ -77,7 +77,7 @@ class Hj_ClubController extends AbstractController
 		$PermissionCheck = $this->manager->checkMenuPermission("addClub");
 		if($PermissionCheck['return'])
 		{
-			//获取顶级俱乐部列表
+		    //获取顶级俱乐部列表
 			$companyList = $this->oCompany->getCompanyList([],"company_id,company_name");
 			//渲染模版
 			include $this->tpl('Hj_Club_ClubAdd');
@@ -92,48 +92,77 @@ class Hj_ClubController extends AbstractController
 	//添加新俱乐部
 	public function clubInsertAction()
 	{
-		//检查权限
-		$bind=$this->request->from('club_name','company_id','club_sign','member_limit','allow_enter');
-		//俱乐部名称不能为空
-		if(trim($bind['club_name'])=="")
-		{
-			$response = array('errno' => 1);
-		}
+		$connectedUser = (new Hj_UserInfo())->getConnectedUserInfo($this->manager->id);
+		if(!$connectedUser['user_id'])
+        {
+            $response = array('errno' => 8);
+        }
 		else
-		{
-            if(trim($bind['club_sign'])=="")
+        {
+            //检查权限
+            $bind=$this->request->from('club_name','company_id','club_sign','member_limit','allow_enter');
+            //俱乐部名称不能为空
+            if(trim($bind['club_name'])=="")
             {
-                $response = array('errno' => 3);
+                $response = array('errno' => 1);
             }
             else
             {
-                $clubExists = $this->oClub->getClubList(['company_id'=>$bind['company_id'],'club_sign'=>$bind['club_sign']],'club_id,club_sign');
-                if(count($clubExists)>0)
+                if(trim($bind['club_sign'])=="")
                 {
-                    $response = array('errno' => 4);
+                    $response = array('errno' => 3);
                 }
                 else
                 {
-                    $oUpload = new Base_Upload('upload_img');
-                    $upload = $oUpload->upload('upload_img',$this->config->oss);
-                    $oss_urls = array_column($upload->resultArr,'oss');
-                    $bind['icon'] = implode("",$oss_urls);
-                    if(trim($bind['icon'])=="")
+                    $clubExists = $this->oClub->getClubList(['company_id'=>$bind['company_id'],'club_sign'=>$bind['club_sign']],'club_id,club_sign');
+                    if(count($clubExists)>0)
                     {
-                        $response = array('errno' => 2);
+                        $response = array('errno' => 4);
                     }
                     else
                     {
-                        //数据打包
-                        $bind['detail'] = json_encode([]);
-                        $bind['content'] = "";
-                        //添加俱乐部
-                        $res = $this->oClub->insertClub($bind);
-                        $response = $res ? array('errno' => 0) : array('errno' => 9);
+                        $oUpload = new Base_Upload('upload_img');
+                        $upload = $oUpload->upload('upload_img',$this->config->oss);
+                        $oss_urls = array_column($upload->resultArr,'oss');
+                        $bind['icon'] = implode("",$oss_urls);
+                        if(trim($bind['icon'])=="")
+                        {
+                            $response = array('errno' => 2);
+                        }
+                        else
+                        {
+                            //数据打包
+                            $bind['detail'] = json_encode([]);
+                            $bind['content'] = "";
+                            //添加俱乐部
+                            $res = $this->oClub->insertClub($bind);
+                            if($res)
+                            {
+                                $memberInfo = ['club_id'=>$res,
+                                    'company_id'=>$bind['company_id'],
+                                    'user_id'=>$connectedUser['user_id'],
+                                    'permission'=>9,'status'=>1,
+                                    'detail'=>json_encode(['comment'=>"俱乐部创建自动加入"]),];
+                                $memberLogInfo = ['club_id'=>$res,
+                                    'company_id'=>$bind['company_id'],
+                                    'type'=>1,'sub_type'=>1,
+                                    'user_id'=>$connectedUser['user_id'],
+                                    'operate_user_id'=>$connectedUser['user_id'],
+                                    'process_user_id'=>$connectedUser['user_id'],
+                                    'detail'=>json_encode(['comment'=>"俱乐部创建自动加入"]),
+                                    'result'=>1];
+                                //写入成员
+                                $member = (new Hj_ClubMember())->insertClubMember($memberInfo);
+                                //写入成员日志
+                                $log = (new Hj_ClubMember())->insertClubMemberLog($memberLogInfo);
+                            }
+                            $response = $res ? array('errno' => 0) : array('errno' => 9);
+                        }
                     }
                 }
             }
-		}
+        }
+
 		echo json_encode($response);
 		return true;
 	}
@@ -166,45 +195,53 @@ class Hj_ClubController extends AbstractController
 	//更新俱乐部信息
 	public function clubUpdateAction()
 	{
-	    //接收俱乐部参数
-        $bind=$this->request->from('club_id','club_name','company_id','club_sign','member_limit','allow_enter');
-        //俱乐部名称不能为空
-		if(trim($bind['club_name'])=="")
-		{
-			$response = array('errno' => 1);
-		}
-		else
-		{
-            if(trim($bind['club_sign'])=="")
+        $connectedUser = (new Hj_UserInfo())->getConnectedUserInfo($this->manager->id);
+        if(!$connectedUser['user_id'])
+        {
+            $response = array('errno' => 8);
+        }
+        else
+        {
+            //接收俱乐部参数
+            $bind=$this->request->from('club_id','club_name','company_id','club_sign','member_limit','allow_enter');
+            //俱乐部名称不能为空
+            if(trim($bind['club_name'])=="")
             {
-                $response = array('errno' => 3);
+                $response = array('errno' => 1);
             }
             else
             {
-                $clubExists = $this->oClub->getClubList(['company_id'=>$bind['company_id'],'club_sign'=>$bind['club_sign'],'exclude_id'=>$bind['club_id']],'club_id,club_sign');
-                if(count($clubExists)>0)
+                if(trim($bind['club_sign'])=="")
                 {
-                    $response = array('errno' => 4);
+                    $response = array('errno' => 3);
                 }
                 else
                 {
-                    $oUpload = new Base_Upload('upload_img');
-                    $upload = $oUpload->upload('upload_img',$this->config->oss);
-                    $oss_urls = array_column($upload->resultArr,'oss');
-                    $bind['icon'] = implode("",$oss_urls);
-                    if(trim($bind['icon']) == "")
+                    $clubExists = $this->oClub->getClubList(['company_id'=>$bind['company_id'],'club_sign'=>$bind['club_sign'],'exclude_id'=>$bind['club_id']],'club_id,club_sign');
+                    if(count($clubExists)>0)
                     {
-                        unset($bind['icon']);
+                        $response = array('errno' => 4);
                     }
-                    //数据打包
-                    $bind['detail'] = json_encode([]);
-                    $bind['content'] = "";
-                    //修改俱乐部
-                    $res = $this->oClub->updateClub($bind['club_id'],$bind);
-                    $response = $res ? array('errno' => 0) : array('errno' => 9);
+                    else
+                    {
+                        $oUpload = new Base_Upload('upload_img');
+                        $upload = $oUpload->upload('upload_img',$this->config->oss);
+                        $oss_urls = array_column($upload->resultArr,'oss');
+                        $bind['icon'] = implode("",$oss_urls);
+                        if(trim($bind['icon']) == "")
+                        {
+                            unset($bind['icon']);
+                        }
+                        //数据打包
+                        $bind['detail'] = json_encode([]);
+                        $bind['content'] = "";
+                        //修改俱乐部
+                        $res = $this->oClub->updateClub($bind['club_id'],$bind);
+                        $response = $res ? array('errno' => 0) : array('errno' => 9);
+                    }
                 }
             }
-		}
+        }
 		echo json_encode($response);
 		return true;
 	}
