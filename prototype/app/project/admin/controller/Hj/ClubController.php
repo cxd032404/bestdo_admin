@@ -282,6 +282,7 @@ class Hj_ClubController extends AbstractController
             //获取列表时需要获得记录总数
             $params['getCount'] = 1;
             $params['status'] = 1;
+            $params['club_id'] = $club_id;
             //获取俱乐部信息
             $clubInfo = $this->oClub->getClub($club_id,'*');
             //获取文章列表
@@ -315,4 +316,76 @@ class Hj_ClubController extends AbstractController
             include $this->tpl('403');
         }
     }
+    //成员列表
+    public function memberLogAction()
+    {
+        //检查权限
+        $PermissionCheck = $this->manager->checkMenuPermission(0);
+        if($PermissionCheck['return'])
+        {
+            //俱乐部ID
+            $club_id = intval($this->request->club_id??0);
+            //分页参数
+            $params['Page'] = abs(intval($this->request->Page??1));
+            $params['PageSize'] = 2;
+            //获取列表时需要获得记录总数
+            $params['getCount'] = 1;
+            $params['status'] = 1;
+            $params['club_id'] = $club_id;
+            //获取俱乐部信息
+            $clubInfo = $this->oClub->getClub($club_id,'*');
+            //俱乐部记录列表
+            $logList = $this->oClubMember->getMemberLogList($params);
+            $userList = [];
+            //循环页面列表
+            foreach($logList['LogList'] as $key => $logDetail)
+            {
+                //数据解包
+                if(!isset($userList[$logDetail['user_id']]))
+                {
+                    $userInfo = $this->oUserInfo->getUser($logDetail['user_id'],'user_id,true_name,user_img');
+                    if(isset($userInfo['user_id']))
+                    {
+                        $userList[$logDetail['user_id']] = $userInfo;
+                    }
+                }
+                //数据解包
+                if(!isset($userList[$logDetail['operate_user_id']]))
+                {
+                    $userInfo = $this->oUserInfo->getUser($logDetail['operate_user_id'],'user_id,true_name,user_img');
+                    if(isset($userInfo['user_id']))
+                    {
+                        $userList[$logDetail['operate_user_id']] = $userInfo;
+                    }
+                }
+                //数据解包
+                if(!isset($userList[$logDetail['process_user_id']]))
+                {
+                    $userInfo = $this->oUserInfo->getUser($logDetail['process_user_id'],'user_id,true_name,user_img');
+                    if(isset($userInfo['user_id']))
+                    {
+                        $userList[$logDetail['process_user_id']] = $userInfo;
+                    }
+                }
+                $logList['LogList'][$key]['user_name'] = $userList[$logDetail['user_id']]['true_name']??"未知用户";
+                $logList['LogList'][$key]['operate_user_name'] = $userList[$logDetail['operate_user_id']]['true_name']??"未知用户";
+                $logList['LogList'][$key]['process_user_name'] = $userList[$logDetail['process_user_id']]['true_name']??"未知用户";
+                //$logList['LogList'][$key]['user_img'] = $userList[$logDetail['user_id']]['user_img']??"";
+                $logList['LogList'][$key]['detail'] = json_decode($logDetail['detail'],true);
+                $logList['LogList'][$key]['action_name'] = $this->oClubMember->processMemberAction($logDetail['type'],$logDetail['sub_type']);
+                $logList['LogList'][$key]['result_name'] = $this->oClubMember->processMemberLogResult($logDetail['user_id'],$logDetail['operate_user_id'],$logDetail['process_user_id'],$logDetail['result']);
+            }
+            $page_url = Base_Common::getUrl('',$this->ctl,'member.log',$params)."&Page=~page~";
+            $page_content =  base_common::multi($logList['LogCount'], $page_url, $params['Page'], $params['PageSize'], 10, $maxpage = 100, $prevWord = '上一页', $nextWord = '下一页');
+            //渲染模版
+            include $this->tpl('Hj_Club_MemberLogList');
+        }
+        else
+        {
+            $home = $this->sign;
+            include $this->tpl('403');
+        }
+    }
+
+
 }

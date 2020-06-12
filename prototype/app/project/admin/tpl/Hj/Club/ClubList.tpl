@@ -53,7 +53,7 @@ function clubModify(mid){
       <td align="center">{tpl:if($clubInfo.allow_enter==1)}允许{tpl:else}拒绝{/tpl:if}</td>
       <td align="center">{tpl:$clubInfo.update_time/}</td>
       <td align="center"><a  href="javascript:;" onclick="clubDelete('{tpl:$clubInfo.club_id/}','{tpl:$clubInfo.club_name/}')">删除</a>
- | <a href="javascript:;" onclick="clubModify('{tpl:$clubInfo.club_id/}');">修改</a> | <a href="{tpl:$this.sign/}&ac=member.list&club_id={tpl:$clubInfo.club_id/}">名单{tpl:if($clubInfo.member_count>0)}({tpl:$clubInfo.member_count/}){/tpl:if}</a></td>
+ | <a href="javascript:;" onclick="clubModify('{tpl:$clubInfo.club_id/}');">修改</a> | <a href="{tpl:$this.sign/}&ac=member.list&club_id={tpl:$clubInfo.club_id/}">名单{tpl:if($clubInfo.member_count>0)}({tpl:$clubInfo.member_count/}){/tpl:if}</a> | <a href="{tpl:$this.sign/}&ac=member.log&club_id={tpl:$clubInfo.club_id/}">记录</a></td>
   </tr>
 {/tpl:loop}
 </table>
