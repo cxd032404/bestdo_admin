@@ -468,10 +468,6 @@ class Hj_UserInfo extends Base_Widget
                 $UserList['UserList'][$value['user_id']] = $value;
             }
         }
-        else
-        {
-            return $UserList;
-        }
         return $UserList;
     }
     /**

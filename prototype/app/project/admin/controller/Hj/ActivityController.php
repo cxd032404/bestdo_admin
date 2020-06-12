@@ -287,7 +287,7 @@ class Hj_ActivityController extends AbstractController
         echo $text;
         die();
     }
-    //活动配置列表活动
+    //活动报名记录页面
     public function activityLogAction()
     {
         //检查权限
@@ -319,7 +319,6 @@ class Hj_ActivityController extends AbstractController
                     $userInfo = $this->oUserInfo->getUser($listDetail['user_id'],'user_id,true_name');
                     if(isset($userInfo['user_id']))
                     {
-                        $userList[$listDetail['user_id']] = $userInfo;
                         $userList[$listDetail['user_id']] = $userInfo;
                     }
                 }

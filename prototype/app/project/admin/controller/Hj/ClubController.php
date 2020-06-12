@@ -18,7 +18,7 @@ class Hj_ClubController extends AbstractController
 	 */
 	protected $oClub;
 	protected $oCompany;
-	protected $oClubElement;
+	protected $oClubMember;
     protected $oUserInfo;
 
 	/**
@@ -32,7 +32,9 @@ class Hj_ClubController extends AbstractController
 		$this->oClub = new Hj_Club();
 		$this->oCompany = new Hj_Company();
         $this->oUserInfo = new Hj_UserInfo();
-	}
+        $this->oClubMember = new Hj_ClubMember();
+
+    }
 	//俱乐部配置列表页面
 	public function indexAction()
 	{
@@ -52,14 +54,13 @@ class Hj_ClubController extends AbstractController
                 //数据解包
                 $clubList[$key]['detail'] = json_decode($clubInfo['detail'],true);
 				$clubList[$key]['company_name'] = ($clubInfo['company_id']==0)?"无对应":($companyList[$clubInfo['company_id']]['company_name']??"未知");
-                //分页参数
+                //获取成员数量
+				$clubList[$key]['member_count'] = $this->oClubMember->getMemberCount(['club_id'=>$clubInfo['club_id'],'status'=>1])??0;
+				//分页参数
                 $params['Page'] = 1;
                 $params['PageSize'] = 1;
                 //获取列表时需要获得记录总数
                 $params['getCount'] = 1;
-                ////获取文章列表
-                //$List = $this->oUserInfo->getUserClubLog($params);
-                $clubList[$key]['count'] = $List['UserCount']??0;
             }
 			//渲染模版
 			include $this->tpl('Hj_Club_ClubList');
@@ -152,9 +153,9 @@ class Hj_ClubController extends AbstractController
                                     'detail'=>json_encode(['comment'=>"俱乐部创建自动加入"]),
                                     'result'=>1];
                                 //写入成员
-                                $member = (new Hj_ClubMember())->insertClubMember($memberInfo);
+                                $member = $this->oClubMember->insertClubMember($memberInfo);
                                 //写入成员日志
-                                $log = (new Hj_ClubMember())->insertClubMemberLog($memberLogInfo);
+                                $log = $this->oClubMember->insertClubMemberLog($memberLogInfo);
                             }
                             $response = $res ? array('errno' => 0) : array('errno' => 9);
                         }
@@ -266,4 +267,52 @@ class Hj_ClubController extends AbstractController
 			include $this->tpl('403');
 		}
 	}
+    //成员列表
+    public function memberListAction()
+    {
+        //检查权限
+        $PermissionCheck = $this->manager->checkMenuPermission(0);
+        if($PermissionCheck['return'])
+        {
+            //俱乐部ID
+            $club_id = intval($this->request->club_id??0);
+            //分页参数
+            $params['Page'] = abs(intval($this->request->Page??1));
+            $params['PageSize'] = 20;
+            //获取列表时需要获得记录总数
+            $params['getCount'] = 1;
+            $params['status'] = 1;
+            //获取俱乐部信息
+            $clubInfo = $this->oClub->getClub($club_id,'*');
+            //获取文章列表
+            $memberList = $this->oClubMember->getMemberList($params);
+            $userList = [];
+            //循环页面列表
+            foreach($memberList['MemberList'] as $key => $memberDetail)
+            {
+                //数据解包
+                if(!isset($userList[$memberDetail['user_id']]))
+                {
+                    $userInfo = $this->oUserInfo->getUser($memberDetail['user_id'],'user_id,true_name,user_img');
+                    if(isset($userInfo['user_id']))
+                    {
+                        $userList[$memberDetail['user_id']] = $userInfo;
+                    }
+                }
+                $memberList['MemberList'][$key]['user_name'] = $userList[$memberDetail['user_id']]['true_name']??"未知用户";
+                $memberList['MemberList'][$key]['user_img'] = $userList[$memberDetail['user_id']]['user_img']??"";
+                $memberList['MemberList'][$key]['detail'] = json_decode($memberDetail['detail'],true);
+
+            }
+            $page_url = Base_Common::getUrl('',$this->ctl,'member.list',$params)."&Page=~page~";
+            $page_content =  base_common::multi($memberList['MemberCount'], $page_url, $params['Page'], $params['PageSize'], 10, $maxpage = 100, $prevWord = '上一页', $nextWord = '下一页');
+            //渲染模版
+            include $this->tpl('Hj_Club_MemberList');
+        }
+        else
+        {
+            $home = $this->sign;
+            include $this->tpl('403');
+        }
+    }
 }
