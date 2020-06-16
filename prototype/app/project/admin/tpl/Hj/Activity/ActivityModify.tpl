@@ -19,16 +19,31 @@
 <th align="center" class="rowtip">
 	<input type="text" name="apply_start_time "  id="apply_start_time " class="input-medium" value="{tpl:$activityInfo.apply_start_time/}"   onFocus="WdatePicker({isShowClear:false,readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})" >-<input type="text" name="apply_end_time" id="apply_end_time" class="input-medium"  value="{tpl:$activityInfo.apply_end_time/}" onFocus="WdatePicker({isShowClear:false,readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})" ></th></tr>
 </tr>
-<tr class="hover">
-	<td>活动标识</td>
-<td align="left"><input type="text" class="span4" name="activity_sign"  id="activity_sign" value="{tpl:$activityInfo.activity_sign/}" size="50" /></td>
-</tr>
 <tr class="hover"><td>属于企业</td>
-	<td align="left">	<select name="company_id"  id="company_id" size="1">
+	<td align="left">	<select name="company_id"  id="company_id" size="1" onchange="getClubByCompany()">
 			{tpl:loop $companyList  $company_info}
 			<option value="{tpl:$company_info.company_id/}"{tpl:if($company_info.company_id==$activityInfo.company_id)}selected="selected"{/tpl:if} >{tpl:$company_info.company_name/}</option>
 			{/tpl:loop}
 		</select></td>
+</tr>
+<tr class="hover"><td>对应俱乐部</td>
+	<td align="left">	<select name="club_id"  id="club_id" size="1">
+			<option value="0"{tpl:if($club_info.club_id==0)}selected="selected"{/tpl:if} >不指定</option>
+			{tpl:loop $clubList  $club_info}
+			<option value="{tpl:$club_info.club_id/}"{tpl:if($club_info.club_id==$activityInfo.club_id)}selected="selected"{/tpl:if} >{tpl:$club_info.club_name/}</option>
+			{/tpl:loop}
+		</select></td>
+</tr>
+<tr class="hover"><td>仅限俱乐部内成员</td>
+	<td align="left">	<select name="club_member_only"  id="club_member_only" size="1">
+			<option value="0"{tpl:if($club_info.club_member_only==0)}selected="selected"{/tpl:if} >否</option>
+			<option value="1"{tpl:if($club_info.club_member_only==1)}selected="selected"{/tpl:if} >是</option>
+
+		</select></td>
+</tr>
+<tr class="hover">
+	<td>人数限制</td>
+	<td align="left"><input name="member_limit" type="text" class="span2" id="member_limit" value="{tpl:$activityInfo.member_limit/}" size="50" /></td>
 </tr>
 	<tr class="hover"><td>上传图片</td>
 		<td align="left">
@@ -59,8 +74,6 @@ $('#activity_update_submit').click(function(){
 			if (jsonResponse.errno) {
 				var errors = [];
 				errors[1] = '活动名称不能为空，请修正后再次提交';
-				errors[3] = '活动标识不能为空，请修正后再次提交';
-				errors[4] = '活动标识'+$('#activity_sign').val()+'已重复，请修正后再次提交';
 				errors[9] = '入库失败，请修正后再次提交';
 				divBox.alertBox(errors[jsonResponse.errno],function(){});
 			} else {
@@ -71,5 +84,18 @@ $('#activity_update_submit').click(function(){
 	};
 	$('#activity_update_form').ajaxForm(options);
 });
+
+function getClubByCompany()
+{
+	company=$("#company_id");
+	$.ajax
+	({
+		type: "GET",
+		url: "?ctl=hj/activity&ac=get.club.by.company&company_id="+company.val(),
+		success: function(msg)
+		{
+			$("#club_id").html(msg);
+		}});
+}
 </script>
 {tpl:tpl contentFooter/}

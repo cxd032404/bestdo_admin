@@ -12,7 +12,7 @@ function activityDelete(p_id,p_name){
 }
 
 function activityModify(mid){
-  modifyactivityBox = divBox.showBox('{tpl:$this.sign/}&ac=activity.modify&activity_id=' + mid, {title:'修改活动',width:600,height:500});
+  modifyactivityBox = divBox.showBox('{tpl:$this.sign/}&ac=activity.modify&activity_id=' + mid, {title:'修改活动',width:600,height:800});
 }
 
 </script>
@@ -35,9 +35,12 @@ function activityModify(mid){
   <tr>
     <th align="center" class="rowtip">活动ID</th>
     <th align="center" class="rowtip">活动名称</th>
-    <th align="center" class="rowtip">活动标识</th>
     <th align="center" class="rowtip">对应企业</th>
-    <th align="center" class="rowtip">活动时间</th>
+    <th align="center" class="rowtip">关联俱乐部</th>
+    <th align="center" class="rowtip">创建者</th>
+      <th align="center" class="rowtip">仅俱乐部成员</th>
+      <th align="center" class="rowtip">人数限制</th>
+      <th align="center" class="rowtip">活动时间</th>
     <th align="center" class="rowtip">报名时间</th>
     <th align="center" class="rowtip">更新时间</th>
     <th align="center" class="rowtip">操作</th>
@@ -47,8 +50,13 @@ function activityModify(mid){
   <tr class="hover">
     <td align="center">{tpl:$activityInfo.activity_id/}</td>
     <td align="center">{tpl:$activityInfo.activity_name/}</td>
-      <td align="center">{tpl:$activityInfo.activity_sign/}</td>
       <td align="center">{tpl:$activityInfo.company_name/}</td>
+    <td align="center">{tpl:$activityInfo.club_name/}</td>
+    <td align="center">{tpl:$activityInfo.create_user_name/}</td>
+      <td align="center">{tpl:if($activityInfo.club_member_only==1)}是{tpl:else}否{/tpl:if}</td>
+      <td align="center">{tpl:$activityInfo.member_limit/}</td>
+
+
       <td align="center">{tpl:$activityInfo.start_time/}<P>{tpl:$activityInfo.end_time/}</td>
       <td align="center">{tpl:$activityInfo.apply_start_time/}<P>{tpl:$activityInfo.apply_end_time/}</td>
       <td align="center">{tpl:$activityInfo.update_time/}</td>

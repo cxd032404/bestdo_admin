@@ -32,7 +32,8 @@ class Hj_ActivityController extends AbstractController
 		$this->oActivity = new Hj_Activity();
 		$this->oCompany = new Hj_Company();
         $this->oUserInfo = new Hj_UserInfo();
-	}
+        $this->oClub = new Hj_Club();
+    }
 	//活动配置列表页面
 	public function indexAction()
 	{
@@ -46,7 +47,8 @@ class Hj_ActivityController extends AbstractController
 			$activityList = $this->oActivity->getActivityList(['company_id'=>$company_id]);
 			//获取企业列表
 			$companyList = $this->oCompany->getCompanyList([],"company_id,company_name");
-			//循环活动列表
+            $userList = [];
+            //循环活动列表
 			foreach($activityList as $key => $activityInfo)
             {
                 //数据解包
@@ -58,10 +60,33 @@ class Hj_ActivityController extends AbstractController
                 //获取列表时需要获得记录总数
                 $params['getCount'] = 1;
                 $params['activity_id'] = $activityInfo['activity_id'];
-                //获取文章列表
+                //获取报名记录数量
                 $List = $this->oUserInfo->getUserActivityLog($params);
                 $activityList[$key]['count'] = $List['UserCount']??0;
+                $userList = $clubList = [];
+                if(!isset($userList[$activityInfo['create_user_id']]))
+                {
+                    $userInfo = $this->oUserInfo->getUser($activityInfo['create_user_id'],'user_id,true_name');
+                    if(isset($userInfo['user_id']))
+                    {
+                        $userList[$activityInfo['create_user_id']] = $userInfo;
+                    }
+                }
+                if($activityInfo['club_id']>0)
+                {
+                    if(!isset($clubList[$activityInfo['club_id']]))
+                    {
+                        $clubInfo = $this->oClub->getClub($activityInfo['club_id'],'club_id,club_name');
+                        if(isset($clubInfo['club_id']))
+                        {
+                            $clubList[$activityInfo['club_id']] = $clubInfo;
+                        }
+                    }
+                }
+                $activityList[$key]['create_user_name'] = $userList[$activityInfo['create_user_id']]['true_name']??"未知用户";
+                $activityList[$key]['club_name'] = $clubList[$activityInfo['club_id']]['club_name']??"未指定";
             }
+
 			//渲染模版
 			include $this->tpl('Hj_Activity_ActivityList');
 		}
@@ -93,47 +118,42 @@ class Hj_ActivityController extends AbstractController
 	//添加新活动
 	public function activityInsertAction()
 	{
-		//检查权限
-		$bind=$this->request->from('activity_name','company_id','activity_sign','start_time','end_time','apply_start_time','apply_end_time','detail');
-		//活动名称不能为空
-		if(trim($bind['activity_name'])=="")
-		{
-			$response = array('errno' => 1);
-		}
-		else
-		{
-            if(trim($bind['activity_sign'])=="")
+        $connectedUser = (new Hj_UserInfo())->getConnectedUserInfo($this->manager->id);
+        if(!$connectedUser['user_id'])
+        {
+            $response = array('errno' => 8);
+        }
+        else
+        {
+            //检查权限
+            $bind=$this->request->from('activity_name','company_id','club_id','member_limit','start_time','end_time','apply_start_time','apply_end_time','detail');
+            //活动名称不能为空
+            if(trim($bind['activity_name'])=="")
             {
-                $response = array('errno' => 3);
+                $response = array('errno' => 1);
             }
             else
             {
-                $activityExists = $this->oActivity->getActivityList(['company_id'=>$bind['company_id'],'activity_sign'=>$bind['activity_sign']],'activity_id,activity_sign');
-                if(count($activityExists)>0)
+                $oUpload = new Base_Upload('upload_img');
+                $upload = $oUpload->upload('upload_img',$this->config->oss);
+                $oss_urls = array_column($upload->resultArr,'oss');
+                $bind['icon'] = implode("",$oss_urls);
+                if(trim($bind['icon'])=="")
                 {
-                    $response = array('errno' => 4);
+                    $response = array('errno' => 2);
                 }
                 else
                 {
-                    $oUpload = new Base_Upload('upload_img');
-                    $upload = $oUpload->upload('upload_img',$this->config->oss);
-                    $oss_urls = array_column($upload->resultArr,'oss');
-                    $bind['icon'] = implode("",$oss_urls);
-                    if(trim($bind['icon'])=="")
-                    {
-                        $response = array('errno' => 2);
-                    }
-                    else
-                    {
-                        //数据打包
-                        $bind['detail'] = json_encode($bind['detail']);
-                        //添加活动
-                        $res = $this->oActivity->insertActivity($bind);
-                        $response = $res ? array('errno' => 0) : array('errno' => 9);
-                    }
+                    $bind['create_user_id'] = $connectedUser['user_id'];
+                    //数据打包
+                    $bind['detail'] = json_encode($bind['detail']);
+                    //添加活动
+                    $res = $this->oActivity->insertActivity($bind);
+                    $response = $res ? array('errno' => 0) : array('errno' => 9);
                 }
             }
-		}
+        }
+
 		echo json_encode($response);
 		return true;
 	}
@@ -153,6 +173,8 @@ class Hj_ActivityController extends AbstractController
             $activityInfo['detail'] = json_decode($activityInfo['detail'],true);
 			//获取企业列表
 			$companyList = $this->oCompany->getCompanyList([],"company_id,company_name");
+            //获取企业对应的俱乐部列表
+            $clubList = $activityInfo['club_id']>0?$this->oClub->getClubList(["company_id"=>$activityInfo['company_id']],"club_id,club_name"):[];
             //渲染模版
 			include $this->tpl('Hj_Activity_ActivityModify');
 		}
@@ -167,7 +189,7 @@ class Hj_ActivityController extends AbstractController
 	public function activityUpdateAction()
 	{
 	    //接收活动参数
-        $bind=$this->request->from('activity_id','activity_name','company_id','activity_sign','start_time','end_time','apply_start_time','apply_end_time','detail');
+        $bind=$this->request->from('activity_id','activity_name','company_id','club_id','member_limit','start_time','end_time','apply_start_time','apply_end_time','detail');
         //活动名称不能为空
 		if(trim($bind['activity_name'])=="")
 		{
@@ -175,34 +197,24 @@ class Hj_ActivityController extends AbstractController
 		}
 		else
 		{
-            if(trim($bind['activity_sign'])=="")
+            $oUpload = new Base_Upload('upload_img');
+            $upload = $oUpload->upload('upload_img',$this->config->oss);
+            $oss_urls = array_column($upload->resultArr,'oss');
+            $bind['icon'] = implode("",$oss_urls);
+            if(trim($bind['icon']) == "")
             {
-                $response = array('errno' => 3);
+                unset($bind['icon']);
             }
-            else
-            {
-                $activityExists = $this->oActivity->getActivityList(['company_id'=>$bind['company_id'],'activity_sign'=>$bind['activity_sign'],'exclude_id'=>$bind['activity_id']],'activity_id,activity_sign');
-                if(count($activityExists)>0)
-                {
-                    $response = array('errno' => 4);
-                }
-                else
-                {
-                    $oUpload = new Base_Upload('upload_img');
-                    $upload = $oUpload->upload('upload_img',$this->config->oss);
-                    $oss_urls = array_column($upload->resultArr,'oss');
-                    $bind['icon'] = implode("",$oss_urls);
-                    if(trim($bind['icon']) == "")
-                    {
-                        unset($bind['icon']);
-                    }
-                    //数据打包
-                    $bind['detail'] = json_encode($bind['detail']);
-                    //修改活动
-                    $res = $this->oActivity->updateActivity($bind['activity_id'],$bind);
-                    $response = $res ? array('errno' => 0) : array('errno' => 9);
-                }
-            }
+            //获取原本的信息
+            $activityInfo = $this->oActivity->getActivity($bind['activity_id'],"activity_id,detail");
+            $activityInfo['detail'] = json_decode($activityInfo['detail'],true);
+            //合并数据
+            $bind['detail'] = array_merge($activityInfo['detail'],$bind['detail']);
+            //数据打包
+            $bind['detail'] = json_encode($bind['detail']);
+            //修改活动
+            $res = $this->oActivity->updateActivity($bind['activity_id'],$bind);
+            $response = $res ? array('errno' => 0) : array('errno' => 9);
 		}
 		echo json_encode($response);
 		return true;
@@ -283,6 +295,35 @@ class Hj_ActivityController extends AbstractController
             */
             //字符串拼接
             $text .= '<option value="'.$activityInfo['activity_id'].'">'.$activityInfo['activity_name'].'</option>';
+        }
+        echo $text;
+        die();
+    }
+    //获取企业获取俱乐部列表
+    public function getClubByCompanyAction()
+    {
+        //企业ID
+        $company_id = intval($this->request->company_id);
+        //获取活动列表
+        //获取企业对应的俱乐部列表
+        $clubList = $this->oClub->getClubList(["company_id"=>$company_id],"club_id,club_name");
+        $text = '';
+        $text .= '<option value="0">不指定</option>';
+        //循环赛事分站列表
+        foreach($clubList as $clubInfo)
+        {
+            //初始化选中状态
+            $selected = "";
+            /*
+            //如果分站ID与传入的分站ID相符
+            if($RaceStageInfo['RaceStageId'] == $StageId)
+            {
+                //选中拼接
+                $selected = 'selected="selected"';
+            }
+            */
+            //字符串拼接
+            $text .= '<option value="'.$clubInfo['club_id'].'">'.$clubInfo['club_name'].'</option>';
         }
         echo $text;
         die();
