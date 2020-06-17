@@ -408,7 +408,7 @@ class Hj_PageController extends AbstractController
                 //获取俱乐部列表
                 $clubList = (new Hj_Club())->getClubList(['company_id'=>$pageInfo['company_id']],"club_id,club_name");
             }
-            elseif(in_array($elementInfo['element_type'] ,[ "activityApply","activityInfo"]))
+            elseif(in_array($elementInfo['element_type'] ,[ "activityApply","activityInfo","managedActivityList"]))
             {
                 //获取活动列表
                 $activityList = (new Hj_Activity())->getActivityList(['company_id'=>$pageInfo['company_id']],"activity_id,activity_name");
@@ -555,7 +555,7 @@ class Hj_PageController extends AbstractController
                 unset($elementDetail['detail']['from_params']);
             }
         }
-        elseif(in_array($elementDetail['element_type'],['activityInfo']))
+        elseif(in_array($elementDetail['element_type'],['activityInfo',"managedActivityList"]))
         {
             if($detail['id_from']=="from_params")
             {
