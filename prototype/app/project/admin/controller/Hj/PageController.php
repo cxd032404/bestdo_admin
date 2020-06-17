@@ -398,11 +398,6 @@ class Hj_PageController extends AbstractController
                 }
                 $t = implode(',&#10;',$t);
             }
-            elseif($elementInfo['element_type'] == "activityApply")
-            {
-                //获取活动列表
-                $activityList = (new Hj_Activity())->getActivityList(['company_id'=>$pageInfo['company_id']],"activity_id,activity_name");
-            }
             elseif(in_array($elementInfo['element_type'] ,[ "list","rankByKudos","post"]))
             {
                 //获取列表列表
@@ -410,8 +405,13 @@ class Hj_PageController extends AbstractController
             }
             elseif(in_array($elementInfo['element_type'] ,[ "clubInfo","clubMemberList","clubMemberLog"]))
             {
-                //获取列表列表
+                //获取俱乐部列表
                 $clubList = (new Hj_Club())->getClubList(['company_id'=>$pageInfo['company_id']],"club_id,club_name");
+            }
+            elseif(in_array($elementInfo['element_type'] ,[ "activityApply","activityInfo"]))
+            {
+                //获取活动列表
+                $activityList = (new Hj_Activity())->getActivityList(['company_id'=>$pageInfo['company_id']],"activity_id,activity_name");
             }
             $elementTypeInfo = $this->oElementType->getElementType($elementInfo['element_type']);
             //渲染模版
@@ -552,6 +552,19 @@ class Hj_PageController extends AbstractController
             elseif($detail['id_from']=="from_id")
             {
                 $elementDetail['detail']['club_id'] = $detail['club_id'];
+                unset($elementDetail['detail']['from_params']);
+            }
+        }
+        elseif(in_array($elementDetail['element_type'],['activityInfo']))
+        {
+            if($detail['id_from']=="from_params")
+            {
+                $elementDetail['detail']['from_params'] = $detail['from_params'];
+                unset($elementDetail['detail']['activity_id']);
+            }
+            elseif($detail['id_from']=="from_id")
+            {
+                $elementDetail['detail']['activity_id'] = $detail['activity_id'];
                 unset($elementDetail['detail']['from_params']);
             }
         }
