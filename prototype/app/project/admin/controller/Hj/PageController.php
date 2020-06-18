@@ -542,7 +542,7 @@ class Hj_PageController extends AbstractController
                 unset($elementDetail['detail']['from_params']);
             }
         }
-        elseif(in_array($elementDetail['element_type'],['clubInfo','clumPermission','clubMemberList','clubMemberLog']))
+        elseif(in_array($elementDetail['element_type'],['clubInfo','clubPermission','clubMemberList','clubMemberLog']))
         {
             if($detail['id_from']=="from_params")
             {
