@@ -23,7 +23,7 @@
 	<fieldset>
 		[ <a href="{tpl:$this.sign/}&company_id={tpl:$clubInfo.company_id/}">返回</a> | <a href="javascript:;" id="add_banner">添加Banner</a> ]
 	</fieldset>
-	<fieldset><legend>页面元素详情</legend>
+	<fieldset><legend>banner列表</legend>
 		<table width="99%" align="center" class="table table-bordered table-striped" >
 			<tr class="hover"><td colspan="2">Banner列表</td></tr>
 			{tpl:loop $clubInfo.detail.banner $pos $picInfo}
