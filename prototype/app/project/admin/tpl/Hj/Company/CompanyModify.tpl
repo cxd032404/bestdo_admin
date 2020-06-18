@@ -24,6 +24,14 @@ function iconDelete(cid,name){
 			{/tpl:loop}
 		</select></td>
 </tr>
+<tr class="hover"><td>精彩回顾</td>
+	<td align="left">	<select name="detail[hot]"  id="detail[hot]" size="1">
+			<option value="0" {tpl:if(0==$companyInfo.detail.hot)}selected="selected"{/tpl:if}>不选择</option>
+			{tpl:loop $listList  $list_info}
+			<option value="{tpl:$list_info.list_id/}" {tpl:if($companyInfo.detail.hot==$list_info.list_id)}selected="selected"{/tpl:if} >{tpl:$list_info.list_name/}</option>
+			{/tpl:loop}
+		</select></td>
+</tr>
 <tr class="hover"><td>是否显示</td>
 	<td align="left">
 	<input type="radio" name="display" id="display" value="1"  {tpl:if($companyInfo.display==1)}checked{/tpl:if}>显示

@@ -19,7 +19,7 @@ function companyDelete(c_id,p_id,p_name){
 }
 
 function companyModify(mid){
-  modifycompanyBox = divBox.showBox('{tpl:$this.sign/}&ac=company.modify&company_id=' + mid, {title:'修改企业',width:600,height:350});
+  modifycompanyBox = divBox.showBox('{tpl:$this.sign/}&ac=company.modify&company_id=' + mid, {title:'修改企业',width:600,height:400});
 }
 function protocalModify(mid,type){
   modifycompanyBox = divBox.showBox('{tpl:$this.sign/}&ac=protocal.modify&company_id=' + mid + '&type=' + type, {title:'协议',width:600,height:600});

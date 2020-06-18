@@ -44,7 +44,7 @@ class Hj_CompanyController extends AbstractController
 			foreach($companyList as $key => $companyInfo)
             {
                 //数据解包
-                $companyList[$key]['comment'] = json_decode($companyInfo['comment'],true);
+                $companyList[$key]['detail'] = json_decode($companyInfo['detail'],true);
 				$companyList[$key]['parent_name'] = ($companyInfo['parent_id']==0)?"无上级":($companyList[$companyInfo['parent_id']]['company_name']??"未知");
 				$companyList[$key]['display_name'] = ($companyInfo['display']==0)?"隐藏":"显示";
 				$companyList[$key]['sort'] = $companyInfo['parent_id']==0?($companyInfo['company_id']."_0"):($companyInfo["parent_id"]."_".$companyInfo['company_id']);
@@ -83,7 +83,7 @@ class Hj_CompanyController extends AbstractController
 	public function companyInsertAction()
 	{
 		//检查权限
-		$bind=$this->request->from('company_name','comment','parent_id','display');
+		$bind=$this->request->from('company_name','detail','parent_id','display');
 		//企业名称不能为空
 		if(trim($bind['company_name'])=="")
 		{
@@ -109,7 +109,7 @@ class Hj_CompanyController extends AbstractController
                 else
                 {
                     //数据打包
-                    $bind['comment'] = json_encode($bind['comment']);
+                    $bind['detail'] = json_encode($bind['detail']);
                     //添加企业
                     $res = $this->oCompany->insertCompany($bind);
                     $response = $res ? array('errno' => 0) : array('errno' => 9);
@@ -132,9 +132,11 @@ class Hj_CompanyController extends AbstractController
 			//获取企业信息
 			$companyInfo = $this->oCompany->getCompany($company_id,'*');
 			//数据解包
-			$companyInfo['comment'] = json_decode($companyInfo['comment'],true);
+			$companyInfo['detail'] = json_decode($companyInfo['detail'],true);
 			//获取顶级企业列表
 			$companyList = $this->oCompany->getCompanyList(['parent_id'=>0],"company_id,company_name");
+            //获取页面列表
+            $listList = (new Hj_List())->getListList(['company_id'=>$company_id],"list_id,list_name");
             //渲染模版
 			include $this->tpl('Hj_Company_CompanyModify');
 		}
@@ -150,7 +152,7 @@ class Hj_CompanyController extends AbstractController
 	public function companyUpdateAction()
 	{
 	    //接收页面参数
-		$bind=$this->request->from('company_id','company_name','parent_id','comment','display');
+		$bind=$this->request->from('company_id','company_name','parent_id','detail','display');
         //企业名称不能为空
 		if(trim($bind['company_name'])=="")
 		{
@@ -175,7 +177,7 @@ class Hj_CompanyController extends AbstractController
                     unset($bind['icon']);
                 }
                 //数据打包
-                $bind['comment'] = json_encode($bind['comment']);
+                $bind['detail'] = json_encode($bind['detail']);
                 //修改企业
                 $res = $this->oCompany->updateCompany($bind['company_id'],$bind);
                 $response = $res ? array('errno' => 0) : array('errno' => 9);
