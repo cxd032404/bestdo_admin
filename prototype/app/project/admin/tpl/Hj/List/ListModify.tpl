@@ -32,6 +32,13 @@
 			</select>
 		</td>
 	</tr>
+	<tr class="hover"><td>仅限管理员提交</td>
+		<td align="left">
+			<select name="detail[manager_only]"  id="detail[manager_only]" size="1">
+				<option value="0"{tpl:if(0==$listInfo.detail.manager_only)}selected="selected"{/tpl:if} >所有人</option>
+				<option value="1"{tpl:if(1==$listInfo.detail.manager_only)}selected="selected"{/tpl:if} >仅限管理员</option>
+			</select></td>
+	</tr>
 <tr class="hover"><td>列表分类</td>
 	<td align="left">
 		<select name="list_type"  id="list_type" size="1">
