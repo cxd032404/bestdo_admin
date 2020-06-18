@@ -686,7 +686,7 @@ class Hj_PageController extends AbstractController
         }
         $this->response->goBack();
     }
-    //添加页面元素详情
+    //更新页面元素详情
     public function pageElementSingleDetailUpdateAction()
     {
         //元素ID
