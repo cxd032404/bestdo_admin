@@ -58,6 +58,10 @@
 	<td>自动跳转</td>
 	<td align="left"><input type="text" class="span4" name="detail[jump_url]"  id="detail[jump_url]" value="{tpl:$activityInfo.detail.jump_url/}" size="50" /></td>
 </tr>
+<tr class="hover">
+	<td>定制路由</td>
+	<td align="left"><input type="text" class="span4" name="detail[specified_url]"  id="detail[specified_url]" value="{tpl:$activityInfo.detail.specified_url/}" size="50" /></td>
+</tr>
 <tr class="noborder"><td></td>
 <td><button type="submit" id="activity_update_submit">提交</button></td>
 </tr>
