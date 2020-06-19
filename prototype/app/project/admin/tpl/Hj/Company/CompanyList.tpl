@@ -51,7 +51,12 @@ function protocalModify(mid,type){
     <td align="center">{tpl:if($companyInfo.icon=="")}未定义{tpl:else}<img src="{tpl:$RootUrl/}{tpl:$companyInfo.icon/}" width='150' height='130'/>{/tpl:if}</td>
     <td align="center">{tpl:$companyInfo.update_time/}</td>
       <td align="center"><a  href="javascript:;" onclick="companyDelete('{tpl:$companyInfo.company_id/}','{tpl:$companyInfo.parent_id/}','{tpl:$companyInfo.company_name/}')">删除</a>
- |  <a href="javascript:;" onclick="companyModify('{tpl:$companyInfo.company_id/}');">修改</a> | <a href="javascript:;" onclick="protocalModify('{tpl:$companyInfo.company_id/}','privacy');">隐私政策</a> | <a href="javascript:;" onclick="protocalModify('{tpl:$companyInfo.company_id/}','user');">用户政策</a> | <a target="_blank" href="{tpl:$companyInfo.reg_url/}">注册页面</a></td>
+ |  <a href="javascript:;" onclick="companyModify('{tpl:$companyInfo.company_id/}');">修改</a>
+  | <a href="javascript:;" onclick="protocalModify('{tpl:$companyInfo.company_id/}','privacy');">隐私政策</a>
+  | <a href="javascript:;" onclick="protocalModify('{tpl:$companyInfo.company_id/}','user');">用户政策</a>
+  | <a target="_blank" href="{tpl:$companyInfo.reg_url/}">注册页面</a>
+        | <a href="{tpl:$this.sign/}&ac=boutique&company_id={tpl:$companyInfo.company_id/}">精品课设置({tpl:$companyInfo.detail.boutique func='count(@@)'/})</a>
+      </td>
   </tr>
 {/tpl:loop}
 </table>

@@ -268,4 +268,65 @@ class Hj_CompanyController extends AbstractController
         echo json_encode($response);
         return true;
     }
+    //精品课配置页面
+    public function boutiqueAction()
+    {
+        //检查权限
+        $PermissionCheck = $this->manager->checkMenuPermission("updateCompany");
+        if($PermissionCheck['return'])
+        {
+            //企业ID
+            $company_id= intval($this->request->company_id);
+            //获取企业信息
+            $companyInfo = $this->oCompany->getCompany($company_id,'*');
+            //数据解包
+            $companyInfo['detail'] = json_decode($companyInfo['detail'],true);
+            //获取页面列表
+            $listList = (new Hj_List())->getListList(['company_id'=>$company_id],"list_id,list_name");
+            foreach($listList as $key => $listInfo)
+            {
+                if(isset($companyInfo['detail']['boutique'][$listInfo['list_id']]))
+                {
+                    $listList[$key]['checked'] = 1;
+                }
+                else
+                {
+                    $listList[$key]['checked'] = 0;
+                }
+            }
+            //渲染模版
+            include $this->tpl('Hj_Company_Boutique');
+        }
+        else
+        {
+            $home = $this->sign;
+            include $this->tpl('403');
+        }
+
+    }
+    //精品课列表修改
+    public function boutiqueUpdateAction()
+    {
+        //接收页面参数
+		$bind=$this->request->from('company_id','boutique');
+        if(count($bind['boutique'])==0)
+        {
+            $response = array('errno' => 1);
+        }
+        else
+        {
+            //获取企业信息
+            $companyInfo = $this->oCompany->getCompany($bind['company_id'],'company_id,company_name,detail');
+            //数据解包
+            $companyInfo['detail'] = json_decode($companyInfo['detail'],true);
+            $companyInfo['detail']['boutique'] = $bind['boutique'];
+            //数据打包
+            $companyInfo['detail'] = json_encode($companyInfo['detail']);
+            //修改企业
+            $res = $this->oCompany->updateCompany($bind['company_id'],$companyInfo);
+            $response = $res ? array('errno' => 0) : array('errno' => 9);
+        }
+		echo json_encode($response);
+		return true;
+    }
 }
