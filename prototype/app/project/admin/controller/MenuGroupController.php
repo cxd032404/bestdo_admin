@@ -118,7 +118,7 @@ class MenuGroupController extends AbstractController
 	public function deleteAction()
 	{		
 		//检查权限
-		$this->manager->checkMenuPermission("DeleteMenuGroup");
+        $PermissionCheck = $this->manager->checkMenuPermission("DeleteMenuGroup");
 		if($PermissionCheck['return'])
 		{
 			$group_id = intVal($this->request->group_id);
