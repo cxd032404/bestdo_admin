@@ -72,7 +72,7 @@ class MenuGroupController extends AbstractController
 	public function modifyAction()
 	{				
 		//检查权限
-		$this->manager->checkMenuPermission("UpdateMenuGroup");
+        $PermissionCheck = $this->manager->checkMenuPermission("UpdateMenuGroup");
 		if($PermissionCheck['return'])
 		{
 			$group_id = $this->request->group_id;
