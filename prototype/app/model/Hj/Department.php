@@ -36,6 +36,25 @@ class Hj_Department extends Base_Widget
 		}
 		return $DepartmentList;
 	}
+    /**
+     * 查询全部
+     * @param $fields
+     * @return array
+     */
+    public function getDepartmentCount($params = [],$fields = "*")
+    {
+        //生成查询列
+        $fields = Base_common::getSqlFields(array("DepartmentCount"=>"count(department_id)"));
+        $table_to_process = Base_Widget::getDbTable($this->table);
+        $whereCompany = (isset($params['company_id']) && $params['company_id']>0)?" company_id = ".$params['company_id']:"";
+        $whereName = (isset($params['department_name']) && trim($params['department_name'])!="")?" department_name = '".$params['department_name']."'":"";
+        $whereExclude = (isset($params['exclude_id']) && $params['exclude_id'])>0?" department_id != ".$params['exclude_id']:"";
+        $whereParent = isset($params['parent_id'])?" parent_id = ".$params['parent_id']:"";
+        $whereCondition = array($whereCompany,$whereExclude,$whereParent,$whereName);
+        $where = Base_common::getSqlWhere($whereCondition);
+        $sql = "SELECT $fields FROM " . $table_to_process . " where 1 ".$where." ORDER BY department_id ASC";
+        return $this->db->getOne($sql);
+    }
 	/**
 	 * 获取单条记录
 	 * @param integer $department_id

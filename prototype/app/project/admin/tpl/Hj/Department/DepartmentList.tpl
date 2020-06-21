@@ -48,7 +48,7 @@ function departmentModify(mid){
     <td align="center">{tpl:$departmentInfo.parent_department_name/}</td>
       <td align="center">{tpl:$departmentInfo.company_name/}</td>
     <td align="center">{tpl:$departmentInfo.update_time/}</td>
-      <td align="center"><a  href="javascript:;" onclick="departmentDelete('{tpl:$departmentInfo.department_id/}','{tpl:$departmentInfo.department_name/}')">删除</a>
+      <td align="center"> {tpl:if(0==$departmentInfo.child_count)}  <a  href="javascript:;" onclick="departmentDelete('{tpl:$departmentInfo.department_id/}','{tpl:$departmentInfo.department_name/}')">删除</a>{/tpl:if}
  |  <a href="javascript:;" onclick="departmentModify('{tpl:$departmentInfo.department_id/}');">修改</a></td>
   </tr>
 {/tpl:loop}

@@ -51,6 +51,8 @@ class Hj_DepartmentController extends AbstractController
                 //数据解包
                 $departmentList[$key]['company_name'] = ($departmentInfo['company_id']==0)?"无对应":($companyList[$departmentInfo['company_id']]['company_name']??"未知");
                 $departmentList[$key]['parent_department_name'] = ($departmentInfo['parent_id']==0)?"无对应":($departmentList[$departmentInfo['parent_id']]['department_name']??"未知");
+                $departmentList[$key]['child_count'] = $this->oDepartment->getDepartmentCount(['company_id'=>$company_id,'parent_id'=>$departmentInfo['department_id']]);
+
                 $name_prefix = "";
                 $departmentList[$key]['department_sign'] = $departmentInfo['department_id']."_0_0";
                 //有上级
