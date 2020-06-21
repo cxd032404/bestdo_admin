@@ -44,12 +44,12 @@ function departmentModify(mid){
 {tpl:loop $departmentList $departmentInfo}
   <tr class="hover">
     <td align="center">{tpl:$departmentInfo.department_id/}</td>
-    <td align="center">{tpl:$departmentInfo.department_name/}</td>
+    <td align="center">{tpl:$departmentInfo.display_department_name/}</td>
     <td align="center">{tpl:$departmentInfo.parent_department_name/}</td>
       <td align="center">{tpl:$departmentInfo.company_name/}</td>
     <td align="center">{tpl:$departmentInfo.update_time/}</td>
       <td align="center"><a  href="javascript:;" onclick="departmentDelete('{tpl:$departmentInfo.department_id/}','{tpl:$departmentInfo.department_name/}')">删除</a>
- |  <a href="javascript:;" onclick="departmentModify('{tpl:$departmentInfo.department_id/}');">修改</a> | <a href="{tpl:$this.sign/}&ac=department.detail&department_id={tpl:$departmentInfo.department_id/}">部门元素 ({tpl:$departmentInfo.element_count/})</a> | <a target="_blank" href="{tpl:$departmentInfo.test_url/}?{tpl:$departmentInfo.department_params/}">测试部门</a></td>
+ |  <a href="javascript:;" onclick="departmentModify('{tpl:$departmentInfo.department_id/}');">修改</a></td>
   </tr>
 {/tpl:loop}
 </table>

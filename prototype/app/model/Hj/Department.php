@@ -19,8 +19,10 @@ class Hj_Department extends Base_Widget
 	{
 		$table_to_process = Base_Widget::getDbTable($this->table);
 	    $whereCompany = (isset($params['company_id']) && $params['company_id']>0)?" company_id = ".$params['company_id']:"";
+        $whereName = (isset($params['department_name']) && trim($params['department_name'])!="")?" department_name = '".$params['department_name']."'":"";
         $whereExclude = (isset($params['exclude_id']) && $params['exclude_id'])>0?" department_id != ".$params['exclude_id']:"";
-        $whereCondition = array($whereCompany,$whereExclude);
+        $whereParent = isset($params['parent_id'])?" parent_id = ".$params['parent_id']:"";
+        $whereCondition = array($whereCompany,$whereExclude,$whereParent,$whereName);
         $where = Base_common::getSqlWhere($whereCondition);
 		$sql = "SELECT $fields FROM " . $table_to_process . " where 1 ".$where." ORDER BY department_id ASC";
 		$return = $this->db->getAll($sql);
