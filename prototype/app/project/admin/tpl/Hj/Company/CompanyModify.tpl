@@ -47,6 +47,10 @@ function iconDelete(cid,name){
                 更改图片:<input name="upload_img[1]" type="file" class="span4" id="upload_img[1]"/>
             </td>
         </tr>
+	<tr class="noborder">
+		<td>每日步数</td>
+		<td align="left"><input type="text" class="span2" name="detail[daily_step]"  id="detail[daily_step]" value="{tpl:$companyInfo.detail.daily_step/}" size="50" /></td>
+	</tr>
 <tr class="noborder"><td></td>
 <td><button type="submit" id="company_update_submit">提交</button></td>
 </tr>

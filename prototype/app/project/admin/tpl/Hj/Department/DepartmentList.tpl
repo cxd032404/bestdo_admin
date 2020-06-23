@@ -35,7 +35,7 @@ function departmentModify(mid){
   <tr>
     <th align="center" class="rowtip">部门ID</th>
     <th align="center" class="rowtip">部门名称</th>
-      <th align="center" class="rowtip">上级企业</th>
+      <th align="center" class="rowtip">上级部门</th>
     <th align="center" class="rowtip">对应企业</th>
     <th align="center" class="rowtip">更新时间</th>
       <th align="center" class="rowtip">操作</th>

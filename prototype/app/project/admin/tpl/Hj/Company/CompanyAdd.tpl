@@ -24,7 +24,11 @@
 <td>图片上传：</td>
 	<td align="left"><input name="upload_img[1]" type="file" id="upload_img[1]" /></td>
 </tr>
-	<tr class="noborder"><td></td>
+	<tr class="noborder">
+<td>每日步数</td>
+	<td align="left"><input type="text" class="span2" name="detail[daily_step]"  id="detail[daily_step]" value="6000" size="50" /></td>
+</tr>
+	<tr class="noborder"><td>
 <td><button type="submit" id="company_add_submit">提交</button></td>
 </tr>
 </table>

@@ -176,8 +176,13 @@ class Hj_CompanyController extends AbstractController
                 {
                     unset($bind['icon']);
                 }
+                //获取企业信息
+                $companyInfo = $this->oCompany->getCompany($bind['company_id'],'*');
+                //数据解包
+                $companyInfo['detail'] = json_decode($companyInfo['detail'],true);
+
                 //数据打包
-                $bind['detail'] = json_encode($bind['detail']);
+                $bind['detail'] = json_encode(array_merge($companyInfo['detail'],$bind['detail']));
                 //修改企业
                 $res = $this->oCompany->updateCompany($bind['company_id'],$bind);
                 $response = $res ? array('errno' => 0) : array('errno' => 9);
