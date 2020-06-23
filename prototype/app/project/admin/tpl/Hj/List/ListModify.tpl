@@ -1,5 +1,9 @@
 {tpl:tpl contentHeader/}
-
+<script type="text/javascript">
+	function headerImgDelete(lid){
+		headerImgDeleteBox = divBox.confirmBox({content:'是否确认删除吗?删除后将不可恢复，需要重新上传',ok:function(){location.href = '{tpl:$this.sign/}&ac=header.img.remove&list_id=' + lid;}});
+	}
+</script>
 <div class="br_bottom"></div>
 <form id="list_update_form" name="list_update_form" action="{tpl:$this.sign/}&ac=list.update" method="post">
 <input type="hidden" name="list_id" value="{tpl:$listInfo.list_id/}" />
@@ -15,7 +19,7 @@
 			{tpl:if($listInfo.detail.header_url!="")}
 			已选图片:<img src="{tpl:$listInfo.detail.header_url/}" width="30px;" height="30px;"/>
 		<br>
-			{/tpl:if}
+			<a  href="javascript:;" onclick="headerImgDelete('{tpl:$listInfo.list_id/}','{tpl:$key/}')">删除</a> {/tpl:if}
 		</td>
 	</tr>
 <tr class="hover"><td>类型</td>

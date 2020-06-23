@@ -265,6 +265,32 @@ class Hj_ListController extends AbstractController
 			include $this->tpl('403');
 		}
 	}
+    //删除页面
+    public function headerImgRemoveAction()
+    {
+        //检查权限
+        $PermissionCheck = $this->manager->checkMenuPermission("updateList");
+        if($PermissionCheck['return'])
+        {
+            //页面ID
+            $list_id = trim($this->request->list_id);
+            //获取列表信息
+            $listInfo = $this->oList->getList($list_id,'list_id,detail');
+            $listInfo['detail'] = json_decode($listInfo['detail'],true);
+            unset($listInfo['detail']['header_url']);
+            //数据打包
+            $listInfo['detail'] = json_encode($listInfo['detail']);
+            //修改页面
+            $res = $this->oList->updateList($list_id,$listInfo);
+            //返回之前的页面
+            $this->response->goBack();
+        }
+        else
+        {
+            $home = $this->sign;
+            include $this->tpl('403');
+        }
+    }
     //添加页面元素单个详情页面
     public function postAction()
     {
