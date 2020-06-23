@@ -216,6 +216,22 @@ class Hj_ListController extends AbstractController
                         $bind['detail']['connect_name'] = "";
                     }
                     $bind['detail']['type'] = $bind['type'];
+                    //获取列表信息
+                    $listInfo = $this->oList->getList($bind['list_id'],'*');
+                    $listInfo['detail'] = json_decode($listInfo['detail'],true);
+
+                    //上传图片
+                    $oUpload = new Base_Upload('upload_img');
+                    $upload = $oUpload->upload('upload_img',$this->config->oss);
+                    $oss_urls = array_column($upload->resultArr,'oss');
+                    if(isset($oss_urls['0']) && $oss_urls['0']!="")
+                    {
+                        $bind['detail']['header_url'] = $oss_urls['0'];
+                    }
+                    else
+                    {
+                        $bind['detail']['header_url'] = $listInfo['detail']['header_url'];
+                    }
                     unset($bind['type']);
                     //数据打包
                     $bind['detail'] = json_encode($bind['detail']);

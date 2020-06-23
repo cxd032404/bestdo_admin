@@ -9,6 +9,15 @@
 <td>列表名称</td>
 <td align="left"><input name="list_name" type="text" class="span2" id="list_name" value="{tpl:$listInfo.list_name/}" size="50" /></td>
 </tr>
+	<tr class="hover">
+		<td>头部图片上传：</td>
+		<td align="left"><input name="upload_img[1]" type="file" id="upload_img[1]" />
+			{tpl:if($listInfo.detail.header_url!="")}
+			已选图片:<img src="{tpl:$listInfo.detail.header_url/}" width="30px;" height="30px;"/>
+		<br>
+			{/tpl:if}
+		</td>
+	</tr>
 <tr class="hover"><td>类型</td>
 	<td align="left">	<select name="type"  id="type" size="1">
 			<option value="vote" {tpl:if("vote"==$listInfo.detail.type)}selected="selected"{/tpl:if}>投票</option>
