@@ -605,6 +605,20 @@ class Hj_UserInfo extends Base_Widget
         return $this->db->insert($table_to_process, $bind);
     }
 
+    /**
+     * 更新单个企业导入用户记录
+     * @param char $user_id 用户ID
+     * @param array $bind 更新的数据列表
+     * @return boolean
+     */
+    public function updateCompanyUser($id, array $bind)
+    {
+        $id = intval($id);
+        $bind['update_time'] = date("Y-m-d H:i:s",time());
+        $table_to_process = Base_Widget::getDbTable($this->table_company_user);
+        return $this->db->update($table_to_process, $bind, '`id` = ?', $id);
+    }
+
     public function getTokenForManager($manager_id)
     {
         $tokenUrl = $this->config->apiUrl.$this->config->api['api']['get_token_for_manager']."?manager_id=".$manager_id;

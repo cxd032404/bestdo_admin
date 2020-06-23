@@ -67,6 +67,20 @@ class Hj_Department extends Base_Widget
         $table_to_process = Base_Widget::getDbTable($this->table);
 		return $this->db->selectRow($table_to_process, $fields, '`department_id` = ?', $department_id);
 	}
+    /**
+     * 根据部门名称获取单条记录
+     * @param integer $company_id
+     * @param string $department_name
+     * @param string $fields
+     * @return array
+     */
+    public function getDepartmentByName($company_id,$department_name, $fields = '*')
+    {
+        $company_id = intval($company_id);
+        $department_name = trim($department_name);
+        $table_to_process = Base_Widget::getDbTable($this->table);
+        return $this->db->selectRow($table_to_process, $fields, '`company_id` = ? and `department_name` = ?', [$company_id,$department_name]);
+    }
 	/**
 	 * 更新
 	 * @param integer $department_id

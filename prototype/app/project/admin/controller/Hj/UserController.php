@@ -305,17 +305,24 @@ class Hj_UserController extends AbstractController
                     if(trim($content)!="" && !is_null($content))
                     {
                         $text = explode(",",$content);
+                        $t = explode("|",$text[2]);
+                        $departmentName = $t[count($t)-1];
+                        $departmentInfo = (new Hj_Department())->getDepartmentByName($company_id,$departmentName);
                         if(count($text)>=2)
                         {
-                            $existUser = $this->oUserInfo->getCompanyUserByColumn($company_id,trim($text['0']),$auth_type,trim($text[1]),"id,name");
+                            $existUser = $this->oUserInfo->getCompanyUserByColumn($company_id,trim($text['0']),$auth_type,trim($text[1]),"id,name,department_id");
                             if(count($existUser)>=1)
                             {
+                                if($existUser[0]['department_id'] != $departmentInfo['department_id'])
+                                {
+                                    $this->oUserInfo->updateCompanyUser($existUser[0]['id'],['department_id'=>$departmentInfo['department_id']]);
+                                }
                                 $successList = array_merge($successList,array_column(array_values($existUser),"id"));
                                 $exist ++;
                             }
                             else
                             {
-                                $userInfo = ["company_id" => $company_id, "name" => trim($text[0]), $auth_type => trim($text[1])];
+                                $userInfo = ["company_id" => $company_id, "name" => trim($text[0]),"department_id" => $departmentInfo['department_id'] ,$auth_type => trim($text[1])];
                                 $insert = $this->oUserInfo->insertCompanyUser($userInfo);
                                 if($insert)
                                 {
