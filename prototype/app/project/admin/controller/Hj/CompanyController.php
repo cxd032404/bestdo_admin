@@ -112,6 +112,7 @@ class Hj_CompanyController extends AbstractController
                     $bind['detail'] = json_encode($bind['detail']);
                     //添加企业
                     $res = $this->oCompany->insertCompany($bind);
+                    Base_Common::refreshCache($this->config,"company",$res);
                     $response = $res ? array('errno' => 0) : array('errno' => 9);
                 }
             }
@@ -185,6 +186,7 @@ class Hj_CompanyController extends AbstractController
                 $bind['detail'] = json_encode(array_merge($companyInfo['detail'],$bind['detail']));
                 //修改企业
                 $res = $this->oCompany->updateCompany($bind['company_id'],$bind);
+                Base_Common::refreshCache($this->config,"company",$bind['company_id']);
                 $response = $res ? array('errno' => 0) : array('errno' => 9);
             }
 		}
@@ -329,6 +331,7 @@ class Hj_CompanyController extends AbstractController
             $companyInfo['detail'] = json_encode($companyInfo['detail']);
             //修改企业
             $res = $this->oCompany->updateCompany($bind['company_id'],$companyInfo);
+            Base_Common::refreshCache($this->config,"company",$bind['company_id']);
             $response = $res ? array('errno' => 0) : array('errno' => 9);
         }
 		echo json_encode($response);

@@ -139,6 +139,7 @@ class Hj_ClubController extends AbstractController
                             $res = $this->oClub->insertClub($bind);
                             if($res)
                             {
+                                Base_Common::refreshCache($this->config,"club",$res);
                                 $memberInfo = ['club_id'=>$res,
                                     'company_id'=>$bind['company_id'],
                                     'user_id'=>$connectedUser['user_id'],
@@ -260,6 +261,7 @@ class Hj_ClubController extends AbstractController
                         $bind['content'] = "";
                         //修改俱乐部
                         $res = $this->oClub->updateClub($bind['club_id'],$bind);
+                        Base_Common::refreshCache($this->config,"club",$bind['club_id']);
                         $response = $res ? array('errno' => 0) : array('errno' => 9);
                     }
                 }
@@ -451,6 +453,7 @@ class Hj_ClubController extends AbstractController
             $clubInfo['detail']['banner'][] = ['img_url'=>$oss_urls['0'],'img_jump_url'=>$detail['img_jump_url'],'text'=>trim($detail['text']??""),'title'=>trim($detail['title']??"")];
             $clubInfo['detail'] = json_encode($clubInfo['detail']);
             $res = $this->oClub->updateclub($club_id,$clubInfo);
+            Base_Common::refreshCache($this->config,"club",$club_id);
             $response = $res ? array('errno' => 0) : array('errno' => 9);
             }
         echo json_encode($response);
@@ -496,6 +499,7 @@ class Hj_ClubController extends AbstractController
             $clubInfo['detail']['banner'][$pos]['title'] = trim($detail['title']??"");
             $clubInfo['detail'] = json_encode($clubInfo['detail']);
             $res = $this->oClub->updateClub($club_id,$clubInfo);
+            Base_Common::refreshCache($this->config,"club",$club_id);
             $response = $res ? array('errno' => 0) : array('errno' => 9);
         }
         echo json_encode($response);
@@ -516,6 +520,7 @@ class Hj_ClubController extends AbstractController
             $clubInfo['detail']['banner'] = array_values($clubInfo['detail']['banner']);
             $clubInfo['detail'] = json_encode($clubInfo['detail']);
             $res = $this->oClub->updateClub($club_id,$clubInfo);
+            Base_Common::refreshCache($this->config,"club",$club_id);
         }
         $this->response->goBack();
     }

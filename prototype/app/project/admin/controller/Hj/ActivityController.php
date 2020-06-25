@@ -149,6 +149,7 @@ class Hj_ActivityController extends AbstractController
                     $bind['detail'] = json_encode($bind['detail']);
                     //添加活动
                     $res = $this->oActivity->insertActivity($bind);
+                    Base_Common::refreshCache($this->config,"activity",$res);
                     $response = $res ? array('errno' => 0) : array('errno' => 9);
                 }
             }
@@ -214,6 +215,7 @@ class Hj_ActivityController extends AbstractController
             $bind['detail'] = json_encode($bind['detail']);
             //修改活动
             $res = $this->oActivity->updateActivity($bind['activity_id'],$bind);
+            Base_Common::refreshCache($this->config,"activity",$bind['activity_id']);
             $response = $res ? array('errno' => 0) : array('errno' => 9);
 		}
 		echo json_encode($response);

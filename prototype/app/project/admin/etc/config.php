@@ -21,6 +21,7 @@ $config['api'] = [
         'get_page'=>'/page/getPage/',
         'get_token_for_manager'=>'/user/createTokenForManager',
         'display'=>'/list/post_display',
+        'refresh'=>'/cache/refresh',
     ],
         'site'=>[
     'company_user_reg'=>'loginhome',

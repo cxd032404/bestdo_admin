@@ -1360,4 +1360,10 @@ EOF;
         $calculatedDistance = $earthRadius * $stepTwo;
         return round($calculatedDistance);
     }
+
+    public function refreshCache($config = [],$type,$id = 0)
+    {
+        $url =$config->apiUrl.$config->api['api']['refresh']."?type=".$type."&id=".$id;
+        return json_decode(file_get_contents($url),true);
+    }
 }
