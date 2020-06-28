@@ -19,7 +19,7 @@ class Hj_UserInfo extends Base_Widget
 
     protected $companyUserAuthType = array("mobile"=>"手机号","worker_id"=>"工号");
     //登录方式列表
-    protected $loginSource = array('WeChat'=>"微信",'Weibo'=>"微博",'Mobile'=>"手机");
+    protected $loginSource = array('WeChat'=>"微信",'Weibo'=>"微博",'Mobile'=>"手机",'MiniProgram'=>"小程序");
     //性别列表
 	protected $sex = array('0'=>"保密",'1'=>"男",'2'=>"女");
     //性别列表
