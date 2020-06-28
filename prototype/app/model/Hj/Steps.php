@@ -22,7 +22,9 @@ class Hj_Steps extends Base_Widget
         $whereDepartment_1 = (isset($params['department_id_1']) && $params['department_id_1']>0)?" department_id_1 = ".$params['department_id_1']:"";
         $whereDepartment_2 = (isset($params['department_id_2']) && $params['department_id_2']>0)?" department_id_2 = ".$params['department_id_2']:"";
         $whereDepartment_3 = (isset($params['department_id_2']) && $params['department_id_2']>0)?" department_id_2 = ".$params['department_id_2']:"";
-        $whereCondition = array($whereCompany,$whereDepartment_1,$whereDepartment_2,$whereDepartment_3);
+        $whereStartDate = (isset($params['start_date']) && strtotime($params['start_date'])>0)?" date >= '".$params['start_date']."'":"";
+        $whereEndDate = (isset($params['end_date']) && strtotime($params['end_date'])>0)?" date <= '".$params['end_date']."'":"";
+        $whereCondition = array($whereCompany,$whereDepartment_1,$whereDepartment_2,$whereDepartment_3,$whereStartDate,$whereEndDate);
         $where = Base_common::getSqlWhere($whereCondition);
         //获取用户数量
         if(isset($params['getCount'])&&$params['getCount']==1)
@@ -48,7 +50,7 @@ class Hj_Steps extends Base_Widget
         return $StepsDetailList;
     }
     /**
-     * 获取用户数量
+     * 获取记录数量
      * @param $fields  所要获取的数据列
      * @param $params 传入的条件列表
      * @return integer
@@ -63,59 +65,79 @@ class Hj_Steps extends Base_Widget
         $whereDepartment_1 = (isset($params['department_id_1']) && $params['department_id_1']>0)?" department_id_1 = ".$params['department_id_1']:"";
         $whereDepartment_2 = (isset($params['department_id_2']) && $params['department_id_2']>0)?" department_id_2 = ".$params['department_id_2']:"";
         $whereDepartment_3 = (isset($params['department_id_2']) && $params['department_id_2']>0)?" department_id_2 = ".$params['department_id_2']:"";
-        $whereCondition = array($whereCompany,$whereDepartment_1,$whereDepartment_2,$whereDepartment_3);
+        $whereStartDate = (isset($params['start_date']) && strtotime($params['start_date'])>0)?" date >= '".$params['start_date']."'":"";
+        $whereEndDate = (isset($params['end_date']) && strtotime($params['end_date'])>0)?" date <= '".$params['end_date']."'":"";
+        $whereCondition = array($whereCompany,$whereDepartment_1,$whereDepartment_2,$whereDepartment_3,$whereStartDate,$whereEndDate);
         //生成条件列
         $where = Base_common::getSqlWhere($whereCondition);
         $sql = "SELECT $fields FROM $table_to_process where 1 ".$where;
         return $this->db->getOne($sql);
     }
     /**
-     * 获取单条记录
-     * @param integer $Steps_id
-     * @param string $fields
+     * 查询全部
+     * @param $fields
      * @return array
      */
-    public function getSteps($Steps_id, $fields = '*')
+    public function getStepsStatList($params = [])
     {
-        $Steps_id = intval($Steps_id);
+        $fields = ["user_id","totalStep"=>"sum(step)"];
+        $groupBy = ["user_id"];
         $table_to_process = Base_Widget::getDbTable($this->table);
-        return $this->db->selectRow($table_to_process, $fields, '`Steps_id` = ?', $Steps_id);
-    }
-    /**
-     * 更新
-     * @param integer $Steps_id
-     * @param array $bind
-     * @return boolean
-     */
-    public function updateSteps($Steps_id, array $bind)
-    {
-        $Steps_id = intval($Steps_id);
-        $bind['update_time'] = date("Y-m-d H:i:s");
-        $table_to_process = Base_Widget::getDbTable($this->table);
-        return $this->db->update($table_to_process, $bind, '`Steps_id` = ?', $Steps_id);
-    }
-    /**
-     * 插入
-     * @param array $bind
-     * @return boolean
-     */
-    public function insertSteps(array $bind)
-    {
-        $bind['create_time'] = $bind['update_time'] = date("Y-m-d H:i:s");
-        $table_to_process = Base_Widget::getDbTable($this->table);
-        return $this->db->insert($table_to_process, $bind);
-    }
+        $whereCompany = (isset($params['company_id']) && $params['company_id']>0)?" company_id = ".$params['company_id']:"";
+        $whereDepartment_1 = (isset($params['department_id_1']) && $params['department_id_1']>0)?" department_id_1 = ".$params['department_id_1']:"";
+        $whereDepartment_2 = (isset($params['department_id_2']) && $params['department_id_2']>0)?" department_id_2 = ".$params['department_id_2']:"";
+        $whereDepartment_3 = (isset($params['department_id_2']) && $params['department_id_2']>0)?" department_id_2 = ".$params['department_id_2']:"";
+        $whereStartDate = (isset($params['start_date']) && strtotime($params['start_date'])>0)?" date >= '".$params['start_date']."'":"";
+        $whereEndDate = (isset($params['end_date']) && strtotime($params['end_date'])>0)?" date <= '".$params['end_date']."'":"";
+        $whereCondition = array($whereCompany,$whereDepartment_1,$whereDepartment_2,$whereDepartment_3,$whereStartDate,$whereEndDate);
+        $where = Base_common::getSqlWhere($whereCondition);
+        $groupBy = Base_Common::getGroupBy($groupBy);
+        $fields = Base_Common::getSqlFields($fields);
+        //获取用户数量
+        if(isset($params['getCount'])&&$params['getCount']==1)
+        {
+            $LogCount = $this->getStepsStatCount($params);
+        }
+        else
+        {
+            $LogCount = 0;
+        }
 
-    /**
-     * 删除
-     * @param integer $Steps_id
-     * @return boolean
-     */
-    public function deleteSteps($Steps_id)
-    {
-        $Steps_id = intval($Steps_id);
-        $table_to_process = Base_Widget::getDbTable($this->table);
-        return $this->db->delete($table_to_process, '`Steps_id` = ?', $Steps_id);
+        $limit  = isset($params['Page'])&&$params['Page']?" limit ".($params['Page']-1)*$params['PageSize'].",".$params['PageSize']." ":"";
+        $sql = "SELECT $fields FROM " . $table_to_process . " where 1 ".$where.$groupBy." ORDER BY totalStep desc ".$limit;
+        $return = $this->db->getAll($sql);
+        $StepsDetailList = array("UserList"=>[],"UserCount"=>$LogCount);
+        if(count($return))
+        {
+            foreach($return as $key => $value)
+            {
+                $StepsDetailList['UserList'][$value['user_id']] = $value;
+            }
+        }
+        return $StepsDetailList;
     }
-
+    /**
+     * 获取记录数量
+     * @param $fields  所要获取的数据列
+     * @param $params 传入的条件列表
+     * @return integer
+     */
+    public function getStepsStatCount($params)
+    {
+        //获取需要用到的表名
+        $table_to_process = Base_Widget::getDbTable($this->table);
+        //生成查询列
+        $fields = Base_common::getSqlFields(array("UserCount"=>"count(distinct(user_id))"));
+        $whereCompany = (isset($params['company_id']) && $params['company_id']>0)?" company_id = ".$params['company_id']:"";
+        $whereDepartment_1 = (isset($params['department_id_1']) && $params['department_id_1']>0)?" department_id_1 = ".$params['department_id_1']:"";
+        $whereDepartment_2 = (isset($params['department_id_2']) && $params['department_id_2']>0)?" department_id_2 = ".$params['department_id_2']:"";
+        $whereDepartment_3 = (isset($params['department_id_2']) && $params['department_id_2']>0)?" department_id_2 = ".$params['department_id_2']:"";
+        $whereStartDate = (isset($params['start_date']) && strtotime($params['start_date'])>0)?" date >= '".$params['start_date']."'":"";
+        $whereEndDate = (isset($params['end_date']) && strtotime($params['end_date'])>0)?" date <= '".$params['end_date']."'":"";
+        $whereCondition = array($whereCompany,$whereDepartment_1,$whereDepartment_2,$whereDepartment_3,$whereStartDate,$whereEndDate);
+        //生成条件列
+        $where = Base_common::getSqlWhere($whereCondition);
+        $sql = "SELECT $fields FROM $table_to_process where 1 ".$where;
+        return $this->db->getOne($sql);
+    }
 }
