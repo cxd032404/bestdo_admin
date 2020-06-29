@@ -146,4 +146,8 @@ $table['club_member_log']['num'] = 1;
 #步数详情记录
 $table['user_steps']['db'] = 'hj_user';
 $table['user_steps']['num'] = 1;
+
+#企业自定义的健步走活动时间段
+$table['config_steps_date_range']['db'] = 'hj_config';
+$table['config_steps_date_range']['num'] = 1;
 return $table;

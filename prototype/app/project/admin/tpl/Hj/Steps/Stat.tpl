@@ -5,7 +5,7 @@
 <fieldset><legend>操作</legend>
 </fieldset>
 <form action="{tpl:$this.sign/}&ac=stat" name="form" id="form" method="post">
-    日期：<input type="text" name="start_date"  id="start_date " class="input-medium" value="{tpl:$params.start_date/}"  onFocus="WdatePicker({isShowClear:false,readOnly:true,dateFmt:'yyyy-MM-dd'})" >-<input type="text" name="end_date" id="end_date" class="input-medium"  value="{tpl:$params.end_date/}" onFocus="WdatePicker({isShowClear:false,readOnly:true,dateFmt:'yyyy-MM-dd'})" >
+    日期：<input type="text" name="start_date"  id="start_date " class="input-medium" value="{tpl:$params.start_date/}"  onFocus="WdatePicker({isShowClear:false,readOnly:true,dateFmt:'yyyy-MM-dd'})" ><input type="text" name="start_date"  id="start_date " class="input-medium" value="{tpl:$params.start_date/}"  onFocus="WdatePicker({isShowClear:false,readOnly:true,dateFmt:'yyyy-MM-dd'})" >-<input type="text" name="end_date" id="end_date" class="input-medium"  value="{tpl:$params.end_date/}" onFocus="WdatePicker({isShowClear:false,readOnly:true,dateFmt:'yyyy-MM-dd'})" >
     <p>企业：<select name="company_id"  id="company_id" size="1" onchange="getDepartmentByCompany()">
         <option value="0" {tpl:if(0==$params.company_id)}selected="selected"{/tpl:if} >全部</option>
         {tpl:loop $companyList  $company_info}
@@ -43,7 +43,8 @@
           <th align="center" class="rowtip">姓名</th>
           <th align="center" class="rowtip">步数</th>
         <th align="center" class="rowtip">热量</th>
-        <th align="center" class="rowtip">估测距离</th>
+          <th align="center" class="rowtip">估测时间</th>
+          <th align="center" class="rowtip">估测距离</th>
           <th align="center" class="rowtip">达标率</th>
           <th align="center" class="rowtip">达标</th>
       </tr>
@@ -53,7 +54,8 @@
           <td align="center">{tpl:$StepsInfo.user_name/}</td>
         <td align="center">{tpl:$StepsInfo.totalStep/}</td>
         <td align="center">{tpl:$StepsInfo.kcal/}kcal</td>
-        <td align="center">{tpl:$StepsInfo.distance/}米</td>
+          <td align="center">{tpl:$StepsInfo.time/}分钟</td>
+          <td align="center">{tpl:$StepsInfo.distance/}米</td>
           <td align="center">{tpl:$StepsInfo.achive_rate/}%</td>
         <td align="center">{tpl:if(0==$StepsInfo.achive)}未达标{tpl:else}达标{/tpl:if}</td>
       </tr>

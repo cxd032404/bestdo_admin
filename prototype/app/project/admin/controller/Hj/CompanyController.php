@@ -30,7 +30,8 @@ class Hj_CompanyController extends AbstractController
 		$this->oCompany = new Hj_Company();
         $this->oProtocal = new Hj_Protocal();
 
-	}
+
+    }
 	//企业配置列表页面
 	public function indexAction()
 	{
@@ -473,5 +474,168 @@ class Hj_CompanyController extends AbstractController
             Base_Common::refreshCache($this->config,"company",$company_id);
         }
         $this->response->goBack();
+    }
+    //健步走自定义时间段列表
+    public function stepDateRangeAction()
+    {
+        //检查权限
+        $PermissionCheck = $this->manager->checkMenuPermission("updateCompany");
+        if($PermissionCheck['return'])
+        {
+            //企业ID
+            $params['company_id'] = intval($this->request->company_id);
+            //获取企业信息
+            $companyInfo = $this->oCompany->getCompany($params['company_id'],'*');
+            //数据解包
+            $companyInfo['detail'] = json_decode($companyInfo['detail'],true);
+            //获取日期信息
+            $oDateRange = new Hj_StepDateRange();
+            //分页参数
+            $params['Page'] = abs(intval($this->request->Page))?abs(intval($this->request->Page)):1;
+            $params['PageSize'] = 20;
+            $params['getCount'] = 1;
+            $DateRange = $oDateRange->getDateList($params);
+            foreach($DateRange['DateList'] as $key => $value)
+            {
+                $DateRange['DateList'][$key]['detail'] = json_decode($value['detail'],true);
+            }
+            //翻页参数
+            $page_url = Base_Common::getUrl('',$this->ctl,'step.date.range',$params)."&Page=~page~";
+            $page_content =  base_common::multi($DateRange['DateCount'], $page_url, $params['Page'], $params['PageSize'], 10, $maxpage = 100, $prevWord = '上一页', $nextWord = '下一页');
+            //渲染模版
+            include $this->tpl('Hj_Company_StepDateRange');
+        }
+        else
+        {
+            $home = $this->sign;
+            include $this->tpl('403');
+        }
+    }
+    //添加健步走日期段页面
+    public function stepDateRangeAddAction()
+    {
+        //检查权限
+        $PermissionCheck = $this->manager->checkMenuPermission("updateCompany");
+        if($PermissionCheck['return'])
+        {
+            $currentTime = time();
+            //企业ID
+            $company_id= intval($this->request->company_id);
+            //获取企业信息
+            $companyInfo = $this->oCompany->getCompany($company_id,'*');
+            $startDate  = date("Y-m-d",$currentTime+3*86400);
+            $endDate  = date("Y-m-d",$currentTime+(3+30)*86400);
+            //渲染模版
+            include $this->tpl('Hj_Company_StepDateRangeAdd');
+        }
+        else
+        {
+            $home = $this->sign;
+            include $this->tpl('403');
+        }
+    }
+    //添加健步走banner
+    public function stepDateRangeInsertAction()
+    {
+        //检查权限
+        $bind=$this->request->from('company_id','detail','start_date','end_date');
+        //日期校验
+        if(strtotime($bind['start_date'])==0 || strtotime($bind['end_date'])==0 || (strtotime($bind['start_date']) > strtotime($bind['end_date'])))
+        {
+            $response = array('errno' => 1);
+        }
+        else
+        {
+            //获取时间冲突的日期信息
+            $oDateRange = new Hj_StepDateRange();
+            $exists = $oDateRange->checkDateExist($bind);
+            if($exists>0)
+            {
+                $response = array('errno' => 3);
+            }
+            else
+            {
+                //数据打包
+                $bind['detail'] = json_encode($bind['detail']);
+                //添加日期段
+                $res = $oDateRange->insertDateRange($bind);
+                $response = $res ? array('errno' => 0) : array('errno' => 9);
+            }
+        }
+        echo json_encode($response);
+        return true;
+    }
+    //添加健步走日期段页面
+    public function stepDateRangeModifyAction()
+    {
+        //检查权限
+        $PermissionCheck = $this->manager->checkMenuPermission("updateCompany");
+        if($PermissionCheck['return'])
+        {
+            //记录ID
+            $date_id= intval($this->request->date_id);
+            $oDateRange = new Hj_StepDateRange();
+            $dateRangeInfo = $oDateRange->getDateRange($date_id);
+            $dateRangeInfo['detail'] = json_decode($dateRangeInfo['detail'],true);
+            //渲染模版
+            include $this->tpl('Hj_Company_StepDateRangeModify');
+        }
+        else
+        {
+            $home = $this->sign;
+            include $this->tpl('403');
+        }
+    }
+    //更新健步走banner
+    public function stepDateRangeUpdateAction()
+    {
+        //检查权限
+        $bind=$this->request->from('company_id','date_id','detail','start_date','end_date');
+        //日期校验
+        if(strtotime($bind['start_date'])==0 || strtotime($bind['end_date'])==0 || (strtotime($bind['start_date']) > strtotime($bind['end_date'])))
+        {
+            $response = array('errno' => 1);
+        }
+        else
+        {
+            //获取时间冲突的日期信息
+            $oDateRange = new Hj_StepDateRange();
+            $exists = $oDateRange->checkDateExist($bind);
+            if($exists>0)
+            {
+                $response = array('errno' => 3);
+            }
+            else
+            {
+                //数据打包
+                $bind['detail'] = json_encode($bind['detail']);
+                //添加日期段
+                $res = $oDateRange->updateDateRange($bind['date_id'],$bind);
+                $response = $res ? array('errno' => 0) : array('errno' => 9);
+            }
+        }
+        echo json_encode($response);
+        return true;
+    }
+    //删除日期
+    public function dateRangeDeleteAction()
+    {
+        //检查权限
+        $PermissionCheck = $this->manager->checkMenuPermission("updateCompany");
+        if($PermissionCheck['return'])
+        {
+            $oDateRange = new Hj_StepDateRange();
+            //记录ID
+            $date_id= intval($this->request->date_id);
+            //删除俱乐部
+            $oDateRange->deleteDateRange($date_id);
+            //返回之前的俱乐部
+            $this->response->goBack();
+        }
+        else
+        {
+            $home = $this->sign;
+            include $this->tpl('403');
+        }
     }
 }

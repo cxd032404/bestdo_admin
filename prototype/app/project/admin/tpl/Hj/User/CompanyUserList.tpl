@@ -29,7 +29,9 @@
         <th align="center" class="rowtip">真实姓名</th>
         <th align="center" class="rowtip">工号</th>
         <th align="center" class="rowtip">联系电话</th>
-        <th align="center" class="rowtip">操作</th>
+          <th align="center" class="rowtip">部门</th>
+          <th align="center" class="rowtip">关联用户ID</th>
+          <th align="center" class="rowtip">操作</th>
       </tr>
     {tpl:loop $UserList.UserList $UserInfo}
       <tr class="hover">
@@ -37,7 +39,9 @@
         <td align="center">{tpl:$UserInfo.name/}</td>
         <td align="center">{tpl:$UserInfo.worker_id/}</td>
         <td align="center">{tpl:$UserInfo.mobile/}</td>
-        <!--<td align="center"><a  href="javascript:;" onclick="userDetail('{tpl:$UserInfo.user_id/}')">详细</a>{tpl:if($UserInfo.AuthStatus==1)} | <a  href="javascript:;" onclick="userAuth('{tpl:$UserInfo.user_id/}')">审核</a>{/tpl:if} | {tpl:$UserInfo.License/} | {tpl:$UserInfo.Team/} | <a  href="javascript:;" onclick="userPasswordUpdate('{tpl:$UserInfo.user_id/}')">更新密码</a> | <a  href="javascript:;" onclick="userMobileUpdate('{tpl:$UserInfo.user_id/}')">更新手机</a></td>-->
+          <td align="center">{tpl:$UserInfo.department_name/}</td>
+          <td align="center">{tpl:$UserInfo.user_id/}</td>
+          <!--<td align="center"><a  href="javascript:;" onclick="userDetail('{tpl:$UserInfo.user_id/}')">详细</a>{tpl:if($UserInfo.AuthStatus==1)} | <a  href="javascript:;" onclick="userAuth('{tpl:$UserInfo.user_id/}')">审核</a>{/tpl:if} | {tpl:$UserInfo.License/} | {tpl:$UserInfo.Team/} | <a  href="javascript:;" onclick="userPasswordUpdate('{tpl:$UserInfo.user_id/}')">更新密码</a> | <a  href="javascript:;" onclick="userMobileUpdate('{tpl:$UserInfo.user_id/}')">更新手机</a></td>-->
           <td align="center"><a  href="javascript:;" onclick="userDetail('{tpl:$UserInfo.user_id/}')">详细</a></td>
 
       </tr>

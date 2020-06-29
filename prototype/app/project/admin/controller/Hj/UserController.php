@@ -238,11 +238,22 @@ class Hj_UserController extends AbstractController
             //导出EXCEL链接
             $export_var = "<a href =".(Base_Common::getUrl('',$this->ctl,'user.list.download',$params))."><导出表格></a>";
             //翻页参数
-            $page_url = Base_Common::getUrl('',$this->ctl,'index',$params)."&Page=~page~";
+            $page_url = Base_Common::getUrl('',$this->ctl,'company.user.list',$params)."&Page=~page~";
             $page_content =  base_common::multi($UserList['UserCount'], $page_url, $params['Page'], $params['PageSize'], 10, $maxpage = 100, $prevWord = '上一页', $nextWord = '下一页');
+            $oDepartment = new Hj_Department;
+            $departmentList = [];
             foreach($UserList['UserList'] as $userId => $UserInfo)
             {
+                if(!isset($departmentList[$UserInfo['department_id']]))
+                {
+                    $departmentInfo = $oDepartment->getDepartment($UserInfo['department_id']);
+                    if(isset($departmentInfo['department_id']))
+                    {
+                        $departmentList[$UserInfo['department_id']] = $departmentInfo;
+                    }
+                }
                 $UserList['UserList'][$userId]['company_name'] = isset($companyList[$UserInfo['company_id']])?$companyList[$UserInfo['company_id']]['company_name']:"未知";
+                $UserList['UserList'][$userId]['department_name'] = isset($departmentList[$UserInfo['department_id']])?$departmentList[$UserInfo['department_id']]['department_name']:"未知";
             }
             //模板渲染
             include $this->tpl('Hj_User_CompanyUserList');

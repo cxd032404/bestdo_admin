@@ -68,7 +68,8 @@ class Hj_StepsController extends AbstractController
             //获取步数详情列表
 			$StepsDetailList = $this->oSteps->getStepsDetailList($params);
             $userList  = $goalList = [];
-			foreach($StepsDetailList['DetailList'] as $key => $detail)
+			$spepsConfig = $this->config->steps;
+            foreach($StepsDetailList['DetailList'] as $key => $detail)
             {
                 if(!isset($userList[$detail['user_id']]))
                 {
@@ -79,8 +80,9 @@ class Hj_StepsController extends AbstractController
                     }
                 }
                 $StepsDetailList['DetailList'][$key]['user_name'] = $userList[$detail['user_id']]['true_name']??"未知用户";
-                $StepsDetailList['DetailList'][$key]['kcal'] = intval($detail['step']/$this->config->stepsPerKcal);
-                $StepsDetailList['DetailList'][$key]['distance'] = intval($this->config->distancePerStep*$detail['step']);
+                $StepsDetailList['DetailList'][$key]['kcal'] = intval($detail['step']/$this->config->steps['stepsPerKcal']);
+                $StepsDetailList['DetailList'][$key]['time'] = intval($detail['step']/$this->config->steps['stepsPerMinute']);
+                $StepsDetailList['DetailList'][$key]['distance'] = intval($this->config->steps['distancePerStep']*$detail['step']);
                 $StepsDetailList['DetailList'][$key]['company_name'] = $companyList[$detail['company_id']]['company_name']??"未知企业";
                 if(!isset($goalList[$detail['company_id']]))
                 {
@@ -137,6 +139,7 @@ class Hj_StepsController extends AbstractController
             $StepsStatList = $this->oSteps->getStepsStatList($params);
             $userList  = $goalList = [];
             $days = intval((strtotime($params['end_date']) - strtotime($params['start_date']))/86400);
+            $spepsConfig = $this->config->steps;
             foreach($StepsStatList['UserList'] as $key => $detail)
             {
                 if(!isset($userList[$detail['user_id']]))
@@ -148,8 +151,9 @@ class Hj_StepsController extends AbstractController
                     }
                 }
                 $StepsStatList['UserList'][$key]['user_name'] = $userList[$detail['user_id']]['true_name']??"未知用户";
-                $StepsStatList['UserList'][$key]['kcal'] = intval($detail['totalStep']/$this->config->stepsPerKcal);
-                $StepsStatList['UserList'][$key]['distance'] = intval($this->config->distancePerStep*$detail['totalStep']);
+                $StepsStatList['UserList'][$key]['kcal'] = intval($detail['totalStep']/$spepsConfig['stepsPerKcal']);
+                $StepsStatList['UserList'][$key]['time'] = intval($detail['totalStep']/$spepsConfig['stepsPerMinute']);
+                $StepsStatList['UserList'][$key]['distance'] = intval($spepsConfig['distancePerStep']*$detail['totalStep']);
                 $StepsStatList['UserList'][$key]['company_name'] = $companyList[$userList[$detail['user_id']]['company_id']]['company_name']??"未知企业";
                 if(!isset($goalList[$userList[$detail['user_id']]['company_id']]))
                 {

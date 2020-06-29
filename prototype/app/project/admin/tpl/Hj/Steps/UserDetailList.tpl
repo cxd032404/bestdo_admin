@@ -44,7 +44,8 @@
           <th align="center" class="rowtip">日期</th>
           <th align="center" class="rowtip">步数</th>
         <th align="center" class="rowtip">热量</th>
-        <th align="center" class="rowtip">估测距离</th>
+          <th align="center" class="rowtip">估测时间</th>
+          <th align="center" class="rowtip">估测距离</th>
           <th align="center" class="rowtip">达标率</th>
           <th align="center" class="rowtip">达标</th>
         <th align="center" class="rowtip">更新时间</th>
@@ -56,7 +57,8 @@
           <td align="center">{tpl:$StepsInfo.date/}</td>
         <td align="center">{tpl:$StepsInfo.step/}</td>
         <td align="center">{tpl:$StepsInfo.kcal/}kcal</td>
-        <td align="center">{tpl:$StepsInfo.distance/}米</td>
+          <td align="center">{tpl:$StepsInfo.time/}分钟</td>
+          <td align="center">{tpl:$StepsInfo.distance/}米</td>
           <td align="center">{tpl:$StepsInfo.achive_rate/}%</td>
         <td align="center">{tpl:if(0==$StepsInfo.achive)}未达标{tpl:else}达标{/tpl:if}</td>
         <td align="center">{tpl:$StepsInfo.update_time/}</td>
