@@ -337,4 +337,141 @@ class Hj_CompanyController extends AbstractController
 		echo json_encode($response);
 		return true;
     }
+    //健步走banner列表
+    public function stepBannerAction()
+    {
+        //检查权限
+        $PermissionCheck = $this->manager->checkMenuPermission("updateCompany");
+        if($PermissionCheck['return'])
+        {
+            //企业ID
+            $company_id= intval($this->request->company_id);
+            //获取企业信息
+            $companyInfo = $this->oCompany->getCompany($company_id,'*');
+            //数据解包
+            $companyInfo['detail'] = json_decode($companyInfo['detail'],true);
+            //渲染模版
+            include $this->tpl('Hj_Company_StepBanner');
+        }
+        else
+        {
+            $home = $this->sign;
+            include $this->tpl('403');
+        }
+    }
+    //添加健步走banner页面
+    public function stepBannerAddAction()
+    {
+        //检查权限
+        $PermissionCheck = $this->manager->checkMenuPermission("updateCompany");
+        if($PermissionCheck['return'])
+        {
+            //企业ID
+            $company_id= intval($this->request->company_id);
+            //获取企业信息
+            $companyInfo = $this->oCompany->getCompany($company_id,'*');
+            //渲染模版
+            include $this->tpl('Hj_Company_StepBannerAdd');
+        }
+        else
+        {
+            $home = $this->sign;
+            include $this->tpl('403');
+        }
+    }
+    //添加健步走banner
+    public function stepBannerInsertAction()
+    {
+        //企业ID
+        $company_id = intval($this->request->company_id);
+        $detail = $this->request->detail;
+        $companyInfo = $this->oCompany->getCompany($company_id,"company_id,detail");
+        $companyInfo['detail'] = json_decode($companyInfo['detail'],true);
+        //上传图片
+        $oUpload = new Base_Upload('upload_img');
+        $upload = $oUpload->upload('upload_img',$this->config->oss);
+        $oss_urls = array_column($upload->resultArr,'oss');
+        //如果没有成功上传
+        if(!isset($oss_urls['0']) || $oss_urls['0'] == "")
+        {
+            $response = array('errno' => 1);
+        }
+        else
+        {
+            $companyInfo['detail']['stepBanner'] = $companyInfo['detail']['stepBanner']??[];
+            $companyInfo['detail']['stepBanner'][] = ['img_url'=>$oss_urls['0'],'img_jump_url'=>$detail['img_jump_url'],'text'=>trim($detail['text']??""),'title'=>trim($detail['title']??"")];
+            $companyInfo['detail'] = json_encode($companyInfo['detail']);
+            $res = $this->oCompany->updateCompany($company_id,$companyInfo);
+            Base_Common::refreshCache($this->config,"company",$company_id);
+            $response = $res ? array('errno' => 0) : array('errno' => 9);
+        }
+        echo json_encode($response);
+        return true;
+    }
+    //修改健步走Banner页面
+    public function stepBannerModifyAction()
+    {
+        //元素ID
+        $company_id = intval($this->request->company_id);
+        $pos = intval($this->request->pos??0);
+        $companyInfo = $this->oCompany->getCompany($company_id,"company_id,detail");
+        $companyInfo['detail'] = json_decode($companyInfo['detail'],true);
+        $bannerInfo = $companyInfo['detail']['stepBanner'][$pos];
+        //渲染模版
+        include $this->tpl('Hj_Company_StepBannerModify');
+    }
+    //更新健步走banner详情
+    public function stepBannerUpdateAction()
+    {
+        //企业ID
+        $company_id = intval($this->request->company_id);
+        $detail = $this->request->detail;
+        $companyInfo = $this->oCompany->getCompany($company_id,"company_id,detail");
+        $companyInfo['detail'] = json_decode($companyInfo['detail'],true);
+        $pos = intval($this->request->pos??0);
+        //上传图片
+        $oUpload = new Base_Upload('upload_img');
+        $upload = $oUpload->upload('upload_img',$this->config->oss);
+        $oss_urls = array_column($upload->resultArr,'oss');
+        //如果以前没上传过且这次也没有成功上传
+        if((!isset($companyInfo['detail']['stepBanner'][$pos]['img_url']) || $companyInfo['detail']['stepBanner'][$pos]['img_url']=="") && (!isset($oss_urls['0']) || $oss_urls['0'] == ""))
+        {
+            $response = array('errno' => 2);
+        }
+        else
+        {
+            //这次传成功了就用这次，否则维持
+            $companyInfo['detail']['stepBanner'][$pos]['img_url'] = (isset($oss_urls['0']) && $oss_urls['0']!="")?($oss_urls['0']):($companyInfo['detail']['stepBanner'][$pos]['img_url']);
+            //保存跳转链接
+            $companyInfo['detail']['stepBanner'][$pos]['img_jump_url'] = trim($detail['img_jump_url']??"");
+            $companyInfo['detail']['stepBanner'][$pos]['text'] = trim($detail['text']??"");
+            $companyInfo['detail']['stepBanner'][$pos]['title'] = trim($detail['title']??"");
+            $companyInfo['detail'] = json_encode($companyInfo['detail']);
+
+            $res = $this->oCompany->updateCompany($company_id,$companyInfo);
+            Base_Common::refreshCache($this->config,"company",$company_id);
+            $response = $res ? array('errno' => 0) : array('errno' => 9);
+        }
+        echo json_encode($response);
+        return true;
+    }
+    //删除健步走banner详情
+    public function stepBannerDeleteAction()
+    {
+        //企业ID
+        $company_id = intval($this->request->company_id);
+        $detail = $this->request->detail;
+        $companyInfo = $this->oCompany->getCompany($company_id,"company_id,detail");
+        $companyInfo['detail'] = json_decode($companyInfo['detail'],true);
+        $pos = intval($this->request->pos??0);
+        if(isset($companyInfo['detail']['stepBanner'][$pos]))
+        {
+            unset($companyInfo['detail']['stepBanner'][$pos]);
+            $companyInfo['detail']['stepBanner'] = array_values($companyInfo['detail']['stepBanner']);
+            $companyInfo['detail'] = json_encode($companyInfo['detail']);
+            $res = $this->oCompany->updateCompany($company_id,$companyInfo);
+            Base_Common::refreshCache($this->config,"company",$company_id);
+        }
+        $this->response->goBack();
+    }
 }

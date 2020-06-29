@@ -193,7 +193,7 @@ class Hj_ClubController extends AbstractController
 			include $this->tpl('403');
 		}
 	}
-    //修改俱乐部信息
+    //俱乐部banner列表
     public function bannerAction()
     {
         //检查权限
