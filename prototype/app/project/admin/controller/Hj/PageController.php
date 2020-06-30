@@ -123,6 +123,7 @@ class Hj_PageController extends AbstractController
                         $bind['detail'] = json_encode($bind['detail']);
                         //添加页面
                         $res = $this->oPage->insertPage($bind);
+                        Base_Common::refreshCache($this->config,"page",$res);
                         $response = $res ? array('errno' => 0) : array('errno' => 9);
                     }
                 }
@@ -197,6 +198,7 @@ class Hj_PageController extends AbstractController
                         $currentPageInfo = $this->oPage->getPage($bind['page_id'],"page_id,company_id");
                         //修改页面
                         $res = $this->oPage->updatePage($bind['page_id'],$bind);
+                        Base_Common::refreshCache($this->config,"page",$bind['page_id']);
                         $response = $res ? array('errno' => 0) : array('errno' => 9,'company_id'=>$currentPageInfo['company_id']);
                     }
                 }
@@ -307,6 +309,7 @@ class Hj_PageController extends AbstractController
                     $bind['detail'] = json_encode([]);
                     //添加页面元素
                     $res = $this->oPageElement->insertPageElement($bind);
+                    Base_Common::refreshCache($this->config,"page",$bind['page_id']);
                     $response = $res ? array('errno' => 0) : array('errno' => 9);
                 }
             }
@@ -365,6 +368,7 @@ class Hj_PageController extends AbstractController
                 {
                     //添加页面元素
                     $res = $this->oPageElement->updatePageElement($bind['element_id'],$bind);
+                    Base_Common::refreshCache($this->config,"page",$elementInfo['page_id']);
                     $response = $res ? array('errno' => 0) : array('errno' => 9);
                 }
             }
@@ -429,7 +433,7 @@ class Hj_PageController extends AbstractController
         //元素ID
         $element_id = intval($this->request->element_id);
         $detail = $this->request->detail;
-        $elementDetail = $this->oPageElement->getPageElement($element_id,"detail,element_type");
+        $elementDetail = $this->oPageElement->getPageElement($element_id,"page_id,detail,element_type");
         $elementDetail['detail'] = json_decode($elementDetail['detail'],true);
         if(in_array($elementDetail['element_type'],['singlePic','backgroundPic']))
         {
@@ -576,6 +580,7 @@ class Hj_PageController extends AbstractController
         {
             $elementDetail['detail'] = json_encode($elementDetail['detail']);
             $res = $this->oPageElement->updatePageElement($element_id,$elementDetail);
+            Base_Common::refreshCache($this->config,"page",$elementDetail['page_id']);
             $response = $res ? array('errno' => 0) : array('errno' => 9);
         }
         echo json_encode($response);
@@ -590,8 +595,10 @@ class Hj_PageController extends AbstractController
         {
             //页面元素ID
             $element_id = trim($this->request->element_id);
+            $elementDetail = $this->oPageElement->getPageElement($element_id,"page_id");
             //删除页面元素
             $this->oPageElement->deletePageElement($element_id);
+            Base_Common::refreshCache($this->config,"page",$elementDetail['page_id']);
             //返回之前的页面
             $this->response->goBack();
         }
@@ -627,7 +634,7 @@ class Hj_PageController extends AbstractController
         //元素ID
         $element_id = intval($this->request->element_id);
         $detail = $this->request->detail;
-        $elementDetail = $this->oPageElement->getPageElement($element_id,"detail,element_type");
+        $elementDetail = $this->oPageElement->getPageElement($element_id,"page_id,detail,element_type");
         $elementDetail['detail'] = json_decode($elementDetail['detail'],true);
         if(in_array($elementDetail['element_type'],['slidePic','picList']))
         {
@@ -645,6 +652,7 @@ class Hj_PageController extends AbstractController
                 $elementDetail['detail'][] = ['img_url'=>$oss_urls['0'],'img_jump_url'=>$detail['img_jump_url'],'text'=>trim($detail['text']??""),'title'=>trim($detail['title']??"")];
                 $elementDetail['detail'] = json_encode($elementDetail['detail']);
                 $res = $this->oPageElement->updatePageElement($element_id,$elementDetail);
+                Base_Common::refreshCache($this->config,"page",$elementDetail['page_id']);
                 $response = $res ? array('errno' => 0) : array('errno' => 9);
             }
         }
@@ -672,7 +680,7 @@ class Hj_PageController extends AbstractController
         //元素ID
         $element_id = intval($this->request->element_id);
         $pos = intval($this->request->pos??0);
-        $elementDetail = $this->oPageElement->getPageElement($element_id,"detail,element_type");
+        $elementDetail = $this->oPageElement->getPageElement($element_id,"page_id,detail,element_type");
         $elementDetail['detail'] = json_decode($elementDetail['detail'],true);
         if(in_array($elementDetail['element_type'],['slidePic','picList']))
         {
@@ -682,6 +690,7 @@ class Hj_PageController extends AbstractController
                 $elementDetail['detail'] = array_values($elementDetail['detail']);
                 $elementDetail['detail'] = json_encode($elementDetail['detail']);
                 $res = $this->oPageElement->updatePageElement($element_id,$elementDetail);
+                Base_Common::refreshCache($this->config,"page",$elementDetail['page_id']);
             }
         }
         $this->response->goBack();
@@ -692,7 +701,7 @@ class Hj_PageController extends AbstractController
         //元素ID
         $element_id = intval($this->request->element_id);
         $detail = $this->request->detail;
-        $elementDetail = $this->oPageElement->getPageElement($element_id,"detail,element_type");
+        $elementDetail = $this->oPageElement->getPageElement($element_id,"page_id,detail,element_type");
         $elementDetail['detail'] = json_decode($elementDetail['detail'],true);
         if(in_array($elementDetail['element_type'],['slidePic','picList']))
         {
@@ -716,6 +725,7 @@ class Hj_PageController extends AbstractController
                 $elementDetail['detail'][$pos]['title'] = trim($detail['title']??"");
                 $elementDetail['detail'] = json_encode($elementDetail['detail']);
                 $res = $this->oPageElement->updatePageElement($element_id,$elementDetail);
+                Base_Common::refreshCache($this->config,"page",$elementDetail['page_id']);
                 $response = $res ? array('errno' => 0) : array('errno' => 9);
             }
         }
