@@ -14,7 +14,8 @@ class Hj_UserController extends AbstractController
 	 * @var object
 	 */
 	protected $oUserInfo;
-	protected $oManager;
+    protected $oDepartment;
+    protected $oManager;
 
         /**
 	 * 初始化
@@ -25,7 +26,9 @@ class Hj_UserController extends AbstractController
 	{
 		parent::init();
         $this->oUserInfo = new Hj_UserInfo();
-	}
+        $this->oDepartment = new Hj_Department();
+
+    }
 	//用户列表
 	public function indexAction()
 	{
@@ -56,6 +59,7 @@ class Hj_UserController extends AbstractController
 			//翻页参数
 			$page_url = Base_Common::getUrl('',$this->ctl,'index',$params)."&Page=~page~";
 			$page_content =  base_common::multi($UserList['UserCount'], $page_url, $params['Page'], $params['PageSize'], 10, $maxpage = 100, $prevWord = '上一页', $nextWord = '下一页');
+			$departmentList = [];
 			foreach($UserList['UserList'] as $userId => $UserInfo)
 			{
 			    //用户性别
@@ -64,7 +68,31 @@ class Hj_UserController extends AbstractController
 				$UserList['UserList'][$userId]['birthday'] = is_null($UserInfo['birthday'])?"未知":$UserInfo['birthday'];
                 $UserList['UserList'][$userId]['LoginSourceName'] = isset($LoginSourceList[$UserInfo['last_login_source']])?$LoginSourceList[$UserInfo['last_login_source']]:"未知";
                 $UserList['UserList'][$userId]['company_name'] = isset($companyList[$UserInfo['company_id']])?$companyList[$UserInfo['company_id']]['company_name']:"未知";
-
+                if(!isset($departmentList[$UserInfo['company_id']][$UserInfo['department_id_1']]))
+                {
+                    $departmentInfo = $this->oDepartment->getDepartment($UserInfo['department_id_1']);
+                    $departmentList[$UserInfo['company_id']][$UserInfo['department_id_1']] = $departmentInfo;
+                }
+                $departmentName = [$departmentList[$UserInfo['company_id']][$UserInfo['department_id_1']]["department_name"]];
+                if($UserInfo['department_id_2'] >0)
+                {
+                    if(!isset($departmentList[$UserInfo['company_id']][$UserInfo['department_id_2']]))
+                    {
+                        $departmentInfo = $this->oDepartment->getDepartment($UserInfo['department_id_2']);
+                        $departmentList[$UserInfo['company_id']][$UserInfo['department_id_2']] = $departmentInfo;
+                    }
+                    $departmentName[] = $departmentList[$UserInfo['company_id']][$UserInfo['department_id_2']]["department_name"];
+                }
+                if($UserInfo['department_id_3'] >0)
+                {
+                    if(!isset($departmentList[$UserInfo['company_id']][$UserInfo['department_id_3']]))
+                    {
+                        $departmentInfo = $this->oDepartment->getDepartment($UserInfo['department_id_3']);
+                        $departmentList[$UserInfo['company_id']][$UserInfo['department_id_3']] = $departmentInfo;
+                    }
+                    $departmentName[] = $departmentList[$UserInfo['company_id']][$UserInfo['department_id_3']]["department_name"];
+                }
+                $UserList['UserList'][$userId]['department_name'] = implode("|",$departmentName);
 			}
 			//模板渲染
 			include $this->tpl('Hj_User_UserList');
@@ -82,7 +110,9 @@ class Hj_UserController extends AbstractController
 		$PermissionCheck = $this->manager->checkMenuPermission("UserListDownload");
 		if($PermissionCheck['return'])
 		{
-            //获取登录方式列表
+            //获取企业列表
+            $companyList = (new Hj_Company())->getCompanyList([],"company_id,company_name");
+		    //获取登录方式列表
             $LoginSourceList = $this->oUserInfo->getLoginSourceList();
             //获取性别列表
             $sexList = $this->oUserInfo->getsexList();
@@ -91,10 +121,9 @@ class Hj_UserController extends AbstractController
             //获取实名认证证件类型列表
             $AuthIdTypesList = $this->oUserInfo->getAuthIdType();
 			//页面参数预处理
-			$params['sex'] = isset($sexList[intval($this->request->sex)])?intval($this->request->sex):-1;
-			$params['Name'] = urldecode(trim($this->request->Name))?substr(urldecode(trim($this->request->Name)),0,8):"";
-			$params['NickName'] = urldecode(trim($this->request->NickName))?substr(urldecode(trim($this->request->NickName)),0,8):"";
-			$params['AuthStatus'] = isset($AuthStatusList[$this->request->AuthStatus])?intval($this->request->AuthStatus):-1;
+            $params['sex'] = isset($sexList[intval($this->request->sex??-1)])?intval($this->request->sex):-1;
+            $params['true_name'] = urldecode(trim($this->request->true_name))?substr(urldecode(trim($this->request->true_name)),0,8):"";
+            $params['nick_name'] = urldecode(trim($this->request->nick_name))?substr(urldecode(trim($this->request->nick_name)),0,8):"";
 
 			//分页参数
 			$params['PageSize'] = 500;
@@ -103,42 +132,53 @@ class Hj_UserController extends AbstractController
 			$FileName= ($this->manager->name().'用户列表');
 			$oExcel->download($FileName)->addSheet('用户');
 			//标题栏
-			$title = array("用户ID","姓名","昵称","性别","出生年月",/*"实名认证状态",*/"注册时间","最后登录时间","最后登录方式");
+			$title = array("用户ID","企业","部门","真实姓名","昵称","性别","联系电话","注册时间","最后登录时间","最后登录方式");
 			$oExcel->addRows(array($title));
 			$Count = 1;$params['Page'] =1;
-			do
+            $departmentList = [];
+            do
 			{
 				$UserList = $this->oUserInfo->getUserList($params);
 				$Count = count($UserList['UserList']);
 				foreach($UserList['UserList'] as $userId => $UserInfo)
 				{
-					//生成单行数据
-					$t = array();
-					$t['UserId'] = $UserInfo['UserId'];
-					$t['Name'] = $UserInfo['Name'];
-					$t['NickName'] = $UserInfo['NickName'];
-					$t['sex'] = isset($sexList[$UserInfo['sex']])?$sexList[$UserInfo['sex']]:"保密";
-                    $t['Birthday'] = $UserInfo['Birthday'];
-
-                    //实名认证状态
-                    /*
-                    if(isset($AuthStatusList[$UserInfo['AuthStatus']]))
+                    if(!isset($departmentList[$UserInfo['company_id']][$UserInfo['department_id_1']]))
                     {
-                        if($UserInfo['AuthStatus'] == 2 && isset($AuthIdTypesList[intval($UserInfo['IdType'])]))
-                        {
-                            //如果当前已经认证，则同时拼接上认证的证件类型
-                            $t['AuthStatus'] = $AuthStatusList[$UserInfo['AuthStatus']]."/".$AuthIdTypesList[intval($UserInfo['IdType'])];
-                        }
-                        else
-                        {
-                            $t['AuthStatus'] = $AuthStatusList[$UserInfo['AuthStatus']];
-                        }
+                        $departmentInfo = $this->oDepartment->getDepartment($UserInfo['department_id_1']);
+                        $departmentList[$UserInfo['company_id']][$UserInfo['department_id_1']] = $departmentInfo;
                     }
-                    */
-                    $t['RegTime'] = $UserInfo['RegTime'];
-                    $t['LastLoginTime'] = $UserInfo['LastLoginTime'];
-                    $t['LoginSourceName'] = isset($LoginSourceList[$UserInfo['LastLoginSource']])?$LoginSourceList[$UserInfo['LastLoginSource']]:"未知";
-
+                    $departmentName = [$departmentList[$UserInfo['company_id']][$UserInfo['department_id_1']]["department_name"]];
+                    if($UserInfo['department_id_2'] >0)
+                    {
+                        if(!isset($departmentList[$UserInfo['company_id']][$UserInfo['department_id_2']]))
+                        {
+                            $departmentInfo = $this->oDepartment->getDepartment($UserInfo['department_id_2']);
+                            $departmentList[$UserInfo['company_id']][$UserInfo['department_id_2']] = $departmentInfo;
+                        }
+                        $departmentName[] = $departmentList[$UserInfo['company_id']][$UserInfo['department_id_2']]["department_name"];
+                    }
+                    if($UserInfo['department_id_3'] >0)
+                    {
+                        if(!isset($departmentList[$UserInfo['company_id']][$UserInfo['department_id_3']]))
+                        {
+                            $departmentInfo = $this->oDepartment->getDepartment($UserInfo['department_id_3']);
+                            $departmentList[$UserInfo['company_id']][$UserInfo['department_id_3']] = $departmentInfo;
+                        }
+                        $departmentName[] = $departmentList[$UserInfo['company_id']][$UserInfo['department_id_3']]["department_name"];
+                    }
+                    $UserList['UserList'][$userId]['department_name'] = implode("|",$departmentName);
+				    //生成单行数据
+					$t = array();
+					$t['UserId'] = $UserInfo['user_id'];
+					$t['companName'] = isset($companyList[$UserInfo['company_id']])?$companyList[$UserInfo['company_id']]['company_name']:"未知";
+                    $t['departmentName'] = implode("|",$departmentName);
+                    $t['TrueName'] = $UserInfo['true_name'];
+					$t['NickName'] = $UserInfo['nick_name'];
+                    $t['Mobile'] = $UserInfo['mobile'];
+					$t['sex'] = isset($sexList[$UserInfo['sex']])?$sexList[$UserInfo['sex']]:"保密";
+                    $t['RegTime'] = $UserInfo['reg_time'];
+                    $t['LastLoginTime'] = $UserInfo['last_login_time'];
+                    $t['LoginSourceName'] = isset($LoginSourceList[$UserInfo['last_login_source']])?$LoginSourceList[$UserInfo['last_login_source']]:"未知";
 					$oExcel->addRows(array($t));
 					unset($t);
 				}

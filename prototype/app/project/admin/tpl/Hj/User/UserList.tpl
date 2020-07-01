@@ -42,12 +42,11 @@
       <tr>
         <th align="center" class="rowtip">用户ID</th>
           <th align="center" class="rowtip">企业</th>
+          <th align="center" class="rowtip">部门</th>
           <th align="center" class="rowtip">真实姓名</th>
           <th align="center" class="rowtip">昵称</th>
         <th align="center" class="rowtip">联系电话</th>
         <th align="center" class="rowtip">性别</th>
-          <!--<th align="center" class="rowtip">实名认证</th>-->
-        <th align="center" class="rowtip">生日</th>
         <th align="center" class="rowtip">注册时间</th>
         <th align="center" class="rowtip">最后登陆</th>
         <th align="center" class="rowtip">操作</th>
@@ -56,11 +55,11 @@
       <tr class="hover">
         <td align="center">{tpl:$UserInfo.user_id/}</td>
           <td align="center">{tpl:$UserInfo.company_name/}</td>
+          <td align="center">{tpl:$UserInfo.department_name/}</td>
           <td align="center">{tpl:$UserInfo.true_name/}</td>
         <td align="center">{tpl:$UserInfo.nick_name/}</td>
         <td align="center">{tpl:$UserInfo.mobile/}</td>
         <td align="center">{tpl:$UserInfo.sex/}</td>
-        <td align="center">{tpl:$UserInfo.birthday/}</td>
         <td align="center">{tpl:$UserInfo.reg_time/}</td>
         <td align="center">{tpl:$UserInfo.last_login_time/}<br>{tpl:$UserInfo.LoginSourceName/}</td>
         <!--<td align="center"><a  href="javascript:;" onclick="userDetail('{tpl:$UserInfo.user_id/}')">详细</a>{tpl:if($UserInfo.AuthStatus==1)} | <a  href="javascript:;" onclick="userAuth('{tpl:$UserInfo.user_id/}')">审核</a>{/tpl:if} | {tpl:$UserInfo.License/} | {tpl:$UserInfo.Team/} | <a  href="javascript:;" onclick="userPasswordUpdate('{tpl:$UserInfo.user_id/}')">更新密码</a> | <a  href="javascript:;" onclick="userMobileUpdate('{tpl:$UserInfo.user_id/}')">更新手机</a></td>-->
