@@ -132,7 +132,7 @@ class Hj_UserController extends AbstractController
 			$FileName= ($this->manager->name().'用户列表');
 			$oExcel->download($FileName)->addSheet('用户');
 			//标题栏
-			$title = array("用户ID","企业","部门","真实姓名","昵称","性别","联系电话","注册时间","最后登录时间","最后登录方式");
+			$title = array("用户ID","企业","部门","真实姓名","昵称","联系电话","性别","注册时间","最后登录时间","最后登录方式");
 			$oExcel->addRows(array($title));
 			$Count = 1;$params['Page'] =1;
             $departmentList = [];
