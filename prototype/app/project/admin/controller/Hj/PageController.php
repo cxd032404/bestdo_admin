@@ -124,7 +124,7 @@ class Hj_PageController extends AbstractController
                         //添加页面
                         $res = $this->oPage->insertPage($bind);
                         Base_Common::refreshCache($this->config,"page",$res);
-                        $response = $res ? array('errno' => 0) : array('errno' => 9);
+                        $response = $res ? array('errno' => 0,'page_id'=>$res) : array('errno' => 9);
                     }
                 }
             }

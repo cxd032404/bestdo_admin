@@ -23,7 +23,7 @@ class Hj_Page extends Base_Widget
         $whereExclude = (isset($params['exclude_id']) && $params['exclude_id'])>0?" page_id != ".$params['exclude_id']:"";
         $whereCondition = array($whereCompany,$whereSign,$whereExclude);
         $where = Base_common::getSqlWhere($whereCondition);
-		$sql = "SELECT $fields FROM " . $table_to_process . " where 1 ".$where." ORDER BY page_id ASC";
+		$sql = "SELECT $fields FROM " . $table_to_process . " where 1 ".$where." ORDER BY update_time DESC";
 		$return = $this->db->getAll($sql);
 		$PageList = array();
 		if(count($return))

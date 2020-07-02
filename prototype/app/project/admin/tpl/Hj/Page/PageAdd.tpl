@@ -49,7 +49,7 @@ $('#page_add_submit').click(function(){
 				divBox.alertBox(errors[jsonResponse.errno],function(){});
 			} else {
 				var message = '添加页面成功';
-				divBox.confirmBox({content:message,ok:function(){windowParent.getRightHtml('{tpl:$this.sign/}' + '&company_id=' + $('#company_id').val());}});
+				divBox.confirmBox({content:message,ok:function(){windowParent.getRightHtml('{tpl:$this.sign/}' + '&ac=page.detail&page_id=' + jsonResponse.page_id);}});
 			}
 		}
 	};
