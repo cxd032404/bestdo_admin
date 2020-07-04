@@ -40,6 +40,7 @@
 <table width="99%" align="center" class="table table-bordered table-striped">
       <tr>
         <th align="center" class="rowtip">企业</th>
+          <th align="center" class="rowtip">部门</th>
           <th align="center" class="rowtip">姓名</th>
           <th align="center" class="rowtip">步数</th>
         <th align="center" class="rowtip">热量</th>
@@ -51,6 +52,7 @@
     {tpl:loop $StepsStatList.UserList $StepsInfo}
       <tr class="hover">
         <td align="center">{tpl:$StepsInfo.company_name/}</td>
+          <td align="center">{tpl:$StepsInfo.department_name/}</td>
           <td align="center">{tpl:$StepsInfo.user_name/}</td>
         <td align="center">{tpl:$StepsInfo.totalStep/}</td>
         <td align="center">{tpl:$StepsInfo.kcal/}kcal</td>

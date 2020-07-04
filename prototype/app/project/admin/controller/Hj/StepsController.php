@@ -236,7 +236,7 @@ class Hj_StepsController extends AbstractController
                     $t['kcal'] = $StepsDetailList['DetailList'][$key]['kcal']."kcal";
                     $t['time'] = $StepsDetailList['DetailList'][$key]['time']."分钟";
                     $t['distance'] = $StepsDetailList['DetailList'][$key]['distance']."米";
-                    $t['achiveRate'] = $StepsDetailList['DetailList'][$key]['achiveRate']."%";
+                    $t['achiveRate'] = $StepsDetailList['DetailList'][$key]['achive_rate']."%";
                     $t['achive'] = $StepsDetailList['DetailList'][$key]['achive']==1?"达标":"未达标";
                     $t['updateTime'] = $StepsDetailList['DetailList'][$key]['update_time'];
                     $oExcel->addRows(array($t));
@@ -283,7 +283,7 @@ class Hj_StepsController extends AbstractController
             $departmentList_1 = $params['company_id']>0?$this->oDepartment->getDepartmentList(["company_id"=>$params['company_id'],"parent_id"=>0],"department_id,department_name"):[];
             $departmentList_2 = $params['department_id_1']>0?$this->oDepartment->getDepartmentList(["company_id"=>$params['company_id'],"parent_id"=>$params['department_id_1']],"department_id,department_name"):[];
             $departmentList_3 = $params['department_id_2']>0?$this->oDepartment->getDepartmentList(["company_id"=>$params['company_id'],"parent_id"=>$params['department_id_2']],"department_id,department_name"):[];
-            //获取步数详情列表
+            //获取步数统计列表
             $StepsStatList = $this->oSteps->getStepsStatList($params);
             $userList  = $goalList = [];
             $days = intval((strtotime($params['end_date']) - strtotime($params['start_date']))/86400);
@@ -292,7 +292,8 @@ class Hj_StepsController extends AbstractController
             {
                 if(!isset($userList[$detail['user_id']]))
                 {
-                    $userInfo = $this->oUserInfo->getUser($detail['user_id'],'user_id,true_name,company_id');
+                    $userInfo = $this->oUserInfo->getUser($detail['user_id'],'user_id,true_name,company_id,
+                    department_id_1,department_id_2,department_id_3');
                     if(isset($userInfo['user_id']))
                     {
                         $userList[$detail['user_id']] = $userInfo;
@@ -308,6 +309,32 @@ class Hj_StepsController extends AbstractController
                     $companyDetail = json_decode($companyList[$userList[$detail['user_id']]['company_id']]['detail'],true);
                     $goalList[$userList[$detail['user_id']]['company_id']] = ($companyDetail['daily_step']??5000)*$days;
                 }
+                $departmentName = [];
+                if(!isset($departmentList[$userInfo['company_id']][$userInfo['department_id_1']]))
+                {
+                    $departmentInfo = $this->oDepartment->getDepartment($userInfo['department_id_1']);
+                    $departmentList[$userInfo['company_id']][$userInfo['department_id_1']] = $departmentInfo;
+                }
+                $departmentName[] = $departmentList[$userInfo['company_id']][$userInfo['department_id_1']]["department_name"];
+                if($userInfo['department_id_2'] >0)
+                {
+                    if(!isset($departmentList[$UserInfo['company_id']][$UserInfo['department_id_2']]))
+                    {
+                        $departmentInfo = $this->oDepartment->getDepartment($userInfo['department_id_2']);
+                        $departmentList[$userInfo['company_id']][$userInfo['department_id_2']] = $departmentInfo;
+                    }
+                    $departmentName[] = $departmentList[$userInfo['company_id']][$userInfo['department_id_2']]["department_name"];
+                }
+                if($userInfo['department_id_3'] >0)
+                {
+                    if(!isset($departmentList[$userInfo['company_id']][$userInfo['department_id_3']]))
+                    {
+                        $departmentInfo = $this->oDepartment->getDepartment($userInfo['department_id_3']);
+                        $departmentList[$userInfo['company_id']][$userInfo['department_id_3']] = $departmentInfo;
+                    }
+                    $departmentName[] = $departmentList[$userInfo['company_id']][$userInfo['department_id_3']]["department_name"];
+                }
+                $StepsStatList['UserList'][$key]['department_name'] = implode("|",$departmentName);
                 $StepsStatList['UserList'][$key]['achive'] = $detail['totalStep']>=$goalList[$userList[$detail['user_id']]['company_id']]?1:0;
                 $StepsStatList['UserList'][$key]['achive_rate'] = intval(100*($detail['totalStep']/$goalList[$userList[$detail['user_id']]['company_id']]));
             }
@@ -315,9 +342,127 @@ class Hj_StepsController extends AbstractController
             $page_url = Base_Common::getUrl('',$this->ctl,'stat',$params)."&Page=~page~";
             $page_content =  base_common::multi($StepsStatList['UserCount'], $page_url, $params['Page'], $params['PageSize'], 10, $maxpage = 100, $prevWord = '上一页', $nextWord = '下一页');
             //导出EXCEL链接
-            $export_var = "<a href =".(Base_Common::getUrl('',$this->ctl,'user.list.download',$params))."><导出表格></a>";
+            $export_var = "<a href =".(Base_Common::getUrl('',$this->ctl,'stat.download',$params))."><导出表格></a>";
             //渲染模版
             include $this->tpl('Hj_Steps_Stat');
+        }
+        else
+        {
+            $home = $this->sign;
+            include $this->tpl('403');
+        }
+    }
+    //步数详情页面
+    public function statDownloadAction()
+    {
+        //检查权限
+        $PermissionCheck = $this->manager->checkMenuPermission(0);
+        if($PermissionCheck['return'])
+        {
+            //企业ID
+            $params['company_id'] = intval($this->request->company_id??0);
+            //一级部门ID
+            $params['department_id_1'] = intval($this->request->department_id_1??0);
+            //二级部门ID
+            $params['department_id_2'] = intval($this->request->department_id_2??0);
+            //三级部门ID
+            $params['department_id_3'] = intval($this->request->department_id_3??0);
+            //用户姓名
+            $params['user_name']= trim($this->requrest->user_name??"");
+            //开始日期
+            $params['start_date']= trim($this->requrest->start_date??date("Y-m-d",time()-3*86400));
+            //结束日期
+            $params['end_date']= trim($this->requrest->end_date??date("Y-m-d"));
+            //分页参数
+            $params['PageSize'] = 500;
+            $params['getCount'] = 1;
+            //获取企业列表
+            $companyList = $this->oCompany->getCompanyList([],"company_id,company_name,detail");
+            $departmentList_1 = $params['company_id']>0?$this->oDepartment->getDepartmentList(["company_id"=>$params['company_id'],"parent_id"=>0],"department_id,department_name"):[];
+            $departmentList_2 = $params['department_id_1']>0?$this->oDepartment->getDepartmentList(["company_id"=>$params['company_id'],"parent_id"=>$params['department_id_1']],"department_id,department_name"):[];
+            $departmentList_3 = $params['department_id_2']>0?$this->oDepartment->getDepartmentList(["company_id"=>$params['company_id'],"parent_id"=>$params['department_id_2']],"department_id,department_name"):[];
+
+            $oExcel = new Third_Excel();
+            $FileName= ($this->manager->name().'步数详情');
+            $oExcel->download($FileName)->addSheet('步数统计');
+            //标题栏
+            $title = array("企业","部门","姓名","步数","热量","估测时间","估测距离","达标率","是否达标");
+            $oExcel->addRows(array($title));
+            $Count = 1;$params['Page'] =1;
+            $userList  = $goalList = [];
+            $spepsConfig = $this->config->steps;
+            $days = intval((strtotime($params['end_date']) - strtotime($params['start_date']))/86400);
+            do{
+//获取步数详情列表
+                $StepsStatList = $this->oSteps->getStepsStatList($params);
+                $Count = count($StepsStatList['UserCount']);
+                foreach($StepsStatList['UserList'] as $key => $detail)
+                {
+                    if(!isset($userList[$detail['user_id']]))
+                    {
+                        $userInfo = $this->oUserInfo->getUser($detail['user_id'],'user_id,true_name,company_id,
+                    department_id_1,department_id_2,department_id_3');
+                        if(isset($userInfo['user_id']))
+                        {
+                            $userList[$detail['user_id']] = $userInfo;
+                        }
+                    }
+                    $StepsStatList['UserList'][$key]['user_name'] = $userList[$detail['user_id']]['true_name']??"未知用户";
+                    $StepsStatList['UserList'][$key]['kcal'] = intval($detail['totalStep']/$spepsConfig['stepsPerKcal']);
+                    $StepsStatList['UserList'][$key]['time'] = intval($detail['totalStep']/$spepsConfig['stepsPerMinute']);
+                    $StepsStatList['UserList'][$key]['distance'] = intval($spepsConfig['distancePerStep']*$detail['totalStep']);
+                    $StepsStatList['UserList'][$key]['company_name'] = $companyList[$userList[$detail['user_id']]['company_id']]['company_name']??"未知企业";
+                    if(!isset($goalList[$userList[$detail['user_id']]['company_id']]))
+                    {
+                        $companyDetail = json_decode($companyList[$userList[$detail['user_id']]['company_id']]['detail'],true);
+                        $goalList[$userList[$detail['user_id']]['company_id']] = ($companyDetail['daily_step']??5000)*$days;
+                    }
+                    $departmentName = [];
+                    if(!isset($departmentList[$userInfo['company_id']][$userInfo['department_id_1']]))
+                    {
+                        $departmentInfo = $this->oDepartment->getDepartment($userInfo['department_id_1']);
+                        $departmentList[$userInfo['company_id']][$userInfo['department_id_1']] = $departmentInfo;
+                    }
+                    $departmentName[] = $departmentList[$userInfo['company_id']][$userInfo['department_id_1']]["department_name"];
+                    if($userInfo['department_id_2'] >0)
+                    {
+                        if(!isset($departmentList[$UserInfo['company_id']][$UserInfo['department_id_2']]))
+                        {
+                            $departmentInfo = $this->oDepartment->getDepartment($userInfo['department_id_2']);
+                            $departmentList[$userInfo['company_id']][$userInfo['department_id_2']] = $departmentInfo;
+                        }
+                        $departmentName[] = $departmentList[$userInfo['company_id']][$userInfo['department_id_2']]["department_name"];
+                    }
+                    if($userInfo['department_id_3'] >0)
+                    {
+                        if(!isset($departmentList[$userInfo['company_id']][$userInfo['department_id_3']]))
+                        {
+                            $departmentInfo = $this->oDepartment->getDepartment($userInfo['department_id_3']);
+                            $departmentList[$userInfo['company_id']][$userInfo['department_id_3']] = $departmentInfo;
+                        }
+                        $departmentName[] = $departmentList[$userInfo['company_id']][$userInfo['department_id_3']]["department_name"];
+                    }
+                    $StepsStatList['UserList'][$key]['department_name'] = implode("|",$departmentName);
+                    $StepsStatList['UserList'][$key]['achive'] = $detail['totalStep']>=$goalList[$userList[$detail['user_id']]['company_id']]?1:0;
+                    $StepsStatList['UserList'][$key]['achive_rate'] = intval(100*($detail['totalStep']/$goalList[$userList[$detail['user_id']]['company_id']]));
+                    //生成单行数据
+                    $t = array();
+                    $t['companyName'] = $StepsStatList['UserList'][$key]['company_name'];
+                    $t['departmentName'] = $StepsStatList['UserList'][$key]['department_name'];
+                    $t['userName'] = $StepsStatList['UserList'][$key]['user_name'];
+                    $t['step'] = $StepsStatList['UserList'][$key]['step'];
+                    $t['kcal'] = $StepsStatList['UserList'][$key]['kcal']."kcal";
+                    $t['time'] = $StepsStatList['UserList'][$key]['time']."分钟";
+                    $t['distance'] = $StepsStatList['UserList'][$key]['distance']."米";
+                    $t['achiveRate'] = $StepsStatList['UserList'][$key]['achive_rate']."%";
+                    $t['achive'] = $StepsStatList['UserList'][$key]['achive']==1?"达标":"未达标";
+                    $oExcel->addRows(array($t));
+                    unset($t);
+                }
+                $params['Page']++;
+                $oExcel->closeSheet()->close();
+            }
+            while($Count>0);
         }
         else
         {
