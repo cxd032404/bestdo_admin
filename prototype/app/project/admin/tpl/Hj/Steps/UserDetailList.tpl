@@ -40,6 +40,7 @@
 <table width="99%" align="center" class="table table-bordered table-striped">
       <tr>
         <th align="center" class="rowtip">企业</th>
+          <th align="center" class="rowtip">部门</th>
           <th align="center" class="rowtip">姓名</th>
           <th align="center" class="rowtip">日期</th>
           <th align="center" class="rowtip">步数</th>
@@ -53,6 +54,7 @@
     {tpl:loop $StepsDetailList.DetailList $StepsInfo}
       <tr class="hover">
         <td align="center">{tpl:$StepsInfo.company_name/}</td>
+          <td align="center">{tpl:$StepsInfo.department_name/}</td>
           <td align="center">{tpl:$StepsInfo.user_name/}</td>
           <td align="center">{tpl:$StepsInfo.date/}</td>
         <td align="center">{tpl:$StepsInfo.step/}</td>

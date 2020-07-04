@@ -170,7 +170,7 @@ class Hj_UserController extends AbstractController
 				    //生成单行数据
 					$t = array();
 					$t['UserId'] = $UserInfo['user_id'];
-					$t['companName'] = isset($companyList[$UserInfo['company_id']])?$companyList[$UserInfo['company_id']]['company_name']:"未知";
+					$t['companyName'] = isset($companyList[$UserInfo['company_id']])?$companyList[$UserInfo['company_id']]['company_name']:"未知";
                     $t['departmentName'] = implode("|",$departmentName);
                     $t['TrueName'] = $UserInfo['true_name'];
 					$t['NickName'] = $UserInfo['nick_name'];
