@@ -33,9 +33,10 @@ else
             $updateUser = $oUser->updateUser($userInfo['user_id'],['manager_id'=>$id]);
             if($updateManager && $updateUser)
             {
-                $refresh =
-                Base_Common::refreshCache($config,"user",$userInfo['user_id']);
-                print_R($refresh);
+                $url = $config['apiUrl']."/cache/refresh?type=user&id=".$userInfo['user_id'];
+                $refresh = file_get_contents($url);
+                print_R($url);
+
                 echo "用户".$userInfo['nick_name']."绑定成功";
             }
             else
@@ -51,9 +52,10 @@ else
 
             if($updateManager && $updateUser)
             {
-                $refresh =
-                    Base_Common::refreshCache($config,"user",$userInfo['user_id']);
-                print_R($refresh);
+                $url = $config['apiUrl']."/cache/refresh?type=user&id=".$userInfo['user_id'];
+                $refresh = file_get_contents($url);
+                print_R($url);
+                
                 echo "用户".$userInfo['nick_name']."解绑成功";
             }
             else
