@@ -36,7 +36,7 @@ function pageElementModify(e_id){
   <tr class="hover">
     <td align="center">{tpl:$elementInfo.element_name/}</td>
     <td align="center">{tpl:$elementInfo.element_sign/}</td>
-    <td align="center">{tpl:$elementInfo.element_type_name/}</td>
+    <td align="center">{tpl:$elementInfo.element_type_name/}-{tpl:$elementInfo.element_type/}</td>
     <td align="center">{tpl:$elementInfo.update_time/}</td>
       <td align="center"><a  href="javascript:;" onclick="pageElementDelete('{tpl:$elementInfo.element_id/}','{tpl:$elementInfo.element_name/}')">删除</a>
  |  <a href="javascript:;" onclick="pageElementModify('{tpl:$elementInfo.element_id/}');">修改</a>
