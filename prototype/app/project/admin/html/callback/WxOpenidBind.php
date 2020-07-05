@@ -35,7 +35,7 @@ else
             {
                 $url = $config['apiUrl']."/cache/refresh?type=user&id=".$userInfo['user_id'];
                 $refresh = file_get_contents($url);
-                print_R($url);
+                print_R($refresh);
 
                 echo "用户".$userInfo['nick_name']."绑定成功";
             }
@@ -54,8 +54,8 @@ else
             {
                 $url = $config['apiUrl']."/cache/refresh?type=user&id=".$userInfo['user_id'];
                 $refresh = file_get_contents($url);
-                print_R($url);
-                
+                print_R($refresh);
+
                 echo "用户".$userInfo['nick_name']."解绑成功";
             }
             else
