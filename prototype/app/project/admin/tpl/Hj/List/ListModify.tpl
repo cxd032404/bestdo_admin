@@ -139,7 +139,7 @@ $('#list_update_submit').click(function(){
 				divBox.alertBox(errors[jsonResponse.errno],function(){});
 			} else {
 				var message = '修改列表成功';
-				divBox.confirmBox({content:message,ok:function(){windowParent.getRightHtml('{tpl:$this.sign/}' + '&company_id=' + $('#company_id').val()+ '&list_type=' + $('#list_type').val());}});
+				divBox.confirmBox({content:message,ok:function(){windowParent.getRightHtml('{tpl:$this.sign/}' + '&company_id=' + $('#company_id').val()+ '&list_type=' + $('#list_type').val()+ '&ac=' + jsonResponse.ac);}});
 			}
 		}
 	};

@@ -3,7 +3,8 @@
 <form id="list_add_form" name="list_add_form" action="{tpl:$this.sign/}&ac=list.insert" method="post">
 <table width="99%" align="center" class="table table-bordered table-striped">
 <tr class="hover">
-<td>列表名称</td>
+<input type="hidden"  name="boutique"  id="boutique" value="{tpl:$boutique/}" size="50" />
+	<td>列表名称</td>
 	<td align="left"><input type="text" class="span2" name="list_name"  id="list_name" value="" size="50" /></td>
 </tr>
 <tr class="hover"><td>类型</td>
@@ -91,7 +92,7 @@ $('#list_add_submit').click(function(){
 				divBox.alertBox(errors[jsonResponse.errno],function(){});
 			} else {
 				var message = '添加列表成功';
-				divBox.confirmBox({content:message,ok:function(){windowParent.getRightHtml('{tpl:$this.sign/}' + '&company_id=' + $('#company_id').val());}});
+				divBox.confirmBox({content:message,ok:function(){windowParent.getRightHtml('{tpl:$this.sign/}' + '&company_id=' + $('#company_id').val()+ '&ac=' + jsonResponse.ac);}});
 			}
 		}
 	};

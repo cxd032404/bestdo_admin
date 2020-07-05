@@ -22,7 +22,7 @@ function post(lid){
 </script>
 
 <fieldset><legend>操作</legend>
-[ <a href="{tpl:$this.sign/}&company_id={tpl:$listInfo.company_id/}">返回</a> | <a href="javascript:;" id="post">发布</a> ]
+[ <a href="{tpl:$return_url/}">返回</a> | <a href="javascript:;" id="post">发布</a> ]
 </fieldset>
 
 <fieldset><legend>列表详情</legend>
