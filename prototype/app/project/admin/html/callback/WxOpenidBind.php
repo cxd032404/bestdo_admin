@@ -32,6 +32,7 @@ else
             $updateUser = $oUser->updateUser($userInfo['user_id'],['manager_id'=>$id]);
             if($updateManager && $updateUser)
             {
+                Base_Common::refreshCache($this->config,"user",$userInfo['user_id']);
                 echo "用户".$userInfo['nick_name']."绑定成功";
             }
             else
@@ -44,8 +45,10 @@ else
             $managerInfo["openid"] = "";
             $updateManager = $oManager->update($id,$managerInfo);
             $updateUser = $oUser->updateUser($userInfo['user_id'],['manager_id'=>0]);
+
             if($updateManager && $updateUser)
             {
+                Base_Common::refreshCache($this->config,"user",$userInfo['user_id']);
                 echo "用户".$userInfo['nick_name']."解绑成功";
             }
             else
