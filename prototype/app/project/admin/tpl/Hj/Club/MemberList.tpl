@@ -22,7 +22,7 @@
     <td align="center">{tpl:$memberInfo.user_name/}</td>
     <td align="center">{tpl:if($memberInfo.user_img=="")}无{tpl:else}<img src="{tpl:$memberInfo.user_img/}" width="30px;" height="30px;"/>{/tpl:if}</td>
     <td align="center">{tpl:$memberInfo.create_time/}</td>
-    <td align="center">发起人：{tpl:$memberInfo.detail.comment/}</td>
+    <td align="center">{tpl:$memberInfo.detail.comment/}</td>
   </tr>
 {/tpl:loop}
   <tr><th colspan="10" align="center" class="rowtip">{tpl:$page_content/}</th></tr>
