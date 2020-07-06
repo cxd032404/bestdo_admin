@@ -35,7 +35,6 @@
 			{/tpl:loop}
 		</table>
 </form>
-<?php Third_ckeditor_ckeditor::render("text")?>
 <script type="text/javascript">
 	$('#company_banner_submit').click(function(){
 		var options = {

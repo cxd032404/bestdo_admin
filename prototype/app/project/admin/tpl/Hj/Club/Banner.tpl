@@ -38,7 +38,6 @@
 			</tr>
 		</table>
 </form>
-<?php Third_ckeditor_ckeditor::render("text")?>
 <script type="text/javascript">
 	$('#club_banner_submit').click(function(){
 		var options = {

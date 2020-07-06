@@ -150,4 +150,8 @@ $table['user_steps']['num'] = 1;
 #企业自定义的健步走活动时间段
 $table['config_steps_date_range']['db'] = 'hj_config';
 $table['config_steps_date_range']['num'] = 1;
+
+#系统配置
+$table['config_default']['db'] = 'hj_config';
+$table['config_default']['num'] = 1;
 return $table;

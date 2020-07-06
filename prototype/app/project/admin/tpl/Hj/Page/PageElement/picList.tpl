@@ -52,7 +52,6 @@
 			</tr>
 		</table>
 </form>
-<?php Third_ckeditor_ckeditor::render("text")?>
 <script type="text/javascript">
 	$('#page_element_detail_update_submit').click(function(){
 		var options = {

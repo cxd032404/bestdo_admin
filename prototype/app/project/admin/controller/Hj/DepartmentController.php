@@ -171,20 +171,20 @@ class Hj_DepartmentController extends AbstractController
             if($departmentInfo['parent_id']==0)
             {
                 //第一级的列表获取
-                $departmentList = $this->oDepartment->getDepartmentList(['company_id'=>$departmentInfo['parent_id'],'parent_id'=>0]);
+                $departmentList = $this->oDepartment->getDepartmentList(['company_id'=>$departmentInfo['company_id'],'parent_id'=>0]);
             }
             else
             {
                 //获取上级数据
-                $parentDepartmentInfo = $this->oDepartment->getDepartment($departmentInfo['parent_id'],'department_id,parent_id');
+                $parentDepartmentInfo = $this->oDepartment->getDepartment($departmentInfo['parent_id'],'department_name,department_id,parent_id');
                 //第一级的列表获取
-                $departmentList = $this->oDepartment->getDepartmentList(['company_id'=>$departmentInfo['parent_id'],'parent_id'=>0]);
+                $departmentList = $this->oDepartment->getDepartmentList(['company_id'=>$departmentInfo['company_id'],'parent_id'=>0]);
                 {
                     //第二级
                     if($parentDepartmentInfo['parent_id']==0)
                     {
                         //第一级的列表获取
-                        $departmentList = $this->oDepartment->getDepartmentList(['company_id'=>$departmentInfo['parent_id'],'parent_id'=>0]);
+                        $departmentList = $this->oDepartment->getDepartmentList(['company_id'=>$departmentInfo['company_id'],'parent_id'=>0]);
                         $departmentList[$departmentInfo['parent_id']]['selected'] = 1;
                         $parentDepartmentList = [];
                     }

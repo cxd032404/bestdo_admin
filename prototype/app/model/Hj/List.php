@@ -27,7 +27,7 @@ class Hj_List extends Base_Widget
     {
         return $this->list_type;
     }
-    //获取列表类型
+    //获取完成后操作的类型
     public function getAfterAction()
     {
         return $this->after_action;
