@@ -21,7 +21,7 @@
 	<input type="hidden" name="config_sign" id="config_sign" value="{tpl:$configInfo.config_sign/}" />
 	<input type="hidden" name="config_name" id="config_name" value="{tpl:$configInfo.config_name/}" />
 	<fieldset>
-		[ <a href="{tpl:$this.sign/}&config_sign={tpl:$configInfo.config_sign/}">返回</a> | <a href="javascript:;" id="add_source">添加Source</a> ]
+		[ <a href="{tpl:$this.sign/}&config_sign={tpl:$configInfo.config_sign/}">返回</a> | <a href="javascript:;" id="add_source">添加资源</a> ]
 	</fieldset>
 	<fieldset><legend>{tpl:$configInfo.config_name/} 资源列表</legend>
 		<table width="99%" align="center" class="table table-bordered table-striped" >
