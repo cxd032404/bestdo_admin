@@ -618,7 +618,7 @@ class Hj_CompanyController extends AbstractController
         return true;
     }
     //删除日期
-    public function dateRangeDeleteAction()
+    public function stepDateRangeDeleteAction()
     {
         //检查权限
         $PermissionCheck = $this->manager->checkMenuPermission("updateCompany");

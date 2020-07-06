@@ -103,7 +103,7 @@ class ConfigController extends AbstractController
                     $bind['content'] = "";
                     //添加配置
                     $res = $this->oConfig->insertConfig($bind);
-                    //Base_Common::refreshCache($this->config,"config",$res);
+                    Base_Common::refreshCache($this->config,"config",$bind['config_sign']);
                     $response = $res ? array('errno' => 0) : array('errno' => 9);
                 }
             }
@@ -180,7 +180,7 @@ class ConfigController extends AbstractController
                 }
                 //修改配置
                 $res = $this->oConfig->updateConfig($bind['config_sign'],$bind);
-                //Base_Common::refreshCache($this->config,"config",$bind['config_sign']);
+                Base_Common::refreshCache($this->config,"config",$bind['config_sign']);
                 $response = $res ? array('errno' => 0) : array('errno' => 9);
             }
 		}
@@ -192,21 +192,11 @@ class ConfigController extends AbstractController
 	public function configDeleteAction()
 	{
 		//检查权限
-		$PermissionCheck = $this->manager->checkMenuPermission("deleteConfig");
+		$PermissionCheck = $this->manager->checkMenuPermission("updateConfig");
 		if($PermissionCheck['return'])
 		{
 			//配置ID
 			$config_sign = trim($this->request->config_sign);
-			//获取下属配置列表
-			$configList = $this->oConfig->getConfigList(['parent_id'=>$config_sign],"config_sign");
-			//循环删除下属配置
-			if(count($configList)>0)
-			{
-				foreach($configList as $configInfo)
-				{
-					$this->oConfig->deleteConfig($configInfo['config_sign']);
-				}
-			}
 			//删除配置
 			$this->oConfig->deleteConfig($config_sign);
 			//返回之前的页面
