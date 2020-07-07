@@ -140,4 +140,11 @@ class Hj_Steps extends Base_Widget
         $sql = "SELECT $fields FROM $table_to_process where 1 ".$where;
         return $this->db->getOne($sql);
     }
+
+    public function setUserDepartment($user_id,$department)
+    {
+        $user_id = intval($user_id);
+        $table_to_process = Base_Widget::getDbTable($this->table);
+        return $this->db->update($table_to_process, $department, '`user_id` = ?', $user_id);
+    }
 }

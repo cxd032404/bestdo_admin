@@ -4,68 +4,52 @@
 
     <table width="99%" align="center" class="table table-bordered table-striped" >
         <tr class="hover">
-            <th align="center" class="rowtip" rowspan="10" colspan="2"><img src="{tpl:$UserInfo.thumb/}" width='160' height='160'/></th>
+            <th align="center" class="rowtip" rowspan="20" colspan="2"><img src="{tpl:$userInfo.user_img/}" width='160' height='160'/></th>
         </tr>
         <tr class="hover">
             <th align="center"class="rowtip">用户昵称</th>
-            <td align="left"  colspan="3" >{tpl:$UserInfo.NickName/}</td>
+            <td align="left"  colspan="3" >{tpl:$userInfo.nick_name/}</td>
         </tr>
         <tr class="hover">
             <th align="center" class="rowtip">用户姓名</th>
-            <td align="left">{tpl:$UserInfo.Name/}</td>
+            <td align="left">{tpl:$userInfo.true_name/}</td>
         </tr>
         <tr class="hover">
             <th align="center" class="rowtip">用户性别</th>
-            <td align="left">{tpl:$UserInfo.Sex/}</td>
+            <td align="left">{tpl:$userInfo.sex/}</td>
         </tr>
         <tr class="hover">
             <th align="center" class="rowtip">联系电话</th>
-            <td align="left">{tpl:$UserInfo.Mobile/}</td>
+            <td align="left">{tpl:$userInfo.mobile/}</td>
         </tr>
         <tr class="hover">
-            <th align="center" class="rowtip">实名认证状态</th>
-            <td align="left">{tpl:$UserInfo.AuthStatus/}</td>
-        </tr>
-        {tpl:if($UserInfo.IdNo!="")}
-        <tr class="hover">
-            <th align="center" class="rowtip">证件类型</th>
-            <td align="left">{tpl:$UserInfo.AuthIdType/}</td>
+            <th align="center" class="rowtip">注册时间</th>
+            <td align="left">{tpl:$userInfo.reg_time/}</td>
         </tr>
         <tr class="hover">
-           <th align="center" class="rowtip">生日</th>
-            <td align="left">{tpl:$UserInfo.Birthday/}</td>
+            <th align="center" class="rowtip">最后登录时间</th>
+            <td align="left">{tpl:$userInfo.last_login_time/}</td>
         </tr>
         <tr class="hover">
-            <th align="center" class="rowtip">证件号码</th>
-            <td align="left">{tpl:$UserInfo.IdNo/}</td>
+            <th align="center" class="rowtip">最后登录方式</th>
+            <td align="left">{tpl:$userInfo.LoginSourceName/}</td>
         </tr>
         <tr class="hover">
-            <th align="center" class="rowtip">证件有效期</th>
-            <td align="left">{tpl:$UserInfo.AuthExpireDate/}</td>
-        </tr>
-        {/tpl:if}
-        {tpl:if(count($UserInfo.UserAuthLog))}
-        <tr class="hover">
-            <th align="center" class="rowtip" colspan="4">实名认证记录</th>
+            <th align="center" class="rowtip">微信openId</th>
+            <td align="left">{tpl:$userInfo.wechatid/}</td>
         </tr>
         <tr class="hover">
-            <th align="center" class="rowtip">操作时间</th>
-            <th align="center" class="rowtip">后台管理员账号</th>
-            <th align="center" class="rowtip">操作结果</th>
-            <th align="center" class="rowtip">说明</th>
+            <th align="center" class="rowtip">小程序openId</th>
+            <td align="left">{tpl:$userInfo.mini_program_id/}</td>
         </tr>
-            {tpl:loop $UserInfo.UserAuthLog $LogId $LogInfo}
-                <tr class="hover">
-                        <td align="left">{tpl:$LogInfo.op_time/}</th>
-                        <td align="left">{tpl:$LogInfo.ManagerName/}</th>
-                        <td align="left">{tpl:$LogInfo.AuthResult/}</th>
-                        <td align="left">{tpl:$LogInfo.auth_resp/}</th>
-                </tr>
-            {/tpl:loop}
-
-        {/tpl:if}
-
-
+        <tr class="hover">
+            <th align="center" class="rowtip">unionId</th>
+            <td align="left">{tpl:$userInfo.unionid/}</td>
+        </tr>
+        <tr class="hover">
+            <th align="center" class="rowtip">unionId</th>
+            <td align="left">{tpl:$userInfo.department_name/}</td>
+        </tr>
     </table>
 
 {tpl:tpl contentFooter/}

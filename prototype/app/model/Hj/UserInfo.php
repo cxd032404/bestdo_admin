@@ -423,6 +423,7 @@ class Hj_UserInfo extends Base_Widget
         $table_to_process = Base_Widget::getDbTable($this->table);
         return $this->db->update($table_to_process, $bind, '`user_id` = ?', $user_id);
     }
+
     /**
      * 获取用户列表
      * @param $fields  所要获取的数据列
@@ -617,6 +618,19 @@ class Hj_UserInfo extends Base_Widget
         $bind['update_time'] = date("Y-m-d H:i:s",time());
         $table_to_process = Base_Widget::getDbTable($this->table_company_user);
         return $this->db->update($table_to_process, $bind, '`id` = ?', $id);
+    }
+    /**
+     * 更新单个企业导入用户记录
+     * @param char $user_id 用户ID
+     * @param array $bind 更新的数据列表
+     * @return boolean
+     */
+    public function updateCompanyUserByUser($user_id, array $bind)
+    {
+        $user_id = intval($user_id);
+        $bind['update_time'] = date("Y-m-d H:i:s",time());
+        $table_to_process = Base_Widget::getDbTable($this->table_company_user);
+        return $this->db->update($table_to_process, $bind, '`user_id` = ?', $user_id);
     }
 
     public function getTokenForManager($manager_id)

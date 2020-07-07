@@ -45,8 +45,8 @@ class Hj_UserController extends AbstractController
 			//页面参数预处理
             $params['company_id'] = $this->request->company_id??0;
             $params['sex'] = isset($sexList[intval($this->request->sex??-1)])?intval($this->request->sex):-1;
-			$params['true_name'] = urldecode(trim($this->request->true_name))?substr(urldecode(trim($this->request->true_name)),0,8):"";
-			$params['nick_name'] = urldecode(trim($this->request->nick_name))?substr(urldecode(trim($this->request->nick_name)),0,8):"";
+			$params['true_name'] = urldecode(trim($this->request->true_name))?substr(urldecode(trim($this->request->true_name)),0,20):"";
+			$params['nick_name'] = urldecode(trim($this->request->nick_name))?substr(urldecode(trim($this->request->nick_name)),0,20):"";
 			//分页参数
 			$params['Page'] = abs(intval($this->request->Page))?abs(intval($this->request->Page)):1;
 			$params['PageSize'] = 20;
@@ -62,18 +62,19 @@ class Hj_UserController extends AbstractController
 			$departmentList = [];
 			foreach($UserList['UserList'] as $userId => $userInfo)
 			{
+                $departmentName = [];
 			    //用户性别
 				$UserList['UserList'][$userId]['sex'] = isset($sexList[$userInfo['sex']])?$sexList[$userInfo['sex']]:"保密";
 				//用户生日
 				$UserList['UserList'][$userId]['birthday'] = is_null($userInfo['birthday'])?"未知":$userInfo['birthday'];
                 $UserList['UserList'][$userId]['LoginSourceName'] = isset($LoginSourceList[$userInfo['last_login_source']])?$LoginSourceList[$userInfo['last_login_source']]:"未知";
                 $UserList['UserList'][$userId]['company_name'] = isset($companyList[$userInfo['company_id']])?$companyList[$userInfo['company_id']]['company_name']:"未知";
-                if(!isset($departmentList[$userInfo['company_id']][$userInfo['department_id_1']]))
+                if(!isset($departmentList[$userInfo['company_id']][$userInfo['department_id_1']]) && $userInfo['department_id_1']>0)
                 {
                     $departmentInfo = $this->oDepartment->getDepartment($userInfo['department_id_1']);
                     $departmentList[$userInfo['company_id']][$userInfo['department_id_1']] = $departmentInfo;
+                    $departmentName = [$departmentList[$userInfo['company_id']][$userInfo['department_id_1']]["department_name"]];
                 }
-                $departmentName = [$departmentList[$userInfo['company_id']][$userInfo['department_id_1']]["department_name"]];
                 if($userInfo['department_id_2'] >0)
                 {
                     if(!isset($departmentList[$userInfo['company_id']][$userInfo['department_id_2']]))
@@ -92,7 +93,7 @@ class Hj_UserController extends AbstractController
                     }
                     $departmentName[] = $departmentList[$userInfo['company_id']][$userInfo['department_id_3']]["department_name"];
                 }
-                $UserList['UserList'][$userId]['department_name'] = implode("|",$departmentName);
+                $UserList['UserList'][$userId]['department_name'] = (count($departmentName)>0 || strlen(implode("|",$departmentName))>0)?implode("|",$departmentName):"未定义";
 			}
 			//模板渲染
 			include $this->tpl('Hj_User_UserList');
@@ -202,51 +203,40 @@ class Hj_UserController extends AbstractController
 		{
 			//获取性别列表
 			$sexList = $this->oUserInfo->getsexList();
-			//获取实名认证状态列表
-			$AuthStatusList = $this->oUserInfo->getAuthStatus();
-			//获取实名认证证件类型列表
-			$AuthIdTypesList = $this->oUserInfo->getAuthIdType();
-			$userId = trim($this->request->UserId);
+            //获取登录方式列表
+            $LoginSourceList = $this->oUserInfo->getLoginSourceList();
+			$userId = trim($this->request->user_id);
 			//获取用户信息
 			$userInfo = $this->oUserInfo->getUser($userId);
 			//用户性别
 			$userInfo['sex'] = isset($sexList[$userInfo['sex']])?$sexList[$userInfo['sex']]:"保密";
-			//实名认证状态
-			$userInfo['AuthStatus'] = isset($AuthStatusList[$userInfo['AuthStatus']])?$AuthStatusList[$userInfo['AuthStatus']]:"未知";
-			//证件生日
-			$userInfo['Birthday'] = !is_null($userInfo['Birthday'])?$userInfo['Birthday']:"未知";
-			//用户头像
-			$userInfo['UserImg'] = urldecode($userInfo['UserImg']);
-			//实名认证证件类型
-			$userInfo['AuthIdType'] = isset($AuthIdTypesList[intval($userInfo['IdType'])])?$AuthIdTypesList[intval($userInfo['IdType'])]:"未知";
-			//获取用户实名认证记录
-			//$userInfo['UserAuthLog'] = $this->oUser->getUserAuthLog($userId,'submit_time,op_time,op_uid,auth_result,auth_resp');
-            $userInfo['UserAuthLog'] = array();
-            if(count($userInfo['UserAuthLog']))
-			{
-				//初始化一个空的后台管理员列表
-				$ManagerList = array();
-				//获取实名认证记录的状态列表
-				$AuthLogIdStatusList = $this->oUser->getAuthLogStatusTypeList();
-				foreach($userInfo['UserAuthLog'] as $LogId => $AuthLog)
-				{
-					// 如果管理员记录已经获取到
-					if(isset($ManagerList[$AuthLog['op_uid']]))
-					{
-						$ManagerInfo = $ManagerList[$AuthLog['op_uid']];
-					}
-					//否则重新获取
-					else
-					{
-						$ManagerInfo = $this->manager->get($AuthLog['op_uid'], "name");
-					}
-					//记录管理员账号
-					$userInfo['UserAuthLog'][$LogId]['ManagerName'] = $ManagerInfo['name'];
-					//认证结果
-					$userInfo['UserAuthLog'][$LogId]['AuthResult'] = $AuthLogIdStatusList[$AuthLog['auth_result']];
-				}
-			}
-			//渲染模板
+            $userInfo['LoginSourceName'] = isset($LoginSourceList[$userInfo['last_login_source']])?$LoginSourceList[$userInfo['last_login_source']]:"未知";
+            if(!isset($departmentList[$userInfo['company_id']][$userInfo['department_id_1']]))
+            {
+                $departmentInfo = $this->oDepartment->getDepartment($userInfo['department_id_1']);
+                $departmentList[$userInfo['company_id']][$userInfo['department_id_1']] = $departmentInfo;
+            }
+            $departmentName = [$departmentList[$userInfo['company_id']][$userInfo['department_id_1']]["department_name"]];
+            if($userInfo['department_id_2'] >0)
+            {
+                if(!isset($departmentList[$userInfo['company_id']][$userInfo['department_id_2']]))
+                {
+                    $departmentInfo = $this->oDepartment->getDepartment($userInfo['department_id_2']);
+                    $departmentList[$userInfo['company_id']][$userInfo['department_id_2']] = $departmentInfo;
+                }
+                $departmentName[] = $departmentList[$userInfo['company_id']][$userInfo['department_id_2']]["department_name"];
+            }
+            if($userInfo['department_id_3'] >0)
+            {
+                if(!isset($departmentList[$userInfo['company_id']][$userInfo['department_id_3']]))
+                {
+                    $departmentInfo = $this->oDepartment->getDepartment($userInfo['department_id_3']);
+                    $departmentList[$userInfo['company_id']][$userInfo['department_id_3']] = $departmentInfo;
+                }
+                $departmentName[] = $departmentList[$userInfo['company_id']][$userInfo['department_id_3']]["department_name"];
+            }
+            $userInfo['department_name'] = implode("|",$departmentName);
+            //渲染模板
 			include $this->tpl('Hj_User_UserDetail');
 		}
 		else
@@ -255,6 +245,70 @@ class Hj_UserController extends AbstractController
 			include $this->tpl('403');
 		}
 	}
+    //用户详情
+    public function userDepartmentModifyAction()
+    {
+        //检查权限
+        $PermissionCheck = $this->manager->checkMenuPermission("UserUpdate");
+        if($PermissionCheck['return'])
+        {
+            $userId = trim($this->request->user_id);
+            //获取用户信息
+            $userInfo = $this->oUserInfo->getUser($userId);
+            //print_R($userInfo);
+            //部门ID
+            $department_id= $userInfo['department_id'];
+            //获取部门信息
+            $departmentInfo = $this->oDepartment->getDepartment($department_id,'*');
+            $departmentList_1 = [];
+            $departmentList_2 = [];
+            $departmentList_3 = [];
+            //第一级
+            if($departmentInfo['parent_id']==0)
+            {
+                //第一级的列表获取
+                $departmentList_1 = $this->oDepartment->getDepartmentList(['company_id'=>$departmentInfo['company_id'],'parent_id'=>0]);
+            }
+            else
+            {
+                //获取上级数据
+                $parentDepartmentInfo = $this->oDepartment->getDepartment($departmentInfo['parent_id'],'department_name,department_id,parent_id');
+                //第一级的列表获取
+                $departmentList = $this->oDepartment->getDepartmentList(['company_id'=>$departmentInfo['company_id'],'parent_id'=>0]);
+                {
+                    //第二级
+                    if($parentDepartmentInfo['parent_id']==0)
+                    {
+                        //第一级的列表获取
+                        $departmentList_1 = $this->oDepartment->getDepartmentList(['company_id'=>$departmentInfo['company_id'],'parent_id'=>0]);
+                        $departmentList_1[$userInfo['department_id_1']]['selected'] = 1;
+                        //第二级的列表获取
+                        $departmentList_2 = $this->oDepartment->getDepartmentList(['company_id'=>$departmentInfo['company_id'],'parent_id'=>$userInfo['department_id_1']]);
+                        $departmentList_2[$userInfo['department_id_2']]['selected'] = 1;
+                    }
+                    else//第三级别
+                    {
+                        //第一级的列表获取
+                        $departmentList_1 = $this->oDepartment->getDepartmentList(['company_id'=>$departmentInfo['company_id'],'parent_id'=>0]);
+                        //第二级的列表获取
+                        $departmentList_2 = $this->oDepartment->getDepartmentList(['company_id'=>$departmentInfo['company_id'],'parent_id'=>$userInfo['department_id_1']]);
+                        //第三级的列表获取
+                        $departmentList_3 = $this->oDepartment->getDepartmentList(['company_id'=>$departmentInfo['company_id'],'parent_id'=>$userInfo['department_id_2']]);
+                        $departmentList_1[$userInfo['department_id_1']]['selected'] = 1;
+                        $departmentList_2[$userInfo['department_id_2']]['selected'] = 1;
+                        $departmentList_3[$userInfo['department_id_3']]['selected'] = 1;
+                    }
+                }
+            }
+            //渲染模板
+            include $this->tpl('Hj_User_Department');
+        }
+        else
+        {
+            $home = $this->sign;
+            include $this->tpl('403');
+        }
+    }
     //企业导入用户列表
     public function companyUserListAction()
     {
@@ -398,6 +452,40 @@ class Hj_UserController extends AbstractController
             $index = 1;
             $response = array('errno' => 0,'result'=>["success"=>$success,"error"=>$error,"exist"=>$exist,"index"=>$index]);
         }
+        echo json_encode($response);
+        return true;
+    }
+    //修改页面元素
+    public function departmentUpdateAction()
+    {
+        //元素ID
+        $user_id = intval($this->request->user_id);
+        $department['department_id_1'] = intval($this->request->department_id_1);
+        $department['department_id_2'] = intval($this->request->department_id_2);
+        $department['department_id_3'] = intval($this->request->department_id_3);
+        if($department['department_id_3']==0)
+        {
+            if($department['department_id_2']==0)
+            {
+                $department['department_id'] = $department['department_id_1'];
+            }
+            else
+            {
+                $department['department_id'] = $department['department_id_2'];
+            }
+        }
+        else
+        {
+            $department['department_id'] = $department['department_id_3'];
+        }
+        $update = $this->oUserInfo->updateUser($user_id,$department);
+        $updateCompanyUser = $this->oUserInfo->updateCompanyUserByUser($user_id,['department_id'=>$department['department_id']]);
+        Base_Common::refreshCache($this->config,"user",$user_id);
+        unset($department['department_id']);
+        $oStep = new Hj_Department();
+        $oStep->setUserDepartment($user_id,$department);
+
+        $response = $update ? array('errno' => 0) : array('errno' => 9);
         echo json_encode($response);
         return true;
     }

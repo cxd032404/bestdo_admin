@@ -1,19 +1,10 @@
 {tpl:tpl contentHeader/}
 <script type="text/javascript">
-    function userDetail(uid){
-        userDetailBox = divBox.showBox('{tpl:$this.sign/}&ac=user.detail&user_id=' + uid, {title:'用户详情',width:600,height:400});
+    function userDetail(uid,uname){
+        userDetailBox = divBox.showBox('{tpl:$this.sign/}&ac=user.detail&user_id=' + uid, {title:'用户详情-'+uname,width:600,height:500});
     }
-    function userPasswordUpdate(uid){
-        userPasswordUpdateBox = divBox.showBox('{tpl:$this.sign/}&ac=user.password.update.submit&user_id=' + uid, {title:'密码更新',width:400,height:300});
-    }
-    function userMobileUpdate(uid){
-        userMobileUpdateBox = divBox.showBox('{tpl:$this.sign/}&ac=user.mobile.update.submit&user_id=' + uid, {title:'手机号码更新',width:400,height:220});
-    }
-    function userAuth(uid){
-        userAuthBox = divBox.showBox('{tpl:$this.sign/}&ac=user.auth.info&user_id=' + uid, {title:'实名认证',width:600,height:400});
-    }
-    function userTeamList(uid,uname){
-        userTeamListBox = divBox.showBox('{tpl:$this.sign/}&ac=user.team.list&user_id=' + uid, {title:uname+'的队伍列表',width:600,height:400});
+    function userDepartment(uid,uname){
+        userDepartmentUpdateBox = divBox.showBox('{tpl:$this.sign/}&ac=user.department.modify&user_id=' + uid, {title:'部门更新-'+uname,width:400,height:300});
     }
 </script>
 
@@ -55,15 +46,14 @@
       <tr class="hover">
         <td align="center">{tpl:$UserInfo.user_id/}</td>
           <td align="center">{tpl:$UserInfo.company_name/}</td>
-          <td align="center">{tpl:$UserInfo.department_name/}</td>
+          <td align="center"><a  href="javascript:;" onclick="userDepartment('{tpl:$UserInfo.user_id/}','{tpl:$UserInfo.true_name/}')">{tpl:$UserInfo.department_name/}</a></td>
           <td align="center">{tpl:$UserInfo.true_name/}</td>
         <td align="center">{tpl:$UserInfo.nick_name/}</td>
         <td align="center">{tpl:$UserInfo.mobile/}</td>
         <td align="center">{tpl:$UserInfo.sex/}</td>
         <td align="center">{tpl:$UserInfo.reg_time/}</td>
         <td align="center">{tpl:$UserInfo.last_login_time/}<br>{tpl:$UserInfo.LoginSourceName/}</td>
-        <!--<td align="center"><a  href="javascript:;" onclick="userDetail('{tpl:$UserInfo.user_id/}')">详细</a>{tpl:if($UserInfo.AuthStatus==1)} | <a  href="javascript:;" onclick="userAuth('{tpl:$UserInfo.user_id/}')">审核</a>{/tpl:if} | {tpl:$UserInfo.License/} | {tpl:$UserInfo.Team/} | <a  href="javascript:;" onclick="userPasswordUpdate('{tpl:$UserInfo.user_id/}')">更新密码</a> | <a  href="javascript:;" onclick="userMobileUpdate('{tpl:$UserInfo.user_id/}')">更新手机</a></td>-->
-          <td align="center"><a  href="javascript:;" onclick="userDetail('{tpl:$UserInfo.user_id/}')">详细</a></td>
+          <td align="center"><a  href="javascript:;" onclick="userDetail('{tpl:$UserInfo.user_id/}','{tpl:$UserInfo.true_name/}')">详细</a></td>
 
       </tr>
     {/tpl:loop}
