@@ -18,10 +18,14 @@ class Hj_Activity extends Base_Widget
 	public function getActivityList($params = [],$fields = "*")
 	{
 		$table_to_process = Base_Widget::getDbTable($this->table);
-	    $whereCompany = (isset($params['company_id']) && $params['company_id']>0)?" company_id = ".$params['company_id']:"";
+        $wherePermission = isset($params['permissionList'])?(
+        count($params['permissionList'])>0?
+            ( " company_id in (".implode(",",array_column($params['permissionList'],"company_id")).") ")
+            :" 0 "):"";
+        $whereCompany = (isset($params['company_id']) && $params['company_id']>0)?" company_id = ".$params['company_id']:"";
         $whereSign = (isset($params['activity_sign']) && trim($params['activity_sign'])!="")?" activity_sign = '".$params['activity_sign']."'":"";
         $whereExclude = (isset($params['exclude_id']) && $params['exclude_id'])>0?" activity_id != ".$params['exclude_id']:"";
-        $whereCondition = array($whereCompany,$whereSign,$whereExclude);
+        $whereCondition = array($wherePermission,$whereCompany,$whereSign,$whereExclude);
         $where = Base_common::getSqlWhere($whereCondition);
 		$sql = "SELECT $fields FROM " . $table_to_process . " where 1 ".$where." ORDER BY activity_id ASC";
 		$return = $this->db->getAll($sql);

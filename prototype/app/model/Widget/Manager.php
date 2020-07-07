@@ -564,11 +564,28 @@ class Widget_Manager extends Base_Widget
     {
         $companyList = (new Hj_Company())->getCompanyList([],"company_id,company_name");
         $PermissionList = $this->getDataPermissionByGroup($group_id);
-        foreach($PermissionList as $key => $PermissionInfo)
+        $PermissionList = array_column($PermissionList,"company_id");
+        foreach($companyList as $key => $companyInfo)
         {
-            $companyList[$PermissionInfo['company_id']]['Permission'] = 1;
+            if(!in_array($companyInfo['company_id'],$PermissionList))
+            {
+                unset($companyList[$key]);
+            }
         }
         return $companyList;
+    }
+    public function getPermissionWhere($group_id)
+    {
+        $companyList = $this->getPermissionList($group_id);
+        if(count($companyList))
+        {
+            $where = " company_id in (".implode(",",array_column($companyList,"company_id")).") ";
+        }
+        else
+        {
+            $where  = " ";
+        }
+        return $where;
     }
     public function getDataPermissionByGroup($group_ids,$fields = "*")
     {

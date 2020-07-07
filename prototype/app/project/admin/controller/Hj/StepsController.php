@@ -253,7 +253,7 @@ class Hj_StepsController extends AbstractController
             include $this->tpl('403');
         }
     }
-//步数详情页面
+    //个人步数统计详情页面
     public function statAction()
     {
         //检查权限
@@ -288,7 +288,7 @@ class Hj_StepsController extends AbstractController
             $userList  = $goalList = [];
             $days = intval((strtotime($params['end_date']) - strtotime($params['start_date']))/86400);
             $spepsConfig = $this->config->steps;
-            foreach($StepsStatList['UserList'] as $key => $detail)
+            foreach($StepsStatList['List'] as $key => $detail)
             {
                 if(!isset($userList[$detail['user_id']]))
                 {
@@ -299,11 +299,11 @@ class Hj_StepsController extends AbstractController
                         $userList[$detail['user_id']] = $userInfo;
                     }
                 }
-                $StepsStatList['UserList'][$key]['user_name'] = $userList[$detail['user_id']]['true_name']??"未知用户";
-                $StepsStatList['UserList'][$key]['kcal'] = intval($detail['totalStep']/$spepsConfig['stepsPerKcal']);
-                $StepsStatList['UserList'][$key]['time'] = intval($detail['totalStep']/$spepsConfig['stepsPerMinute']);
-                $StepsStatList['UserList'][$key]['distance'] = intval($spepsConfig['distancePerStep']*$detail['totalStep']);
-                $StepsStatList['UserList'][$key]['company_name'] = $companyList[$userList[$detail['user_id']]['company_id']]['company_name']??"未知企业";
+                $StepsStatList['List'][$key]['user_name'] = $userList[$detail['user_id']]['true_name']??"未知用户";
+                $StepsStatList['List'][$key]['kcal'] = intval($detail['totalStep']/$spepsConfig['stepsPerKcal']);
+                $StepsStatList['List'][$key]['time'] = intval($detail['totalStep']/$spepsConfig['stepsPerMinute']);
+                $StepsStatList['List'][$key]['distance'] = intval($spepsConfig['distancePerStep']*$detail['totalStep']);
+                $StepsStatList['List'][$key]['company_name'] = $companyList[$userList[$detail['user_id']]['company_id']]['company_name']??"未知企业";
                 if(!isset($goalList[$userList[$detail['user_id']]['company_id']]))
                 {
                     $companyDetail = json_decode($companyList[$userList[$detail['user_id']]['company_id']]['detail'],true);
@@ -334,13 +334,13 @@ class Hj_StepsController extends AbstractController
                     }
                     $departmentName[] = $departmentList[$userInfo['company_id']][$userInfo['department_id_3']]["department_name"];
                 }
-                $StepsStatList['UserList'][$key]['department_name'] = implode("|",$departmentName);
-                $StepsStatList['UserList'][$key]['achive'] = $detail['totalStep']>=$goalList[$userList[$detail['user_id']]['company_id']]?1:0;
-                $StepsStatList['UserList'][$key]['achive_rate'] = intval(100*($detail['totalStep']/$goalList[$userList[$detail['user_id']]['company_id']]));
+                $StepsStatList['List'][$key]['department_name'] = implode("|",$departmentName);
+                $StepsStatList['List'][$key]['achive'] = $detail['totalStep']>=$goalList[$userList[$detail['user_id']]['company_id']]?1:0;
+                $StepsStatList['List'][$key]['achive_rate'] = intval(100*($detail['totalStep']/$goalList[$userList[$detail['user_id']]['company_id']]));
             }
             //翻页参数
             $page_url = Base_Common::getUrl('',$this->ctl,'stat',$params)."&Page=~page~";
-            $page_content =  base_common::multi($StepsStatList['UserCount'], $page_url, $params['Page'], $params['PageSize'], 10, $maxpage = 100, $prevWord = '上一页', $nextWord = '下一页');
+            $page_content =  base_common::multi($StepsStatList['Count'], $page_url, $params['Page'], $params['PageSize'], 10, $maxpage = 100, $prevWord = '上一页', $nextWord = '下一页');
             //导出EXCEL链接
             $export_var = "<a href =".(Base_Common::getUrl('',$this->ctl,'stat.download',$params))."><导出表格></a>";
             //渲染模版
@@ -396,7 +396,7 @@ class Hj_StepsController extends AbstractController
 //获取步数详情列表
                 $StepsStatList = $this->oSteps->getStepsStatList($params);
                 $Count = count($StepsStatList['UserCount']);
-                foreach($StepsStatList['UserList'] as $key => $detail)
+                foreach($StepsStatList['List'] as $key => $detail)
                 {
                     if(!isset($userList[$detail['user_id']]))
                     {
@@ -407,11 +407,11 @@ class Hj_StepsController extends AbstractController
                             $userList[$detail['user_id']] = $userInfo;
                         }
                     }
-                    $StepsStatList['UserList'][$key]['user_name'] = $userList[$detail['user_id']]['true_name']??"未知用户";
-                    $StepsStatList['UserList'][$key]['kcal'] = intval($detail['totalStep']/$spepsConfig['stepsPerKcal']);
-                    $StepsStatList['UserList'][$key]['time'] = intval($detail['totalStep']/$spepsConfig['stepsPerMinute']);
-                    $StepsStatList['UserList'][$key]['distance'] = intval($spepsConfig['distancePerStep']*$detail['totalStep']);
-                    $StepsStatList['UserList'][$key]['company_name'] = $companyList[$userList[$detail['user_id']]['company_id']]['company_name']??"未知企业";
+                    $StepsStatList['List'][$key]['user_name'] = $userList[$detail['user_id']]['true_name']??"未知用户";
+                    $StepsStatList['List'][$key]['kcal'] = intval($detail['totalStep']/$spepsConfig['stepsPerKcal']);
+                    $StepsStatList['List'][$key]['time'] = intval($detail['totalStep']/$spepsConfig['stepsPerMinute']);
+                    $StepsStatList['List'][$key]['distance'] = intval($spepsConfig['distancePerStep']*$detail['totalStep']);
+                    $StepsStatList['List'][$key]['company_name'] = $companyList[$userList[$detail['user_id']]['company_id']]['company_name']??"未知企业";
                     if(!isset($goalList[$userList[$detail['user_id']]['company_id']]))
                     {
                         $companyDetail = json_decode($companyList[$userList[$detail['user_id']]['company_id']]['detail'],true);
@@ -442,20 +442,20 @@ class Hj_StepsController extends AbstractController
                         }
                         $departmentName[] = $departmentList[$userInfo['company_id']][$userInfo['department_id_3']]["department_name"];
                     }
-                    $StepsStatList['UserList'][$key]['department_name'] = implode("|",$departmentName);
-                    $StepsStatList['UserList'][$key]['achive'] = $detail['totalStep']>=$goalList[$userList[$detail['user_id']]['company_id']]?1:0;
-                    $StepsStatList['UserList'][$key]['achive_rate'] = intval(100*($detail['totalStep']/$goalList[$userList[$detail['user_id']]['company_id']]));
+                    $StepsStatList['List'][$key]['department_name'] = implode("|",$departmentName);
+                    $StepsStatList['List'][$key]['achive'] = $detail['totalStep']>=$goalList[$userList[$detail['user_id']]['company_id']]?1:0;
+                    $StepsStatList['List'][$key]['achive_rate'] = intval(100*($detail['totalStep']/$goalList[$userList[$detail['user_id']]['company_id']]));
                     //生成单行数据
                     $t = array();
-                    $t['companyName'] = $StepsStatList['UserList'][$key]['company_name'];
-                    $t['departmentName'] = $StepsStatList['UserList'][$key]['department_name'];
-                    $t['userName'] = $StepsStatList['UserList'][$key]['user_name'];
-                    $t['step'] = $StepsStatList['UserList'][$key]['step'];
-                    $t['kcal'] = $StepsStatList['UserList'][$key]['kcal']."kcal";
-                    $t['time'] = $StepsStatList['UserList'][$key]['time']."分钟";
-                    $t['distance'] = $StepsStatList['UserList'][$key]['distance']."米";
-                    $t['achiveRate'] = $StepsStatList['UserList'][$key]['achive_rate']."%";
-                    $t['achive'] = $StepsStatList['UserList'][$key]['achive']==1?"达标":"未达标";
+                    $t['companyName'] = $StepsStatList['List'][$key]['company_name'];
+                    $t['departmentName'] = $StepsStatList['List'][$key]['department_name'];
+                    $t['userName'] = $StepsStatList['List'][$key]['user_name'];
+                    $t['step'] = $StepsStatList['List'][$key]['totalStep'];
+                    $t['kcal'] = $StepsStatList['List'][$key]['kcal']."kcal";
+                    $t['time'] = $StepsStatList['List'][$key]['time']."分钟";
+                    $t['distance'] = $StepsStatList['List'][$key]['distance']."米";
+                    $t['achiveRate'] = $StepsStatList['List'][$key]['achive_rate']."%";
+                    $t['achive'] = $StepsStatList['List'][$key]['achive']==1?"达标":"未达标";
                     $oExcel->addRows(array($t));
                     unset($t);
                 }
@@ -463,6 +463,95 @@ class Hj_StepsController extends AbstractController
                 $oExcel->closeSheet()->close();
             }
             while($Count>0);
+        }
+        else
+        {
+            $home = $this->sign;
+            include $this->tpl('403');
+        }
+    }
+    //团队步数统计详情页面
+    public function departmentStatAction()
+    {
+        //检查权限
+        $PermissionCheck = $this->manager->checkMenuPermission(0);
+        if($PermissionCheck['return'])
+        {
+            //一级部门ID
+            $params['department_id_1'] = intval($this->request->department_id_1??0);
+            //二级部门ID
+            $params['department_id_2'] = intval($this->request->department_id_2??0);
+            if($params['department_id_1']>0)
+            {
+                if($params['department_id_2']>0)
+                {
+                    $current_level = 3;
+                }
+                else
+                {
+                    $current_level = 2;
+                }
+            }
+            else
+            {
+                $current_level = 1;
+            }
+            $groupKey = "department_id_".$current_level;
+            //用户姓名
+            $params['user_name']= trim($this->requrest->user_name??"");
+            //开始日期
+            $params['start_date']= trim($this->requrest->start_date??date("Y-m-d",time()-3*86400));
+            //结束日期
+            $params['end_date']= trim($this->requrest->end_date??date("Y-m-d"));
+            //分页参数
+            $params['Page'] = abs(intval($this->request->Page))?abs(intval($this->request->Page)):1;
+            $params['PageSize'] = 20;
+            $params['getCount'] = 1;
+            $totalPermission = $this->manager->getPermissionList($this->manager->data_groups);
+            $params['PermissionList'] = $totalPermission;
+            //获取企业列表
+            $companyList = $this->oCompany->getCompanyList(["permissionList"=>$totalPermission],"company_id,company_name,detail");
+            $default_company = array_column($companyList,'company_id')['0'];
+            //企业ID
+            $params['company_id'] = intval($this->request->company_id??$companyList);
+
+
+            $departmentList_1 = $params['company_id']>0?$this->oDepartment->getDepartmentList(["company_id"=>$params['company_id'],"parent_id"=>0],"department_id,department_name"):[];
+            $departmentList_2 = $params['department_id_1']>0?$this->oDepartment->getDepartmentList(["company_id"=>$params['company_id'],"parent_id"=>$params['department_id_1']],"department_id,department_name"):[];
+            $departmentList_3 = $params['department_id_2']>0?$this->oDepartment->getDepartmentList(["company_id"=>$params['company_id'],"parent_id"=>$params['department_id_2']],"department_id,department_name"):[];
+            //获取步数统计列表
+            $StepsStatList = $this->oSteps->getStepsStatList($params,$groupKey);
+            $departmentList  = [];
+            $days = intval((strtotime($params['end_date']) - strtotime($params['start_date']))/86400);
+            $spepsConfig = $this->config->steps;
+            $companyInfo = $companyList[$params['company_id']];
+            $companyDetail =
+            json_decode($companyList[$params['company_id']]['detail'],true);
+            $goal = $companyDetail['daily_step']??6000*$days;
+            foreach($StepsStatList['List'] as $key => $detail)
+            {
+                if(!isset($departmentList[$detail[$groupKey]]))
+                {
+                    $departmentInfo = $this->oDepartment->getDepartment($detail[$groupKey],'department_name,department_id');
+                    if(isset($departmentInfo["department_id"]))
+                    {
+                        $departmentInfo[$detail[$groupKey]] = $departmentInfo;
+                    }
+                }
+                $StepsStatList['List'][$key]['department_name'] = $departmentInfo[$detail[$groupKey]]['department_name']??"未知部门";
+                $StepsStatList['List'][$key]['kcal'] = intval($detail['totalStep']/$spepsConfig['stepsPerKcal']);
+                $StepsStatList['List'][$key]['time'] = intval($detail['totalStep']/$spepsConfig['stepsPerMinute']);
+                $StepsStatList['List'][$key]['distance'] = intval($spepsConfig['distancePerStep']*$detail['totalStep']);
+                $StepsStatList['List'][$key]['achive'] = $detail['totalStep']>=$goal*$detail['userCount']?1:0;
+                $StepsStatList['List'][$key]['achive_rate'] = intval(100*($detail['totalStep']/($goal*$detail['userCount'])));
+            }
+            //翻页参数
+            $page_url = Base_Common::getUrl('',$this->ctl,'stat',$params)."&Page=~page~";
+            $page_content =  base_common::multi($StepsStatList['Count'], $page_url, $params['Page'], $params['PageSize'], 10, $maxpage = 100, $prevWord = '上一页', $nextWord = '下一页');
+            //导出EXCEL链接
+            $export_var = "<a href =".(Base_Common::getUrl('',$this->ctl,'stat.download',$params))."><导出表格></a>";
+            //渲染模版
+            include $this->tpl('Hj_Steps_DepartmentStat');
         }
         else
         {

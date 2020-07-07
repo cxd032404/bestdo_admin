@@ -41,12 +41,13 @@ class Hj_PageController extends AbstractController
         $PermissionCheck = $this->manager->checkMenuPermission(0);
         if($PermissionCheck['return'])
         {
+            $totalPermission = $this->manager->getPermissionList($this->manager->data_groups);
             //页面ID
             $company_id = intval($this->request->company_id??0);
             //获取页面列表
-            $pageList = $this->oPage->getPageList(['company_id'=>$company_id]);
+            $pageList = $this->oPage->getPageList(["permissionList"=>$totalPermission,'company_id'=>$company_id]);
             //获取企业列表
-            $companyList = $this->oCompany->getCompanyList([],"company_id,company_name");
+            $companyList = $this->oCompany->getCompanyList(["permissionList"=>$totalPermission],"company_id,company_name");
             //循环页面列表
             foreach($pageList as $key => $pageInfo)
             {
@@ -74,8 +75,9 @@ class Hj_PageController extends AbstractController
         $PermissionCheck = $this->manager->checkMenuPermission("addPage");
         if($PermissionCheck['return'])
         {
+            $totalPermission = $this->manager->getPermissionList($this->manager->data_groups);
             //获取顶级页面列表
-            $companyList = $this->oCompany->getCompanyList([],"company_id,company_name");
+            $companyList = $this->oCompany->getCompanyList(["permissionList"=>$totalPermission],"company_id,company_name");
             //渲染模版
             include $this->tpl('Hj_Page_PageAdd');
         }
@@ -149,7 +151,8 @@ class Hj_PageController extends AbstractController
             $pageInfo['detail'] = json_decode($pageInfo['detail'],true);
             $pageInfo['detail']['params'] = $this->oPage->packPageParams($pageInfo['detail']['params']);
             //获取企业列表
-            $companyList = $this->oCompany->getCompanyList([],"company_id,company_name");
+            $totalPermission = $this->manager->getPermissionList($this->manager->data_groups);
+            $companyList = $this->oCompany->getCompanyList(["permissionList"=>$totalPermission],"company_id,company_name");
             //渲染模版
             include $this->tpl('Hj_Page_PageModify');
         }
@@ -244,8 +247,9 @@ class Hj_PageController extends AbstractController
             $pageElementList = $this->oPageElement->getElementList(['page_id'=>$page_id]);
             //获取元素类型列表
             $elementTypeList = $this->oElementType->getElementTypeList();
+            $totalPermission = $this->manager->getPermissionList($this->manager->data_groups);
             //获取企业列表
-            $companyList = $this->oCompany->getCompanyList([],"company_id,company_name");
+            //$companyList = $this->oCompany->getCompanyList(["permissionList"=>$totalPermission],"company_id,company_name");
             foreach ($pageElementList as $elementSign => $elementInfo)
             {
                 $pageElementList[$elementSign]['element_type_name'] = $elementTypeList[$elementInfo['element_type']]['element_type_name']??"未知类型";

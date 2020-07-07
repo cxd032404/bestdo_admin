@@ -46,8 +46,9 @@ class Hj_ListController extends AbstractController
 			$company_id = intval($this->request->company_id??0);
             //列表分类
             $list_type = trim($this->request->list_type??0);
-			//获取企业列表
-			$companyList = $this->oCompany->getCompanyList([],"company_id,company_name,detail");
+            $totalPermission = $this->manager->getPermissionList($this->manager->data_groups);
+            //获取企业列表
+			$companyList = $this->oCompany->getCompanyList(["permissionList"=>$totalPermission],"company_id,company_name,detail");
             $boutiqueList = [];
 			foreach($companyList as $key => $companyInfo)
             {
@@ -109,8 +110,9 @@ class Hj_ListController extends AbstractController
             $company_id = intval($this->request->company_id??0);
             //列表分类
             $list_type = trim($this->request->list_type??0);
+            $totalPermission = $this->manager->getPermissionList($this->manager->data_groups);
             //获取企业列表
-            $companyList = $this->oCompany->getCompanyList([],"company_id,company_name,detail");
+            $companyList = $this->oCompany->getCompanyList(["permissionList"=>$totalPermission],"company_id,company_name,detail");
             $boutiqueList = [];
             foreach($companyList as $key => $companyInfo)
             {
@@ -168,8 +170,9 @@ class Hj_ListController extends AbstractController
 		$PermissionCheck = $this->manager->checkMenuPermission("addList");
 		if($PermissionCheck['return'])
 		{
-			//获取顶级页面列表
-			$companyList = $this->oCompany->getCompanyList([],"company_id,company_name");
+            $totalPermission = $this->manager->getPermissionList($this->manager->data_groups);
+            //获取顶级页面列表
+			$companyList = $this->oCompany->getCompanyList(["permissionList"=>$totalPermission],"company_id,company_name");
             //获取列表类型列表
             $listTypeList = $this->oList->getListType();
             //是否精品课
@@ -274,8 +277,9 @@ class Hj_ListController extends AbstractController
 			$list_id= intval($this->request->list_id);
 			//获取列表信息
 			$listInfo = $this->oList->getList($list_id,'*');
-			//获取企业列表
-			$companyList = $this->oCompany->getCompanyList([],"company_id,company_name");
+            $totalPermission = $this->manager->getPermissionList($this->manager->data_groups);
+            //获取企业列表
+			$companyList = $this->oCompany->getCompanyList(["permissionList"=>$totalPermission],"company_id,company_name");
             //获取列表类型列表
             $listTypeList = $this->oList->getListType();
             //数据解包

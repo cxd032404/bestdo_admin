@@ -18,10 +18,14 @@ class Hj_Page extends Base_Widget
 	public function getPageList($params = [],$fields = "*")
 	{
 		$table_to_process = Base_Widget::getDbTable($this->table);
-	    $whereCompany = (isset($params['company_id']) && $params['company_id']>0)?" company_id = ".$params['company_id']:"";
+        $wherePermission = isset($params['permissionList'])?(
+        count($params['permissionList'])>0?
+            ( " company_id in (".implode(",",array_column($params['permissionList'],"company_id")).") ")
+            :" 0 "):"";
+		$whereCompany = (isset($params['company_id']) && $params['company_id']>0)?" company_id = ".$params['company_id']:"";
         $whereSign = (isset($params['page_sign']) && trim($params['page_sign'])!="")?" page_sign = '".$params['page_sign']."'":"";
         $whereExclude = (isset($params['exclude_id']) && $params['exclude_id'])>0?" page_id != ".$params['exclude_id']:"";
-        $whereCondition = array($whereCompany,$whereSign,$whereExclude);
+        $whereCondition = array($wherePermission,$whereCompany,$whereSign,$whereExclude);
         $where = Base_common::getSqlWhere($whereCondition);
 		$sql = "SELECT $fields FROM " . $table_to_process . " where 1 ".$where." ORDER BY update_time DESC";
 		$return = $this->db->getAll($sql);
