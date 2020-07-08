@@ -24,6 +24,9 @@ function companyModify(mid){
 function protocalModify(mid,type){
   modifycompanyBox = divBox.showBox('{tpl:$this.sign/}&ac=protocal.modify&company_id=' + mid + '&type=' + type, {title:'协议',width:600,height:600});
 }
+function regPage(mid,name){
+    openIdBindBox = divBox.showBox('{tpl:$this.sign/}&ac=reg.page.qr&id=' + mid, {title:name+':注册页',width:430,height:430});
+}
 </script>
 
 <fieldset><legend>操作</legend>
@@ -54,7 +57,7 @@ function protocalModify(mid,type){
  |  <a href="javascript:;" onclick="companyModify('{tpl:$companyInfo.company_id/}');">修改</a>
   | <a href="javascript:;" onclick="protocalModify('{tpl:$companyInfo.company_id/}','privacy');">隐私政策</a>
   | <a href="javascript:;" onclick="protocalModify('{tpl:$companyInfo.company_id/}','user');">用户政策</a>
-  | <a target="_blank" href="{tpl:$companyInfo.reg_url/}">注册页面</a>
+  | <a href="javascript:;" onclick="regPage('{tpl:$companyInfo.company_id/}','{tpl:$companyInfo.company_name/}');">注册页面</a>
         | <a href="{tpl:$this.sign/}&ac=boutique&company_id={tpl:$companyInfo.company_id/}">精品课设置({tpl:$companyInfo.detail.boutique func='count(@@)'/}) </a>
         | <a href="{tpl:$this.sign/}&ac=club.banner&company_id={tpl:$companyInfo.company_id/}">俱乐部Banner({tpl:$companyInfo.detail.clubBanner func="count(@@)"/})</a>
         | <a href="{tpl:$this.sign/}&ac=step.banner&company_id={tpl:$companyInfo.company_id/}">健步走Banner({tpl:$companyInfo.detail.stepBanner func="count(@@)"/})</a>

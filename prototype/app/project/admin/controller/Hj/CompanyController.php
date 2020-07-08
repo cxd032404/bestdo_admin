@@ -778,4 +778,13 @@ class Hj_CompanyController extends AbstractController
         }
         $this->response->goBack();
     }
+    public function regPageQrAction()
+    {
+        include('Third/phpqrcode/phpqrcode.php');
+        //企业ID
+        $company_id = intval($this->request->company_id);
+        $url = $this->config->siteUrl.'/'.$this->config->api['site']['company_user_reg']."?company_id=".$company_id;
+        $url = urlencode($url);
+        include $this->tpl('Hj_Company_regPageQR');
+    }
 }
