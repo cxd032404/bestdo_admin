@@ -18,10 +18,14 @@ class Hj_Club extends Base_Widget
     public function getClubList($params = [],$fields = "*")
     {
         $table_to_process = Base_Widget::getDbTable($this->table);
+        $wherePermission = isset($params['permissionList'])?(
+        count($params['permissionList'])>0?
+            ( " company_id in (".implode(",",array_column($params['permissionList'],"company_id")).") ")
+            :" 0 "):"";
         $whereCompany = (isset($params['company_id']) && $params['company_id']>0)?" company_id = ".$params['company_id']:"";
         $whereSign = (isset($params['club_sign']) && trim($params['club_sign'])!="")?" club_sign = '".$params['club_sign']."'":"";
         $whereExclude = (isset($params['exclude_id']) && $params['exclude_id'])>0?" club_id != ".$params['exclude_id']:"";
-        $whereCondition = array($whereCompany,$whereSign,$whereExclude);
+        $whereCondition = array($wherePermission,$whereCompany,$whereSign,$whereExclude);
         $where = Base_common::getSqlWhere($whereCondition);
         $sql = "SELECT $fields FROM " . $table_to_process . " where 1 ".$where." ORDER BY club_id ASC";
         $return = $this->db->getAll($sql);

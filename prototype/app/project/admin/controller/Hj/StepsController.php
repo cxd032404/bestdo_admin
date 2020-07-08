@@ -60,8 +60,10 @@ class Hj_StepsController extends AbstractController
             $params['Page'] = abs(intval($this->request->Page))?abs(intval($this->request->Page)):1;
             $params['PageSize'] = 20;
             $params['getCount'] = 1;
+            $totalPermission = $this->manager->getPermissionList($this->manager->data_groups);
+
             //获取企业列表
-            $companyList = $this->oCompany->getCompanyList([],"company_id,company_name,detail");
+            $companyList = $this->oCompany->getCompanyList(["permissionList"=>$totalPermission],"company_id,company_name,detail");
             $departmentList_1 = $params['company_id']>0?$this->oDepartment->getDepartmentList(["company_id"=>$params['company_id'],"parent_id"=>0],"department_id,department_name"):[];
             $departmentList_2 = $params['department_id_1']>0?$this->oDepartment->getDepartmentList(["company_id"=>$params['company_id'],"parent_id"=>$params['department_id_1']],"department_id,department_name"):[];
             $departmentList_3 = $params['department_id_2']>0?$this->oDepartment->getDepartmentList(["company_id"=>$params['company_id'],"parent_id"=>$params['department_id_2']],"department_id,department_name"):[];
@@ -160,7 +162,7 @@ class Hj_StepsController extends AbstractController
             $params['PageSize'] = 500;
             $params['getCount'] = 1;
             //获取企业列表
-            $companyList = $this->oCompany->getCompanyList([],"company_id,company_name,detail");
+            $companyList = $this->oCompany->getCompanyList(["permissionList"=>$totalPermission],"company_id,company_name,detail");
             $departmentList_1 = $params['company_id']>0?$this->oDepartment->getDepartmentList(["company_id"=>$params['company_id'],"parent_id"=>0],"department_id,department_name"):[];
             $departmentList_2 = $params['department_id_1']>0?$this->oDepartment->getDepartmentList(["company_id"=>$params['company_id'],"parent_id"=>$params['department_id_1']],"department_id,department_name"):[];
             $departmentList_3 = $params['department_id_2']>0?$this->oDepartment->getDepartmentList(["company_id"=>$params['company_id'],"parent_id"=>$params['department_id_2']],"department_id,department_name"):[];
@@ -278,8 +280,9 @@ class Hj_StepsController extends AbstractController
             $params['Page'] = abs(intval($this->request->Page))?abs(intval($this->request->Page)):1;
             $params['PageSize'] = 20;
             $params['getCount'] = 1;
+            $totalPermission = $this->manager->getPermissionList($this->manager->data_groups);
             //获取企业列表
-            $companyList = $this->oCompany->getCompanyList([],"company_id,company_name,detail");
+            $companyList = $this->oCompany->getCompanyList(["permissionList"=>$totalPermission],"company_id,company_name,detail");
             $departmentList_1 = $params['company_id']>0?$this->oDepartment->getDepartmentList(["company_id"=>$params['company_id'],"parent_id"=>0],"department_id,department_name"):[];
             $departmentList_2 = $params['department_id_1']>0?$this->oDepartment->getDepartmentList(["company_id"=>$params['company_id'],"parent_id"=>$params['department_id_1']],"department_id,department_name"):[];
             $departmentList_3 = $params['department_id_2']>0?$this->oDepartment->getDepartmentList(["company_id"=>$params['company_id'],"parent_id"=>$params['department_id_2']],"department_id,department_name"):[];
@@ -377,7 +380,7 @@ class Hj_StepsController extends AbstractController
             $params['PageSize'] = 500;
             $params['getCount'] = 1;
             //获取企业列表
-            $companyList = $this->oCompany->getCompanyList([],"company_id,company_name,detail");
+            $companyList = $this->oCompany->getCompanyList(["permissionList"=>$totalPermission],"company_id,company_name,detail");
             $departmentList_1 = $params['company_id']>0?$this->oDepartment->getDepartmentList(["company_id"=>$params['company_id'],"parent_id"=>0],"department_id,department_name"):[];
             $departmentList_2 = $params['department_id_1']>0?$this->oDepartment->getDepartmentList(["company_id"=>$params['company_id'],"parent_id"=>$params['department_id_1']],"department_id,department_name"):[];
             $departmentList_3 = $params['department_id_2']>0?$this->oDepartment->getDepartmentList(["company_id"=>$params['company_id'],"parent_id"=>$params['department_id_2']],"department_id,department_name"):[];

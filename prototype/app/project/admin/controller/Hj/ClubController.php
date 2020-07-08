@@ -42,12 +42,13 @@ class Hj_ClubController extends AbstractController
 		$PermissionCheck = $this->manager->checkMenuPermission(0);
 		if($PermissionCheck['return'])
 		{
-			//企业ID
+            $totalPermission = $this->manager->getPermissionList($this->manager->data_groups);
+            //企业ID
 			$company_id = intval($this->request->company_id??0);
 			//获取俱乐部列表
-			$clubList = $this->oClub->getClubList(['company_id'=>$company_id]);
+			$clubList = $this->oClub->getClubList(["permissionList"=>$totalPermission,'company_id'=>$company_id]);
 			//获取企业列表
-			$companyList = $this->oCompany->getCompanyList([],"company_id,company_name");
+			$companyList = $this->oCompany->getCompanyList(["permissionList"=>$totalPermission],"company_id,company_name");
 			//循环俱乐部列表
 			foreach($clubList as $key => $clubInfo)
             {
@@ -78,8 +79,9 @@ class Hj_ClubController extends AbstractController
 		$PermissionCheck = $this->manager->checkMenuPermission("addClub");
 		if($PermissionCheck['return'])
 		{
-		    //获取顶级俱乐部列表
-			$companyList = $this->oCompany->getCompanyList([],"company_id,company_name");
+            $totalPermission = $this->manager->getPermissionList($this->manager->data_groups);
+            //获取顶级俱乐部列表
+			$companyList = $this->oCompany->getCompanyList(["permissionList"=>$totalPermission],"company_id,company_name");
 			//渲染模版
 			include $this->tpl('Hj_Club_ClubAdd');
 		}
@@ -182,8 +184,9 @@ class Hj_ClubController extends AbstractController
 			$clubInfo = $this->oClub->getClub($club_id,'*');
 			//数据解包
             $clubInfo['detail'] = json_decode($clubInfo['detail'],true);
-			//获取企业列表
-			$companyList = $this->oCompany->getCompanyList([],"company_id,company_name");
+            $totalPermission = $this->manager->getPermissionList($this->manager->data_groups);
+            //获取企业列表
+			$companyList = $this->oCompany->getCompanyList(["permissionList"=>$totalPermission],"company_id,company_name");
             //渲染模版
 			include $this->tpl('Hj_Club_ClubModify');
 		}

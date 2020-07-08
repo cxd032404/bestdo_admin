@@ -39,12 +39,14 @@ class Hj_DepartmentController extends AbstractController
         $PermissionCheck = $this->manager->checkMenuPermission(0);
         if($PermissionCheck['return'])
         {
-            //部门ID
-            $company_id = intval($this->request->company_id??0);
+            $totalPermission = $this->manager->getPermissionList($this->manager->data_groups);
             //获取部门列表
-            $departmentList = $this->oDepartment->getDepartmentList(['company_id'=>$company_id]);
+            $companyList = $this->oCompany->getCompanyList(["permissionList"=>$totalPermission],"company_id,company_name");
+            $default_company = array_column($companyList,'company_id')['0'];
+            //部门ID
+            $company_id = intval($this->request->company_id??$default_company);
+            $departmentList = $this->oDepartment->getDepartmentList(["permissionList"=>$totalPermission,'company_id'=>$company_id]);
             //获取企业列表
-            $companyList = $this->oCompany->getCompanyList([],"company_id,company_name");
             //循环部门列表
             foreach($departmentList as $key => $departmentInfo)
             {
@@ -90,8 +92,9 @@ class Hj_DepartmentController extends AbstractController
         $PermissionCheck = $this->manager->checkMenuPermission("addDepartment");
         if($PermissionCheck['return'])
         {
+            $totalPermission = $this->manager->getPermissionList($this->manager->data_groups);
             //获取顶级部门列表
-            $companyList = $this->oCompany->getCompanyList([],"company_id,company_name");
+            $companyList = $this->oCompany->getCompanyList(["permissionList"=>$totalPermission],"company_id,company_name");
             //渲染模版
             include $this->tpl('Hj_Department_DepartmentAdd');
         }
@@ -171,27 +174,27 @@ class Hj_DepartmentController extends AbstractController
             if($departmentInfo['parent_id']==0)
             {
                 //第一级的列表获取
-                $departmentList = $this->oDepartment->getDepartmentList(['company_id'=>$departmentInfo['company_id'],'parent_id'=>0]);
+                $departmentList = $this->oDepartment->getDepartmentList(["permissionList"=>$totalPermission,'company_id'=>$departmentInfo['company_id'],'parent_id'=>0]);
             }
             else
             {
                 //获取上级数据
                 $parentDepartmentInfo = $this->oDepartment->getDepartment($departmentInfo['parent_id'],'department_name,department_id,parent_id');
                 //第一级的列表获取
-                $departmentList = $this->oDepartment->getDepartmentList(['company_id'=>$departmentInfo['company_id'],'parent_id'=>0]);
+                $departmentList = $this->oDepartment->getDepartmentList(["permissionList"=>$totalPermission,'company_id'=>$departmentInfo['company_id'],'parent_id'=>0]);
                 {
                     //第二级
                     if($parentDepartmentInfo['parent_id']==0)
                     {
                         //第一级的列表获取
-                        $departmentList = $this->oDepartment->getDepartmentList(['company_id'=>$departmentInfo['company_id'],'parent_id'=>0]);
+                        $departmentList = $this->oDepartment->getDepartmentList(["permissionList"=>$totalPermission,'company_id'=>$departmentInfo['company_id'],'parent_id'=>0]);
                         $departmentList[$departmentInfo['parent_id']]['selected'] = 1;
                         $parentDepartmentList = [];
                     }
                     else//第三级别
                     {
                         //第一级的列表获取
-                        $departmentList = $this->oDepartment->getDepartmentList(['company_id'=>$departmentInfo['company_id'],'parent_id'=>0]);
+                        $departmentList = $this->oDepartment->getDepartmentList(["permissionList"=>$totalPermission,'company_id'=>$departmentInfo['company_id'],'parent_id'=>0]);
                         //第二级的列表获取
                         $parentDepartmentList = $this->oDepartment->getDepartmentList(['company_id'=>$departmentInfo['company_id'],'parent_id'=>$parentDepartmentInfo['parent_id']]);
                         $departmentList[$parentDepartmentInfo['parent_id']]['selected'] = 1;
@@ -200,8 +203,9 @@ class Hj_DepartmentController extends AbstractController
                     }
                 }
             }
+            $totalPermission = $this->manager->getPermissionList($this->manager->data_groups);
             //获取企业列表
-            $companyList = $this->oCompany->getCompanyList([],"company_id,company_name");
+            $companyList = $this->oCompany->getCompanyList(["permissionList"=>$totalPermission],"company_id,company_name");
             //渲染模版
             include $this->tpl('Hj_Department_DepartmentModify');
         }
@@ -290,7 +294,7 @@ class Hj_DepartmentController extends AbstractController
         $company_id = intval($this->request->company_id);
         $parent_id = intval($this->request->parent_id??0);
         //获取部门列表
-        $departmentList = $this->oDepartment->getDepartmentList(['company_id'=>$company_id,'parent_id'=>$parent_id]);
+        $departmentList = $this->oDepartment->getDepartmentList(["permissionList"=>$totalPermission,'company_id'=>$company_id,'parent_id'=>$parent_id]);
         $text = '';
         $text .= '<option value="0">不指定</option>';
         //循环赛事分站列表

@@ -18,13 +18,17 @@ class Hj_Steps extends Base_Widget
     public function getStepsDetailList($params = [],$fields = "*")
     {
         $table_to_process = Base_Widget::getDbTable($this->table);
+        $wherePermission = isset($params['permissionList'])?(
+        count($params['permissionList'])>0?
+            ( " company_id in (".implode(",",array_column($params['permissionList'],"company_id")).") ")
+            :" 0 "):"";
         $whereCompany = (isset($params['company_id']) && $params['company_id']>0)?" company_id = ".$params['company_id']:"";
         $whereDepartment_1 = (isset($params['department_id_1']) && $params['department_id_1']>0)?" department_id_1 = ".$params['department_id_1']:"";
         $whereDepartment_2 = (isset($params['department_id_2']) && $params['department_id_2']>0)?" department_id_2 = ".$params['department_id_2']:"";
         $whereDepartment_3 = (isset($params['department_id_2']) && $params['department_id_2']>0)?" department_id_2 = ".$params['department_id_2']:"";
         $whereStartDate = (isset($params['start_date']) && strtotime($params['start_date'])>0)?" date >= '".$params['start_date']."'":"";
         $whereEndDate = (isset($params['end_date']) && strtotime($params['end_date'])>0)?" date <= '".$params['end_date']."'":"";
-        $whereCondition = array($whereCompany,$whereDepartment_1,$whereDepartment_2,$whereDepartment_3,$whereStartDate,$whereEndDate);
+        $whereCondition = array($wherePermission,$whereCompany,$whereDepartment_1,$whereDepartment_2,$whereDepartment_3,$whereStartDate,$whereEndDate);
         $where = Base_common::getSqlWhere($whereCondition);
         //获取用户数量
         if(isset($params['getCount'])&&$params['getCount']==1)
@@ -61,13 +65,17 @@ class Hj_Steps extends Base_Widget
         $table_to_process = Base_Widget::getDbTable($this->table);
         //生成查询列
         $fields = Base_common::getSqlFields(array("LogCount"=>"count(log_id)"));
+        $wherePermission = isset($params['permissionList'])?(
+        count($params['permissionList'])>0?
+            ( " company_id in (".implode(",",array_column($params['permissionList'],"company_id")).") ")
+            :" 0 "):"";
         $whereCompany = (isset($params['company_id']) && $params['company_id']>0)?" company_id = ".$params['company_id']:"";
         $whereDepartment_1 = (isset($params['department_id_1']) && $params['department_id_1']>0)?" department_id_1 = ".$params['department_id_1']:"";
         $whereDepartment_2 = (isset($params['department_id_2']) && $params['department_id_2']>0)?" department_id_2 = ".$params['department_id_2']:"";
         $whereDepartment_3 = (isset($params['department_id_2']) && $params['department_id_2']>0)?" department_id_2 = ".$params['department_id_2']:"";
         $whereStartDate = (isset($params['start_date']) && strtotime($params['start_date'])>0)?" date >= '".$params['start_date']."'":"";
         $whereEndDate = (isset($params['end_date']) && strtotime($params['end_date'])>0)?" date <= '".$params['end_date']."'":"";
-        $whereCondition = array($whereCompany,$whereDepartment_1,$whereDepartment_2,$whereDepartment_3,$whereStartDate,$whereEndDate);
+        $whereCondition = array($wherePermission,$whereCompany,$whereDepartment_1,$whereDepartment_2,$whereDepartment_3,$whereStartDate,$whereEndDate);
         //生成条件列
         $where = Base_common::getSqlWhere($whereCondition);
         $sql = "SELECT $fields FROM $table_to_process where 1 ".$where;
@@ -83,13 +91,17 @@ class Hj_Steps extends Base_Widget
         $fields = ["totalStep"=>"sum(step)","userCount"=>"count(distinct(user_id))"];
         $fields[] = $groupByField;
         $table_to_process = Base_Widget::getDbTable($this->table);
+        $wherePermission = isset($params['permissionList'])?(
+        count($params['permissionList'])>0?
+            ( " company_id in (".implode(",",array_column($params['permissionList'],"company_id")).") ")
+            :" 0 "):"";
         $whereCompany = (isset($params['company_id']) && $params['company_id']>0)?" company_id = ".$params['company_id']:"";
         $whereDepartment_1 = (isset($params['department_id_1']) && $params['department_id_1']>0)?" department_id_1 = ".$params['department_id_1']:"";
         $whereDepartment_2 = (isset($params['department_id_2']) && $params['department_id_2']>0)?" department_id_2 = ".$params['department_id_2']:"";
         $whereDepartment_3 = (isset($params['department_id_2']) && $params['department_id_2']>0)?" department_id_2 = ".$params['department_id_2']:"";
         $whereStartDate = (isset($params['start_date']) && strtotime($params['start_date'])>0)?" date >= '".$params['start_date']."'":"";
         $whereEndDate = (isset($params['end_date']) && strtotime($params['end_date'])>0)?" date <= '".$params['end_date']."'":"";
-        $whereCondition = array($whereCompany,$whereDepartment_1,$whereDepartment_2,$whereDepartment_3,$whereStartDate,$whereEndDate);
+        $whereCondition = array($wherePermission,$whereCompany,$whereDepartment_1,$whereDepartment_2,$whereDepartment_3,$whereStartDate,$whereEndDate);
         $where = Base_common::getSqlWhere($whereCondition);
         $groupBy = Base_Common::getGroupBy([$groupByField]);
         $fields = Base_Common::getSqlFields($fields);
@@ -129,13 +141,17 @@ class Hj_Steps extends Base_Widget
         $table_to_process = Base_Widget::getDbTable($this->table);
         //生成查询列
         $fields = Base_common::getSqlFields($fields);
+        $wherePermission = isset($params['permissionList'])?(
+        count($params['permissionList'])>0?
+            ( " company_id in (".implode(",",array_column($params['permissionList'],"company_id")).") ")
+            :" 0 "):"";
         $whereCompany = (isset($params['company_id']) && $params['company_id']>0)?" company_id = ".$params['company_id']:"";
         $whereDepartment_1 = (isset($params['department_id_1']) && $params['department_id_1']>0)?" department_id_1 = ".$params['department_id_1']:"";
         $whereDepartment_2 = (isset($params['department_id_2']) && $params['department_id_2']>0)?" department_id_2 = ".$params['department_id_2']:"";
         $whereDepartment_3 = (isset($params['department_id_2']) && $params['department_id_2']>0)?" department_id_2 = ".$params['department_id_2']:"";
         $whereStartDate = (isset($params['start_date']) && strtotime($params['start_date'])>0)?" date >= '".$params['start_date']."'":"";
         $whereEndDate = (isset($params['end_date']) && strtotime($params['end_date'])>0)?" date <= '".$params['end_date']."'":"";
-        $whereCondition = array($whereCompany,$whereDepartment_1,$whereDepartment_2,$whereDepartment_3,$whereStartDate,$whereEndDate);
+        $whereCondition = array($wherePermission,$whereCompany,$whereDepartment_1,$whereDepartment_2,$whereDepartment_3,$whereStartDate,$whereEndDate);
         //生成条件列
         $where = Base_common::getSqlWhere($whereCondition);
         $groupBy = Base_Common::getGroupBy($groupByField);
