@@ -37,7 +37,7 @@
 			{tpl:loop $DateRange.DateList $key $dateInfo}
 			<tr class="hover">
 				<td align="center">{tpl:$dateInfo.start_date/}</td>
-				<td align="center">{tpl:$dateInfo.start_date/}</td>
+				<td align="center">{tpl:$dateInfo.end_date/}</td>
 				<td align="center">{tpl:$dateInfo.detail.title/}</td>
 				<td align="center">{tpl:$dateInfo.create_time/}</td>
 				<td align="center">{tpl:$dateInfo.update_time/}</td>

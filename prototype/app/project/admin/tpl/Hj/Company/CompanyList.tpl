@@ -57,6 +57,8 @@ function regPage(mid,name){
  |  <a href="javascript:;" onclick="companyModify('{tpl:$companyInfo.company_id/}');">修改</a>
   | <a href="javascript:;" onclick="protocalModify('{tpl:$companyInfo.company_id/}','privacy');">隐私政策</a>
   | <a href="javascript:;" onclick="protocalModify('{tpl:$companyInfo.company_id/}','user');">用户政策</a>
+          | <a href="javascript:;" onclick="protocalModify('{tpl:$companyInfo.company_id/}','privacy_m');">隐私政策(小程序）</a>
+          | <a href="javascript:;" onclick="protocalModify('{tpl:$companyInfo.company_id/}','user_m');">用户政策（小程序）</a>
   | <a href="javascript:;" onclick="regPage('{tpl:$companyInfo.company_id/}','{tpl:$companyInfo.company_name/}');">注册页面</a>
         | <a href="{tpl:$this.sign/}&ac=boutique&company_id={tpl:$companyInfo.company_id/}">精品课设置({tpl:$companyInfo.detail.boutique func='count(@@)'/}) </a>
         | <a href="{tpl:$this.sign/}&ac=club.banner&company_id={tpl:$companyInfo.company_id/}">俱乐部Banner({tpl:$companyInfo.detail.clubBanner func="count(@@)"/})</a>

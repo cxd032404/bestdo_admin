@@ -11,7 +11,7 @@
 </td>
 </tr>
 <tr class="hover">
-<td>开始日期：</td>
+<td>结束日期：</td>
 <td align="left"><input type="text" name="end_date"  id="end_date " class="input-medium" value="{tpl:$dateRangeInfo.end_date/}"  onFocus="WdatePicker({isShowClear:false,readOnly:true,dateFmt:'yyyy-MM-dd'})" >
 </td>
 </tr>

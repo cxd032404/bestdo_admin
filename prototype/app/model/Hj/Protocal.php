@@ -8,7 +8,7 @@ class Hj_Protocal extends Base_Widget
 {
 	//声明所用到的表
 	protected $table = 'config_protocal';
-	protected $protocal_type = ["privacy"=>"隐私政策","user"=>"用户协议"];
+	protected $protocal_type = ["privacy"=>"隐私政策","user"=>"用户协议","privacy_m"=>"隐私政策(小程序)","user_m"=>"用户协议(小程序)"];
 
 	public function getPrototcalType()
     {
