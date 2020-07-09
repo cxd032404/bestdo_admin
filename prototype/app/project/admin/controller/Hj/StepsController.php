@@ -379,15 +379,18 @@ class Hj_StepsController extends AbstractController
             //分页参数
             $params['PageSize'] = 500;
             $params['getCount'] = 1;
+            $totalPermission = $this->manager->getPermissionList($this->manager->data_groups);
             //获取企业列表
             $companyList = $this->oCompany->getCompanyList(["permissionList"=>$totalPermission],"company_id,company_name,detail");
             $departmentList_1 = $params['company_id']>0?$this->oDepartment->getDepartmentList(["company_id"=>$params['company_id'],"parent_id"=>0],"department_id,department_name"):[];
             $departmentList_2 = $params['department_id_1']>0?$this->oDepartment->getDepartmentList(["company_id"=>$params['company_id'],"parent_id"=>$params['department_id_1']],"department_id,department_name"):[];
             $departmentList_3 = $params['department_id_2']>0?$this->oDepartment->getDepartmentList(["company_id"=>$params['company_id'],"parent_id"=>$params['department_id_2']],"department_id,department_name"):[];
 
+
             $oExcel = new Third_Excel();
-            $FileName= ($this->manager->name().'步数详情');
+            $FileName= ('步数详情');
             $oExcel->download($FileName)->addSheet('步数统计');
+
             //标题栏
             $title = array("企业","部门","姓名","步数","热量","估测时间","估测距离","达标率","是否达标");
             $oExcel->addRows(array($title));
@@ -480,6 +483,8 @@ class Hj_StepsController extends AbstractController
         $PermissionCheck = $this->manager->checkMenuPermission(0);
         if($PermissionCheck['return'])
         {
+            //企业ID
+            $params['company_id'] = intval($this->request->company_id??0);
             //一级部门ID
             $params['department_id_1'] = intval($this->request->department_id_1??0);
             //二级部门ID
@@ -541,7 +546,7 @@ class Hj_StepsController extends AbstractController
                         $departmentInfo[$detail[$groupKey]] = $departmentInfo;
                     }
                 }
-                $StepsStatList['List'][$key]['department_name'] = $departmentInfo[$detail[$groupKey]]['department_name']??"未知部门";
+                $StepsStatList['List'][$key]['department_name'] = $departmentInfo[$detail[$groupKey]]['department_name']??"直属人员";
                 $StepsStatList['List'][$key]['kcal'] = intval($detail['totalStep']/$spepsConfig['stepsPerKcal']);
                 $StepsStatList['List'][$key]['time'] = intval($detail['totalStep']/$spepsConfig['stepsPerMinute']);
                 $StepsStatList['List'][$key]['distance'] = intval($spepsConfig['distancePerStep']*$detail['totalStep']);
@@ -552,9 +557,111 @@ class Hj_StepsController extends AbstractController
             $page_url = Base_Common::getUrl('',$this->ctl,'stat',$params)."&Page=~page~";
             $page_content =  base_common::multi($StepsStatList['Count'], $page_url, $params['Page'], $params['PageSize'], 10, $maxpage = 100, $prevWord = '上一页', $nextWord = '下一页');
             //导出EXCEL链接
-            $export_var = "<a href =".(Base_Common::getUrl('',$this->ctl,'stat.download',$params))."><导出表格></a>";
+            $export_var = "<a href =".(Base_Common::getUrl('',$this->ctl,'department.download',$params))."><导出表格></a>";
             //渲染模版
             include $this->tpl('Hj_Steps_DepartmentStat');
+        }
+        else
+        {
+            $home = $this->sign;
+            include $this->tpl('403');
+        }
+    }
+    //步数详情页面
+    public function departmentDownloadAction()
+    {
+        //检查权限
+        $PermissionCheck = $this->manager->checkMenuPermission(0);
+        if($PermissionCheck['return'])
+        {
+            //企业ID
+            $params['company_id'] = intval($this->request->company_id??0);
+            //一级部门ID
+            $params['department_id_1'] = intval($this->request->department_id_1??0);
+            //二级部门ID
+            $params['department_id_2'] = intval($this->request->department_id_2??0);
+            if($params['department_id_1']>0)
+            {
+                if($params['department_id_2']>0)
+                {
+                    $current_level = 3;
+                }
+                else
+                {
+                    $current_level = 2;
+                }
+            }
+            else
+            {
+                $current_level = 1;
+            }
+            $groupKey = "department_id_".$current_level;
+            //用户姓名
+            $params['user_name']= trim($this->requrest->user_name??"");
+            //开始日期
+            $params['start_date']= trim($this->requrest->start_date??date("Y-m-d",time()-3*86400));
+            //结束日期
+            $params['end_date']= trim($this->requrest->end_date??date("Y-m-d"));
+            //分页参数
+            $params['PageSize'] = 500;
+            $params['getCount'] = 1;
+            $totalPermission = $this->manager->getPermissionList($this->manager->data_groups);
+            $params['PermissionList'] = $totalPermission;
+
+
+            $oExcel = new Third_Excel();
+            $FileName= ('达成率');
+            $oExcel->download($FileName)->addSheet('部门达成率统计');
+
+            //标题栏
+            $title = array("企业","部门","步数","热量","估测时间","估测距离","达标率","是否达标");
+            $oExcel->addRows(array($title));
+
+            $Count = 1;$params['Page'] =1;
+            $departmentList  = [];
+            $days = intval((strtotime($params['end_date']) - strtotime($params['start_date']))/86400);
+            $spepsConfig = $this->config->steps;
+            $companyInfo = $this->oCompany->getCompany($params['company_id'],"company_id,company_name,detail");
+            $companyDetail =
+                json_decode($companyInfo['detail'],true);
+            $goal = $companyDetail['daily_step']??6000*$days;
+            do{
+                //获取步数详情列表
+                $StepsStatList = $this->oSteps->getStepsStatList($params,$groupKey);
+                $Count = count($StepsStatList['UserCount']);
+                foreach($StepsStatList['List'] as $key => $detail)
+                {
+                    if(!isset($departmentList[$detail[$groupKey]]))
+                    {
+                        $departmentInfo = $this->oDepartment->getDepartment($detail[$groupKey],'department_name,department_id');
+                        if(isset($departmentInfo["department_id"]))
+                        {
+                            $departmentInfo[$detail[$groupKey]] = $departmentInfo;
+                        }
+                    }
+                    $StepsStatList['List'][$key]['department_name'] = $departmentInfo[$detail[$groupKey]]['department_name']??"直属人员";
+                    $StepsStatList['List'][$key]['kcal'] = intval($detail['totalStep']/$spepsConfig['stepsPerKcal']);
+                    $StepsStatList['List'][$key]['time'] = intval($detail['totalStep']/$spepsConfig['stepsPerMinute']);
+                    $StepsStatList['List'][$key]['distance'] = intval($spepsConfig['distancePerStep']*$detail['totalStep']);
+                    $StepsStatList['List'][$key]['achive'] = $detail['totalStep']>=$goal*$detail['userCount']?1:0;
+                    $StepsStatList['List'][$key]['achive_rate'] = intval(100*($detail['totalStep']/($goal*$detail['userCount'])));
+                    //生成单行数据
+                    $t = array();
+                    $t['companyName'] = $companyInfo['company_name'];
+                    $t['departmentName'] = $StepsStatList['List'][$key]['department_name'];
+                    $t['step'] = $StepsStatList['List'][$key]['totalStep'];
+                    $t['kcal'] = $StepsStatList['List'][$key]['kcal']."kcal";
+                    $t['time'] = $StepsStatList['List'][$key]['time']."分钟";
+                    $t['distance'] = $StepsStatList['List'][$key]['distance']."米";
+                    $t['achiveRate'] = $StepsStatList['List'][$key]['achive_rate']."%";
+                    $t['achive'] = $StepsStatList['List'][$key]['achive']==1?"达标":"未达标";
+                    $oExcel->addRows(array($t));
+                    unset($t);
+                }
+                $params['Page']++;
+                $oExcel->closeSheet()->close();
+            }
+            while($Count>0);
         }
         else
         {
