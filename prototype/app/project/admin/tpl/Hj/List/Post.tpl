@@ -42,7 +42,8 @@
 		var options = {
 			dataType:'json',
 			babeforeSubmit:function(formData, jqForm, options) {},
-			success:function(jsonResponsee) {
+			success:function(jsonResponse) {
+
 				if (jsonResponse.success == "false") {
 					
 					divBox.alertBox(jsonResponse.msg,function(){});

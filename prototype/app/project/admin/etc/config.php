@@ -26,6 +26,7 @@ $config['api'] = [
         'get_token_for_manager'=>'/user/createTokenForManager',
         'display'=>'/list/post_display',
         'refresh'=>'/cache/refresh',
+        'invite'=>'/club/inviteToClub',
     ],
         'site'=>[
     'company_user_reg'=>'loginhome',

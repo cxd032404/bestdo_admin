@@ -1,16 +1,21 @@
 {tpl:tpl contentHeader/}
 <div class="br_bottom"></div>
-<form id="club_update_form" name="club_update_form" action="{tpl:$this.sign/}&ac=club.update" method="post">
+<form id="invite_form" name="invite_form" action="{tpl:$inviteUrl/}" method="post">
 <input type="hidden" name="club_id" id="club_id" value="{tpl:$clubInfo.club_id/}" />
+<input type="hidden" name="UserToken" id="UserToken" value="{tpl:$token/}" />
 
 <table width="99%" align="center" class="table table-bordered table-striped" >
 <tr class="hover">
 <td>俱乐部名称</td>
-<td align="left"><input name="club_name" type="text" class="span2" id="club_name" value="{tpl:$clubInfo.club_name/}" size="50" /></td>
+	<td align="left">{tpl:$clubInfo.club_name/}</td>
 </tr>
 <tr class="hover">
-	<td>姓名</td>
-<td align="left"><input type="text" class="span4" name="user_name"  id="user_name" value="" size="50" onchange="getUser()"/></td>
+<td>姓名</td>
+<td align="left"><input type="text" class="span2" name="user_name"  id="user_name" value="" size="50" onchange="getUser()"/></td>
+</tr>
+<tr class="hover">
+	<td>说明</td>
+	<td align="left"><input name="comment" type="text" class="span2" id="comment" value="" size="50" /></td>
 </tr>
 
 	<tr class="hover"><td>用户列表</td>
@@ -21,33 +26,26 @@
 		</select></td>
 </tr>
 <tr class="noborder"><td></td>
-<td><button type="submit" id="club_update_submit">提交</button></td>
+<td><button type="submit" id="invite_submit">提交</button></td>
 </tr>
 </table>
 </form>
 
 <script type="text/javascript">
-$('#club_update_submit').click(function(){
+$('#invite_submit').click(function(){
 	var options = {
 		dataType:'json',
-		beforeSubmit:function(formData, jqForm, options) {
-		},
+		beforeSubmit:function(formData, jqForm, options) {},
 		success:function(jsonResponse) {
-			if (jsonResponse.errno) {
-				var errors = [];
-				errors[1] = '俱乐部名称不能为空，请修正后再次提交';
-				errors[3] = '俱乐部标识不能为空，请修正后再次提交';
-				errors[4] = '俱乐部标识'+$('#club_sign').val()+'已重复，请修正后再次提交';
-				errors[8] = '尚未绑定管理员用户，请修正后再次提交';
-				errors[9] = '入库失败，请修正后再次提交';
-				divBox.alertBox(errors[jsonResponse.errno],function(){});
+			if (jsonResponse.code != 200) {
+				divBox.alertBox(jsonResponse.msg,function(){});
 			} else {
-				var message = '修改俱乐部成功';
-				divBox.confirmBox({content:message,ok:function(){windowParent.getRightHtml('{tpl:$this.sign/}' + '&company_id=' + jsonResponse.company_id);}});
+				var message = '邀请成功';
+				divBox.confirmBox({content:message,ok:function(){windowParent.getRightHtml('{tpl:$this.sign/}' + '&ac=member.list&club_id=' + $('#club_id').val());}});
 			}
 		}
 	};
-	$('#club_update_form').ajaxForm(options);
+	$('#invite_form').ajaxForm(options);
 });
 function getUser()
 {

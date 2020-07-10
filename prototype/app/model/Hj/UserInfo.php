@@ -635,10 +635,29 @@ class Hj_UserInfo extends Base_Widget
 
     public function getTokenForManager($manager_id)
     {
-        $tokenUrl = $this->config->apiUrl.$this->config->api['api']['get_token_for_manager']."?manager_id=".$manager_id;
-        $tokenInfo  = file_get_contents($tokenUrl);
-        $tokenInfo = json_decode($tokenInfo,true);
-        return $tokenInfo['data']['user_token']??"";
+        $redis_key = "UserTokenForManager_".$manager_id;
+        $oRedis = new Base_Cache_Redis("Hj");
+        $cache = $oRedis->get($redis_key);
+        if(!$cache || strlen($cache)<=20)
+        {
+            $tokenUrl = $this->config->apiUrl.$this->config->api['api']['get_token_for_manager']."?manager_id=".$manager_id;
+            $tokenInfo  = file_get_contents($tokenUrl);
+            $tokenInfo = json_decode($tokenInfo,true);
+            $userToken = $tokenInfo['data']['user_token']??"";
+            if($userToken != "")
+            {
+                $oRedis->set($redis_key,$userToken,3600);
+            }
+            else
+            {
+                $userToken = "";
+            }
+        }
+        else
+        {
+            $userToken = $cache;
+        }
+        return $userToken;
     }
     /**
      * 获取用户报名列表
