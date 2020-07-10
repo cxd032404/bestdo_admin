@@ -33,8 +33,8 @@
     <td align="center">{tpl:$logInfo.process_time/}</td>
     <td align="center">{tpl:$logInfo.result_name/}</td>
 
-    <td align="center">发起人：{tpl:$memberInfo.detail.comment/}<p>
-        操作人：{tpl:$memberInfo.detail.operate_comment/}<p></td>
+    <td align="center">发起人：{tpl:$logInfo.detail.comment/}<p>
+        操作人：{tpl:$logInfo.detail.operate_comment/}<p></td>
   </tr>
 {/tpl:loop}
   <tr><th colspan="10" align="center" class="rowtip">{tpl:$page_content/}</th></tr>

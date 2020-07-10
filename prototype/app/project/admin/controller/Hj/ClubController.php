@@ -364,7 +364,7 @@ class Hj_ClubController extends AbstractController
             $club_id = intval($this->request->club_id??0);
             //分页参数
             $params['Page'] = abs(intval($this->request->Page??1));
-            $params['PageSize'] = 2;
+            $params['PageSize'] = 20;
             //获取列表时需要获得记录总数
             $params['getCount'] = 1;
             $params['status'] = 1;

@@ -33,7 +33,6 @@
 
 <script type="text/javascript">
 $('#invite_submit').click(function(){
-	alert(1)
 	var options = {
 		dataType:'json',
 		beforeSubmit:function(formData, jqForm, options) {},
@@ -41,8 +40,8 @@ $('#invite_submit').click(function(){
 			if (jsonResponse.code != 200) {
 				divBox.alertBox(jsonResponse.msg,function(){});
 			} else {
-				var message = '添加俱乐部成功';
-				divBox.confirmBox({content:message,ok:function(){windowParent.getRightHtml('{tpl:$this.sign/}' + '&company_id=' + $('#company_id').val());}});
+				var message = '邀请成功';
+				divBox.confirmBox({content:message,ok:function(){windowParent.getRightHtml('{tpl:$this.sign/}' + '&ac=member.list&club_id=' + $('#club_id').val());}});
 			}
 		}
 	};
