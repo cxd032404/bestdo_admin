@@ -787,4 +787,19 @@ class Hj_CompanyController extends AbstractController
         $url = urlencode($url);
         include $this->tpl('Hj_Company_RegQR');
     }
+    public function regPageQrMiniprogramAction()
+    {
+        //include('Third/phpqrcode/phpqrcode.php');
+        //企业ID
+        $company_id = intval($this->request->id);
+        $filePath = "upload/RegQR-".$company_id.".png";
+        $fileExist = file_exists($filePath);
+        if(!$fileExist)
+        {
+            $url = $url = $this->config->adminUrl.'/callback/miniprogram.php?company_id='.$company_id;
+            file_get_contents($url);
+        }
+        $img_url = $this->config->adminUrl.'/'.$filePath;
+        include $this->tpl('Hj_Company_RegQRM');
+    }
 }

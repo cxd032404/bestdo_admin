@@ -1,10 +1,15 @@
 <?php
-echo "here";
-test();
-function test(){
-    echo "666";
-    $appid = 'wx52f654781e1775e7';
-    $secret = '732c040be5cf8a47de04d93bf2bb4de2';
+include dirname(dirname(__FILE__)) . '/init.php';
+
+$company_id = isset($_GET['company_id']) ? $_GET['company_id'] : '';
+
+generateRegQR($company_id);
+
+function generateRegQR($company_id){
+    $config=array();
+    $config  = (@include dirname(dirname(__FILE__)) . '../../../../../../CommonConfig/keyConfig.php');
+    $appid = $config['mini_program']['appid'];
+    $secret = $config['mini_program']['appsecret'];
     $filename = './upload/test.png';
     $url = 'https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid='.$appid.'&secret='.$secret;
     //开启session
@@ -21,16 +26,15 @@ function test(){
     }
     if(!empty($access_token)){
         $url = 'https://api.weixin.qq.com/wxa/getwxacode?access_token='.$access_token;
-        $data['path'] = 'pages/index/index';
-        $data['scene'] = 'jobId=222';//(string类型,必须是数字)
+        $data['path'] = 'pages/wtCompany/wtCompany';
+        $data['scene'] = 'company_id='.$company_id;//(string类型,必须是数字)
         $data['width'] = 430;
         $result = curlPost($url,$data,'POST');
-        // p($result);
-        $ret = file_put_contents('../upload/test.png', $result, true);
-        print_R($ret);
-        echo '成功';
+        $filename = '../upload/test-'.$company_id.'.png';
+        $ret = file_put_contents('../upload/RegQR-'.$company_id.'.png', $result, true);
+        echo json_encode(["result"=>1]);
     }else{
-        echo 'string';
+        echo json_encode(["result"=>0]);
     }
 }
 function getJson($url,$data=array(),$method='GET'){
