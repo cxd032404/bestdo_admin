@@ -548,6 +548,8 @@ class Hj_ClubController extends AbstractController
             $club_id= intval($this->request->club_id);
             //获取俱乐部信息
             $clubInfo = $this->oClub->getClub($club_id,'*');
+            $inviteUrl = $this->config->apiUrl.$this->config->api['api']['invite'];
+            $token = (new Hj_UserInfo())->getTokenForManager($this->manager->id);
             //渲染模版
             include $this->tpl('Hj_Club_Invite');
         }
