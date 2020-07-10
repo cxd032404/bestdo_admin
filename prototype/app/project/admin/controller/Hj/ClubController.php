@@ -374,40 +374,56 @@ class Hj_ClubController extends AbstractController
             //俱乐部记录列表
             $logList = $this->oClubMember->getMemberLogList($params);
             $userList = [];
+            $defaultUserImg = (new Widget_Config())->getConfig("default_user_img");
+            if(isset($defaultUserImg['config_sign']))
+            {
+                $defaultUserImg['content'] = json_decode($defaultUserImg['content'],true);
+                $defaultUserImg = $defaultUserImg['content']['0']['img_url']??"";
+            }
+            else
+            {
+                $defaultUserImg = "";
+            }
             //循环页面列表
             foreach($logList['LogList'] as $key => $logDetail)
             {
-                //数据解包
+                //被操作用户
                 if(!isset($userList[$logDetail['user_id']]))
                 {
                     $userInfo = $this->oUserInfo->getUser($logDetail['user_id'],'user_id,true_name,user_img');
                     if(isset($userInfo['user_id']))
                     {
+                        //$userInfo['user_img'] = $userInfo['user_img']??$defaultUserImg;
                         $userList[$logDetail['user_id']] = $userInfo;
                     }
                 }
-                //数据解包
+                //操作用户
                 if(!isset($userList[$logDetail['operate_user_id']]))
                 {
                     $userInfo = $this->oUserInfo->getUser($logDetail['operate_user_id'],'user_id,true_name,user_img');
                     if(isset($userInfo['user_id']))
                     {
+                        //$userInfo['user_img'] = $userInfo['user_img']??$defaultUserImg;
+
                         $userList[$logDetail['operate_user_id']] = $userInfo;
                     }
                 }
-                //数据解包
+                //最终处理用户
                 if(!isset($userList[$logDetail['process_user_id']]))
                 {
                     $userInfo = $this->oUserInfo->getUser($logDetail['process_user_id'],'user_id,true_name,user_img');
                     if(isset($userInfo['user_id']))
                     {
+                        //$userInfo['user_img'] = $userInfo['user_img']??$defaultUserImg;
                         $userList[$logDetail['process_user_id']] = $userInfo;
                     }
                 }
                 $logList['LogList'][$key]['user_name'] = $userList[$logDetail['user_id']]['true_name']??"未知用户";
+                $logList['LogList'][$key]['user_img'] = $userList[$logDetail['user_id']]['user_img']??$defaultUserImg;
                 $logList['LogList'][$key]['operate_user_name'] = $userList[$logDetail['operate_user_id']]['true_name']??"未知用户";
+                $logList['LogList'][$key]['operate_img'] = $userList[$logDetail['operate_user_id']]['user_img']??$defaultUserImg;
                 $logList['LogList'][$key]['process_user_name'] = $userList[$logDetail['process_user_id']]['true_name']??"未知用户";
-                //$logList['LogList'][$key]['user_img'] = $userList[$logDetail['user_id']]['user_img']??"";
+                $logList['LogList'][$key]['process_img'] = $userList[$logDetail['process_user_id']]['user_img']??$defaultUserImg;
                 $logList['LogList'][$key]['detail'] = json_decode($logDetail['detail'],true);
                 $logList['LogList'][$key]['action_name'] = $this->oClubMember->processMemberAction($logDetail['type'],$logDetail['sub_type']);
                 $logList['LogList'][$key]['result_name'] = $this->oClubMember->processMemberLogResult($logDetail['user_id'],$logDetail['operate_user_id'],$logDetail['process_user_id'],$logDetail['result']);
