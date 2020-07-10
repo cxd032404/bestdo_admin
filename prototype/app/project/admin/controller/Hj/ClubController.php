@@ -315,6 +315,16 @@ class Hj_ClubController extends AbstractController
             //获取文章列表
             $memberList = $this->oClubMember->getMemberList($params);
             $userList = [];
+            $defaultUserImg = (new Widget_Config())->getConfig("default_user_img");
+            if(isset($defaultUserImg['config_sign']))
+            {
+                $defaultUserImg['content'] = json_decode($defaultUserImg['content'],true);
+                $defaultUserImg = $defaultUserImg['content']['0']['img_url']??"";
+            }
+            else
+            {
+                $defaultUserImg = "";
+            }
             //循环页面列表
             foreach($memberList['MemberList'] as $key => $memberDetail)
             {
@@ -328,7 +338,7 @@ class Hj_ClubController extends AbstractController
                     }
                 }
                 $memberList['MemberList'][$key]['user_name'] = $userList[$memberDetail['user_id']]['true_name']??"未知用户";
-                $memberList['MemberList'][$key]['user_img'] = $userList[$memberDetail['user_id']]['user_img']??"";
+                $memberList['MemberList'][$key]['user_img'] = $userList[$memberDetail['user_id']]['user_img']??$defaultUserImg;
                 $memberList['MemberList'][$key]['detail'] = json_decode($memberDetail['detail'],true);
 
             }
@@ -526,5 +536,60 @@ class Hj_ClubController extends AbstractController
             Base_Common::refreshCache($this->config,"club",$club_id);
         }
         $this->response->goBack();
+    }
+    //俱乐部邀请成员加入
+    public function inviteAction()
+    {
+        //检查权限
+        $PermissionCheck = $this->manager->checkMenuPermission("updateClub");
+        if($PermissionCheck['return'])
+        {
+            //俱乐部ID
+            $club_id= intval($this->request->club_id);
+            //获取俱乐部信息
+            $clubInfo = $this->oClub->getClub($club_id,'*');
+            //渲染模版
+            include $this->tpl('Hj_Club_Invite');
+        }
+        else
+        {
+            $home = $this->sign;
+            include $this->tpl('403');
+        }
+    }
+    //根据输入的用户信息搜索列表以供邀请
+    public function getUserForInviteAction()
+    {
+        //俱乐部ID
+        $club_id = intval($this->request->club_id);
+        //姓名
+        $user_name = trim($this->request->user_name);
+        //获取俱乐部信息
+        $clubInfo = $this->oClub->getClub($club_id,'*');
+        $text = '';
+        $text .= '<option value="0">请选择</option>';
+        if($user_name!="")
+        {
+            //获取用户列表
+            $UserList = $this->oUserInfo->getUserList(['company_id'=>$clubInfo['company_id'],"true_name"=>$user_name,"Page"=>1,"PageSize"=>20]);
+            if(isset($UserList['UserList']))
+            {
+                foreach($UserList['UserList'] as $key => $userInfo)
+                {
+                    $exist = $this->oClubMember->getMemberCount(['club_id'=>$club_id,"status"=>1,"user_id"=>$userInfo['user_id']]);
+                    if($exist>0)
+                    {
+                        $text .= '<option value="'.$userInfo['user_id'].'" disabled="disabled">'.$userInfo['true_name'].'(已加入)</option>';
+                    }
+                    else
+                    {
+                        $text .= '<option value="'.$userInfo['user_id'].'">'.$userInfo['true_name'].'</option>';
+                    }
+
+                }
+            }
+        }
+        echo $text;
+        die();
     }
 }

@@ -1,10 +1,12 @@
 {tpl:tpl contentHeader/}
 <script type="text/javascript">
-
+  function invite(){
+    inviteBox = divBox.showBox('{tpl:$this.sign/}&ac=invite&club_id={tpl:$clubInfo.club_id/}', {title:'邀请成员加入',width:600,height:500});
+  }
 </script>
 
 <fieldset><legend>操作</legend>
-[ <a href="{tpl:$this.sign/}&club_id={tpl:$clubInfo.club_id/}">返回</a> ]
+[ <a href="{tpl:$this.sign/}&club_id={tpl:$clubInfo.club_id/}">返回</a> ｜ <a href="javascript:;" onclick="invite();">邀请</a> ]
 </fieldset>
 
 <fieldset><legend>{tpl:$clubInfo.club_name/} 成员列表</legend>
