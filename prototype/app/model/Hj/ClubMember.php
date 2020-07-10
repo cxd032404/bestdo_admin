@@ -125,7 +125,7 @@ class Hj_ClubMember extends Base_Widget
         $fields = Base_common::getSqlFields($fields);
         //获取需要用到的表名
         $table_to_process = Base_Widget::getDbTable($this->table_log);
-        $order = " ORDER BY log_id desc";
+        $order = " ORDER BY update_time desc";
         //企业
         $whereCompany = (isset($params['company_id']) && ($params['company_id']>0))?" company_id = '".$params['company_id']."' ":"";
         //俱乐部
