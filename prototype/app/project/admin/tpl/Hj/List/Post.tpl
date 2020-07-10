@@ -44,6 +44,7 @@
 			babeforeSubmit:function(formData, jqForm, options) {},
 			success:function(jsonResponsee) {
 				if (jsonResponse.success == "false") {
+					
 					divBox.alertBox(jsonResponse.msg,function(){});
 				} else {
 					var message = '发布成功';
