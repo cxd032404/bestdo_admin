@@ -42,10 +42,9 @@
 		var options = {
 			dataType:'json',
 			babeforeSubmit:function(formData, jqForm, options) {},
-			success:function(jsonResponse) {
-				alert(jsonResponse.success);
+			success:function(jsonResponsee) {
 				if (jsonResponse.success == "false") {
-					//divBox.alertBox(jsonResponse.msg,function(){});
+					divBox.alertBox(jsonResponse.msg,function(){});
 				} else {
 					var message = '发布成功';
 					divBox.confirmBox({content:message,ok:function(){windowParent.getRightHtml('{tpl:$this.sign/}'+'&ac=list&list_id='+$('#list_id').val());}});
