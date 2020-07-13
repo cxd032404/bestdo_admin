@@ -161,6 +161,7 @@ class Hj_StepsController extends AbstractController
             //分页参数
             $params['PageSize'] = 500;
             $params['getCount'] = 1;
+            $totalPermission = $this->manager->getPermissionList($this->manager->data_groups);
             //获取企业列表
             $companyList = $this->oCompany->getCompanyList(["permissionList"=>$totalPermission],"company_id,company_name,detail");
             $departmentList_1 = $params['company_id']>0?$this->oDepartment->getDepartmentList(["company_id"=>$params['company_id'],"parent_id"=>0],"department_id,department_name"):[];
@@ -168,7 +169,7 @@ class Hj_StepsController extends AbstractController
             $departmentList_3 = $params['department_id_2']>0?$this->oDepartment->getDepartmentList(["company_id"=>$params['company_id'],"parent_id"=>$params['department_id_2']],"department_id,department_name"):[];
 
             $oExcel = new Third_Excel();
-            $FileName= ($this->manager->name().'步数详情');
+            $FileName= (iconv('gbk','utf-8','步数详情'));
             $oExcel->download($FileName)->addSheet('每日步数详情');
             //标题栏
             $title = array("企业","部门","姓名","日期","步数","热量","估测时间","估测距离","达标率","是否达标","更新时间");
@@ -177,7 +178,7 @@ class Hj_StepsController extends AbstractController
             $userList  = $goalList = [];
             $spepsConfig = $this->config->steps;
             do{
-//获取步数详情列表
+                //获取步数详情列表
                 $StepsDetailList = $this->oSteps->getStepsDetailList($params);
                 $Count = count($StepsDetailList['LogCount']);
                 foreach($StepsDetailList['DetailList'] as $key => $detail)
@@ -245,9 +246,9 @@ class Hj_StepsController extends AbstractController
                     unset($t);
                 }
                 $params['Page']++;
-                $oExcel->closeSheet()->close();
             }
             while($Count>0);
+            $oExcel->closeSheet()->close();
         }
         else
         {
@@ -388,7 +389,7 @@ class Hj_StepsController extends AbstractController
 
 
             $oExcel = new Third_Excel();
-            $FileName= ('步数详情');
+            $FileName= (iconv('gbk','utf-8','步数详情'));
             $oExcel->download($FileName)->addSheet('步数统计');
 
             //标题栏
@@ -399,7 +400,7 @@ class Hj_StepsController extends AbstractController
             $spepsConfig = $this->config->steps;
             $days = intval((strtotime($params['end_date']) - strtotime($params['start_date']))/86400);
             do{
-//获取步数详情列表
+                //获取步数详情列表
                 $StepsStatList = $this->oSteps->getStepsStatList($params);
                 $Count = count($StepsStatList['UserCount']);
                 foreach($StepsStatList['List'] as $key => $detail)
@@ -466,9 +467,9 @@ class Hj_StepsController extends AbstractController
                     unset($t);
                 }
                 $params['Page']++;
-                $oExcel->closeSheet()->close();
             }
             while($Count>0);
+            $oExcel->closeSheet()->close();
         }
         else
         {
@@ -610,9 +611,8 @@ class Hj_StepsController extends AbstractController
 
 
             $oExcel = new Third_Excel();
-            $FileName= ('达成率');
+            $FileName= (iconv('gbk','utf-8','达成率'));
             $oExcel->download($FileName)->addSheet('部门达成率统计');
-
             //标题栏
             $title = array("企业","部门","步数","热量","估测时间","估测距离","达标率","是否达标");
             $oExcel->addRows(array($title));
@@ -659,9 +659,9 @@ class Hj_StepsController extends AbstractController
                     unset($t);
                 }
                 $params['Page']++;
-                $oExcel->closeSheet()->close();
             }
             while($Count>0);
+            $oExcel->closeSheet()->close();
         }
         else
         {
