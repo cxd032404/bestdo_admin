@@ -50,12 +50,10 @@ class Hj_StepsController extends AbstractController
             $params['department_id_2'] = intval($this->request->department_id_2??0);
             //三级部门ID
             $params['department_id_3'] = intval($this->request->department_id_3??0);
-            //用户姓名
-            $params['user_name']= trim($this->requrest->user_name??"");
             //开始日期
-            $params['start_date']= trim($this->requrest->start_date??date("Y-m-d",time()-3*86400));
+            $params['start_date']= $this->request->start_date??date("Y-m-d",time()-3*86400);
             //结束日期
-            $params['end_date']= trim($this->requrest->end_date??date("Y-m-d"));
+            $params['end_date']= $this->request->end_date??date("Y-m-d");
             //分页参数
             $params['Page'] = abs(intval($this->request->Page))?abs(intval($this->request->Page)):1;
             $params['PageSize'] = 20;
@@ -153,11 +151,11 @@ class Hj_StepsController extends AbstractController
             //三级部门ID
             $params['department_id_3'] = intval($this->request->department_id_3??0);
             //用户姓名
-            $params['user_name']= trim($this->requrest->user_name??"");
+            $params['user_name']= trim($this->request->user_name??"");
             //开始日期
-            $params['start_date']= trim($this->requrest->start_date??date("Y-m-d",time()-3*86400));
+            $params['start_date']= trim($this->request->start_date??date("Y-m-d",time()-3*86400));
             //结束日期
-            $params['end_date']= trim($this->requrest->end_date??date("Y-m-d"));
+            $params['end_date']= trim($this->request->end_date??date("Y-m-d"));
             //分页参数
             $params['PageSize'] = 500;
             $params['getCount'] = 1;
@@ -272,11 +270,11 @@ class Hj_StepsController extends AbstractController
             //三级部门ID
             $params['department_id_3'] = intval($this->request->department_id_3??0);
             //用户姓名
-            $params['user_name']= trim($this->requrest->user_name??"");
+            $params['user_name']= trim($this->request->user_name??"");
             //开始日期
-            $params['start_date']= trim($this->requrest->start_date??date("Y-m-d",time()-3*86400));
+            $params['start_date']= trim($this->request->start_date??date("Y-m-d",time()-3*86400));
             //结束日期
-            $params['end_date']= trim($this->requrest->end_date??date("Y-m-d"));
+            $params['end_date']= trim($this->request->end_date??date("Y-m-d"));
             //分页参数
             $params['Page'] = abs(intval($this->request->Page))?abs(intval($this->request->Page)):1;
             $params['PageSize'] = 20;
@@ -372,11 +370,11 @@ class Hj_StepsController extends AbstractController
             //三级部门ID
             $params['department_id_3'] = intval($this->request->department_id_3??0);
             //用户姓名
-            $params['user_name']= trim($this->requrest->user_name??"");
+            $params['user_name']= trim($this->request->user_name??"");
             //开始日期
-            $params['start_date']= trim($this->requrest->start_date??date("Y-m-d",time()-3*86400));
+            $params['start_date']= trim($this->request->start_date??date("Y-m-d",time()-3*86400));
             //结束日期
-            $params['end_date']= trim($this->requrest->end_date??date("Y-m-d"));
+            $params['end_date']= trim($this->request->end_date??date("Y-m-d"));
             //分页参数
             $params['PageSize'] = 500;
             $params['getCount'] = 1;
@@ -507,11 +505,11 @@ class Hj_StepsController extends AbstractController
             }
             $groupKey = "department_id_".$current_level;
             //用户姓名
-            $params['user_name']= trim($this->requrest->user_name??"");
+            $params['user_name']= trim($this->request->user_name??"");
             //开始日期
-            $params['start_date']= trim($this->requrest->start_date??date("Y-m-d",time()-3*86400));
+            $params['start_date']= trim($this->request->start_date??date("Y-m-d",time()-3*86400));
             //结束日期
-            $params['end_date']= trim($this->requrest->end_date??date("Y-m-d"));
+            $params['end_date']= trim($this->request->end_date??date("Y-m-d"));
             //分页参数
             $params['Page'] = abs(intval($this->request->Page))?abs(intval($this->request->Page)):1;
             $params['PageSize'] = 20;
@@ -598,11 +596,11 @@ class Hj_StepsController extends AbstractController
             }
             $groupKey = "department_id_".$current_level;
             //用户姓名
-            $params['user_name']= trim($this->requrest->user_name??"");
+            $params['user_name']= trim($this->request->user_name??"");
             //开始日期
-            $params['start_date']= trim($this->requrest->start_date??date("Y-m-d",time()-3*86400));
+            $params['start_date']= trim($this->request->start_date??date("Y-m-d",time()-3*86400));
             //结束日期
-            $params['end_date']= trim($this->requrest->end_date??date("Y-m-d"));
+            $params['end_date']= trim($this->request->end_date??date("Y-m-d"));
             //分页参数
             $params['PageSize'] = 500;
             $params['getCount'] = 1;
