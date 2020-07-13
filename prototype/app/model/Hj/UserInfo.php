@@ -437,6 +437,10 @@ class Hj_UserInfo extends Base_Widget
         //获取需要用到的表名
         $table_to_process = Base_Widget::getDbTable($this->table);
         $order = " ORDER BY user_id desc";
+        $wherePermission = isset($params['permissionList'])?(
+        count($params['permissionList'])>0?
+            ( " company_id in (".implode(",",array_column($params['permissionList'],"company_id")).") ")
+            :" 0 "):"";
         //企业
         $whereCompany = (isset($params['company_id']) && ($params['company_id']>0))?" company_id = '".$params['company_id']."' ":"";
         //性别判断
@@ -445,8 +449,10 @@ class Hj_UserInfo extends Base_Widget
         $whereName = (isset($params['true_name']) && trim($params['true_name']))?" true_name like '%".$params['true_name']."%' ":"";
         //昵称
         $whereNickName = (isset($params['NickName']) && trim($params['nick_name']))?" nick_name like '%".$params['nick_name']."%' ":"";
+        //注册日期
+        $whereReg = (isset($params['regDate']) && strtotime($params['regDate'])>0)?" reg_time >= '".$params['regDate']."' and reg_time <= '".$params['regDate']." 23:59:59"."' ":"";
         //所有查询条件置入数组
-        $whereCondition = array($whereCompany,$wheresex,$whereName,$whereNickName);
+        $whereCondition = array($wherePermission,$whereCompany,$wheresex,$whereName,$whereNickName,$whereReg);
         //生成条件列
         $where = Base_common::getSqlWhere($whereCondition);
         //获取用户数量
@@ -483,6 +489,10 @@ class Hj_UserInfo extends Base_Widget
         $table_to_process = Base_Widget::getDbTable($this->table);
         //生成查询列
         $fields = Base_common::getSqlFields(array("UserCount"=>"count(user_id)"));
+        $wherePermission = isset($params['permissionList'])?(
+        count($params['permissionList'])>0?
+            ( " company_id in (".implode(",",array_column($params['permissionList'],"company_id")).") ")
+            :" 0 "):"";
         //企业
         $whereCompany = (isset($params['company_id']) && ($params['company_id']>0))?" company_id = '".$params['company_id']."' ":"";
         //性别判断
@@ -491,10 +501,10 @@ class Hj_UserInfo extends Base_Widget
         $whereName = (isset($params['true_name']) && trim($params['true_name']))?" true_name like '%".$params['true_name']."%' ":"";
         //昵称
         $whereNickName = (isset($params['NickName']) && trim($params['nick_name']))?" nick_name like '%".$params['nick_name']."%' ":"";
+        //注册日期
+        $whereReg = (isset($params['regDate']) && strtotime($params['regDate'])>0)?" reg_time >= '".$params['regDate']."' and reg_time <= '".$params['regDate']." 23:59:59"."' ":"";
         //所有查询条件置入数组
-        $whereCondition = array($whereCompany,$wheresex,$whereName,$whereNickName);
-        //生成条件列
-        $where = Base_common::getSqlWhere($whereCondition);
+        $whereCondition = array($wherePermission,$whereCompany,$wheresex,$whereName,$whereNickName,$whereReg);
         //生成条件列
         $where = Base_common::getSqlWhere($whereCondition);
         $sql = "SELECT $fields FROM $table_to_process where 1 ".$where;
@@ -738,6 +748,50 @@ class Hj_UserInfo extends Base_Widget
             $userInfo = $this->db->selectRow($table_to_process, "user_id,wechatid", '`wechatid` = ?', trim($managerInfo['openid']));
         }
         return $userInfo;
+    }
+    /**
+     * 获取用户列表
+     * @param $fields  所要获取的数据列
+     * @param $params 传入的条件列表
+     * @return array
+     */
+    public function getUserRegData($params,$fields = array("*"))
+    {
+        $fields = ["left(reg_time,10) as date","count(1) as userCount"];
+        //生成查询列
+        $fields = Base_common::getSqlFields($fields);
+        //获取需要用到的表名
+        $table_to_process = Base_Widget::getDbTable($this->table);
+        $order = " ORDER BY date desc";
+        $wherePermission = isset($params['permissionList'])?(
+        count($params['permissionList'])>0?
+            ( " company_id in (".implode(",",array_column($params['permissionList'],"company_id")).") ")
+            :" 0 "):"";
+        //企业
+        $whereCompany = (isset($params['company_id']) && ($params['company_id']>0))?" company_id = '".$params['company_id']."' ":"";
+        //注册开始日期
+        $whereRegStart = (isset($params['regStartDate']) && strtotime($params['regStartDate'])>0)?" reg_time >= '".$params['regStartDate']."' ":"";
+        //注册结束日期
+        $whereRegEnd = (isset($params['regEndDate']) && strtotime($params['regStartDate'])>0)?" reg_time <= '".$params['regStartDate']." 23:59:59"."' ":"";
+        //注册结束日期
+        $whereReg = (isset($params['regDate']) && strtotime($params['regDate'])>0)?" reg_time >= '".$params['regDate']."' and reg_time <= '".$params['regDate']." 23:59:59"."' ":"";
+        //所有查询条件置入数组
+        $whereCondition = array($wherePermission,$whereCompany,$whereRegStart,$whereRegEnd,$whereReg);
+        //生成条件列
+        $where = Base_common::getSqlWhere($whereCondition);
+        $sql = "SELECT $fields FROM $table_to_process where 1 ".$where." ".$order;
+        $return = $this->db->getAll($sql);
+        print_R($return);
+        die();
+        $UserList = array('UserList'=>array(),'UserCount'=>$UserCount);
+        if(count($return))
+        {
+            foreach($return as $key => $value)
+            {
+                $UserList['UserList'][$value['user_id']] = $value;
+            }
+        }
+        return $UserList;
     }
 
 }
