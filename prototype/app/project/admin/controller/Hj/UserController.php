@@ -133,7 +133,7 @@ class Hj_UserController extends AbstractController
 
 
 			$oExcel = new Third_Excel();
-			$FileName= ('用户列表');
+            $FileName= (iconv('gbk','utf-8','用户列表'));
 			$oExcel->download($FileName)->addSheet('用户');
 			//标题栏
 			$title = array("用户ID","企业","部门","真实姓名","昵称","联系电话","性别","注册时间","最后登录时间","最后登录方式");
@@ -333,8 +333,6 @@ class Hj_UserController extends AbstractController
             $params['getCount'] = 1;
             //获取用户列表
             $UserList = $this->oUserInfo->getCompanyUserList($params);
-            //导出EXCEL链接
-            $export_var = "<a href =".(Base_Common::getUrl('',$this->ctl,'user.list.download',$params))."><导出表格></a>";
             //翻页参数
             $page_url = Base_Common::getUrl('',$this->ctl,'company.user.list',$params)."&Page=~page~";
             $page_content =  base_common::multi($UserList['UserCount'], $page_url, $params['Page'], $params['PageSize'], 10, $maxpage = 100, $prevWord = '上一页', $nextWord = '下一页');
