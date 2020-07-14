@@ -42,7 +42,11 @@
                             <ul class="unstyled">
                                 <li>
                                     <!--span class="act act-warning">65</span-->
-                                    <h4>你好, <?php $this->manager->name(); ?></h4>
+                                    <h4>你好, <?php echo $groupInfo['name']; ?></h4>
+                                </li>
+                                <li>
+                                    <!--span class="act act-warning">65</span-->
+                                    <h4><?php $this->manager->name(); ?></h4>
                                 </li>
                                 <li>
                                     <!--span class="act act-success">10</span-->

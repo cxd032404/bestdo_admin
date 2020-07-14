@@ -16,12 +16,7 @@ class IndexController extends AbstractController
     	$oMenuPurview = new Widget_Menu_Permission();
 		$allowedMenuArr = $oMenuPurview->getTopPermissionByGroup($this->manager->menu_group_id,0);
         $menuArr = $this->getChildMenu(0);
-
-            $oUpdateLog = new Hj_UpdateLog();
-            //获取更新记录列表
-            $UpdateLogList = $oUpdateLog->getUpdateLogList();
-            //更新记录类型列表
-            $UpdateLogTypeList = $oUpdateLog->getLogTypeList();
+        $groupInfo = (new Widget_Group())->get($this->manager->menu_group_id);
         include $this->tpl();
     }
     
