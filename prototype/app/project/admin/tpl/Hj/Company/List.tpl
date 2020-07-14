@@ -4,16 +4,17 @@
 	[ <a href="{tpl:$this.sign/}">返回</a> ]
 </fieldset>
 <div class="br_bottom"></div>
-<form id="boutique_update_form" name="boutique_update_form" action="{tpl:$this.sign/}&ac=boutique.update" method="post">
+<form id="boutique_update_form" name="boutique_update_form" action="{tpl:$this.sign/}&ac=list.update" method="post">
 <input type="hidden" name="company_id" value="{tpl:$companyInfo.company_id/}" />
+	<input type="hidden" name="type" value="{tpl:$type/}" />
 
 <table width="99%" align="center" class="table table-bordered table-striped" >
 	<tr class="hover">
-		<td colspan="1">精品课对应文章列表</td>
+		<td colspan="1">{tpl:$typeName/}对应文章列表</td>
 	</tr>
 		{tpl:loop $listList  $list_info}
 	<tr class="noborder">
-	<td><input type="checkbox" name="boutique[{tpl:$list_info.list_id/}]" value="{tpl:$list_info.list_id/}" {tpl:if($list_info.checked == 1)}checked{/tpl:if} />{tpl:$list_info.list_name/}
+	<td><input type="checkbox" name="list[{tpl:$list_info.list_id/}]" value="{tpl:$list_info.list_id/}" {tpl:if($list_info.checked == 1)}checked{/tpl:if} />{tpl:$list_info.list_name/}
 	</td>
 			{/tpl:loop}
 

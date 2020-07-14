@@ -279,8 +279,8 @@ class Hj_CompanyController extends AbstractController
         echo json_encode($response);
         return true;
     }
-    //精品课配置页面
-    public function boutiqueAction()
+    //特殊列表配置页面
+    public function listAction()
     {
         //检查权限
         $PermissionCheck = $this->manager->checkMenuPermission("updateCompany");
@@ -288,15 +288,19 @@ class Hj_CompanyController extends AbstractController
         {
             //企业ID
             $company_id= intval($this->request->company_id);
+            //列表类型
+            $type= trim($this->request->type);
             //获取企业信息
             $companyInfo = $this->oCompany->getCompany($company_id,'*');
             //数据解包
             $companyInfo['detail'] = json_decode($companyInfo['detail'],true);
+            $listType = (new Hj_List())->getSpecifiedListType();
+            $typeName = $listType[$type];
             //获取页面列表
             $listList = (new Hj_List())->getListList(['company_id'=>$company_id],"list_id,list_name");
             foreach($listList as $key => $listInfo)
             {
-                if(isset($companyInfo['detail']['boutique'][$listInfo['list_id']]))
+                if(isset($companyInfo['detail'][$type][$listInfo['list_id']]))
                 {
                     $listList[$key]['checked'] = 1;
                 }
@@ -306,7 +310,7 @@ class Hj_CompanyController extends AbstractController
                 }
             }
             //渲染模版
-            include $this->tpl('Hj_Company_Boutique');
+            include $this->tpl('Hj_Company_List');
         }
         else
         {
@@ -315,12 +319,12 @@ class Hj_CompanyController extends AbstractController
         }
 
     }
-    //精品课列表修改
-    public function boutiqueUpdateAction()
+    //特殊列表修改
+    public function listUpdateAction()
     {
         //接收页面参数
-		$bind=$this->request->from('company_id','boutique');
-        if(count($bind['boutique'])==0)
+		$bind=$this->request->from('company_id','list','type');
+		if(count($bind['list'])==0)
         {
             $response = array('errno' => 1);
         }
@@ -330,7 +334,7 @@ class Hj_CompanyController extends AbstractController
             $companyInfo = $this->oCompany->getCompany($bind['company_id'],'company_id,company_name,detail');
             //数据解包
             $companyInfo['detail'] = json_decode($companyInfo['detail'],true);
-            $companyInfo['detail']['boutique'] = $bind['boutique'];
+            $companyInfo['detail'][$bind['type']] = $bind['list'];
             //数据打包
             $companyInfo['detail'] = json_encode($companyInfo['detail']);
             //修改企业
