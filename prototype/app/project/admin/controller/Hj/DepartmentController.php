@@ -39,7 +39,7 @@ class Hj_DepartmentController extends AbstractController
         $PermissionCheck = $this->manager->checkMenuPermission(0);
         if($PermissionCheck['return'])
         {
-            $totalPermission = $this->manager->getPermissionList($this->manager->data_groups);
+            $totalPermission = $this->manager->getPermissionList($this->manager->data_groups,"only");
             //获取部门列表
             $companyList = $this->oCompany->getCompanyList(["permissionList"=>$totalPermission],"company_id,company_name");
             $default_company = array_column($companyList,'company_id')['0'];
@@ -92,7 +92,7 @@ class Hj_DepartmentController extends AbstractController
         $PermissionCheck = $this->manager->checkMenuPermission("addDepartment");
         if($PermissionCheck['return'])
         {
-            $totalPermission = $this->manager->getPermissionList($this->manager->data_groups);
+            $totalPermission = $this->manager->getPermissionList($this->manager->data_groups,"only");
             //获取顶级部门列表
             $companyList = $this->oCompany->getCompanyList(["permissionList"=>$totalPermission],"company_id,company_name");
             //渲染模版
@@ -203,7 +203,7 @@ class Hj_DepartmentController extends AbstractController
                     }
                 }
             }
-            $totalPermission = $this->manager->getPermissionList($this->manager->data_groups);
+            $totalPermission = $this->manager->getPermissionList($this->manager->data_groups,"only");
             //获取企业列表
             $companyList = $this->oCompany->getCompanyList(["permissionList"=>$totalPermission],"company_id,company_name");
             //渲染模版

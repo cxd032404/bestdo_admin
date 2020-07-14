@@ -41,7 +41,7 @@ class Hj_PageController extends AbstractController
         $PermissionCheck = $this->manager->checkMenuPermission(0);
         if($PermissionCheck['return'])
         {
-            $totalPermission = $this->manager->getPermissionList($this->manager->data_groups);
+            $totalPermission = $this->manager->getPermissionList($this->manager->data_groups,"only");
             //页面ID
             $company_id = intval($this->request->company_id??0);
             //获取页面列表
@@ -75,7 +75,7 @@ class Hj_PageController extends AbstractController
         $PermissionCheck = $this->manager->checkMenuPermission("addPage");
         if($PermissionCheck['return'])
         {
-            $totalPermission = $this->manager->getPermissionList($this->manager->data_groups);
+            $totalPermission = $this->manager->getPermissionList($this->manager->data_groups,"only");
             //获取顶级页面列表
             $companyList = $this->oCompany->getCompanyList(["permissionList"=>$totalPermission],"company_id,company_name");
             //渲染模版
@@ -151,7 +151,7 @@ class Hj_PageController extends AbstractController
             $pageInfo['detail'] = json_decode($pageInfo['detail'],true);
             $pageInfo['detail']['params'] = $this->oPage->packPageParams($pageInfo['detail']['params']);
             //获取企业列表
-            $totalPermission = $this->manager->getPermissionList($this->manager->data_groups);
+            $totalPermission = $this->manager->getPermissionList($this->manager->data_groups,"only");
             $companyList = $this->oCompany->getCompanyList(["permissionList"=>$totalPermission],"company_id,company_name");
             //渲染模版
             include $this->tpl('Hj_Page_PageModify');
@@ -247,7 +247,7 @@ class Hj_PageController extends AbstractController
             $pageElementList = $this->oPageElement->getElementList(['page_id'=>$page_id]);
             //获取元素类型列表
             $elementTypeList = $this->oElementType->getElementTypeList();
-            $totalPermission = $this->manager->getPermissionList($this->manager->data_groups);
+            $totalPermission = $this->manager->getPermissionList($this->manager->data_groups,"only");
             //获取企业列表
             //$companyList = $this->oCompany->getCompanyList(["permissionList"=>$totalPermission],"company_id,company_name");
             foreach ($pageElementList as $elementSign => $elementInfo)

@@ -42,7 +42,7 @@ class Hj_ClubController extends AbstractController
 		$PermissionCheck = $this->manager->checkMenuPermission(0);
 		if($PermissionCheck['return'])
 		{
-            $totalPermission = $this->manager->getPermissionList($this->manager->data_groups);
+            $totalPermission = $this->manager->getPermissionList($this->manager->data_groups,"only");
             //企业ID
 			$company_id = intval($this->request->company_id??0);
 			//获取俱乐部列表
@@ -79,7 +79,7 @@ class Hj_ClubController extends AbstractController
 		$PermissionCheck = $this->manager->checkMenuPermission("addClub");
 		if($PermissionCheck['return'])
 		{
-            $totalPermission = $this->manager->getPermissionList($this->manager->data_groups);
+            $totalPermission = $this->manager->getPermissionList($this->manager->data_groups,"only");
             //获取顶级俱乐部列表
 			$companyList = $this->oCompany->getCompanyList(["permissionList"=>$totalPermission],"company_id,company_name");
 			//渲染模版
@@ -184,7 +184,7 @@ class Hj_ClubController extends AbstractController
 			$clubInfo = $this->oClub->getClub($club_id,'*');
 			//数据解包
             $clubInfo['detail'] = json_decode($clubInfo['detail'],true);
-            $totalPermission = $this->manager->getPermissionList($this->manager->data_groups);
+            $totalPermission = $this->manager->getPermissionList($this->manager->data_groups,"only");
             //获取企业列表
 			$companyList = $this->oCompany->getCompanyList(["permissionList"=>$totalPermission],"company_id,company_name");
             //渲染模版
