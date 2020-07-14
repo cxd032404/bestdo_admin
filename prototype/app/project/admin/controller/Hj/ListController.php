@@ -389,7 +389,6 @@ class Hj_ListController extends AbstractController
 	}
 
 	//删除列表
-	//删除列表
 	public function listDeleteAction()
 	{
 		//检查权限
