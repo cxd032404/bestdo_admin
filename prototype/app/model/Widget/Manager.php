@@ -569,7 +569,11 @@ class Widget_Manager extends Base_Widget
         {
             if(!in_array($companyInfo['company_id'],$PermissionList))
             {
-                unset($companyList[$key]);
+                //unset($companyList[$key]);
+            }
+            else
+            {
+                $companyList[$key]['Permission'] = 1;
             }
         }
         return $companyList;
