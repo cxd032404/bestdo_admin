@@ -270,6 +270,7 @@ class Hj_UserController extends AbstractController
             {
                 //第一级的列表获取
                 $departmentList_1 = $this->oDepartment->getDepartmentList(['company_id'=>$departmentInfo['company_id'],'parent_id'=>0]);
+                $departmentList_1[$userInfo['department_id_1']]['selected'] = 1;
             }
             else
             {
@@ -376,7 +377,7 @@ class Hj_UserController extends AbstractController
             include $this->tpl('403');
         }
     }
-    //修改页面元素
+    //导入企业用户名单
     public function companyUserUploadAction()
     {
         //元素ID
@@ -458,8 +459,9 @@ class Hj_UserController extends AbstractController
     //修改页面元素
     public function departmentUpdateAction()
     {
-        //元素ID
+        //用户ID
         $user_id = intval($this->request->user_id);
+        //部门ID
         $department['department_id_1'] = intval($this->request->department_id_1);
         $department['department_id_2'] = intval($this->request->department_id_2);
         $department['department_id_3'] = intval($this->request->department_id_3);
@@ -488,5 +490,30 @@ class Hj_UserController extends AbstractController
         $response = $update ? array('errno' => 0) : array('errno' => 9);
         echo json_encode($response);
         return true;
+    }	//删除列表
+    public function userDisableAction()
+    {
+        //检查权限
+        $PermissionCheck = $this->manager->checkMenuPermission("UserUpdate");
+        if($PermissionCheck['return'])
+        {
+            //用户ID
+            $user_id = intval($this->request->user_id);
+            //获取用户信息
+            $userInfo = $this->oUserInfo->getUser($user_id);
+            if($userInfo['is_del']!=1)
+            {
+                $update = $this->oUserInfo->updateUser($user_id,['is_del'=>1]);
+            }
+            //刷新列表
+            Base_Common::refreshCache($this->config,"user",$user_id);
+            //返回之前的页面
+            $this->response->goBack();
+        }
+        else
+        {
+            $home = $this->sign;
+            include $this->tpl('403');
+        }
     }
 }
