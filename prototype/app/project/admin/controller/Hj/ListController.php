@@ -100,7 +100,7 @@ class Hj_ListController extends AbstractController
 		}
 	}
     //列表页面
-    public function boutiqueAction()
+    public function specifiedListAction()
     {
         //检查权限
         $PermissionCheck = $this->manager->checkMenuPermission(0);
@@ -109,21 +109,23 @@ class Hj_ListController extends AbstractController
             //企业ID
             $company_id = intval($this->request->company_id??0);
             //列表分类
-            $list_type = trim($this->request->list_type??0);
+            $list_type = trim($this->request->type??0);
+            $listType = (new Hj_List())->getSpecifiedListType();
+            $typeName = $listType[$list_type];
             $totalPermission = $this->manager->getPermissionList($this->manager->data_groups);
             //获取企业列表
             $companyList = $this->oCompany->getCompanyList(["permissionList"=>$totalPermission],"company_id,company_name,detail");
-            $boutiqueList = [];
+            $list  = [];
             foreach($companyList as $key => $companyInfo)
             {
                 if($company_id==0 || $company_id == $companyInfo['company_id'])
                 {
                     $companyInfo['detail'] = json_decode($companyInfo['detail'],true);
-                    $boutiqueList = array_merge($boutiqueList,$companyInfo['detail']['boutique']??[]);
+                    $list = array_merge($list,$companyInfo['detail'][$list_type]??[]);
                 }
             }
             //获取页面列表
-            $listList = $this->oList->getListList(['company_id'=>$company_id,'list_type'=>$list_type,'id_in'=>$boutiqueList]);
+            $listList = $this->oList->getListList(['company_id'=>$company_id,'type'=>$list_type,'id_in'=>$list]);
             //获取列表类型列表
             $listTypeList = $this->oList->getListType();
             //初始化空的活动列表
@@ -152,10 +154,9 @@ class Hj_ListController extends AbstractController
                     }
                     $listList[$key]['activity_name'] = $activityList[$listInfo['activity_id']]['activity_name']??"未指定";
                 }
-
             }
             //渲染模版
-            include $this->tpl('Hj_List_Boutique');
+            include $this->tpl('Hj_List_Specified');
         }
         else
         {
@@ -176,7 +177,7 @@ class Hj_ListController extends AbstractController
             //获取列表类型列表
             $listTypeList = $this->oList->getListType();
             //是否精品课
-            $boutique = trim($this->request->boutique??0);
+            $specifiedType = trim($this->request->type??"");
             //渲染模版
 			include $this->tpl('Hj_List_ListAdd');
 		}
@@ -191,7 +192,7 @@ class Hj_ListController extends AbstractController
 	public function listInsertAction()
 	{
 		//检查权限
-		$bind=$this->request->from('list_name','company_id','activity_id','list_type','detail','type','boutique');
+		$bind=$this->request->from('list_name','company_id','activity_id','list_type','detail','type','specifiedType');
 		//页面名称不能为空
 		if(trim($bind['list_name'])=="")
 		{
@@ -216,8 +217,8 @@ class Hj_ListController extends AbstractController
                 {
                     $bind['activity_id'] = $bind['activity_id']??0;
                     $bind['detail']['type'] = $bind['type'];
-                    $boutique = $bind['boutique'];
-                    unset($bind['boutique']);
+                    $specifiedType = $bind['specifiedType'];
+                    unset($bind['specifiedType']);
                     unset($bind['type']);
                     //数据打包
                     $bind['detail'] = json_encode($bind['detail']);
@@ -225,20 +226,20 @@ class Hj_ListController extends AbstractController
                     $res = $this->oList->insertList($bind);
                     if($res)
                     {
-                        if($boutique>0)
+                        if($specifiedType!="")
                         {
                             $companyInfo = $this->oCompany->getCompany($bind['company_id'],"company_id,detail");
                             $companyInfo['detail'] = json_decode($companyInfo['detail'],true);
-                            $boutiqueList = $companyInfo['detail']['boutique']??[];
-                            $boutiqueList[$res] = $res;
-                            $companyInfo['detail']['boutique'] = $boutiqueList;
+                            $list = $companyInfo['detail'][$specifiedType]??[];
+                            $list[$res] = $res;
+                            $companyInfo['detail'][$specifiedType] = $list;
                             $companyInfo['detail'] = json_encode($companyInfo['detail']);
                             $this->oCompany->updateCompany($companyInfo['company_id'],$companyInfo);
                             //刷新企业
                             Base_Common::refreshCache($this->config,"company",$companyInfo['company_id']);
                             //刷新列表
                             Base_Common::refreshCache($this->config,"list",$res);
-                            $response = array('errno' => 0,'ac' => 'boutique');
+                            $response = array('errno' => 0,'ac' => 'specified.list&type='.$specifiedType);
                         }
                         else
                         {
@@ -249,9 +250,9 @@ class Hj_ListController extends AbstractController
                     }
                     else
                     {
-                        if($boutique>0)
+                        if($specifiedType!="")
                         {
-                            $response = array('errno' => 9,'ac'=>'boutique');
+                            $response = array('errno' => 9,'ac'=>'specified.list&type='.$specifiedType);
 
                         }
                         else
@@ -356,18 +357,26 @@ class Hj_ListController extends AbstractController
                     $companyInfo = $this->oCompany->getCompany($listInfo['company_id'],"company_id,detail");
                     $companyInfo["detail"] = json_decode($companyInfo['detail'],true);
                     $boutiqueList = $companyInfo['detail']['boutique']??[];
-                    if(!in_array($listInfo['list_id'],$boutiqueList))
+                    $honorList = $companyInfo['detail']['honor']??[];
+                    if(in_array($listInfo['list_id'],$boutiqueList))
                     {
-                        $ac="index";
+                        $ac="specified.list&type=boutique";
+                        //刷新企业
+                        Base_Common::refreshCache($this->config,"company",$companyInfo['company_id']);
                         //刷新列表
                         Base_Common::refreshCache($this->config,"list",$res);
-
+                    }
+                    elseif(in_array($listInfo['list_id'],$honorList))
+                    {
+                        $ac="specified.list&type=honor";
+                        //刷新企业
+                        Base_Common::refreshCache($this->config,"company",$companyInfo['company_id']);
+                        //刷新列表
+                        Base_Common::refreshCache($this->config,"list",$res);
                     }
                     else
                     {
-                        $ac="boutique";
-                        //刷新企业
-                        Base_Common::refreshCache($this->config,"company",$companyInfo['company_id']);
+                        $ac="index";
                         //刷新列表
                         Base_Common::refreshCache($this->config,"list",$res);
                     }
@@ -379,7 +388,8 @@ class Hj_ListController extends AbstractController
 		return true;
 	}
 
-	//删除页面
+	//删除列表
+	//删除列表
 	public function listDeleteAction()
 	{
 		//检查权限
@@ -391,6 +401,11 @@ class Hj_ListController extends AbstractController
             $listInfo = $this->oList->getList($list_id,'list_id,company_id');
 			//删除页面
 			$this->oList->deleteList($list_id);
+			$companyInfo = $this->oCompany->getCompany($listInfo,"company_id,detail");
+			$companyInfo["detail"] = json_decode($companyInfo['detail'],true);
+			unset($companyInfo['detail']['boutique'][$list_id],$companyInfo['detail']['honor'][$list_id]);
+			$companyInfo['detail'] = json_encode($companyInfo['detail']);
+			$this->oCompany->updateCompany($companyInfo['company_id'],$companyInfo);
             //刷新企业
             Base_Common::refreshCache($this->config,"company",$listInfo['company_id']);
             //刷新列表
@@ -479,14 +494,18 @@ class Hj_ListController extends AbstractController
             $companyInfo = $this->oCompany->getCompany($listInfo['company_id'],"company_id,detail");
             $companyInfo['detail'] = json_decode($companyInfo['detail'],true);
             $boutiqueList = $companyInfo['detail']['boutique']??[];
-            if(!in_array($list_id,$boutiqueList))
+            $honorList = $companyInfo['detail']['honor']??[];
+            if(in_array($list_id,$boutiqueList))
             {
-                $return_url = Base_Common::getUrl('',$this->ctl,'index',['company_id'=>$listInfo['company_id']]);
-
+                $return_url = Base_Common::getUrl('',$this->ctl,'specified.list',['company_id'=>$listInfo['company_id'],"type"=>"boutique"]);
+            }
+            elseif(in_array($list_id,$honorList))
+            {
+                $return_url = Base_Common::getUrl('',$this->ctl,'specified.list',['company_id'=>$listInfo['company_id'],"type"=>"honor"]);
             }
             else
             {
-                $return_url = Base_Common::getUrl('',$this->ctl,'boutique',['company_id'=>$listInfo['company_id']]);
+                $return_url = Base_Common::getUrl('',$this->ctl,'index',['company_id'=>$listInfo['company_id']]);
             }
             $params['list_id'] = $listInfo['list_id'];
             //获取文章列表

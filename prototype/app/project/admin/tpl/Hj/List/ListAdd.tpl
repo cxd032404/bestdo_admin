@@ -3,7 +3,7 @@
 <form id="list_add_form" name="list_add_form" action="{tpl:$this.sign/}&ac=list.insert" method="post">
 <table width="99%" align="center" class="table table-bordered table-striped">
 <tr class="hover">
-<input type="hidden"  name="boutique"  id="boutique" value="{tpl:$boutique/}" size="50" />
+<input type="hidden"  name="specifiedType"  id="specifiedType" value="{tpl:$specifiedType/}" size="50" />
 	<td>列表名称</td>
 	<td align="left"><input type="text" class="span2" name="list_name"  id="list_name" value="" size="50" /></td>
 </tr>
