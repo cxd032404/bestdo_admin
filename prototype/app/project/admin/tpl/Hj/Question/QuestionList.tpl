@@ -25,7 +25,7 @@ function questionModify(mid){
 <form action="{tpl:$this.sign/}" name="form" id="form" method="post">
 <select name="activity_id"  id="activity_id" size="1">
       <option value="0"{tpl:if(0==$activity_id)}selected="selected"{/tpl:if} >全部</option>
-      {tpl:loop $activityList  $activity_info}
+      {tpl:loop $activityList.ActivityList  $activity_info}
       <option value="{tpl:$activity_info.activity_id/}"{tpl:if($activity_info.activity_id==$activity_id)}selected="selected"{/tpl:if} >{tpl:$activity_info.activity_name/}</option>
       {/tpl:loop}
     </select>

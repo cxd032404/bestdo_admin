@@ -46,7 +46,7 @@ function activityModify(mid){
     <th align="center" class="rowtip">操作</th>
   </tr>
 
-{tpl:loop $activityList $activityInfo}
+{tpl:loop $activityList.ActivityList $activityInfo}
   <tr class="hover">
     <td align="center">{tpl:$activityInfo.activity_id/}</td>
     <td align="center">{tpl:$activityInfo.activity_name/}</td>
@@ -64,6 +64,7 @@ function activityModify(mid){
  | <a href="javascript:;" onclick="activityModify('{tpl:$activityInfo.activity_id/}');">修改</a> | <a href="{tpl:$this.sign/}&ac=activity.log&activity_id={tpl:$activityInfo.activity_id/}">报名记录{tpl:if($activityInfo.count>0)}({tpl:$activityInfo.count/}){/tpl:if}</a></td>
   </tr>
 {/tpl:loop}
+  <tr><th colspan="10" align="center" class="rowtip">{tpl:$page_content/}</th></tr>
 </table>
 </fieldset>
 {tpl:tpl contentFooter/}

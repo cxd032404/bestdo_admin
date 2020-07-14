@@ -15,7 +15,7 @@
 </tr>
 <tr class="hover"><td>活动</td>
 	<td align="left">	<select name="activity_id"  id="activity_id" size="1">
-			{tpl:loop $activityList  $activityInfo}
+			{tpl:loop $activityList.ActivityList  $activityInfo}
 			<option value="{tpl:$activityInfo.activity_id/}">{tpl:$activityInfo.activity_name/}</option>
 			{/tpl:loop}
 		</select></td>
