@@ -66,7 +66,7 @@ class Hj_StepsController extends AbstractController
             $departmentList_2 = $params['department_id_1']>0?$this->oDepartment->getDepartmentList(["company_id"=>$params['company_id'],"parent_id"=>$params['department_id_1']],"department_id,department_name"):[];
             $departmentList_3 = $params['department_id_2']>0?$this->oDepartment->getDepartmentList(["company_id"=>$params['company_id'],"parent_id"=>$params['department_id_2']],"department_id,department_name"):[];
             //获取步数详情列表
-			$StepsDetailList = $this->oSteps->getStepsDetailList($params);
+			$StepsDetailList = $this->oSteps->getStepsDetailList(array_merge($params,["permissionList"=>$totalPermission]));
             $userList  = $goalList = $departmentList = [];
 
             $spepsConfig = $this->config->steps;
@@ -179,7 +179,7 @@ class Hj_StepsController extends AbstractController
             $spepsConfig = $this->config->steps;
             do{
                 //获取步数详情列表
-                $StepsDetailList = $this->oSteps->getStepsDetailList($params);
+                $StepsDetailList = $this->oSteps->getStepsDetailList(array_merge($params,["permissionList"=>$totalPermission]));
                 $Count = count($StepsDetailList['DetailList']);
                 foreach($StepsDetailList['DetailList'] as $key => $detail)
                 {
@@ -288,7 +288,7 @@ class Hj_StepsController extends AbstractController
             $departmentList_2 = $params['department_id_1']>0?$this->oDepartment->getDepartmentList(["company_id"=>$params['company_id'],"parent_id"=>$params['department_id_1']],"department_id,department_name"):[];
             $departmentList_3 = $params['department_id_2']>0?$this->oDepartment->getDepartmentList(["company_id"=>$params['company_id'],"parent_id"=>$params['department_id_2']],"department_id,department_name"):[];
             //获取步数统计列表
-            $StepsStatList = $this->oSteps->getStepsStatList($params);
+            $StepsStatList = $this->oSteps->getStepsStatList(array_merge($params,["permissionList"=>$totalPermission]));
             $userList  = $goalList = [];
             $days = intval((strtotime($params['end_date']) - strtotime($params['start_date']))/86400);
             $spepsConfig = $this->config->steps;
@@ -402,7 +402,7 @@ class Hj_StepsController extends AbstractController
             $days = intval((strtotime($params['end_date']) - strtotime($params['start_date']))/86400);
             do{
                 //获取步数详情列表
-                $StepsStatList = $this->oSteps->getStepsStatList($params);
+                $StepsStatList = $this->oSteps->getStepsStatList(array_merge($params,["permissionList"=>$totalPermission]));
                 $Count = count($StepsStatList['List']);
                 echo $Count;
                 foreach($StepsStatList['List'] as $key => $detail)
@@ -531,7 +531,7 @@ class Hj_StepsController extends AbstractController
             $departmentList_2 = $params['department_id_1']>0?$this->oDepartment->getDepartmentList(["company_id"=>$params['company_id'],"parent_id"=>$params['department_id_1']],"department_id,department_name"):[];
             $departmentList_3 = $params['department_id_2']>0?$this->oDepartment->getDepartmentList(["company_id"=>$params['company_id'],"parent_id"=>$params['department_id_2']],"department_id,department_name"):[];
             //获取步数统计列表
-            $StepsStatList = $this->oSteps->getStepsStatList($params,$groupKey);
+            $StepsStatList = $this->oSteps->getStepsStatList(array_merge($params,["permissionList"=>$totalPermission]),$groupKey);
             $departmentList  = [];
             $days = intval((strtotime($params['end_date']) - strtotime($params['start_date']))/86400);
             $spepsConfig = $this->config->steps;
@@ -636,7 +636,7 @@ class Hj_StepsController extends AbstractController
             $goal = ($companyDetail['daily_step']??6000)*$days;
             do{
                 //获取步数详情列表
-                $StepsStatList = $this->oSteps->getStepsStatList($params,$groupKey);
+                $StepsStatList = $this->oSteps->getStepsStatList(array_merge($params,["permissionList"=>$totalPermission]),$groupKey);
                 $Count = count($StepsStatList['List']);
                 foreach($StepsStatList['List'] as $key => $detail)
                 {

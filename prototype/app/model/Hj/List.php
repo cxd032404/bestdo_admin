@@ -49,13 +49,17 @@ class Hj_List extends Base_Widget
 	public function getListList($params = [],$fields = "*")
 	{
 	    $table_to_process = Base_Widget::getDbTable($this->table);
+        $wherePermission = isset($params['permissionList'])?(
+        count($params['permissionList'])>0?
+            ( " company_id in (".implode(",",array_column($params['permissionList'],"company_id")).") ")
+            :" 0 "):"";
 	    $whereCompany = (isset($params['company_id']) && $params['company_id']>0)?" company_id = ".$params['company_id']:"";
         $whereType = (isset($params['list_type']) && $params['list_type']!="0")?" list_type = '".$params['list_type']."'":"";
         $whereName = (isset($params['list_name']) && trim($params['list_name'])!="")?" list_name = '".trim($params['list_name'])."'":"";
         $whereExclude = (isset($params['exclude_id']) && $params['exclude_id'])>0?" list_id != ".$params['exclude_id']:"";
         $whereIn = (isset($params['id_in']) && count($params['id_in'])>0)?" list_id in ( ".implode(",",$params['id_in']).")":"";
         $whereNotIn = (isset($params['id_not_in']) && count($params['id_not_in'])>0)?" list_id not in ( ".implode(",",$params['id_not_in']).")":"";
-        $whereCondition = array($whereCompany,$whereExclude,$whereName,$whereType,$whereIn,$whereNotIn);
+        $whereCondition = array($wherePermission,$whereCompany,$whereExclude,$whereName,$whereType,$whereIn,$whereNotIn);
         $where = Base_common::getSqlWhere($whereCondition);
 		$sql = "SELECT $fields FROM " . $table_to_process . " where 1 ".$where." ORDER BY list_id ASC";
 		$return = $this->db->getAll($sql);

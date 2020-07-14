@@ -54,7 +54,7 @@ class Hj_UserController extends AbstractController
 			//获取用户列表时需要获得记录总数
 			$params['getCount'] = 1;
 			//获取用户列表
-			$UserList = $this->oUserInfo->getUserList($params);
+            $UserList = $this->oUserInfo->getUserList(array_merge($params,["permissionList"=>$totalPermission]));
 			//导出EXCEL链接
 			$export_var = "<a href =".(Base_Common::getUrl('',$this->ctl,'user.list.download',$params))."><导出表格></a>";
 			//翻页参数
@@ -141,7 +141,7 @@ class Hj_UserController extends AbstractController
             $departmentList = [];
             do
 			{
-				$UserList = $this->oUserInfo->getUserList($params);
+				$UserList = $this->oUserInfo->getUserList(array_merge($params,["permissionList"=>$totalPermission]));
 				$Count = count($UserList['UserList']);
 				foreach($UserList['UserList'] as $userId => $userInfo)
 				{

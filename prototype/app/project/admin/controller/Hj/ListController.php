@@ -59,7 +59,7 @@ class Hj_ListController extends AbstractController
                 }
             }
             //获取页面列表
-            $listList = $this->oList->getListList(['company_id'=>$company_id,'list_type'=>$list_type,'id_not_in'=>$boutiqueList]);
+            $listList = $this->oList->getListList(["permissionList"=>$totalPermission,'company_id'=>$company_id,'list_type'=>$list_type,'id_not_in'=>$boutiqueList]);
 			//获取列表类型列表
             $listTypeList = $this->oList->getListType();
             //初始化空的活动列表
