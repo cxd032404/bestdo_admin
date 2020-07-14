@@ -64,8 +64,9 @@ function regPage_miniprogram(mid,name){
           | <a href="javascript:;" onclick="protocalModify('{tpl:$companyInfo.company_id/}','user_m');">用户政策（小程序）</a>
   | <a href="javascript:;" onclick="regPage_miniprogram('{tpl:$companyInfo.company_id/}','{tpl:$companyInfo.company_name/}');">注册页面(小程序）</a>
           | <a href="javascript:;" onclick="regPage('{tpl:$companyInfo.company_id/}','{tpl:$companyInfo.company_name/}');">注册页面</a>
-        | <a href="{tpl:$this.sign/}&ac=boutique&company_id={tpl:$companyInfo.company_id/}">精品课设置({tpl:$companyInfo.detail.boutique func='count(@@)'/}) </a>
-        | <a href="{tpl:$this.sign/}&ac=club.banner&company_id={tpl:$companyInfo.company_id/}">俱乐部Banner({tpl:$companyInfo.detail.clubBanner func="count(@@)"/})</a>
+        | <a href="{tpl:$this.sign/}&ac=list&type=boutique&company_id={tpl:$companyInfo.company_id/}">精品课设置({tpl:$companyInfo.detail.boutique func='count(@@)'/}) </a>
+          | <a href="{tpl:$this.sign/}&ac=list&type=honor&company_id={tpl:$companyInfo.company_id/}">荣誉堂设置({tpl:$companyInfo.detail.honor func='count(@@)'/}) </a>
+          | <a href="{tpl:$this.sign/}&ac=club.banner&company_id={tpl:$companyInfo.company_id/}">俱乐部Banner({tpl:$companyInfo.detail.clubBanner func="count(@@)"/})</a>
         | <a href="{tpl:$this.sign/}&ac=step.banner&company_id={tpl:$companyInfo.company_id/}">健步走Banner({tpl:$companyInfo.detail.stepBanner func="count(@@)"/})</a>
         | <a href="{tpl:$this.sign/}&ac=step.date.range&company_id={tpl:$companyInfo.company_id/}">健步走日期设置</a>
       </td>

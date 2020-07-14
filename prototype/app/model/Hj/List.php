@@ -22,10 +22,19 @@ class Hj_List extends Base_Widget
             "this"=>['name'=>"当前详情"],
             "all"=>['name'=>"当前列表"],
         ];
+    protected $specified_list =
+        [   "honor"=>"荣誉堂",
+            "boutique"=>"精品课",
+        ];
     //获取列表类型
     public function getListType()
     {
         return $this->list_type;
+    }
+    //获取列表类型
+    public function getSpecifiedListType()
+    {
+        return $this->specified_list;
     }
     //获取完成后操作的类型
     public function getAfterAction()
