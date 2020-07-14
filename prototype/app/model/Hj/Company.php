@@ -28,7 +28,7 @@ class Hj_Company extends Base_Widget
                 :" 0 "):"";
         $whereCondition = array($wherePermission,$whereParent,$whereName,$whereExclude);
         $where = Base_common::getSqlWhere($whereCondition);
-		$sql = "SELECT $fields FROM " . $table_to_process . " where 1 ".$where." ORDER BY company_id ASC";
+        $sql = "SELECT $fields FROM " . $table_to_process . " where 1 ".$where." ORDER BY company_id ASC";
 		$return = $this->db->getAll($sql);
 		$CompanyList = array();
 		if(count($return))
