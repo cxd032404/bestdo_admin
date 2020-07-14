@@ -564,7 +564,7 @@ class Hj_ClubController extends AbstractController
             $club_id= intval($this->request->club_id);
             //获取俱乐部信息
             $clubInfo = $this->oClub->getClub($club_id,'*');
-            $inviteUrl = $this->config->apiUrl.$this->config->api['api']['invite'];
+            $inviteUrl = $this->config->apiUrl.$this->config->api['api']['invite_club'];
             $token = (new Hj_UserInfo())->getTokenForManager($this->manager->id);
             //渲染模版
             include $this->tpl('Hj_Club_Invite');
@@ -609,5 +609,31 @@ class Hj_ClubController extends AbstractController
         }
         echo $text;
         die();
+    }
+    //踢出俱乐部页面
+    public function leaveClubSubmitAction()
+    {
+        //检查权限
+        $PermissionCheck = $this->manager->checkMenuPermission("updateClub");
+        if($PermissionCheck['return'])
+        {
+            //俱乐部ID
+            $club_id= intval($this->request->club_id);
+            //获取俱乐部信息
+            $clubInfo = $this->oClub->getClub($club_id,'club_id,club_name');
+            //用户ID
+            $user_id= intval($this->request->user_id);
+            //获取用户信息
+            $userInfo = $this->oUserInfo->getUser($user_id,'user_id,true_name');
+            $token = (new Hj_UserInfo())->getTokenForManager($this->manager->id);
+            $leaveUrl = $this->config->apiUrl.$this->config->api['api']['leave_club'];
+            //渲染模版
+            include $this->tpl('Hj_Club_LeaveClub');
+        }
+        else
+        {
+            $home = $this->sign;
+            include $this->tpl('403');
+        }
     }
 }
