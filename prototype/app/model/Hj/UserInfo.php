@@ -724,12 +724,22 @@ class Hj_UserInfo extends Base_Widget
      * @param $params 传入的条件列表
      * @return integer
      */
-    public function getUserActivityLogCount($whereCondition)
+    public function getUserActivityLogCount($params)
     {
         //获取需要用到的表名
         $table_to_process = Base_Widget::getDbTable($this->table_activity_log);
         //生成查询列
         $fields = Base_common::getSqlFields(array("UserCount"=>"count(user_id)"));
+        //企业
+        $whereCompany = (isset($params['company_id']) && ($params['company_id']>0))?" company_id = '".$params['company_id']."' ":"";
+        //活动
+        $whereActivity = (isset($params['activity_id']) && ($params['activity_id']>0))?" activity_id = '".$params['activity_id']."' ":"";
+        //用户
+        $whereUser = (isset($params['user_id']) && ($params['user_id']>0))?" user_id = '".$params['user_id']."' ":"";
+        //所有查询条件置入数组
+        $whereCondition = array($whereCompany,$whereActivity,$whereUser);
+        //生成条件列
+        $where = Base_common::getSqlWhere($whereCondition);
         //生成条件列
         $where = Base_common::getSqlWhere($whereCondition);
         //生成条件列

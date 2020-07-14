@@ -39,7 +39,7 @@
 		<td align="left">
 			<select name="activity_id"  id="activity_id" size="1">
 				<option value="0" {tpl:if($listInfo.activity_id==0)}selected="selected"{/tpl:if} >不指定</option>
-				{tpl:loop $activityList $activity_id $activity_info}
+				{tpl:loop $activityList.ActivityList $activity_id $activity_info}
 				<option value="{tpl:$activity_info.activity_id/}" {tpl:if($listInfo.activity_id==$activity_info.activity_id)}selected="selected"{/tpl:if} >{tpl:$activity_info.activity_name/}</option>
 				{/tpl:loop}
 			</select>

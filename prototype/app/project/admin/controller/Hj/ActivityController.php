@@ -43,27 +43,25 @@ class Hj_ActivityController extends AbstractController
 		{
             $totalPermission = $this->manager->getPermissionList($this->manager->data_groups,"only");
             //企业ID
-			$company_id = intval($this->request->company_id??0);
+            $params['company_id'] = intval($this->request->company_id??0);
+            //分页参数
+            $params['Page'] = abs(intval($this->request->Page??1));
+            $params['PageSize'] = 20;
+            $params['getCount'] = 1;
 			//获取活动列表
-			$activityList = $this->oActivity->getActivityList(["permissionList"=>$totalPermission,'company_id'=>$company_id]);
+			$activityList = $this->oActivity->getActivityList(array_merge($params,["permissionList"=>$totalPermission]));
             //获取企业列表
 			$companyList = $this->oCompany->getCompanyList(["permissionList"=>$totalPermission],"company_id,company_name");
             $userList = [];
             //循环活动列表
-			foreach($activityList as $key => $activityInfo)
+			foreach($activityList['ActivityList'] as $key => $activityInfo)
             {
                 //数据解包
-                $activityList[$key]['detail'] = json_decode($activityInfo['detail'],true);
-				$activityList[$key]['company_name'] = ($activityInfo['company_id']==0)?"无对应":($companyList[$activityInfo['company_id']]['company_name']??"未知");
-                //分页参数
-                $params['Page'] = 1;
-                $params['PageSize'] = 1;
-                //获取列表时需要获得记录总数
-                $params['getCount'] = 1;
+                $activityList['ActivityList'][$key]['detail'] = json_decode($activityInfo['detail'],true);
+				$activityList['ActivityList'][$key]['company_name'] = ($activityInfo['company_id']==0)?"无对应":($companyList[$activityInfo['company_id']]['company_name']??"未知");
                 $params['activity_id'] = $activityInfo['activity_id'];
                 //获取报名记录数量
-                $List = $this->oUserInfo->getUserActivityLog($params);
-                $activityList[$key]['count'] = $List['UserCount']??0;
+                $activityList['ActivityList'][$key]['count']  = $this->oUserInfo->getUserActivityLogCount($params);
                 $userList = $clubList = [];
                 if(!isset($userList[$activityInfo['create_user_id']]))
                 {
@@ -84,10 +82,11 @@ class Hj_ActivityController extends AbstractController
                         }
                     }
                 }
-                $activityList[$key]['create_user_name'] = $userList[$activityInfo['create_user_id']]['true_name']??"未知用户";
-                $activityList[$key]['club_name'] = $clubList[$activityInfo['club_id']]['club_name']??"未指定";
+                $activityList['ActivityList'][$key]['create_user_name'] = $userList[$activityInfo['create_user_id']]['true_name']??"未知用户";
+                $activityList['ActivityList'][$key]['club_name'] = $clubList[$activityInfo['club_id']]['club_name']??"未指定";
             }
-
+            $page_url = Base_Common::getUrl('',$this->ctl,'index',$params)."&Page=~page~";
+            $page_content =  base_common::multi($activityList['ActivityCount'], $page_url, $params['Page'], $params['PageSize'], 10, $maxpage = 100, $prevWord = '上一页', $nextWord = '下一页');
 			//渲染模版
 			include $this->tpl('Hj_Activity_ActivityList');
 		}
@@ -287,7 +286,7 @@ class Hj_ActivityController extends AbstractController
         $text = '';
         $text .= '<option value="0">不指定</option>';
         //循环赛事分站列表
-        foreach($activityList as $activityInfo)
+        foreach($activityList['ActivityList'] as $activityInfo)
         {
             //初始化选中状态
             $selected = "";

@@ -27,18 +27,49 @@ class Hj_Activity extends Base_Widget
         $whereExclude = (isset($params['exclude_id']) && $params['exclude_id'])>0?" activity_id != ".$params['exclude_id']:"";
         $whereCondition = array($wherePermission,$whereCompany,$whereSign,$whereExclude);
         $where = Base_common::getSqlWhere($whereCondition);
-		$sql = "SELECT $fields FROM " . $table_to_process . " where 1 ".$where." ORDER BY activity_id ASC";
-		$return = $this->db->getAll($sql);
-		$ActivityList = array();
+        $limit  = isset($params['Page'])&&$params['Page']?" limit ".($params['Page']-1)*$params['PageSize'].",".$params['PageSize']." ":"";
+        $sql = "SELECT $fields FROM " . $table_to_process . " where 1 ".$where." ORDER BY activity_id ASC ".$limit;
+        $return = $this->db->getAll($sql);
+        //获取用户数量
+        if(isset($params['getCount'])&&$params['getCount']==1)
+        {
+            $activityCount = $this->getActivityCount($whereCondition);
+        }
+        else
+        {
+            $activityCount = 0;
+        }
+        $ActivityList = array('ActivityList'=>array(),'ActivityCount'=>$activityCount);
 		if(count($return))
 		{
 			foreach($return as $key => $value)
 			{
-                $ActivityList[$value['activity_id']] = $value;
+                $ActivityList['ActivityList'][$value['activity_id']] = $value;
 			}
 		}
-		return $ActivityList;
+        return $ActivityList;
 	}
+    /**
+     * 查询全部
+     * @param $fields
+     * @return array
+     */
+    public function getActivityCount($params = [])
+    {
+        $fields = Base_common::getSqlFields(array("ActivityCount"=>"count(activity_id)"));
+        $table_to_process = Base_Widget::getDbTable($this->table);
+        $wherePermission = isset($params['permissionList'])?(
+        count($params['permissionList'])>0?
+            ( " company_id in (".implode(",",array_column($params['permissionList'],"company_id")).") ")
+            :" 0 "):"";
+        $whereCompany = (isset($params['company_id']) && $params['company_id']>0)?" company_id = ".$params['company_id']:"";
+        $whereSign = (isset($params['activity_sign']) && trim($params['activity_sign'])!="")?" activity_sign = '".$params['activity_sign']."'":"";
+        $whereExclude = (isset($params['exclude_id']) && $params['exclude_id'])>0?" activity_id != ".$params['exclude_id']:"";
+        $whereCondition = array($wherePermission,$whereCompany,$whereSign,$whereExclude);
+        $where = Base_common::getSqlWhere($whereCondition);
+        $sql = "SELECT $fields FROM $table_to_process where 1 ".$where;
+        return $this->db->getOne($sql);
+    }
 	/**
 	 * 获取单条记录
 	 * @param integer $activity_id

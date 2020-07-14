@@ -37,7 +37,7 @@
 	<td align="left">		<input type="radio" name="detail[id_from]" id="detail[id_from]" value="from_id" {tpl:if(isset($elementInfo.detail.activity_id))}checked{/tpl:if}
 		 />
 		<select name="detail[activity_id]"  id="detail[activity_id]" size="1">
-			{tpl:loop $activityList  $activityInfo}
+			{tpl:loop $activityList.ActivityList  $activityInfo}
 			<option value="{tpl:$activityInfo.activity_id/}"{tpl:if($activityInfo.activity_id==$elementInfo.detail.activity_id)}selected="selected"{/tpl:if} >{tpl:$activityInfo.activity_name/}</option>
 			{/tpl:loop}
 		</select>
