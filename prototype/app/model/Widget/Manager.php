@@ -560,21 +560,32 @@ class Widget_Manager extends Base_Widget
 		$sql = "SELECT $fields FROM ".Base_Widget::getDbTable($this->table)." WHERE `name` = ?";
 		return $this->db->getRow($sql, $name);
 	}
-	public function getPermissionList($group_id)
+	public function getPermissionList($group_id,$type="all")
     {
         $companyList = (new Hj_Company())->getCompanyList([],"company_id,company_name");
         $PermissionList = $this->getDataPermissionByGroup($group_id);
         $PermissionList = array_column($PermissionList,"company_id");
         foreach($companyList as $key => $companyInfo)
         {
-            if(!in_array($companyInfo['company_id'],$PermissionList))
+            if($type=="all")
             {
-                //unset($companyList[$key]);
+                if(!in_array($companyInfo['company_id'],$PermissionList))
+                {
+                    //unset($companyList[$key]);
+                }
+                else
+                {
+                    $companyList[$key]['Permission'] = 1;
+                }
             }
             else
             {
-                $companyList[$key]['Permission'] = 1;
+                if(!in_array($companyInfo['company_id'],$PermissionList))
+                {
+                    unset($companyList[$key]);
+                }
             }
+
         }
         return $companyList;
     }

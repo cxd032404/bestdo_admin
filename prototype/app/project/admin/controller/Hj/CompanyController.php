@@ -39,7 +39,7 @@ class Hj_CompanyController extends AbstractController
 		$PermissionCheck = $this->manager->checkMenuPermission(0);
 		if($PermissionCheck['return'])
 		{
-            $totalPermission = $this->manager->getPermissionList($this->manager->data_groups);
+            $totalPermission = $this->manager->getPermissionList($this->manager->data_groups,"only");
             //获取企业列表
 			$companyList = $this->oCompany->getCompanyList(["permissionList"=>$totalPermission]);
 			//循环企业列表
@@ -69,7 +69,7 @@ class Hj_CompanyController extends AbstractController
 		$PermissionCheck = $this->manager->checkMenuPermission("addCompany");
 		if($PermissionCheck['return'])
 		{
-		    $totalPermission = $this->manager->getPermissionList($this->manager->data_groups);
+		    $totalPermission = $this->manager->getPermissionList($this->manager->data_groups,"only");
 			//获取顶级企业列表
 			$companyList = $this->oCompany->getCompanyList(["permissionList"=>$totalPermission,'parent_id'=>0],"company_id,company_name");
 			//渲染模版

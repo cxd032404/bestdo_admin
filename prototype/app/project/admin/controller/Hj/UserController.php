@@ -36,7 +36,7 @@ class Hj_UserController extends AbstractController
 		$PermissionCheck = $this->manager->checkMenuPermission(0);
 		if($PermissionCheck['return'])
 		{
-		    $totalPermission = $this->manager->getPermissionList($this->manager->data_groups);
+		    $totalPermission = $this->manager->getPermissionList($this->manager->data_groups,"only");
 		    //获取企业列表
             $companyList = (new Hj_Company())->getCompanyList(["permissionList"=>$totalPermission],"company_id,company_name");
             //获取登录方式列表

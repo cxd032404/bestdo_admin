@@ -55,7 +55,7 @@ class IndexController extends AbstractController
     {
         $oCompany = new Hj_Company();
         $oUser = new Hj_UserInfo();
-        $totalPermission = $this->manager->getPermissionList($this->manager->data_groups);
+        $totalPermission = $this->manager->getPermissionList($this->manager->data_groups,"only");
         //获取企业列表
         $companyList = $oCompany->getCompanyList(["permissionList"=>$totalPermission],"company_id,company_name");
         $startDate = date("Y-m-d",time()-7*86400);

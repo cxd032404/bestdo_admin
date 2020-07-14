@@ -41,7 +41,7 @@ class Hj_ActivityController extends AbstractController
 		$PermissionCheck = $this->manager->checkMenuPermission(0);
 		if($PermissionCheck['return'])
 		{
-            $totalPermission = $this->manager->getPermissionList($this->manager->data_groups);
+            $totalPermission = $this->manager->getPermissionList($this->manager->data_groups,"only");
             //企业ID
 			$company_id = intval($this->request->company_id??0);
 			//获取活动列表
@@ -104,7 +104,7 @@ class Hj_ActivityController extends AbstractController
 		$PermissionCheck = $this->manager->checkMenuPermission("addActivity");
 		if($PermissionCheck['return'])
 		{
-            $totalPermission = $this->manager->getPermissionList($this->manager->data_groups);
+            $totalPermission = $this->manager->getPermissionList($this->manager->data_groups,"only");
             //获取顶级活动列表
 			$companyList = $this->oCompany->getCompanyList(["permissionList"=>$totalPermission],"company_id,company_name");
 			//渲染模版
@@ -174,7 +174,7 @@ class Hj_ActivityController extends AbstractController
 			$activityInfo = $this->oActivity->getActivity($activity_id,'*');
 			//数据解包
             $activityInfo['detail'] = json_decode($activityInfo['detail'],true);
-            $totalPermission = $this->manager->getPermissionList($this->manager->data_groups);
+            $totalPermission = $this->manager->getPermissionList($this->manager->data_groups,"only");
             //获取企业列表
 			$companyList = $this->oCompany->getCompanyList(["permissionList"=>$totalPermission],"company_id,company_name");
             //获取企业对应的俱乐部列表
@@ -261,7 +261,7 @@ class Hj_ActivityController extends AbstractController
 			$activityElementList = $this->oActivityElement->getElementList(['activity_id'=>$activity_id]);
 			//获取元素类型列表
 			$elementTypeList = $this->oElementType->getElementTypeList();
-            $totalPermission = $this->manager->getPermissionList($this->manager->data_groups);
+            $totalPermission = $this->manager->getPermissionList($this->manager->data_groups,"only");
             //获取企业列表
 			$companyList = $this->oCompany->getCompanyList(["permissionList"=>$totalPermission],"company_id,company_name");
             foreach ($activityElementList as $elementSign => $elementInfo)
