@@ -425,13 +425,13 @@ class Widget_Manager extends Base_Widget
     {
         if($referer!= "")
         {
+            //echo "referer:".$referer."<br>";
             $t = explode("?",$referer);
-            $_SERVER['QUERY_STRING'] = $t[1];
+            $_SERVER['QUERY_STRING'] = $t[1]??$t[0];
         }
         $oMenu = new Widget_Menu();
         $oMenuPurview = new Widget_Menu_Permission();
         $t = explode("&",$_SERVER['QUERY_STRING']);
-        //print_R($t);
         foreach($t as $key => $value)
         {
             $t2 = explode("=",$value);

@@ -2,17 +2,17 @@
 <script type="text/javascript">
     $(document).ready(function(){
         $('#add_list').click(function(){
-            addListBox = divBox.showBox('{tpl:$this.sign/}&ac=list.add&type='+$('#type').val(), {title:'添加{tpl:$typeName/}列表',width:600,height:600});
+            addListBox = divBox.showBox('{tpl:$this.sign/}&ac=list.add&type='+$('#type').val()  + '&currentPage='+$('#currentPage').val(), {title:'添加{tpl:$typeName/}列表',width:600,height:600});
         });
     });
 
 function listDelete(p_id,p_name){
     msg = '是否删除 ' + p_name + '?'
-  deleteactivityBox = divBox.confirmBox({content:msg,ok:function(){location.href = '{tpl:$this.sign/}&ac=list.delete&list_id=' + p_id;}});
+  deleteactivityBox = divBox.confirmBox({content:msg,ok:function(){location.href = '{tpl:$this.sign/}&ac=list.delete&list_id=' + p_id + '&currentPage='+$('#currentPage').val();}});
 }
 
 function listModify(lid){
-  modifyactivityBox = divBox.showBox('{tpl:$this.sign/}&ac=list.modify&list_id=' + lid, {title:'修改列表',width:600,height:700});
+  modifyactivityBox = divBox.showBox('{tpl:$this.sign/}&ac=list.modify&list_id=' + lid + '&currentPage='+$('#currentPage').val(), {title:'修改列表',width:600,height:700});
 }
 
 function post(lid){
@@ -28,6 +28,7 @@ function post(lid){
 <fieldset><legend>列表</legend>
 <form action="{tpl:$this.sign/}&ac=specified" name="form" id="form" method="post">
     <input type="hidden" name="type" id="type" value="{tpl:$list_type/}" />
+    <input type="hidden" name="currentPage" id="currentPage" value="{tpl:$currentPage/}" />
     <select name="company_id"  id="company_id" size="1">
       <option value="0"{tpl:if(0==$company_id)}selected="selected"{/tpl:if} >全部</option>
       {tpl:loop $companyList  $company_info}
@@ -63,7 +64,8 @@ function post(lid){
       <td align="center">{tpl:$listInfo.list_type_name/}</td>
       <td align="center">{tpl:$listInfo.update_time/}</td>
       <td align="center"><a  href="javascript:;" onclick="listDelete('{tpl:$listInfo.list_id/}','{tpl:$listInfo.list_name/}')">删除</a>
- |  <a href="javascript:;" onclick="listModify('{tpl:$listInfo.list_id/}');">修改</a> | <a href="{tpl:$this.sign/}&ac=list&list_id={tpl:$listInfo.list_id/}">列表 {tpl:if($listInfo.posts_count>0)}({tpl:$listInfo.posts_count/}){/tpl:if} </a></td>
+ |  <a href="javascript:;" onclick="listModify('{tpl:$listInfo.list_id/}');">修改</a>
+          | <a href="{tpl:$this.sign/}&ac=list&list_id={tpl:$listInfo.list_id/}&currentPage={tpl:$currentPage/}">列表 {tpl:if($listInfo.posts_count>0)}({tpl:$listInfo.posts_count/}){/tpl:if} </a></td>
   </tr>
 {/tpl:loop}
 </table>

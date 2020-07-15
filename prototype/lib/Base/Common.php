@@ -531,14 +531,15 @@ EOF;
 	 * @param $action	 
 	 * @return string
 	 */
-	public static function getUrl($mod,$ctl,$action = "index",$Params = [])
+	public static function getUrl($mod,$ctl,$action = "index",$p = [])
 	{
 	    $Params['mod'] = $mod?$mod:"";
 		$Params['ctl'] = $ctl?$ctl:"";
 		$Params['ac'] = $action?$action:"index";
+		$Params = array_merge($Params,$p);
 		if(count($Params))
 		{
-			foreach($Params as $key => $value)
+		    foreach($Params as $key => $value)
 			{
 				if(strlen($value)>0)
 				{

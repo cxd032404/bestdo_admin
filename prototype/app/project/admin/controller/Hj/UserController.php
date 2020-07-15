@@ -200,7 +200,7 @@ class Hj_UserController extends AbstractController
 	public function userDetailAction()
 	{
 		//检查权限
-		$PermissionCheck = $this->manager->checkMenuPermission("UserListDownload");
+		$PermissionCheck = $this->manager->checkMenuPermission("UserListDownload",$this->sign);
 		if($PermissionCheck['return'])
 		{
 			//获取性别列表
@@ -251,7 +251,7 @@ class Hj_UserController extends AbstractController
     public function userDepartmentModifyAction()
     {
         //检查权限
-        $PermissionCheck = $this->manager->checkMenuPermission("UserUpdate");
+        $PermissionCheck = $this->manager->checkMenuPermission("UserUpdate",$this->sign);
         if($PermissionCheck['return'])
         {
             $userId = trim($this->request->user_id);
@@ -316,7 +316,7 @@ class Hj_UserController extends AbstractController
     public function companyUserListAction()
     {
         //检查权限
-        $PermissionCheck = $this->manager->checkMenuPermission(0);
+        $PermissionCheck = $this->manager->checkMenuPermission("CompanyUserLoad");
         if($PermissionCheck['return'])
         {
             //获取企业列表
@@ -363,7 +363,7 @@ class Hj_UserController extends AbstractController
     public function companyUserUploadSubmitAction()
     {
         //检查权限
-        $PermissionCheck = $this->manager->checkMenuPermission(0);
+        $PermissionCheck = $this->manager->checkMenuPermission(0,$this->sign);
         if($PermissionCheck['return'])
         {
             $companyList = (new Hj_Company())->getCompanyList([],"company_name,company_id");
@@ -494,7 +494,7 @@ class Hj_UserController extends AbstractController
     public function userDisableAction()
     {
         //检查权限
-        $PermissionCheck = $this->manager->checkMenuPermission("UserUpdate");
+        $PermissionCheck = $this->manager->checkMenuPermission("UserUpdate",$this->sign);
         if($PermissionCheck['return'])
         {
             //用户ID

@@ -38,7 +38,7 @@ class Hj_ActivityController extends AbstractController
 	public function indexAction()
 	{
 		//检查权限
-		$PermissionCheck = $this->manager->checkMenuPermission(0);
+		$PermissionCheck = $this->manager->checkMenuPermission(0,$this->sign);
 		if($PermissionCheck['return'])
 		{
             $totalPermission = $this->manager->getPermissionList($this->manager->data_groups,"only");
@@ -100,7 +100,7 @@ class Hj_ActivityController extends AbstractController
 	public function activityAddAction()
 	{
 		//检查权限
-		$PermissionCheck = $this->manager->checkMenuPermission("addActivity");
+		$PermissionCheck = $this->manager->checkMenuPermission("addActivity",$this->sign);
 		if($PermissionCheck['return'])
 		{
             $totalPermission = $this->manager->getPermissionList($this->manager->data_groups,"only");
@@ -164,7 +164,7 @@ class Hj_ActivityController extends AbstractController
 	public function activityModifyAction()
 	{
 		//检查权限
-		$PermissionCheck = $this->manager->checkMenuPermission("updateActivity");
+		$PermissionCheck = $this->manager->checkMenuPermission("updateActivity",$this->sign);
 		if($PermissionCheck['return'])
 		{
 			//活动ID
@@ -228,7 +228,7 @@ class Hj_ActivityController extends AbstractController
 	public function activityDeleteAction()
 	{
 		//检查权限
-		$PermissionCheck = $this->manager->checkMenuPermission("deleteActivity");
+		$PermissionCheck = $this->manager->checkMenuPermission("deleteActivity",$this->sign);
 		if($PermissionCheck['return'])
 		{
 			//活动ID
@@ -249,7 +249,7 @@ class Hj_ActivityController extends AbstractController
 	public function activityDetailAction()
 	{
 		//检查权限
-		$PermissionCheck = $this->manager->checkMenuPermission("updatePage");
+		$PermissionCheck = $this->manager->checkMenuPermission("updatePage",$this->sign);
 		if($PermissionCheck['return'])
 		{
 			//活动ID
@@ -337,7 +337,7 @@ class Hj_ActivityController extends AbstractController
     public function activityLogAction()
     {
         //检查权限
-        $PermissionCheck = $this->manager->checkMenuPermission(0);
+        $PermissionCheck = $this->manager->checkMenuPermission(0,$this->sign);
         if($PermissionCheck['return'])
         {
             //列表ID

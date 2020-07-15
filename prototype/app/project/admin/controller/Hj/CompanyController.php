@@ -321,7 +321,7 @@ class Hj_CompanyController extends AbstractController
     public function listAction()
     {
         //检查权限
-        $PermissionCheck = $this->manager->checkMenuPermission("updateCompany");
+        $PermissionCheck = $this->manager->checkMenuPermission("updateCompany",$this->sign);
         if($PermissionCheck['return'])
         {
             //企业ID
