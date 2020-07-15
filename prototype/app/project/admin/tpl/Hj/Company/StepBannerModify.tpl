@@ -22,10 +22,19 @@
 <td>跳转路径</td>
 	<td align="left"><input type="text" class="span4" name="detail[img_jump_url]"  id="detail[img_jump_url]" value="{tpl:$bannerInfo.img_jump_url/}" size="50" /></td>
 </tr>
-	<tr class="hover">
-		<td>标签</td>
-		<td align="left"><input type="text" class="span2" name="detail[title]"  id="detail[title]" value="{tpl:$bannerInfo.title/}" size="50" /></td>
-	</tr>
+<tr class="hover">
+	<td>标签</td>
+	<td align="left"><input type="text" class="span2" name="detail[title]"  id="detail[title]" value="{tpl:$bannerInfo.title/}" size="50" /></td>
+</tr>
+<tr class="hover">
+	<td>排序</td>
+	<td align="left"><input type="text" class="span2" name="detail[sort]"  id="detail[sort]" value="{tpl:$bannerInfo.title/}" size="50" /></td>
+</tr>
+<tr class="hover">
+	<td>生效时间</td>
+	<td align="left"><input type="text" name="detail[start_time]"  id="detail[start_time]" class="input-medium" value="{tpl:$bannerInfo.start_time/}"  onFocus="WdatePicker({isShowClear:false,readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})" >-<input type="text" name="detail[end_time]" id="detail[end_time]" class="input-medium"  value="{tpl:$bannerInfo.end_time/}" onFocus="WdatePicker({isShowClear:false,readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})" >
+	</td>
+</tr>
 <tr class="noborder"><td></td>
 <td><button type="submit" id="banner_modify_submit">提交</button></td>
 </tr>

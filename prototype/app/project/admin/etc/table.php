@@ -154,4 +154,8 @@ $table['config_steps_date_range']['num'] = 1;
 #系统配置
 $table['config_default']['db'] = 'hj_config';
 $table['config_default']['num'] = 1;
+
+#资源配置
+$table['config_source']['db'] = 'hj_config';
+$table['config_source']['num'] = 1;
 return $table;

@@ -18,6 +18,7 @@ class Hj_CompanyController extends AbstractController
 	 */
 	protected $oCompany;
     protected $oProtocal;
+    protected $oSource;
 
     /**
 	 * 初始化
@@ -29,6 +30,8 @@ class Hj_CompanyController extends AbstractController
 		parent::init();
 		$this->oCompany = new Hj_Company();
         $this->oProtocal = new Hj_Protocal();
+        $this->oSource = new Hj_Source();
+
 
 
     }
@@ -358,6 +361,16 @@ class Hj_CompanyController extends AbstractController
             $companyInfo = $this->oCompany->getCompany($company_id,'*');
             //数据解包
             $companyInfo['detail'] = json_decode($companyInfo['detail'],true);
+            if(isset($companyInfo['detail']['stepBanner']))
+            {
+                foreach($companyInfo['detail']['stepBanner'] as $key => $value)
+                {
+                    if(!is_array($value))
+                    {
+                        $companyInfo['detail']['stepBanner'][$key] = $this->oSource->getSource($value);
+                    }
+                }
+            }
             //渲染模版
             include $this->tpl('Hj_Company_StepBanner');
         }
@@ -378,6 +391,8 @@ class Hj_CompanyController extends AbstractController
             $company_id= intval($this->request->company_id);
             //获取企业信息
             $companyInfo = $this->oCompany->getCompany($company_id,'*');
+            $start_time = date("Y-m-d H:i:s",time()+86400);
+            $end_time = date("Y-m-d H:i:s",time()+86400*30);
             //渲染模版
             include $this->tpl('Hj_Company_StepBannerAdd');
         }
@@ -407,9 +422,28 @@ class Hj_CompanyController extends AbstractController
         else
         {
             $companyInfo['detail']['stepBanner'] = $companyInfo['detail']['stepBanner']??[];
-            $companyInfo['detail']['stepBanner'][] = ['img_url'=>$oss_urls['0'],'img_jump_url'=>$detail['img_jump_url'],'text'=>trim($detail['text']??""),'title'=>trim($detail['title']??"")];
-            $companyInfo['detail'] = json_encode($companyInfo['detail']);
-            $res = $this->oCompany->updateCompany($company_id,$companyInfo);
+            $imgData = [
+                'img_url'=> $oss_urls['0'],
+                'img_jump_url'=>trim($detail['img_jump_url']??""),
+                'text'=>trim($detail['text']??""),
+                'title'=>trim($detail['title']??""),
+                'sort'=>trim($detail['title']??""),
+                'start_time'=>trim($detail['start_time']??""),
+                'end_time'=>trim($detail['end_time']??""),
+            ];
+            $imgData = array_merge($imgData,['type'=>"company","type_id"=>$company_id,"sub_type"=>"stepBanner"]);
+            $source_id = $this->oSource->insertSource($imgData);
+            if($source_id)
+            {
+                $companyInfo['detail']['stepBanner'][] = $source_id;
+                $companyInfo['detail'] = json_encode($companyInfo['detail']);
+                $res = $this->oCompany->updateCompany($company_id,$companyInfo);
+                $response = $res ? array('errno' => 0) : array('errno' => 9);
+            }
+            else
+            {
+                $response = array('errno' => 9);
+            }
             Base_Common::refreshCache($this->config,"company",$company_id);
             $response = $res ? array('errno' => 0) : array('errno' => 9);
         }
@@ -425,6 +459,10 @@ class Hj_CompanyController extends AbstractController
         $companyInfo = $this->oCompany->getCompany($company_id,"company_id,detail");
         $companyInfo['detail'] = json_decode($companyInfo['detail'],true);
         $bannerInfo = $companyInfo['detail']['stepBanner'][$pos];
+        if(!is_array($bannerInfo))
+        {
+            $bannerInfo = $this->oSource->getSource($bannerInfo);
+        }
         //渲染模版
         include $this->tpl('Hj_Company_StepBannerModify');
     }
@@ -441,22 +479,54 @@ class Hj_CompanyController extends AbstractController
         $oUpload = new Base_Upload('upload_img');
         $upload = $oUpload->upload('upload_img',$this->config->oss);
         $oss_urls = array_column($upload->resultArr,'oss');
+        if(is_array($companyInfo['detail']['stepBanner'][$pos]))
+        {
+            $origin = $companyInfo['detail']['stepBanner'][$pos];
+            $toCreate = 1;
+        }
+        else
+        {
+            $origin_id = $companyInfo['detail']['stepBanner'][$pos];
+            $origin = $this->oSource->getSource($origin_id);
+            $toUpdate = 1;
+        }
         //如果以前没上传过且这次也没有成功上传
-        if((!isset($companyInfo['detail']['stepBanner'][$pos]['img_url']) || $companyInfo['detail']['stepBanner'][$pos]['img_url']=="") && (!isset($oss_urls['0']) || $oss_urls['0'] == ""))
+        if((!isset($origin['img_url']) || $origin['img_url']=="") && (!isset($oss_urls['0']) || $oss_urls['0'] == ""))
         {
             $response = array('errno' => 2);
         }
         else
         {
-            //这次传成功了就用这次，否则维持
-            $companyInfo['detail']['stepBanner'][$pos]['img_url'] = (isset($oss_urls['0']) && $oss_urls['0']!="")?($oss_urls['0']):($companyInfo['detail']['stepBanner'][$pos]['img_url']);
-            //保存跳转链接
-            $companyInfo['detail']['stepBanner'][$pos]['img_jump_url'] = trim($detail['img_jump_url']??"");
-            $companyInfo['detail']['stepBanner'][$pos]['text'] = trim($detail['text']??"");
-            $companyInfo['detail']['stepBanner'][$pos]['title'] = trim($detail['title']??"");
-            $companyInfo['detail'] = json_encode($companyInfo['detail']);
 
-            $res = $this->oCompany->updateCompany($company_id,$companyInfo);
+            $imgData = [
+                'img_url'=> (isset($oss_urls['0']) && $oss_urls['0']!="")?($oss_urls['0']):($origin['img_url']),
+                'img_jump_url'=>trim($detail['img_jump_url']??""),
+                'text'=>trim($detail['text']??""),
+                'title'=>trim($detail['title']??""),
+                'sort'=>trim($detail['title']??""),
+                'start_time'=>trim($detail['start_time']??""),
+                'end_time'=>trim($detail['end_time']??""),
+                ];
+
+            if($toCreate == 1)
+            {
+                $imgData = array_merge($imgData,['type'=>"company","type_id"=>$company_id,"sub_type"=>"stepBanner"]);
+                $source_id = $this->oSource->insertSource($imgData);
+                if($source_id)
+                {
+                    $companyInfo['detail']['stepBanner'][$pos] = $source_id;
+                    $companyInfo['detail'] = json_encode($companyInfo['detail']);
+                    $res = $this->oCompany->updateCompany($company_id,$companyInfo);
+                }
+                else
+                {
+                    $res = 9;
+                }
+            }
+            else
+            {
+                $res = $this->oSource->updateSource($origin_id,$imgData);
+            }
             Base_Common::refreshCache($this->config,"company",$company_id);
             $response = $res ? array('errno' => 0) : array('errno' => 9);
         }
@@ -474,10 +544,15 @@ class Hj_CompanyController extends AbstractController
         $pos = intval($this->request->pos??0);
         if(isset($companyInfo['detail']['stepBanner'][$pos]))
         {
+            $source_id = $companyInfo['detail']['stepBanner'][$pos];
             unset($companyInfo['detail']['stepBanner'][$pos]);
             $companyInfo['detail']['stepBanner'] = array_values($companyInfo['detail']['stepBanner']);
             $companyInfo['detail'] = json_encode($companyInfo['detail']);
             $res = $this->oCompany->updateCompany($company_id,$companyInfo);
+            if($res)
+            {
+                $this->oSource->deleteSource($source_id);
+            }
             Base_Common::refreshCache($this->config,"company",$company_id);
         }
         $this->response->goBack();
@@ -658,6 +733,16 @@ class Hj_CompanyController extends AbstractController
             $companyInfo = $this->oCompany->getCompany($company_id,'*');
             //数据解包
             $companyInfo['detail'] = json_decode($companyInfo['detail'],true);
+            if(isset($companyInfo['detail']['clubBanner']))
+            {
+                foreach($companyInfo['detail']['clubBanner'] as $key => $value)
+                {
+                    if(!is_array($value))
+                    {
+                        $companyInfo['detail']['clubBanner'][$key] = $this->oSource->getSource($value);
+                    }
+                }
+            }
             //渲染模版
             include $this->tpl('Hj_Company_ClubBanner');
         }
@@ -678,6 +763,8 @@ class Hj_CompanyController extends AbstractController
             $company_id= intval($this->request->company_id);
             //获取企业信息
             $companyInfo = $this->oCompany->getCompany($company_id,'*');
+            $start_time = date("Y-m-d H:i:s",time()+86400);
+            $end_time = date("Y-m-d H:i:s",time()+86400*30);
             //渲染模版
             include $this->tpl('Hj_Company_ClubBannerAdd');
         }
@@ -707,9 +794,28 @@ class Hj_CompanyController extends AbstractController
         else
         {
             $companyInfo['detail']['clubBanner'] = $companyInfo['detail']['clubBanner']??[];
-            $companyInfo['detail']['clubBanner'][] = ['img_url'=>$oss_urls['0'],'img_jump_url'=>$detail['img_jump_url'],'text'=>trim($detail['text']??""),'title'=>trim($detail['title']??"")];
-            $companyInfo['detail'] = json_encode($companyInfo['detail']);
-            $res = $this->oCompany->updateCompany($company_id,$companyInfo);
+            $imgData = [
+                'img_url'=> $oss_urls['0'],
+                'img_jump_url'=>trim($detail['img_jump_url']??""),
+                'text'=>trim($detail['text']??""),
+                'title'=>trim($detail['title']??""),
+                'sort'=>trim($detail['title']??""),
+                'start_time'=>trim($detail['start_time']??""),
+                'end_time'=>trim($detail['end_time']??""),
+            ];
+            $imgData = array_merge($imgData,['type'=>"company","type_id"=>$company_id,"sub_type"=>"clubBanner"]);
+            $source_id = $this->oSource->insertSource($imgData);
+            if($source_id)
+            {
+                $companyInfo['detail']['clubBanner'][] = $source_id;
+                $companyInfo['detail'] = json_encode($companyInfo['detail']);
+                $res = $this->oCompany->updateCompany($company_id,$companyInfo);
+                $response = $res ? array('errno' => 0) : array('errno' => 9);
+            }
+            else
+            {
+                $response = array('errno' => 9);
+            }
             Base_Common::refreshCache($this->config,"company",$company_id);
             $response = $res ? array('errno' => 0) : array('errno' => 9);
         }
@@ -725,6 +831,11 @@ class Hj_CompanyController extends AbstractController
         $companyInfo = $this->oCompany->getCompany($company_id,"company_id,detail");
         $companyInfo['detail'] = json_decode($companyInfo['detail'],true);
         $bannerInfo = $companyInfo['detail']['clubBanner'][$pos];
+        if(!is_array($bannerInfo))
+        {
+            $bannerInfo = $this->oSource->getSource($bannerInfo);
+        }
+        print_R($bannerInfo);
         //渲染模版
         include $this->tpl('Hj_Company_ClubBannerModify');
     }
@@ -741,22 +852,52 @@ class Hj_CompanyController extends AbstractController
         $oUpload = new Base_Upload('upload_img');
         $upload = $oUpload->upload('upload_img',$this->config->oss);
         $oss_urls = array_column($upload->resultArr,'oss');
+        if(is_array($companyInfo['detail']['clubBanner'][$pos]))
+        {
+            $origin = $companyInfo['detail']['clubBanner'][$pos];
+            $toCreate = 1;
+        }
+        else
+        {
+            $origin_id = $companyInfo['detail']['clubBanner'][$pos];
+            $origin = $this->oSource->getSource($origin_id);
+            $toUpdate = 1;
+        }
         //如果以前没上传过且这次也没有成功上传
-        if((!isset($companyInfo['detail']['clubBanner'][$pos]['img_url']) || $companyInfo['detail']['clubBanner'][$pos]['img_url']=="") && (!isset($oss_urls['0']) || $oss_urls['0'] == ""))
+        if((!isset($origin['img_url']) || $origin['img_url']=="") && (!isset($oss_urls['0']) || $oss_urls['0'] == ""))
         {
             $response = array('errno' => 2);
         }
         else
         {
-            //这次传成功了就用这次，否则维持
-            $companyInfo['detail']['clubBanner'][$pos]['img_url'] = (isset($oss_urls['0']) && $oss_urls['0']!="")?($oss_urls['0']):($companyInfo['detail']['stepBanner'][$pos]['img_url']);
-            //保存跳转链接
-            $companyInfo['detail']['clubBanner'][$pos]['img_jump_url'] = trim($detail['img_jump_url']??"");
-            $companyInfo['detail']['clubBanner'][$pos]['text'] = trim($detail['text']??"");
-            $companyInfo['detail']['clubBanner'][$pos]['title'] = trim($detail['title']??"");
-            $companyInfo['detail'] = json_encode($companyInfo['detail']);
-
-            $res = $this->oCompany->updateCompany($company_id,$companyInfo);
+            $imgData = [
+                'img_url'=> (isset($oss_urls['0']) && $oss_urls['0']!="")?($oss_urls['0']):($origin['img_url']),
+                'img_jump_url'=>trim($detail['img_jump_url']??""),
+                'text'=>trim($detail['text']??""),
+                'title'=>trim($detail['title']??""),
+                'sort'=>trim($detail['title']??""),
+                'start_time'=>trim($detail['start_time']??""),
+                'end_time'=>trim($detail['end_time']??""),
+            ];
+            if($toCreate == 1)
+            {
+                $imgData = array_merge($imgData,['type'=>"company","type_id"=>$company_id,"sub_type"=>"clubBanner"]);
+                $source_id = $this->oSource->insertSource($imgData);
+                if($source_id)
+                {
+                    $companyInfo['detail']['clubBanner'][$pos] = $source_id;
+                    $companyInfo['detail'] = json_encode($companyInfo['detail']);
+                    $res = $this->oCompany->updateCompany($company_id,$companyInfo);
+                }
+                else
+                {
+                    $res = 9;
+                }
+            }
+            else
+            {
+                $res = $this->oSource->updateSource($origin_id,$imgData);
+            }
             Base_Common::refreshCache($this->config,"company",$company_id);
             $response = $res ? array('errno' => 0) : array('errno' => 9);
         }

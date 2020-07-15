@@ -28,7 +28,8 @@
 			<tr class="hover"><td colspan="2">Banner列表</td></tr>
 			{tpl:loop $companyInfo.detail.clubBanner $pos $picInfo}
 			<tr class="hover">
-				<td align="center"><img src="{tpl:$picInfo.img_url/}" width='150' height='130'/><p>文字：{tpl:$picInfo.text/}<p>跳转：{tpl:$picInfo.img_jump_url/}<p>标签：{tpl:$picInfo.title/}</td>
+				<td align="center"><img src="{tpl:$picInfo.img_url/}" width='150' height='130'/><p>文字：{tpl:$picInfo.text/}<p>跳转：{tpl:$picInfo.img_jump_url/}<p>标签：{tpl:$picInfo.title/}<p>排序：{tpl:$picInfo.sort/}<p>
+				<p>生效时间：<p>{tpl:$picInfo.start_time/}<p>{tpl:$picInfo.end_time/}</td>
 				<td align="center"><a  href="javascript:;" onclick="BannerDelete('{tpl:$pos/}')">删除</a>
 					|  <a href="javascript:;" onclick="BannerModify('{tpl:$pos/}');">修改</a></td>
 			</tr>
