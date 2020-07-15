@@ -59,14 +59,8 @@ class Hj_CompanyController extends AbstractController
             }
             array_multisort(array_column($companyList, "sort"),$companyList);
 			//渲染模版
-			if($type == "banner")
-            {
-                include $this->tpl('Hj_Company_CompanyList');
-            }
-			else
-            {
-                include $this->tpl('Hj_Company_CompanyListBanner');
-            }
+            include $this->tpl('Hj_Company_CompanyList');
+
 		}
 		else
 		{
