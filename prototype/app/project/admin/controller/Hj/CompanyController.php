@@ -385,227 +385,6 @@ class Hj_CompanyController extends AbstractController
 		echo json_encode($response);
 		return true;
     }
-    //健步走banner列表
-    public function stepBannerAction()
-    {
-        //检查权限
-        $PermissionCheck = $this->manager->checkMenuPermission("updateBanner",$this->request->currentPage);
-        if($PermissionCheck['return'])
-        {
-            $currentPage = urlencode($this->request->currentPage);
-            //企业ID
-            $company_id= intval($this->request->company_id);
-            //获取企业信息
-            $companyInfo = $this->oCompany->getCompany($company_id,'*');
-            //数据解包
-            $companyInfo['detail'] = json_decode($companyInfo['detail'],true);
-            if(isset($companyInfo['detail']['stepBanner']))
-            {
-                foreach($companyInfo['detail']['stepBanner'] as $key => $value)
-                {
-                    if(!is_array($value))
-                    {
-                        $companyInfo['detail']['stepBanner'][$key] = $this->oSource->getSource($value);
-                    }
-                }
-            }
-            //渲染模版
-            include $this->tpl('Hj_Company_StepBanner');
-        }
-        else
-        {
-            $home = $this->sign;
-            include $this->tpl('403');
-        }
-    }
-    //添加健步走banner页面
-    public function stepBannerAddAction()
-    {
-        //检查权限
-        $PermissionCheck = $this->manager->checkMenuPermission("updateBanner",$this->request->currentPage);
-        if($PermissionCheck['return'])
-        {
-            $currentPage = urlencode($this->request->currentPage);
-            //企业ID
-            $company_id= intval($this->request->company_id);
-            //获取企业信息
-            $companyInfo = $this->oCompany->getCompany($company_id,'*');
-            $start_time = date("Y-m-d H:i:s",time()+86400);
-            $end_time = date("Y-m-d H:i:s",time()+86400*30);
-            //渲染模版
-            include $this->tpl('Hj_Company_StepBannerAdd');
-        }
-        else
-        {
-            $home = $this->sign;
-            include $this->tpl('403');
-        }
-    }
-    //添加健步走banner
-    public function stepBannerInsertAction()
-    {
-        //企业ID
-        $company_id = intval($this->request->company_id);
-        $detail = $this->request->detail;
-        $companyInfo = $this->oCompany->getCompany($company_id,"company_id,detail");
-        $companyInfo['detail'] = json_decode($companyInfo['detail'],true);
-        //上传图片
-        $oUpload = new Base_Upload('upload_img');
-        $upload = $oUpload->upload('upload_img',$this->config->oss);
-        $oss_urls = array_column($upload->resultArr,'oss');
-        //如果没有成功上传
-        if(!isset($oss_urls['0']) || $oss_urls['0'] == "")
-        {
-            $response = array('errno' => 1);
-        }
-        else
-        {
-            $companyInfo['detail']['stepBanner'] = $companyInfo['detail']['stepBanner']??[];
-            $imgData = [
-                'img_url'=> $oss_urls['0'],
-                'img_jump_url'=>trim($detail['img_jump_url']??""),
-                'text'=>trim($detail['text']??""),
-                'title'=>trim($detail['title']??""),
-                'sort'=>trim($detail['sort']??""),
-                'start_time'=>trim($detail['start_time']??""),
-                'end_time'=>trim($detail['end_time']??""),
-            ];
-            $imgData = array_merge($imgData,['type'=>"company","type_id"=>$company_id,"sub_type"=>"stepBanner"]);
-            $source_id = $this->oSource->insertSource($imgData);
-            if($source_id)
-            {
-                $companyInfo['detail']['stepBanner'][] = $source_id;
-                $companyInfo['detail'] = json_encode($companyInfo['detail']);
-                $res = $this->oCompany->updateCompany($company_id,$companyInfo);
-                $response = $res ? array('errno' => 0) : array('errno' => 9);
-            }
-            else
-            {
-                $response = array('errno' => 9);
-            }
-            Base_Common::refreshCache($this->config,"company",$company_id);
-            $response = $res ? array('errno' => 0) : array('errno' => 9);
-        }
-        echo json_encode($response);
-        return true;
-    }
-    //修改健步走Banner页面
-    public function stepBannerModifyAction()
-    {
-        //检查权限
-        $PermissionCheck = $this->manager->checkMenuPermission("updateBanner",$this->request->currentPage);
-        if($PermissionCheck['return'])
-        {
-            $currentPage = urlencode($this->request->currentPage);
-            //元素ID
-            $company_id = intval($this->request->company_id);
-            $pos = intval($this->request->pos??0);
-            $companyInfo = $this->oCompany->getCompany($company_id,"company_id,detail");
-            $companyInfo['detail'] = json_decode($companyInfo['detail'],true);
-            $bannerInfo = $companyInfo['detail']['stepBanner'][$pos];
-            if(!is_array($bannerInfo))
-            {
-                $bannerInfo = $this->oSource->getSource($bannerInfo);
-            }
-            //渲染模版
-            include $this->tpl('Hj_Company_StepBannerModify');
-        }
-        else
-        {
-            $home = $this->sign;
-            include $this->tpl('403');
-        }
-    }
-
-    //更新健步走banner详情
-    public function stepBannerUpdateAction()
-    {
-        //企业ID
-        $company_id = intval($this->request->company_id);
-        $detail = $this->request->detail;
-        $companyInfo = $this->oCompany->getCompany($company_id,"company_id,detail");
-        $companyInfo['detail'] = json_decode($companyInfo['detail'],true);
-        $pos = intval($this->request->pos??0);
-        //上传图片
-        $oUpload = new Base_Upload('upload_img');
-        $upload = $oUpload->upload('upload_img',$this->config->oss);
-        $oss_urls = array_column($upload->resultArr,'oss');
-        if(is_array($companyInfo['detail']['stepBanner'][$pos]))
-        {
-            $origin = $companyInfo['detail']['stepBanner'][$pos];
-            $toCreate = 1;
-        }
-        else
-        {
-            $origin_id = $companyInfo['detail']['stepBanner'][$pos];
-            $origin = $this->oSource->getSource($origin_id);
-            $toUpdate = 1;
-        }
-        //如果以前没上传过且这次也没有成功上传
-        if((!isset($origin['img_url']) || $origin['img_url']=="") && (!isset($oss_urls['0']) || $oss_urls['0'] == ""))
-        {
-            $response = array('errno' => 2);
-        }
-        else
-        {
-            $imgData = [
-                'img_url'=> (isset($oss_urls['0']) && $oss_urls['0']!="")?($oss_urls['0']):($origin['img_url']),
-                'img_jump_url'=>trim($detail['img_jump_url']??""),
-                'text'=>trim($detail['text']??""),
-                'title'=>trim($detail['title']??""),
-                'sort'=>trim($detail['sort']??""),
-                'start_time'=>trim($detail['start_time']??""),
-                'end_time'=>trim($detail['end_time']??""),
-                ];
-            if($toCreate == 1)
-            {
-                $imgData = array_merge($imgData,['type'=>"company","type_id"=>$company_id,"sub_type"=>"stepBanner"]);
-                $source_id = $this->oSource->insertSource($imgData);
-                if($source_id)
-                {
-                    $companyInfo['detail']['stepBanner'][$pos] = $source_id;
-                    $companyInfo['detail'] = json_encode($companyInfo['detail']);
-                    $res = $this->oCompany->updateCompany($company_id,$companyInfo);
-                }
-                else
-                {
-                    $res = 9;
-                }
-            }
-            else
-            {
-                $res = $this->oSource->updateSource($origin_id,$imgData);
-            }
-            Base_Common::refreshCache($this->config,"company",$company_id);
-            $response = $res ? array('errno' => 0) : array('errno' => 9);
-        }
-        echo json_encode($response);
-        return true;
-    }
-    //删除健步走banner详情
-    public function stepBannerDeleteAction()
-    {
-        //企业ID
-        $company_id = intval($this->request->company_id);
-        $detail = $this->request->detail;
-        $companyInfo = $this->oCompany->getCompany($company_id,"company_id,detail");
-        $companyInfo['detail'] = json_decode($companyInfo['detail'],true);
-        $pos = intval($this->request->pos??0);
-        if(isset($companyInfo['detail']['stepBanner'][$pos]))
-        {
-            $source_id = $companyInfo['detail']['stepBanner'][$pos];
-            unset($companyInfo['detail']['stepBanner'][$pos]);
-            $companyInfo['detail']['stepBanner'] = array_values($companyInfo['detail']['stepBanner']);
-            $companyInfo['detail'] = json_encode($companyInfo['detail']);
-            $res = $this->oCompany->updateCompany($company_id,$companyInfo);
-            if($res)
-            {
-                $this->oSource->deleteSource($source_id);
-            }
-            Base_Common::refreshCache($this->config,"company",$company_id);
-        }
-        $this->response->goBack();
-    }
     //健步走自定义时间段列表
     public function stepDateRangeAction()
     {
@@ -770,7 +549,7 @@ class Hj_CompanyController extends AbstractController
         }
     }
     //俱乐部banner列表
-    public function clubBannerAction()
+    public function bannerListAction()
     {
         //检查权限
         $PermissionCheck = $this->manager->checkMenuPermission("updateBanner",$this->request->currentPage);
@@ -779,22 +558,27 @@ class Hj_CompanyController extends AbstractController
             $currentPage = urlencode($this->request->currentPage);
             //企业ID
             $company_id= intval($this->request->company_id);
+            //banner类型
+            $banner_type= trim($this->request->banner_type)??"clubBanner";
+            $bannerType = (new Hj_Company())->getBannerList();
+            $typeName = $bannerType[$banner_type];
             //获取企业信息
             $companyInfo = $this->oCompany->getCompany($company_id,'*');
             //数据解包
             $companyInfo['detail'] = json_decode($companyInfo['detail'],true);
-            if(isset($companyInfo['detail']['clubBanner']))
+            if(isset($companyInfo['detail'][$banner_type]))
             {
-                foreach($companyInfo['detail']['clubBanner'] as $key => $value)
+                foreach($companyInfo['detail'][$banner_type] as $key => $value)
                 {
                     if(!is_array($value))
                     {
-                        $companyInfo['detail']['clubBanner'][$key] = $this->oSource->getSource($value);
+                        $companyInfo['detail'][$banner_type][$key] = $this->oSource->getSource($value);
                     }
                 }
             }
+            $bannerList = $companyInfo['detail'][$banner_type];
             //渲染模版
-            include $this->tpl('Hj_Company_ClubBanner');
+            include $this->tpl('Hj_Company_BannerList');
         }
         else
         {
@@ -803,14 +587,16 @@ class Hj_CompanyController extends AbstractController
         }
 
     }
-    //添加俱乐部banner页面
-    public function clubBannerAddAction()
+    //俱乐部banner页面
+    public function bannerAddAction()
     {
         //检查权限
         $PermissionCheck = $this->manager->checkMenuPermission("updateBanner",$this->request->currentPage);
         if($PermissionCheck['return'])
         {
             $currentPage = urlencode($this->request->currentPage);
+            //banner类型
+            $banner_type= trim($this->request->banner_type)??"clubBanner";
             //企业ID
             $company_id= intval($this->request->company_id);
             //获取企业信息
@@ -818,7 +604,7 @@ class Hj_CompanyController extends AbstractController
             $start_time = date("Y-m-d H:i:s",time()+86400);
             $end_time = date("Y-m-d H:i:s",time()+86400*30);
             //渲染模版
-            include $this->tpl('Hj_Company_ClubBannerAdd');
+            include $this->tpl('Hj_Company_BannerAdd');
         }
         else
         {
@@ -826,11 +612,13 @@ class Hj_CompanyController extends AbstractController
             include $this->tpl('403');
         }
     }
-    //添加俱乐部banner
-    public function clubBannerInsertAction()
+    //添加banner
+    public function bannerInsertAction()
     {
         //企业ID
         $company_id = intval($this->request->company_id);
+        //banner类型
+        $banner_type= trim($this->request->banner_type)??"clubBanner";
         $detail = $this->request->detail;
         $companyInfo = $this->oCompany->getCompany($company_id,"company_id,detail");
         $companyInfo['detail'] = json_decode($companyInfo['detail'],true);
@@ -845,7 +633,7 @@ class Hj_CompanyController extends AbstractController
         }
         else
         {
-            $companyInfo['detail']['clubBanner'] = $companyInfo['detail']['clubBanner']??[];
+            $companyInfo['detail'][$banner_type] = $companyInfo['detail'][$banner_type]??[];
             $imgData = [
                 'img_url'=> $oss_urls['0'],
                 'img_jump_url'=>trim($detail['img_jump_url']??""),
@@ -855,11 +643,11 @@ class Hj_CompanyController extends AbstractController
                 'start_time'=>trim($detail['start_time']??""),
                 'end_time'=>trim($detail['end_time']??""),
             ];
-            $imgData = array_merge($imgData,['type'=>"company","type_id"=>$company_id,"sub_type"=>"clubBanner"]);
+            $imgData = array_merge($imgData,['type'=>"company","type_id"=>$company_id,"sub_type"=>$banner_type]);
             $source_id = $this->oSource->insertSource($imgData);
             if($source_id)
             {
-                $companyInfo['detail']['clubBanner'][] = $source_id;
+                $companyInfo['detail'][$banner_type][] = $source_id;
                 $companyInfo['detail'] = json_encode($companyInfo['detail']);
                 $res = $this->oCompany->updateCompany($company_id,$companyInfo);
                 $response = $res ? array('errno' => 0) : array('errno' => 9);
@@ -874,26 +662,28 @@ class Hj_CompanyController extends AbstractController
         echo json_encode($response);
         return true;
     }
-    //修改俱乐部Banner页面
-    public function clubBannerModifyAction()
+    //俱乐部Banner页面
+    public function bannerModifyAction()
     {
         //检查权限
         $PermissionCheck = $this->manager->checkMenuPermission("updateBanner",$this->request->currentPage);
         if($PermissionCheck['return'])
         {
+            //banner类型
+            $banner_type= trim($this->request->banner_type)??"clubBanner";
             $currentPage = urlencode($this->request->currentPage);
             //元素ID
             $company_id = intval($this->request->company_id);
             $pos = intval($this->request->pos??0);
             $companyInfo = $this->oCompany->getCompany($company_id,"company_id,detail");
             $companyInfo['detail'] = json_decode($companyInfo['detail'],true);
-            $bannerInfo = $companyInfo['detail']['clubBanner'][$pos];
+            $bannerInfo = $companyInfo['detail'][$banner_type][$pos];
             if(!is_array($bannerInfo))
             {
                 $bannerInfo = $this->oSource->getSource($bannerInfo);
             }
             //渲染模版
-            include $this->tpl('Hj_Company_ClubBannerModify');
+            include $this->tpl('Hj_Company_BannerModify');
         }
         else
         {
@@ -902,8 +692,10 @@ class Hj_CompanyController extends AbstractController
         }
     }
     //更新俱乐部banner详情
-    public function clubBannerUpdateAction()
+    public function bannerUpdateAction()
     {
+        //banner类型
+        $banner_type= trim($this->request->banner_type)??"clubBanner";
         //企业ID
         $company_id = intval($this->request->company_id);
         $detail = $this->request->detail;
@@ -914,14 +706,14 @@ class Hj_CompanyController extends AbstractController
         $oUpload = new Base_Upload('upload_img');
         $upload = $oUpload->upload('upload_img',$this->config->oss);
         $oss_urls = array_column($upload->resultArr,'oss');
-        if(is_array($companyInfo['detail']['clubBanner'][$pos]))
+        if(is_array($companyInfo['detail'][$banner_type][$pos]))
         {
-            $origin = $companyInfo['detail']['clubBanner'][$pos];
+            $origin = $companyInfo['detail'][$banner_type][$pos];
             $toCreate = 1;
         }
         else
         {
-            $origin_id = $companyInfo['detail']['clubBanner'][$pos];
+            $origin_id = $companyInfo['detail'][$banner_type][$pos];
             $origin = $this->oSource->getSource($origin_id);
             $toUpdate = 1;
         }
@@ -943,11 +735,11 @@ class Hj_CompanyController extends AbstractController
             ];
             if($toCreate == 1)
             {
-                $imgData = array_merge($imgData,['type'=>"company","type_id"=>$company_id,"sub_type"=>"clubBanner"]);
+                $imgData = array_merge($imgData,['type'=>"company","type_id"=>$company_id,"sub_type"=>$banner_type]);
                 $source_id = $this->oSource->insertSource($imgData);
                 if($source_id)
                 {
-                    $companyInfo['detail']['clubBanner'][$pos] = $source_id;
+                    $companyInfo['detail'][$banner_type][$pos] = $source_id;
                     $companyInfo['detail'] = json_encode($companyInfo['detail']);
                     $res = $this->oCompany->updateCompany($company_id,$companyInfo);
                 }
@@ -966,19 +758,21 @@ class Hj_CompanyController extends AbstractController
         echo json_encode($response);
         return true;
     }
-    //删除俱乐部banner详情
-    public function clubBannerDeleteAction()
+    //删除banner详情
+    public function bannerDeleteAction()
     {
+        //banner类型
+        $banner_type= trim($this->request->banner_type)??"clubBanner";
         //企业ID
         $company_id = intval($this->request->company_id);
         $detail = $this->request->detail;
         $companyInfo = $this->oCompany->getCompany($company_id,"company_id,detail");
         $companyInfo['detail'] = json_decode($companyInfo['detail'],true);
         $pos = intval($this->request->pos??0);
-        if(isset($companyInfo['detail']['clubBanner'][$pos]))
+        if(isset($companyInfo['detail'][$banner_type][$pos]))
         {
-            unset($companyInfo['detail']['clubBanner'][$pos]);
-            $companyInfo['detail']['clubBanner'] = array_values($companyInfo['detail']['clubBanner']);
+            unset($companyInfo['detail'][$banner_type][$pos]);
+            $companyInfo['detail'][$banner_type] = array_values($companyInfo['detail'][$banner_type]);
             $companyInfo['detail'] = json_encode($companyInfo['detail']);
             $res = $this->oCompany->updateCompany($company_id,$companyInfo);
             Base_Common::refreshCache($this->config,"company",$company_id);

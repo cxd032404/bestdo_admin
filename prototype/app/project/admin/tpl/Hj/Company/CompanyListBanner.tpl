@@ -25,8 +25,9 @@
     <td align="center">{tpl:if($companyInfo.icon=="")}未定义{tpl:else}<img src="{tpl:$RootUrl/}{tpl:$companyInfo.icon/}" width='150' height='130'/>{/tpl:if}</td>
     <td align="center">{tpl:$companyInfo.update_time/}</td>
       <td align="center">
-        <a href="{tpl:$this.sign/}&ac=club.banner&company_id={tpl:$companyInfo.company_id/}&currentPage={tpl:$currentPage/}">俱乐部Banner({tpl:$companyInfo.detail.clubBanner func="count(@@)"/})</a>
-        | <a href="{tpl:$this.sign/}&ac=step.banner&company_id={tpl:$companyInfo.company_id/}&currentPage={tpl:$currentPage/}">健步走Banner({tpl:$companyInfo.detail.stepBanner func="count(@@)"/})</a>
+        <a href="{tpl:$this.sign/}&ac=banner.list&banner_type=clubBanner&company_id={tpl:$companyInfo.company_id/}&currentPage={tpl:$currentPage/}">俱乐部Banner({tpl:$companyInfo.detail.clubBanner func="count(@@)"/})</a>
+        | <a href="{tpl:$this.sign/}&ac=banner.list&banner_type=stepBanner&company_id={tpl:$companyInfo.company_id/}&currentPage={tpl:$currentPage/}">健步走Banner({tpl:$companyInfo.detail.stepBanner func="count(@@)"/})</a>
+        | <a href="{tpl:$this.sign/}&ac=banner.list&banner_type=wtBanner&company_id={tpl:$companyInfo.company_id/}&currentPage={tpl:$currentPage/}">文体之窗Banner({tpl:$companyInfo.detail.wtBanner func="count(@@)"/})</a>
       </td>
   </tr>
 {/tpl:loop}
