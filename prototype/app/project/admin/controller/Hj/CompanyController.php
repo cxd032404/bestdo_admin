@@ -42,7 +42,8 @@ class Hj_CompanyController extends AbstractController
 		$PermissionCheck = $this->manager->checkMenuPermission(0);
 		if($PermissionCheck['return'])
 		{
-            //企业ID
+            $currentPage = urlencode($_SERVER['QUERY_STRING']);
+		    //企业ID
             $type= trim($this->request->type??"");
 		    $totalPermission = $this->manager->getPermissionList($this->manager->data_groups,"only");
             //获取企业列表
@@ -75,6 +76,7 @@ class Hj_CompanyController extends AbstractController
         $PermissionCheck = $this->manager->checkMenuPermission("updateBanner");
         if($PermissionCheck['return'])
         {
+            $currentPage = urlencode($_SERVER['QUERY_STRING']);
             //企业ID
             $type= trim($this->request->type??"");
             $totalPermission = $this->manager->getPermissionList($this->manager->data_groups,"only");
@@ -387,9 +389,10 @@ class Hj_CompanyController extends AbstractController
     public function stepBannerAction()
     {
         //检查权限
-        $PermissionCheck = $this->manager->checkMenuPermission("updateBanner",$_SERVER['HTTP_REFERER']);
+        $PermissionCheck = $this->manager->checkMenuPermission("updateBanner",$this->request->currentPage);
         if($PermissionCheck['return'])
         {
+            $currentPage = urlencode($this->request->currentPage);
             //企业ID
             $company_id= intval($this->request->company_id);
             //获取企业信息
@@ -419,9 +422,10 @@ class Hj_CompanyController extends AbstractController
     public function stepBannerAddAction()
     {
         //检查权限
-        $PermissionCheck = $this->manager->checkMenuPermission(0);
+        $PermissionCheck = $this->manager->checkMenuPermission("updateBanner",$this->request->currentPage);
         if($PermissionCheck['return'])
         {
+            $currentPage = urlencode($this->request->currentPage);
             //企业ID
             $company_id= intval($this->request->company_id);
             //获取企业信息
@@ -488,19 +492,31 @@ class Hj_CompanyController extends AbstractController
     //修改健步走Banner页面
     public function stepBannerModifyAction()
     {
-        //元素ID
-        $company_id = intval($this->request->company_id);
-        $pos = intval($this->request->pos??0);
-        $companyInfo = $this->oCompany->getCompany($company_id,"company_id,detail");
-        $companyInfo['detail'] = json_decode($companyInfo['detail'],true);
-        $bannerInfo = $companyInfo['detail']['stepBanner'][$pos];
-        if(!is_array($bannerInfo))
+        //检查权限
+        $PermissionCheck = $this->manager->checkMenuPermission("updateBanner",$this->request->currentPage);
+        if($PermissionCheck['return'])
         {
-            $bannerInfo = $this->oSource->getSource($bannerInfo);
+            $currentPage = urlencode($this->request->currentPage);
+            //元素ID
+            $company_id = intval($this->request->company_id);
+            $pos = intval($this->request->pos??0);
+            $companyInfo = $this->oCompany->getCompany($company_id,"company_id,detail");
+            $companyInfo['detail'] = json_decode($companyInfo['detail'],true);
+            $bannerInfo = $companyInfo['detail']['stepBanner'][$pos];
+            if(!is_array($bannerInfo))
+            {
+                $bannerInfo = $this->oSource->getSource($bannerInfo);
+            }
+            //渲染模版
+            include $this->tpl('Hj_Company_StepBannerModify');
         }
-        //渲染模版
-        include $this->tpl('Hj_Company_StepBannerModify');
+        else
+        {
+            $home = $this->sign;
+            include $this->tpl('403');
+        }
     }
+
     //更新健步走banner详情
     public function stepBannerUpdateAction()
     {
@@ -532,7 +548,6 @@ class Hj_CompanyController extends AbstractController
         }
         else
         {
-
             $imgData = [
                 'img_url'=> (isset($oss_urls['0']) && $oss_urls['0']!="")?($oss_urls['0']):($origin['img_url']),
                 'img_jump_url'=>trim($detail['img_jump_url']??""),
@@ -758,9 +773,10 @@ class Hj_CompanyController extends AbstractController
     public function clubBannerAction()
     {
         //检查权限
-        $PermissionCheck = $this->manager->checkMenuPermission("updateBanner",$_SERVER['HTTP_REFERER']);
+        $PermissionCheck = $this->manager->checkMenuPermission("updateBanner",$this->request->currentPage);
         if($PermissionCheck['return'])
         {
+            $currentPage = urlencode($this->request->currentPage);
             //企业ID
             $company_id= intval($this->request->company_id);
             //获取企业信息
@@ -782,7 +798,7 @@ class Hj_CompanyController extends AbstractController
         }
         else
         {
-            $home = $this->sign;
+            $home = "?".$this->request->currentPage;
             include $this->tpl('403');
         }
 
@@ -791,9 +807,10 @@ class Hj_CompanyController extends AbstractController
     public function clubBannerAddAction()
     {
         //检查权限
-        //$PermissionCheck = $this->manager->checkMenuPermission(0);
-        //if($PermissionCheck['return'])
+        $PermissionCheck = $this->manager->checkMenuPermission("updateBanner",$this->request->currentPage);
+        if($PermissionCheck['return'])
         {
+            $currentPage = urlencode($this->request->currentPage);
             //企业ID
             $company_id= intval($this->request->company_id);
             //获取企业信息
@@ -803,13 +820,11 @@ class Hj_CompanyController extends AbstractController
             //渲染模版
             include $this->tpl('Hj_Company_ClubBannerAdd');
         }
-        /*
         else
         {
             $home = $this->sign;
             include $this->tpl('403');
         }
-        */
     }
     //添加俱乐部banner
     public function clubBannerInsertAction()
@@ -862,18 +877,29 @@ class Hj_CompanyController extends AbstractController
     //修改俱乐部Banner页面
     public function clubBannerModifyAction()
     {
-        //元素ID
-        $company_id = intval($this->request->company_id);
-        $pos = intval($this->request->pos??0);
-        $companyInfo = $this->oCompany->getCompany($company_id,"company_id,detail");
-        $companyInfo['detail'] = json_decode($companyInfo['detail'],true);
-        $bannerInfo = $companyInfo['detail']['clubBanner'][$pos];
-        if(!is_array($bannerInfo))
+        //检查权限
+        $PermissionCheck = $this->manager->checkMenuPermission("updateBanner",$this->request->currentPage);
+        if($PermissionCheck['return'])
         {
-            $bannerInfo = $this->oSource->getSource($bannerInfo);
+            $currentPage = urlencode($this->request->currentPage);
+            //元素ID
+            $company_id = intval($this->request->company_id);
+            $pos = intval($this->request->pos??0);
+            $companyInfo = $this->oCompany->getCompany($company_id,"company_id,detail");
+            $companyInfo['detail'] = json_decode($companyInfo['detail'],true);
+            $bannerInfo = $companyInfo['detail']['clubBanner'][$pos];
+            if(!is_array($bannerInfo))
+            {
+                $bannerInfo = $this->oSource->getSource($bannerInfo);
+            }
+            //渲染模版
+            include $this->tpl('Hj_Company_ClubBannerModify');
         }
-        //渲染模版
-        include $this->tpl('Hj_Company_ClubBannerModify');
+        else
+        {
+            $home = $this->sign;
+            include $this->tpl('403');
+        }
     }
     //更新俱乐部banner详情
     public function clubBannerUpdateAction()

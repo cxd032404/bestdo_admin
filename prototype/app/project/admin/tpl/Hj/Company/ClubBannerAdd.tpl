@@ -2,7 +2,8 @@
 
 <div class="br_bottom"></div>
 <form id="banner_add_form" name="banner_add_form" action="{tpl:$this.sign/}&ac=club.banner.insert" method="post">
-<input type="hidden" name="company_id" id="company_id" value="{tpl:$companyInfo.company_id/}" />
+	<input type="hidden" name="currentPage" id="currentPage" value="{tpl:$currentPage/}" />
+	<input type="hidden" name="company_id" id="company_id" value="{tpl:$companyInfo.company_id/}" />
 <table width="99%" align="center" class="table table-bordered table-striped" >
 <tr class="hover">
 <td>图片上传：</td>
@@ -47,7 +48,7 @@ $('#banner_add_submit').click(function(){
 				divBox.alertBox(errors[jsonResponse.errno],function(){});
 			} else {
 				var message = '添加图片成功';
-				divBox.confirmBox({content:message,ok:function(){windowParent.getRightHtml('{tpl:$this.sign/}' + '&ac=club.banner&company_id=' + $('#company_id').val());}});
+				divBox.confirmBox({content:message,ok:function(){windowParent.getRightHtml('{tpl:$this.sign/}' + '&ac=club.banner&company_id=' + $('#company_id').val()+ '&currentPage='+$('#currentPage').val());}});
 			}
 		}
 	};

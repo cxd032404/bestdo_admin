@@ -2,7 +2,8 @@
 
 <div class="br_bottom"></div>
 <form id="banner_modify_form" name="banner_modify_form" action="{tpl:$this.sign/}&ac=step.banner.update" method="post">
-<input type="hidden" name="company_id" id="company_id" value="{tpl:$company_id/}" />
+	<input type="hidden" name="currentPage" id="currentPage" value="{tpl:$currentPage/}" />
+	<input type="hidden" name="company_id" id="company_id" value="{tpl:$company_id/}" />
 <input type="hidden" name="pos" id="pos" value="{tpl:$pos/}" />
 	<table width="99%" align="center" class="table table-bordered table-striped" >
 <tr class="hover">
@@ -28,7 +29,7 @@
 </tr>
 <tr class="hover">
 	<td>排序</td>
-	<td align="left"><input type="text" class="span2" name="detail[sort]"  id="detail[sort]" value="{tpl:$bannerInfo.title/}" size="50" /></td>
+	<td align="left"><input type="text" class="span2" name="detail[sort]"  id="detail[sort]" value="{tpl:$bannerInfo.sort/}" size="50" /></td>
 </tr>
 <tr class="hover">
 	<td>生效时间</td>
@@ -54,7 +55,7 @@ $('#banner_modify_submit').click(function(){
 				divBox.alertBox(errors[jsonResponse.errno],function(){});
 			} else {
 				var message = '修改图片成功';
-				divBox.confirmBox({content:message,ok:function(){windowParent.getRightHtml('{tpl:$this.sign/}' + '&&ac=step.banner&company_id=' + $('#company_id').val());}});
+				divBox.confirmBox({content:message,ok:function(){windowParent.getRightHtml('{tpl:$this.sign/}' + '&&ac=step.banner&company_id=' + $('#company_id').val()+ '&currentPage='+$('#currentPage').val());}});
 			}
 		}
 	};

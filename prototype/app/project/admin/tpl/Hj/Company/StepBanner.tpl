@@ -2,26 +2,27 @@
 <script type="text/javascript">
 	$(document).ready(function(){
 		$('#add_banner').click(function(){
-			addBannerBox = divBox.showBox('{tpl:$this.sign/}&ac=step.banner.add&company_id='+$('#company_id').val(), {title:'添加banner到'+$('#company_name').val(),width:500,height:400});
+			addBannerBox = divBox.showBox('{tpl:$this.sign/}&ac=step.banner.add&company_id='+$('#company_id').val()+ '&currentPage='+$('#currentPage').val(), {title:'添加banner到'+$('#company_name').val(),width:500,height:400});
 		});
 	});
 
 	function BannerDelete(pos){
 		msg = '是否删除?'
-		deleteBannerBox = divBox.confirmBox({content:msg,ok:function(){location.href = '{tpl:$this.sign/}&ac=step.banner.delete&company_id=' + $('#company_id').val() + '&pos=' + pos;}});
+		deleteBannerBox = divBox.confirmBox({content:msg,ok:function(){location.href = '{tpl:$this.sign/}&ac=step.banner.delete&company_id=' + $('#company_id').val() + '&pos=' + pos+ '&currentPage='+$('#currentPage').val();}});
 	}
 
 	function BannerModify(pos){
-		modifyBannerBox = divBox.showBox('{tpl:$this.sign/}&ac=step.banner.modify&company_id=' + $('#company_id').val() + '&pos=' + pos, {title:'修改Banner',width:600,height:350});
+		modifyBannerBox = divBox.showBox('{tpl:$this.sign/}&ac=step.banner.modify&company_id=' + $('#company_id').val() + '&pos=' + pos+ '&currentPage='+$('#currentPage').val(), {title:'修改Banner',width:600,height:350});
 	}
 
 </script>
 <div class="br_bottom"></div>
 <form id="company_banner_form" name="company_banner_form" action="{tpl:$this.sign/}&ac=company.banner.update" method="post">
+	<input type="hidden" name="currentPage" id="currentPage" value="{tpl:$currentPage/}" />
 	<input type="hidden" name="company_id" id="company_id" value="{tpl:$companyInfo.company_id/}" />
 	<input type="hidden" name="company_name" id="company_name" value="{tpl:$companyInfo.company_name/}" />
 	<fieldset>
-		[ <a href="{tpl:$this.sign/}&company_id={tpl:$companyInfo.company_id/}">返回</a> | <a href="javascript:;" id="add_banner">添加Banner</a> ]
+		[ <a href="?{tpl:$currentPage func='urldecode(@@)'/}&company_id={tpl:$companyInfo.company_id/}">返回L课表</a> | <a href="javascript:;" id="add_banner">添加Banner</a> ]
 	</fieldset>
 	<fieldset><legend>健步走banner列表</legend>
 		<table width="99%" align="center" class="table table-bordered table-striped" >
