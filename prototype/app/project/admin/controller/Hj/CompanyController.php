@@ -42,7 +42,9 @@ class Hj_CompanyController extends AbstractController
 		$PermissionCheck = $this->manager->checkMenuPermission(0);
 		if($PermissionCheck['return'])
 		{
-            $totalPermission = $this->manager->getPermissionList($this->manager->data_groups,"only");
+            //企业ID
+            $type= trim($this->request->type??"");
+		    $totalPermission = $this->manager->getPermissionList($this->manager->data_groups,"only");
             //获取企业列表
 			$companyList = $this->oCompany->getCompanyList(["permissionList"=>$totalPermission]);
 			//循环企业列表
@@ -57,7 +59,14 @@ class Hj_CompanyController extends AbstractController
             }
             array_multisort(array_column($companyList, "sort"),$companyList);
 			//渲染模版
-			include $this->tpl('Hj_Company_CompanyList');
+			if($type == "banner")
+            {
+                include $this->tpl('Hj_Company_CompanyList');
+            }
+			else
+            {
+                include $this->tpl('Hj_Company_CompanyListBanner');
+            }
 		}
 		else
 		{
@@ -65,6 +74,38 @@ class Hj_CompanyController extends AbstractController
 			include $this->tpl('403');
 		}
 	}
+    //企业配置列表页面
+    public function bannerAction()
+    {
+        //检查权限
+        $PermissionCheck = $this->manager->checkMenuPermission("updateBanner");
+        if($PermissionCheck['return'])
+        {
+            //企业ID
+            $type= trim($this->request->type??"");
+            $totalPermission = $this->manager->getPermissionList($this->manager->data_groups,"only");
+            //获取企业列表
+            $companyList = $this->oCompany->getCompanyList(["permissionList"=>$totalPermission]);
+            //循环企业列表
+            foreach($companyList as $key => $companyInfo)
+            {
+                //数据解包
+                $companyList[$key]['detail'] = json_decode($companyInfo['detail'],true);
+                $companyList[$key]['parent_name'] = ($companyInfo['parent_id']==0)?"无上级":($companyList[$companyInfo['parent_id']]['company_name']??"未知");
+                $companyList[$key]['display_name'] = ($companyInfo['display']==0)?"隐藏":"显示";
+                $companyList[$key]['sort'] = $companyInfo['parent_id']==0?($companyInfo['company_id']."_0"):($companyInfo["parent_id"]."_".$companyInfo['company_id']);
+                $companyList[$key]['reg_url'] = $this->config->siteUrl.'/'.$this->config->api['site']['company_user_reg']."?company_id=".$companyInfo['company_id'];
+            }
+            array_multisort(array_column($companyList, "sort"),$companyList);
+            //渲染模版
+            include $this->tpl('Hj_Company_CompanyListBanner');
+        }
+        else
+        {
+            $home = $this->sign;
+            include $this->tpl('403');
+        }
+    }
 	//添加企业类型填写配置页面
 	public function companyAddAction()
 	{
@@ -352,7 +393,7 @@ class Hj_CompanyController extends AbstractController
     public function stepBannerAction()
     {
         //检查权限
-        $PermissionCheck = $this->manager->checkMenuPermission("updateCompany");
+        $PermissionCheck = $this->manager->checkMenuPermission("updateBanner",$_SERVER['HTTP_REFERER']);
         if($PermissionCheck['return'])
         {
             //企业ID
@@ -384,7 +425,7 @@ class Hj_CompanyController extends AbstractController
     public function stepBannerAddAction()
     {
         //检查权限
-        $PermissionCheck = $this->manager->checkMenuPermission("updateCompany");
+        $PermissionCheck = $this->manager->checkMenuPermission(0);
         if($PermissionCheck['return'])
         {
             //企业ID
@@ -427,7 +468,7 @@ class Hj_CompanyController extends AbstractController
                 'img_jump_url'=>trim($detail['img_jump_url']??""),
                 'text'=>trim($detail['text']??""),
                 'title'=>trim($detail['title']??""),
-                'sort'=>trim($detail['title']??""),
+                'sort'=>trim($detail['sort']??""),
                 'start_time'=>trim($detail['start_time']??""),
                 'end_time'=>trim($detail['end_time']??""),
             ];
@@ -503,11 +544,10 @@ class Hj_CompanyController extends AbstractController
                 'img_jump_url'=>trim($detail['img_jump_url']??""),
                 'text'=>trim($detail['text']??""),
                 'title'=>trim($detail['title']??""),
-                'sort'=>trim($detail['title']??""),
+                'sort'=>trim($detail['sort']??""),
                 'start_time'=>trim($detail['start_time']??""),
                 'end_time'=>trim($detail['end_time']??""),
                 ];
-
             if($toCreate == 1)
             {
                 $imgData = array_merge($imgData,['type'=>"company","type_id"=>$company_id,"sub_type"=>"stepBanner"]);
@@ -724,7 +764,7 @@ class Hj_CompanyController extends AbstractController
     public function clubBannerAction()
     {
         //检查权限
-        $PermissionCheck = $this->manager->checkMenuPermission("updateCompany");
+        $PermissionCheck = $this->manager->checkMenuPermission("updateBanner",$_SERVER['HTTP_REFERER']);
         if($PermissionCheck['return'])
         {
             //企业ID
@@ -751,13 +791,14 @@ class Hj_CompanyController extends AbstractController
             $home = $this->sign;
             include $this->tpl('403');
         }
+
     }
     //添加俱乐部banner页面
     public function clubBannerAddAction()
     {
         //检查权限
-        $PermissionCheck = $this->manager->checkMenuPermission("updateCompany");
-        if($PermissionCheck['return'])
+        //$PermissionCheck = $this->manager->checkMenuPermission(0);
+        //if($PermissionCheck['return'])
         {
             //企业ID
             $company_id= intval($this->request->company_id);
@@ -768,11 +809,13 @@ class Hj_CompanyController extends AbstractController
             //渲染模版
             include $this->tpl('Hj_Company_ClubBannerAdd');
         }
+        /*
         else
         {
             $home = $this->sign;
             include $this->tpl('403');
         }
+        */
     }
     //添加俱乐部banner
     public function clubBannerInsertAction()
@@ -799,7 +842,7 @@ class Hj_CompanyController extends AbstractController
                 'img_jump_url'=>trim($detail['img_jump_url']??""),
                 'text'=>trim($detail['text']??""),
                 'title'=>trim($detail['title']??""),
-                'sort'=>trim($detail['title']??""),
+                'sort'=>trim($detail['sort']??""),
                 'start_time'=>trim($detail['start_time']??""),
                 'end_time'=>trim($detail['end_time']??""),
             ];
@@ -835,7 +878,6 @@ class Hj_CompanyController extends AbstractController
         {
             $bannerInfo = $this->oSource->getSource($bannerInfo);
         }
-        print_R($bannerInfo);
         //渲染模版
         include $this->tpl('Hj_Company_ClubBannerModify');
     }
@@ -875,7 +917,7 @@ class Hj_CompanyController extends AbstractController
                 'img_jump_url'=>trim($detail['img_jump_url']??""),
                 'text'=>trim($detail['text']??""),
                 'title'=>trim($detail['title']??""),
-                'sort'=>trim($detail['title']??""),
+                'sort'=>trim($detail['sort']??""),
                 'start_time'=>trim($detail['start_time']??""),
                 'end_time'=>trim($detail['end_time']??""),
             ];

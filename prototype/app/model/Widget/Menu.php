@@ -102,7 +102,7 @@ class Widget_Menu extends Base_Widget
 	 */
 	public function getOneBylink($link, $fields = '*')
 	{
-		$sql = "SELECT $fields FROM " . $this->getDbTable($this->table) . " WHERE link = ?";
+	    $sql = "SELECT $fields FROM " . $this->getDbTable($this->table) . " WHERE link = ?";
 		return $this->db->getRow($sql, $link);
 	}
 

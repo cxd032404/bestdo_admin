@@ -20,6 +20,10 @@
 	<td align="left"><input type="text" class="span2" name="detail[title]"  id="detail[title]" value="" size="50" /></td>
 	</tr>
 <tr class="hover">
+	<td>排序</td>
+	<td align="left"><input type="text" class="span2" name="detail[sort]"  id="detail[sort]" value="80" size="50" /></td>
+</tr>
+<tr class="hover">
 	<td>生效时间</td>
 	<td align="left"><input type="text" name="detail[start_time]"  id="detail[start_time]" class="input-medium" value="{tpl:$start_time/}"  onFocus="WdatePicker({isShowClear:false,readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})" >-<input type="text" name="detail[end_time]" id="detail[end_time]" class="input-medium"  value="{tpl:$end_time/}" onFocus="WdatePicker({isShowClear:false,readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})" >
 	</td>
