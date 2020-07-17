@@ -39,10 +39,11 @@ class Hj_ListController extends AbstractController
 	public function indexAction()
 	{
 		//检查权限
-		$PermissionCheck = $this->manager->checkMenuPermission(0);
+		$PermissionCheck = $this->manager->checkMenuPermission(0,$this->sign);
 		if($PermissionCheck['return'])
 		{
-		    //企业ID
+            $currentPage = urlencode($_SERVER['QUERY_STRING']);
+            //企业ID
 			$company_id = intval($this->request->company_id??0);
             //列表分类
             $list_type = trim($this->request->list_type??0);
@@ -106,6 +107,7 @@ class Hj_ListController extends AbstractController
         $PermissionCheck = $this->manager->checkMenuPermission(0);
         if($PermissionCheck['return'])
         {
+            $currentPage = urlencode($_SERVER['QUERY_STRING']);
             //企业ID
             $company_id = intval($this->request->company_id??0);
             //列表分类
@@ -123,6 +125,10 @@ class Hj_ListController extends AbstractController
                     $companyInfo['detail'] = json_decode($companyInfo['detail'],true);
                     $list = array_merge($list,$companyInfo['detail'][$list_type]??[]);
                 }
+            }
+            if(count($list)==0)
+            {
+                $list = [0];
             }
             //获取页面列表
             $listList = $this->oList->getListList(['company_id'=>$company_id,'type'=>$list_type,'id_in'=>$list]);
@@ -167,8 +173,8 @@ class Hj_ListController extends AbstractController
 	//添加列表填写配置
 	public function listAddAction()
 	{
-		//检查权限
-		$PermissionCheck = $this->manager->checkMenuPermission("addList");
+        //检查权限
+        $PermissionCheck = $this->manager->checkMenuPermission("updateList",$this->request->currentPage);
 		if($PermissionCheck['return'])
 		{
             $totalPermission = $this->manager->getPermissionList($this->manager->data_groups,"only");
@@ -191,7 +197,6 @@ class Hj_ListController extends AbstractController
 	//添加新页面
 	public function listInsertAction()
 	{
-		//检查权限
 		$bind=$this->request->from('list_name','company_id','activity_id','list_type','detail','type','specifiedType');
 		//页面名称不能为空
 		if(trim($bind['list_name'])=="")
@@ -270,8 +275,8 @@ class Hj_ListController extends AbstractController
 	//修改列表信息页面
 	public function listModifyAction()
 	{
-		//检查权限
-		$PermissionCheck = $this->manager->checkMenuPermission("updateList");
+	    //检查权限
+		$PermissionCheck = $this->manager->checkMenuPermission("updateList",$this->request->currentPage);
 		if($PermissionCheck['return'])
 		{
 			//列表ID
@@ -391,8 +396,8 @@ class Hj_ListController extends AbstractController
 	//删除列表
 	public function listDeleteAction()
 	{
-		//检查权限
-		$PermissionCheck = $this->manager->checkMenuPermission("deleteList");
+        //检查权限
+        $PermissionCheck = $this->manager->checkMenuPermission("updateList",$this->request->currentPage);
 		if($PermissionCheck['return'])
 		{
 			//页面ID
@@ -450,9 +455,10 @@ class Hj_ListController extends AbstractController
     public function postAction()
     {
         //检查权限
-        $PermissionCheck = $this->manager->checkMenuPermission("updateList");
+        $PermissionCheck = $this->manager->checkMenuPermission("Post",$this->request->currentPage);
         if($PermissionCheck['return'])
         {
+            $currentPage = urlencode($this->request->currentPage);
             //列表ID
             $list_id = intval($this->request->list_id);
             //获取元素类型列表
@@ -466,20 +472,23 @@ class Hj_ListController extends AbstractController
             $token = (new Hj_UserInfo())->getTokenForManager($this->manager->id);
             //渲染模版
             include $this->tpl('Hj_List_Post');
+
         }
         else
         {
             $home = $this->sign;
             include $this->tpl('403');
         }
+
     }
     //列表页面
     public function listAction()
     {
         //检查权限
-        $PermissionCheck = $this->manager->checkMenuPermission(0);
+        $PermissionCheck = $this->manager->checkMenuPermission(0,$this->request->currentPage);
         if($PermissionCheck['return'])
         {
+            $currentPage = urlencode($this->request->currentPage);
             //列表ID
             $list_id = intval($this->request->list_id??0);
             //分页参数
@@ -542,9 +551,10 @@ class Hj_ListController extends AbstractController
     public function postsDetailAction()
     {
         //检查权限
-        $PermissionCheck = $this->manager->checkMenuPermission(0);
+        $PermissionCheck = $this->manager->checkMenuPermission("Post",$this->request->currentPage);
         if($PermissionCheck['return'])
         {
+            $currentPage = urlencode($this->request->currentPage);
             $token = (new Hj_UserInfo())->getTokenForManager($this->manager->id);
             //文章ID
             $post_id = intval($this->request->post_id??0);

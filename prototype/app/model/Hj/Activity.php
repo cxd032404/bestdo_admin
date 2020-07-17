@@ -33,7 +33,7 @@ class Hj_Activity extends Base_Widget
         //获取用户数量
         if(isset($params['getCount'])&&$params['getCount']==1)
         {
-            $activityCount = $this->getActivityCount($whereCondition);
+            $activityCount = $this->getActivityCount($params);
         }
         else
         {

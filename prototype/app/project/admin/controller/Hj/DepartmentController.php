@@ -89,7 +89,7 @@ class Hj_DepartmentController extends AbstractController
     public function departmentAddAction()
     {
         //检查权限
-        $PermissionCheck = $this->manager->checkMenuPermission("addDepartment");
+        $PermissionCheck = $this->manager->checkMenuPermission("addDepartment",$this->sign);
         if($PermissionCheck['return'])
         {
             $totalPermission = $this->manager->getPermissionList($this->manager->data_groups,"only");
@@ -161,9 +161,10 @@ class Hj_DepartmentController extends AbstractController
     public function departmentModifyAction()
     {
         //检查权限
-        $PermissionCheck = $this->manager->checkMenuPermission("updateDepartment");
+        $PermissionCheck = $this->manager->checkMenuPermission("updateDepartment",$this->sign);
         if($PermissionCheck['return'])
         {
+            $totalPermission = $this->manager->getPermissionList($this->manager->data_groups,"only");
             //部门ID
             $department_id= intval($this->request->department_id);
             //获取部门信息
@@ -271,7 +272,7 @@ class Hj_DepartmentController extends AbstractController
     public function departmentDeleteAction()
     {
         //检查权限
-        $PermissionCheck = $this->manager->checkMenuPermission("deleteDepartment");
+        $PermissionCheck = $this->manager->checkMenuPermission("deleteDepartment",$this->sign);
         if($PermissionCheck['return'])
         {
             //部门ID

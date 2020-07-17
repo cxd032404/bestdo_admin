@@ -421,23 +421,35 @@ class Widget_Manager extends Base_Widget
      * @return boolean
      * @throws Base_Exception
      */
-    public function checkMenuPermission($operation, $return = false)
+    public function checkMenuPermission($operation, $referer = "")
     {
+        if($referer!= "")
+        {
+            //echo "referer:".$referer."<br>";
+            $t = explode("?",$referer);
+            $_SERVER['QUERY_STRING'] = $t[1]??$t[0];
+        }
         $oMenu = new Widget_Menu();
         $oMenuPurview = new Widget_Menu_Permission();
         $t = explode("&",$_SERVER['QUERY_STRING']);
         foreach($t as $key => $value)
         {
             $t2 = explode("=",$value);
-            if(trim($t2[0])=="ctl")
+            if(in_array(trim($t2[0]),['ctl','ac','type']))
             {
-                $ctl = $value;
-                break;
+                if($value!="ac=index")
+                {
+                    $ctl[] = $value;
+                }
+                //break;
             }
         }
-        $link = $ctl;
+
+        $link = implode("&",$ctl);
+        //echo ($link);
         //获取页面ID
         $MenuInfo = $oMenu->getOneBylink("?".$link, "name,menu_id,parent,permission_list");
+        print_R($MenuInfo);
         //获取当前用户组在当前页面的所有权限
         $purview = $oMenuPurview->getPermission($MenuInfo['menu_id'], $this->menu_group_id);
         $bind = array(

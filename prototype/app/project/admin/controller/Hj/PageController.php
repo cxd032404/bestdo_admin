@@ -72,7 +72,7 @@ class Hj_PageController extends AbstractController
     public function pageAddAction()
     {
         //检查权限
-        $PermissionCheck = $this->manager->checkMenuPermission("addPage");
+        $PermissionCheck = $this->manager->checkMenuPermission("addPage",$this->sign);
         if($PermissionCheck['return'])
         {
             $totalPermission = $this->manager->getPermissionList($this->manager->data_groups,"only");
@@ -140,7 +140,7 @@ class Hj_PageController extends AbstractController
     public function pageModifyAction()
     {
         //检查权限
-        $PermissionCheck = $this->manager->checkMenuPermission("updatePage");
+        $PermissionCheck = $this->manager->checkMenuPermission("updatePage",$this->sign);
         if($PermissionCheck['return'])
         {
             //页面ID
@@ -215,7 +215,7 @@ class Hj_PageController extends AbstractController
     public function pageDeleteAction()
     {
         //检查权限
-        $PermissionCheck = $this->manager->checkMenuPermission("deletePage");
+        $PermissionCheck = $this->manager->checkMenuPermission("deletePage",$this->sign);
         if($PermissionCheck['return'])
         {
             //页面ID
@@ -236,7 +236,7 @@ class Hj_PageController extends AbstractController
     public function pageDetailAction()
     {
         //检查权限
-        $PermissionCheck = $this->manager->checkMenuPermission("updatePage");
+        $PermissionCheck = $this->manager->checkMenuPermission("updatePage",$this->sign);
         if($PermissionCheck['return'])
         {
             //页面ID
@@ -268,7 +268,7 @@ class Hj_PageController extends AbstractController
     public function pageElementAddAction()
     {
         //检查权限
-        $PermissionCheck = $this->manager->checkMenuPermission("updatePage");
+        $PermissionCheck = $this->manager->checkMenuPermission("updatePage",$this->sign);
         if($PermissionCheck['return'])
         {
             //页面ID
@@ -325,7 +325,7 @@ class Hj_PageController extends AbstractController
     public function pageElementModifyAction()
     {
         //检查权限
-        $PermissionCheck = $this->manager->checkMenuPermission("updatePage");
+        $PermissionCheck = $this->manager->checkMenuPermission("updatePage",$this->sign);
         if($PermissionCheck['return'])
         {
             //页面ID
@@ -385,7 +385,7 @@ class Hj_PageController extends AbstractController
     public function pageElementDetailAction()
     {
         //检查权限
-        $PermissionCheck = $this->manager->checkMenuPermission("updatePage");
+        $PermissionCheck = $this->manager->checkMenuPermission("updatePage",$this->sign);
         if($PermissionCheck['return'])
         {
             //元素ID
@@ -594,7 +594,7 @@ class Hj_PageController extends AbstractController
     public function pageElementDeleteAction()
     {
         //检查权限
-        $PermissionCheck = $this->manager->checkMenuPermission("updatePage");
+        $PermissionCheck = $this->manager->checkMenuPermission("updatePage",$this->sign);
         if($PermissionCheck['return'])
         {
             //页面元素ID
@@ -616,7 +616,7 @@ class Hj_PageController extends AbstractController
     public function pageElementSingleDetailAddAction()
     {
         //检查权限
-        $PermissionCheck = $this->manager->checkMenuPermission("updatePage");
+        $PermissionCheck = $this->manager->checkMenuPermission("updatePage",$this->sign);
         if($PermissionCheck['return'])
         {
             //元素ID

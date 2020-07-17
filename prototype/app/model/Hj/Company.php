@@ -9,7 +9,16 @@ class Hj_Company extends Base_Widget
 {
 	//声明所用到的表
 	protected $table = 'config_company';
-
+    protected $banner_list =
+        [   "stepBanner"=>"健步走banner",
+            "clubBanner"=>"俱乐部banner",
+            "wtBanner"=>"文体汇banner",
+        ];
+    //获取列表类型
+    public function getBannerList()
+    {
+        return $this->banner_list;
+    }
     /**
 	 * 查询全部
 	 * @param $fields

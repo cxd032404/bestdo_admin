@@ -8,6 +8,7 @@
 <div class="br_bottom"></div>
 <form id="post_form" name="post_form" enctype="multipart/form-data" action="{tpl:$postUrl/}" method="post">
 <input type="hidden" name="post_id" id="post_id" value="{tpl:$postsInfo.post_id/}" />
+	<input type="hidden" name="currentPage" id="currentPage" value="{tpl:$currentPage/}" />
 	<input type="hidden" name="list_id" id="list_id" value="{tpl:$postsInfo.list_id/}" />
 	<input type="hidden" name="UserToken" id="UserToken" value="{tpl:$token/}" />
 	<table width="99%" align="center" class="table table-bordered table-striped" >
@@ -81,12 +82,11 @@
 			dataType:'json',
 			beforeSubmit:function(formData, jqForm, options) {},
 			success:function(jsonResponse) {
-				alert(jsonResponse.success);
 				if (jsonResponse.success == "false") {
-					//divBox.alertBox(jsonResponse.msg,function(){});
+					divBox.alertBox(jsonResponse.msg,function(){});
 				} else {
 					var message = '发布成功';
-					divBox.confirmBox({content:message,ok:function(){windowParent.getRightHtml('{tpl:$this.sign/}'+'&ac=list&list_id='+$('#list_id').val());}});
+					divBox.confirmBox({content:message,ok:function(){windowParent.getRightHtml('{tpl:$this.sign/}'+'&ac=list&list_id='+$('#list_id').val()+ '&currentPage='+$('#currentPage').val());}});
 				}
 			}
 		};

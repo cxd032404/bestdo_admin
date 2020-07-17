@@ -76,7 +76,7 @@ class Hj_ClubController extends AbstractController
 	public function clubAddAction()
 	{
 		//检查权限
-		$PermissionCheck = $this->manager->checkMenuPermission("addClub");
+		$PermissionCheck = $this->manager->checkMenuPermission("addClub",$this->sign);
 		if($PermissionCheck['return'])
 		{
             $totalPermission = $this->manager->getPermissionList($this->manager->data_groups,"only");
@@ -175,7 +175,7 @@ class Hj_ClubController extends AbstractController
 	public function clubModifyAction()
 	{
 		//检查权限
-		$PermissionCheck = $this->manager->checkMenuPermission("updateClub");
+		$PermissionCheck = $this->manager->checkMenuPermission("updateClub",$this->sign);
 		if($PermissionCheck['return'])
 		{
 			//俱乐部ID
@@ -200,7 +200,7 @@ class Hj_ClubController extends AbstractController
     public function bannerAction()
     {
         //检查权限
-        $PermissionCheck = $this->manager->checkMenuPermission("updateClub");
+        $PermissionCheck = $this->manager->checkMenuPermission("updateClub",$this->sign);
         if($PermissionCheck['return'])
         {
             //俱乐部ID
@@ -278,7 +278,7 @@ class Hj_ClubController extends AbstractController
 	public function clubDeleteAction()
 	{
 		//检查权限
-		$PermissionCheck = $this->manager->checkMenuPermission("deleteClub");
+		$PermissionCheck = $this->manager->checkMenuPermission("deleteClub",$this->sign);
 		if($PermissionCheck['return'])
 		{
 			//俱乐部ID
@@ -298,7 +298,7 @@ class Hj_ClubController extends AbstractController
     public function memberListAction()
     {
         //检查权限
-        $PermissionCheck = $this->manager->checkMenuPermission(0);
+        $PermissionCheck = $this->manager->checkMenuPermission(0,$this->sign);
         if($PermissionCheck['return'])
         {
             //俱乐部ID
@@ -357,7 +357,7 @@ class Hj_ClubController extends AbstractController
     public function memberLogAction()
     {
         //检查权限
-        $PermissionCheck = $this->manager->checkMenuPermission(0);
+        $PermissionCheck = $this->manager->checkMenuPermission(0,$this->sign);
         if($PermissionCheck['return'])
         {
             //俱乐部ID
@@ -443,7 +443,7 @@ class Hj_ClubController extends AbstractController
     public function bannerAddAction()
     {
         //检查权限
-        $PermissionCheck = $this->manager->checkMenuPermission("updateClub");
+        $PermissionCheck = $this->manager->checkMenuPermission("updateClub",$this->sign);
         if($PermissionCheck['return'])
         {
             //俱乐部ID
@@ -557,7 +557,7 @@ class Hj_ClubController extends AbstractController
     public function inviteAction()
     {
         //检查权限
-        $PermissionCheck = $this->manager->checkMenuPermission("updateClub");
+        $PermissionCheck = $this->manager->checkMenuPermission("updateClub",$this->sign);
         if($PermissionCheck['return'])
         {
             //俱乐部ID
@@ -614,7 +614,7 @@ class Hj_ClubController extends AbstractController
     public function leaveClubSubmitAction()
     {
         //检查权限
-        $PermissionCheck = $this->manager->checkMenuPermission("updateClub");
+        $PermissionCheck = $this->manager->checkMenuPermission("updateClub",$this->sign);
         if($PermissionCheck['return'])
         {
             //俱乐部ID

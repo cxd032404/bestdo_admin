@@ -70,7 +70,7 @@ class MenuController extends AbstractController
 		/*
 		$this->oLogManager->pushLog('log', $log);
 		*/		
-		$PermissionCheck = $this->manager->checkMenuPermission("AddMenu");
+		$PermissionCheck = $this->manager->checkMenuPermission("AddMenu",$this->sign);
 		if($PermissionCheck['return'])
 		{
 			$Menu = new Widget_Menu();
@@ -164,7 +164,7 @@ class MenuController extends AbstractController
 		$log = "修改菜单表单页面\n\nServerIp:\n" . $this->request->getServer('SERVER_ADDR') . "\n\nGET:\n" . var_export($_GET, true) . "\n\nPOST:\n" . var_export($_POST, true);
 		$this->oLogManager->pushLog('log', $log);
 		*/
-		$PermissionCheck = $this->manager->checkMenuPermission("UpdateMenu");
+        $PermissionCheck = $this->manager->checkMenuPermission("UpdateMenu",$this->sign);
 		if($PermissionCheck['return'])
 		{
 			$menu_id = $this->request->menu_id;
@@ -301,7 +301,7 @@ class MenuController extends AbstractController
 	 */
 	public function deleteAction()
 	{
-        $PermissionCheck = $this->manager->checkMenuPermission("DeleteMenu");
+        $PermissionCheck = $this->manager->checkMenuPermission("DeleteMenu",$this->sign);
 		if($PermissionCheck['return'])
 		{
 			$menu_id = intval($this->request->menu_id);

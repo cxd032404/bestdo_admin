@@ -2,7 +2,7 @@
 <script type="text/javascript">
 $(document).ready(function(){
   $('#post').click(function(){
-    postBox = divBox.showBox('{tpl:$this.sign/}&ac=post&list_id=' + $('#list_id').val(), {title:'提交',width:600,height:800});
+    postBox = divBox.showBox('{tpl:$this.sign/}&ac=post&list_id=' + $('#list_id').val()+ '&currentPage='+$('#currentPage').val(), {title:'提交',width:600,height:800});
   });
 });
 
@@ -16,7 +16,7 @@ function listModify(lid){
 }
 
 function post(lid){
-  postBox = divBox.showBox('{tpl:$this.sign/}&ac=post&list_id=' + lid, {title:'提交',width:600,height:800});
+  postBox = divBox.showBox('{tpl:$this.sign/}&ac=post&list_id=' + lid+ $('#list_id').val()+ '&currentPage='+$('#currentPage').val(), {title:'提交',width:600,height:800});
 }
 
 </script>
@@ -28,7 +28,7 @@ function post(lid){
 <fieldset><legend>列表详情</legend>
   <input type="hidden" id="company_id" name="company_id" value="{tpl:$listInfo.company_id/}" />
   <input type="hidden" id="list_id" name="list_id" value="{tpl:$listInfo.list_id/}" />
-
+  <input type="hidden" name="currentPage" id="currentPage" value="{tpl:$currentPage/}" />
   <table width="99%" align="center" class="table table-bordered table-striped">
   <tr>
     <th align="center" class="rowtip">文章Id</th>
@@ -56,7 +56,7 @@ function post(lid){
         {tpl:else}
         <a href="{tpl:$display_url/}&post_id={tpl:$postsInfo.post_id/}&display=1">显示</a>
         {/tpl:if}
-        | <a href="{tpl:$this.sign/}&ac=posts.detail&post_id={tpl:$postsInfo.post_id/}">详情</a></td>
+        | <a href="{tpl:$this.sign/}&ac=posts.detail&post_id={tpl:$postsInfo.post_id/}&currentPage={tpl:$currentPage/}">详情</a></td>
   </tr>
 {/tpl:loop}
   <tr><th colspan="10" align="center" class="rowtip">{tpl:$page_content/}</th></tr>
