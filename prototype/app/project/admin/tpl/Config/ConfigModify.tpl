@@ -13,7 +13,8 @@
 <td align="left">{tpl:$configInfo.config_type_name/}</td>
 </tr>
 <td>内容</td>
-<td align="left"><input name="content" type="text" class="span2" id="content" value="{tpl:$configInfo.content/}" size="50" /></td>
+	<td align="left"><textarea style="width:450px; height:200px" name="content" id="content" >{tpl:$configInfo.content/}</textarea>
+</td>
 </tr>
 <td colspan = 2><button type="submit" id="config_update_submit">提交</button></td>
 </tr>
