@@ -106,7 +106,7 @@ class Hj_CompanyController extends AbstractController
 	public function companyAddAction()
 	{
 		//检查权限
-		$PermissionCheck = $this->manager->checkMenuPermission("addCompany");
+		$PermissionCheck = $this->manager->checkMenuPermission("addCompany",$this->sign);
 		if($PermissionCheck['return'])
 		{
 		    $totalPermission = $this->manager->getPermissionList($this->manager->data_groups,"only");
@@ -169,7 +169,7 @@ class Hj_CompanyController extends AbstractController
 	public function companyModifyAction()
 	{
 		//检查权限
-		$PermissionCheck = $this->manager->checkMenuPermission("updateCompany");
+		$PermissionCheck = $this->manager->checkMenuPermission("updateCompany",$this->sign);
 		if($PermissionCheck['return'])
 		{
 			//企业ID
@@ -242,7 +242,7 @@ class Hj_CompanyController extends AbstractController
 	public function companyDeleteAction()
 	{
 		//检查权限
-		$PermissionCheck = $this->manager->checkMenuPermission("deleteCompany");
+		$PermissionCheck = $this->manager->checkMenuPermission("deleteCompany",$this->sign);
 		if($PermissionCheck['return'])
 		{
 			//企业ID
@@ -272,7 +272,7 @@ class Hj_CompanyController extends AbstractController
     public function protocalModifyAction()
     {
         //检查权限
-        $PermissionCheck = $this->manager->checkMenuPermission("updateCompany");
+        $PermissionCheck = $this->manager->checkMenuPermission("updateCompany",$this->sign);
         if($PermissionCheck['return'])
         {
             //企业ID
@@ -389,7 +389,7 @@ class Hj_CompanyController extends AbstractController
     public function stepDateRangeAction()
     {
         //检查权限
-        $PermissionCheck = $this->manager->checkMenuPermission("updateCompany");
+        $PermissionCheck = $this->manager->checkMenuPermission("updateCompany",$this->sign);
         if($PermissionCheck['return'])
         {
             //企业ID
@@ -425,7 +425,7 @@ class Hj_CompanyController extends AbstractController
     public function stepDateRangeAddAction()
     {
         //检查权限
-        $PermissionCheck = $this->manager->checkMenuPermission("updateCompany");
+        $PermissionCheck = $this->manager->checkMenuPermission("updateCompany",$this->sign);
         if($PermissionCheck['return'])
         {
             $currentTime = time();
@@ -479,7 +479,7 @@ class Hj_CompanyController extends AbstractController
     public function stepDateRangeModifyAction()
     {
         //检查权限
-        $PermissionCheck = $this->manager->checkMenuPermission("updateCompany");
+        $PermissionCheck = $this->manager->checkMenuPermission("updateCompany",$this->sign);
         if($PermissionCheck['return'])
         {
             //记录ID
@@ -531,7 +531,7 @@ class Hj_CompanyController extends AbstractController
     public function stepDateRangeDeleteAction()
     {
         //检查权限
-        $PermissionCheck = $this->manager->checkMenuPermission("updateCompany");
+        $PermissionCheck = $this->manager->checkMenuPermission("updateCompany",$this->sign);
         if($PermissionCheck['return'])
         {
             $oDateRange = new Hj_StepDateRange();
