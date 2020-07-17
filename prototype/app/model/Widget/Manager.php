@@ -449,7 +449,7 @@ class Widget_Manager extends Base_Widget
         //echo ($link);
         //获取页面ID
         $MenuInfo = $oMenu->getOneBylink("?".$link, "name,menu_id,parent,permission_list");
-        print_R($MenuInfo);
+        //print_R($MenuInfo);
         //获取当前用户组在当前页面的所有权限
         $purview = $oMenuPurview->getPermission($MenuInfo['menu_id'], $this->menu_group_id);
         $bind = array(

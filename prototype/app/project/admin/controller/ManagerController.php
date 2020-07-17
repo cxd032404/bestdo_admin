@@ -103,7 +103,7 @@ class ManagerController extends AbstractController
 		$log = "插入/新增一个管理员表单页面\n\nServerIp:\n" . $this->request->getServer('SERVER_ADDR') . "\n\nGET:\n" . var_export($_GET, true) . "\n\nPOST:\n" . var_export($_POST, true);
 		$this->oLogManager->pushLog('log', $log);
 				
-		$PermissionCheck = $this->manager->checkMenuPermission("AddManager");
+		$PermissionCheck = $this->manager->checkMenuPermission("AddManager",$this->sign);
 		if($PermissionCheck['return'])
 		{
 			$Widget_Group = new Widget_Group();
@@ -133,7 +133,7 @@ class ManagerController extends AbstractController
 		$log = "插入/新增一个管理员执行页面\n\nServerIp:\n" . $this->request->getServer('SERVER_ADDR') . "\n\nGET:\n" . var_export($_GET, true) . "\n\nPOST:\n" . var_export($_POST, true);
 		$this->oLogManager->pushLog('log', $log);
 				
-		$PermissionCheck = $this->manager->checkMenuPermission("AddManager");
+		$PermissionCheck = $this->manager->checkMenuPermission("AddManager",$this->sign);
 		if($PermissionCheck['return'])
 		{
 			$name = trim($this->request->name);
@@ -213,7 +213,7 @@ class ManagerController extends AbstractController
 		$log = "修改管理员表单页面\n\nServerIp:\n" . $this->request->getServer('SERVER_ADDR') . "\n\nGET:\n" . var_export($_GET, true) . "\n\nPOST:\n" . var_export($_POST, true);
 		$this->oLogManager->pushLog('log', $log);
 
-		$PermissionCheck = $this->manager->checkMenuPermission("UpdateManager");
+		$PermissionCheck = $this->manager->checkMenuPermission("UpdateManager",$this->sign);
 		if($PermissionCheck['return'])
 		{
 			$id = $this->request->id;
@@ -244,7 +244,7 @@ class ManagerController extends AbstractController
 		$log = "修改管理员执行页面\n\nServerIp:\n" . $this->request->getServer('SERVER_ADDR') . "\n\nGET:\n" . var_export($_GET, true) . "\n\nPOST:\n" . var_export($_POST, true);
 		$this->oLogManager->pushLog('log', $log);
 				
-		$PermissionCheck = $this->manager->checkMenuPermission("UpdateManager");
+		$PermissionCheck = $this->manager->checkMenuPermission("UpdateManager",$this->sign);
 		if($PermissionCheck['return'])
 		{
 			$id = trim($this->request->id);//用户ID
@@ -314,7 +314,7 @@ class ManagerController extends AbstractController
 		$log = "删除管理员执行页面\n\nServerIp:\n" . $this->request->getServer('SERVER_ADDR') . "\n\nGET:\n" . var_export($_GET, true) . "\n\nPOST:\n" . var_export($_POST, true);
 		$this->oLogManager->pushLog('log', $log);
 				
-		$PermissionCheck = $this->manager->checkMenuPermission("DeleteManager");
+		$PermissionCheck = $this->manager->checkMenuPermission("DeleteManager",$this->sign);
 		if($PermissionCheck['return'])
 		{
 			$id = intval($this->request->id);

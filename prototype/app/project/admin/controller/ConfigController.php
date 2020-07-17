@@ -59,7 +59,7 @@ class ConfigController extends AbstractController
 	public function configAddAction()
 	{
 		//检查权限
-		$PermissionCheck = $this->manager->checkMenuPermission("updateConfig");
+		$PermissionCheck = $this->manager->checkMenuPermission("updateConfig",$this->sign);
 		if($PermissionCheck['return'])
 		{
             $configTypeList = $this->oConfig->getConfigType();
@@ -116,7 +116,7 @@ class ConfigController extends AbstractController
 	public function configModifyAction()
 	{
 		//检查权限
-		$PermissionCheck = $this->manager->checkMenuPermission("updateConfig");
+		$PermissionCheck = $this->manager->checkMenuPermission("updateConfig",$this->sign);
 		if($PermissionCheck['return'])
 		{
 			//配置ID
@@ -129,7 +129,7 @@ class ConfigController extends AbstractController
             if($configInfo['config_type']=="source")
             {
                 //渲染模版
-                include $this->tpl('Config_ConfigModifySource');
+                include $this->tpl('Config_ConfigSourceModify');
             }
             else
             {
@@ -192,7 +192,7 @@ class ConfigController extends AbstractController
 	public function configDeleteAction()
 	{
 		//检查权限
-		$PermissionCheck = $this->manager->checkMenuPermission("updateConfig");
+		$PermissionCheck = $this->manager->checkMenuPermission("updateConfig",$this->sign);
 		if($PermissionCheck['return'])
 		{
 			//配置ID
@@ -212,7 +212,7 @@ class ConfigController extends AbstractController
     public function sourceDetailAction()
     {
         //检查权限
-        $PermissionCheck = $this->manager->checkMenuPermission("updateConfig");
+        $PermissionCheck = $this->manager->checkMenuPermission("updateConfig",$this->sign);
         if($PermissionCheck['return'])
         {
             //配置ID
@@ -234,7 +234,7 @@ class ConfigController extends AbstractController
     public function sourceDetailAddAction()
     {
         //检查权限
-        $PermissionCheck = $this->manager->checkMenuPermission("updateConfig");
+        $PermissionCheck = $this->manager->checkMenuPermission("updateConfig",$this->sign);
         if($PermissionCheck['return'])
         {
             //配置ID
