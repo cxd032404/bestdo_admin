@@ -421,6 +421,11 @@ class Hj_PageController extends AbstractController
                 //获取活动列表
                 $activityList = (new Hj_Activity())->getActivityList(['company_id'=>$pageInfo['company_id']],"activity_id,activity_name");
             }
+            elseif(in_array($elementInfo['element_type'] ,["banner"]))
+            {
+                //获取banner类型列表
+                $bannerTypeList = (new Hj_Company())->getBannerList();
+            }
             $elementTypeInfo = $this->oElementType->getElementType($elementInfo['element_type']);
             //渲染模版
             include $this->tpl('Hj_Page_PageElement_'.$elementInfo['element_type']);
@@ -579,6 +584,10 @@ class Hj_PageController extends AbstractController
         elseif(in_array($elementDetail['element_type'],['postsDetail']))
         {
             $elementDetail['detail']['from_params'] = $detail['from_params'];
+        }
+        elseif(in_array($elementDetail['element_type'],['banner']))
+        {
+            $elementDetail['detail']['banner_type'] = $detail['banner_type'];
         }
         if(!isset($response))
         {

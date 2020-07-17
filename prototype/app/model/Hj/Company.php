@@ -13,6 +13,7 @@ class Hj_Company extends Base_Widget
         [   "stepBanner"=>"健步走banner",
             "clubBanner"=>"俱乐部banner",
             "wtBanner"=>"文体汇banner",
+            "indexBanner"=>"首页banner",
         ];
     //获取列表类型
     public function getBannerList()
