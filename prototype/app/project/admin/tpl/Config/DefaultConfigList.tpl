@@ -2,7 +2,7 @@
 <script type="text/javascript">
 $(document).ready(function(){
   $('#add_config').click(function(){
-    addConfigBox = divBox.showBox('{tpl:$this.sign/}&ac=config.add', {title:'添加配置',width:600,height:300});
+    addConfigBox = divBox.showBox('{tpl:$this.sign/}&ac=config.add', {title:'添加配置',width:650,height:600});
   });
 });
 
@@ -12,7 +12,7 @@ function configDelete(c_id,p_name){
 }
 
 function configModify(mid){
-  modifyconfigBox = divBox.showBox('{tpl:$this.sign/}&ac=config.modify&config_sign=' + mid, {title:'修改配置',width:600,height:250});
+  modifyconfigBox = divBox.showBox('{tpl:$this.sign/}&ac=config.modify&config_sign=' + mid, {title:'修改配置',width:650,height:600});
 }
 </script>
 

@@ -28,6 +28,7 @@
         <a href="{tpl:$this.sign/}&ac=banner.list&banner_type=clubBanner&company_id={tpl:$companyInfo.company_id/}&currentPage={tpl:$currentPage/}">俱乐部Banner({tpl:$companyInfo.detail.clubBanner func="count(@@)"/})</a>
         | <a href="{tpl:$this.sign/}&ac=banner.list&banner_type=stepBanner&company_id={tpl:$companyInfo.company_id/}&currentPage={tpl:$currentPage/}">健步走Banner({tpl:$companyInfo.detail.stepBanner func="count(@@)"/})</a>
         | <a href="{tpl:$this.sign/}&ac=banner.list&banner_type=wtBanner&company_id={tpl:$companyInfo.company_id/}&currentPage={tpl:$currentPage/}">文体之窗Banner({tpl:$companyInfo.detail.wtBanner func="count(@@)"/})</a>
+        | <a href="{tpl:$this.sign/}&ac=banner.list&banner_type=indexBanner&company_id={tpl:$companyInfo.company_id/}&currentPage={tpl:$currentPage/}">首页Banner({tpl:$companyInfo.detail.indexBanner func="count(@@)"/})</a>
       </td>
   </tr>
 {/tpl:loop}
