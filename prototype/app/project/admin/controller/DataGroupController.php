@@ -27,7 +27,7 @@ class DataGroupController extends AbstractController
 	
 	public function addAction()
 	{
-        $PermissionCheck = $this->manager->checkMenuPermission("AddDataGroup");
+        $PermissionCheck = $this->manager->checkMenuPermission("AddDataGroup",$this->sign);
         if($PermissionCheck['return'])
         {
             include $this->tpl();
@@ -63,7 +63,7 @@ class DataGroupController extends AbstractController
 	
 	public function modifyAction()
 	{
-        $PermissionCheck = $this->manager->checkMenuPermission("UpdateDataGroup");
+        $PermissionCheck = $this->manager->checkMenuPermission("UpdateDataGroup",$this->sign);
         if($PermissionCheck['return'])
         {
             $group_id = $this->request->group_id;
@@ -105,7 +105,7 @@ class DataGroupController extends AbstractController
 	
 	public function deleteAction()
 	{
-        $PermissionCheck = $this->manager->checkMenuPermission("DeleteDataGroup");
+        $PermissionCheck = $this->manager->checkMenuPermission("DeleteDataGroup",$this->sign);
         if($PermissionCheck['return'])
         {
             $group_id = intval($this->request->group_id);
@@ -133,7 +133,7 @@ class DataGroupController extends AbstractController
     public function permissionByGroupAction()
     {
         //检查权限
-        $PermissionCheck = $this->manager->checkMenuPermission(0);
+        $PermissionCheck = $this->manager->checkMenuPermission(0,$this->sign);
         if($PermissionCheck['return'])
         {
             $group_id = intval($this->request->group_id);
@@ -155,7 +155,7 @@ class DataGroupController extends AbstractController
     public function permissionModifyAction()
     {
         //检查权限
-        $PermissionCheck = $this->manager->checkMenuPermission("UpdateDataGroup");
+        $PermissionCheck = $this->manager->checkMenuPermission("UpdateDataGroup",$this->sign);
         if($PermissionCheck['return'])
         {
             //获取 页面参数
