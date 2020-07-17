@@ -9,7 +9,20 @@
 
     function userDisable(p_id,p_name){
         msg = '是否停用 ' + p_name + '的账号?'
-        deleteDepartmentBox = divBox.confirmBox({content:msg,ok:function(){location.href = '{tpl:$this.sign/}&ac=user.disable&user_id=' + p_id;}});
+        disableBox = divBox.confirmBox({content:msg,ok:function(){location.href = '{tpl:$this.sign/}&ac=user.disable&user_id=' + p_id;}});
+    }
+
+    function setTestUser(p_id,p_name,status){
+        if(status >0)
+        {
+            msg = '是否将 ' + p_name + '的账号设定为测试用户?';
+
+        }
+        else
+        {
+            msg = '是否将 ' + p_name + '的账号设定为普通用户?';
+        }
+        testBox = divBox.confirmBox({content:msg,ok:function(){location.href = '{tpl:$this.sign/}&ac=set.test.user&user_id=' + p_id + '&status='+  status;}});
     }
 
 </script>
@@ -59,7 +72,12 @@
         <td align="center">{tpl:$UserInfo.sex/}</td>
         <td align="center">{tpl:$UserInfo.reg_time/}</td>
         <td align="center">{tpl:$UserInfo.last_login_time/}<br>{tpl:$UserInfo.LoginSourceName/}</td>
-          <td align="center"><a  href="javascript:;" onclick="userDetail('{tpl:$UserInfo.user_id/}','{tpl:$UserInfo.true_name/}')">详细</a>{tpl:if($UserInfo.is_del!=1)}｜<a  href="javascript:;" onclick="userDisable('{tpl:$UserInfo.user_id/}','{tpl:$UserInfo.true_name/}')">停用</a>{/tpl:if}</td>
+          <td align="center"><a  href="javascript:;" onclick="userDetail('{tpl:$UserInfo.user_id/}','{tpl:$UserInfo.true_name/}')">详细</a>{tpl:if($UserInfo.is_del!=1)}｜<a  href="javascript:;" onclick="userDisable('{tpl:$UserInfo.user_id/}','{tpl:$UserInfo.true_name/}')">停用</a>{/tpl:if}
+              {tpl:if($UserInfo.test==1)} | <a  href="javascript:;" onclick="setTestUser('{tpl:$UserInfo.user_id/}','{tpl:$UserInfo.true_name/}',0)">设为普通用户</a>
+              {tpl:else}
+               | <a  href="javascript:;" onclick="setTestUser('{tpl:$UserInfo.user_id/}','{tpl:$UserInfo.true_name/}',1)">设为测试用户</a>
+              {/tpl:if}
+          </td>
 
       </tr>
     {/tpl:loop}

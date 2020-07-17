@@ -492,7 +492,8 @@ class Hj_UserController extends AbstractController
         $response = $update ? array('errno' => 0) : array('errno' => 9);
         echo json_encode($response);
         return true;
-    }	//删除列表
+    }
+    //停用用户账户
     public function userDisableAction()
     {
         //检查权限
@@ -507,6 +508,30 @@ class Hj_UserController extends AbstractController
             {
                 $update = $this->oUserInfo->updateUser($user_id,['is_del'=>1]);
             }
+            //刷新列表
+            Base_Common::refreshCache($this->config,"user",$user_id);
+            //返回之前的页面
+            $this->response->goBack();
+        }
+        else
+        {
+            $home = $this->sign;
+            include $this->tpl('403');
+        }
+    }
+    //设定用户的测试状态
+    public function setTestUserAction()
+    {
+        //检查权限
+        $PermissionCheck = $this->manager->checkMenuPermission("UserUpdate",$this->sign);
+        if($PermissionCheck['return'])
+        {
+            //用户ID
+            $user_id = intval($this->request->user_id);
+            //测试状态
+            $status= intval($this->request->status);
+            $user_info = ["test"=>$status>0?1:0];
+            $update = $this->oUserInfo->updateUser($user_id,$user_info);
             //刷新列表
             Base_Common::refreshCache($this->config,"user",$user_id);
             //返回之前的页面
