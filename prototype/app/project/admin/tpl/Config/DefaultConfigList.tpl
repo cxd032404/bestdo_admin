@@ -46,7 +46,7 @@ function configModify(mid){
     <td align="center">{tpl:$configInfo.config_sign/}</td>
     <td align="center">{tpl:$configInfo.config_name/}</td>
     <td align="center">{tpl:$configInfo.config_type_name/}</td>
-    <td align="center"> {tpl:if($configInfo.config_type=="source")}<a href="{tpl:$this.sign/}&ac=source.detail&config_sign={tpl:$configInfo.config_sign/}">内容更新</a>{tpl:else}{tpl:$configInfo.content/}{/tpl:if}</td>
+    <td align="center" style="word-break : break-all; overflow:hidden; "> {tpl:if($configInfo.config_type=="source")}<a href="{tpl:$this.sign/}&ac=source.detail&config_sign={tpl:$configInfo.config_sign/}">内容更新</a>{tpl:else}{tpl:$configInfo.content/}{/tpl:if}</td>
       <td align="center">{tpl:$configInfo.create_time/}</td>
       <td align="center">{tpl:$configInfo.update_time/}</td>
       <td align="center"><a  href="javascript:;" onclick="configDelete('{tpl:$configInfo.config_sign/}','{tpl:$configInfo.parent_id/}','{tpl:$configInfo.config_name/}')">删除</a>

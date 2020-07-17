@@ -479,12 +479,20 @@ class ManagerController extends AbstractController
     public function openidBindQrAction()
     {
         include('Third/phpqrcode/phpqrcode.php');
-        //分站ID
+        //管理员ID
         $id = intval($this->request->id);
         $url = $this->config->adminUrl.'/callback/WxOpenidBind.php?id='.$id;
         echo $url;
         $url = urlencode($url);
         include $this->tpl('manager_QR');
+    }
+    public function tokenAction()
+    {
+        //管理员ID
+        $id = intval($this->request->id);
+        $token = (new Hj_UserInfo())->getTokenForManager($id);
+        $userInfo = (new Hj_UserInfo())->getUserByColumn("manager_id",$id)['0']??[];
+        include $this->tpl('manager_token');
     }
 
 }
