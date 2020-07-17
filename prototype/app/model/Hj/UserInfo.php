@@ -594,9 +594,9 @@ class Hj_UserInfo extends Base_Widget
     }
     /**
      * 根据输入条件匹配企业导入的用户列表
-     * @param char $name 姓名
+     * @param intger $company_id 企业ID
      * @param char $authType 验证方式
-     * @param char $auth 用以验证的数据
+     * @param char $name 姓名
      * @param string $fields 所要获取的数据列
      * @return array
      */
@@ -604,6 +604,18 @@ class Hj_UserInfo extends Base_Widget
     {
         $table_to_process = Base_Widget::getDbTable($this->table_company_user);
         return $this->db->select($table_to_process, $fields, '`company_id` = ? and `name` = ? and `'.$authType.'` = ?', [$company_id,$name,$auth]);
+    }
+    /**
+     * 根据输入条件匹配用户列表
+     * @param char $column 列名
+     * @param char $value 数值
+     * @param string $fields 所要获取的数据列
+     * @return array
+     */
+    public function getUserByColumn($column = "",$value = "",$fields = "*")
+    {
+        $table_to_process = Base_Widget::getDbTable($this->table);
+        return $this->db->select($table_to_process, $fields, '`'.$column.'` = ?', [$value]);
     }
     /**
      * 新增单个用户记录

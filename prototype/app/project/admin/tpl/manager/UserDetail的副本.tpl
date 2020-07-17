@@ -47,7 +47,7 @@
             <td align="left">{tpl:$userInfo.unionid/}</td>
         </tr>
         <tr class="hover">
-            <th align="center" class="rowtip">部门</th>
+            <th align="center" class="rowtip">unionId</th>
             <td align="left">{tpl:$userInfo.department_name/}</td>
         </tr>
     </table>
