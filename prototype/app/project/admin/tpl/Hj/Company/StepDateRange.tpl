@@ -21,7 +21,7 @@
 	<input type="hidden" name="company_id" id="company_id" value="{tpl:$companyInfo.company_id/}" />
 	<input type="hidden" name="company_name" id="company_name" value="{tpl:$companyInfo.company_name/}" />
 	<fieldset>
-		[ <a href="{tpl:$this.sign/}&company_id={tpl:$companyInfo.company_id/}">返回</a> | <a href="javascript:;" id="add_date">添加日期段</a> ]
+		[ <a href="{tpl:$this.sign/}&company_id={tpl:$companyInfo.company_id/}"><img src="/icon/return.png" width='30' height='30'/></a> | <a href="javascript:;" id="add_date"><img src="/icon/add.png" width='30' height='30'/></a> ]
 	</fieldset>
 	<fieldset><legend>{tpl:$companyInfo.company_name/} 健步走自定义日期段列表列表</legend>
 		<table width="99%" align="center" class="table table-bordered table-striped" >
@@ -41,8 +41,8 @@
 				<td align="center">{tpl:$dateInfo.detail.title/}</td>
 				<td align="center">{tpl:$dateInfo.create_time/}</td>
 				<td align="center">{tpl:$dateInfo.update_time/}</td>
-				<td align="center"><a  href="javascript:;" onclick="DateDelete('{tpl:$dateInfo.date_id/}')">删除</a>
-					|  <a href="javascript:;" onclick="DateModify('{tpl:$dateInfo.date_id/}');">修改</a></td>
+				<td align="center"><a  href="javascript:;" onclick="DateDelete('{tpl:$dateInfo.date_id/}')"><img src="/icon/del.png" width='30' height='30'/></a>
+					|  <a href="javascript:;" onclick="DateModify('{tpl:$dateInfo.date_id/}');"><img src="/icon/edit2.png" width='30' height='30'/></a></td>
 			</tr>
 			{/tpl:loop}
 			<tr><th colspan="10" align="center" class="rowtip">{tpl:$page_content/}</th></tr>

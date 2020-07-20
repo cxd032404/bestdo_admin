@@ -24,7 +24,7 @@
 <input type="hidden" name="page_id" id="page_id" value="{tpl:$pageInfo.page_id/}" />
 
 	<fieldset>
-		[ <a href="{tpl:$this.sign/}&ac=page.detail&page_id={tpl:$elementInfo.page_id/}">返回</a> | <a href="javascript:;" id="add_page_element_detail">添加页面元素</a> ]
+		[ <a href="{tpl:$this.sign/}&ac=page.detail&page_id={tpl:$elementInfo.page_id/}"><img src="/icon/return.png" width='30' height='30'/></a> | <a href="javascript:;" id="add_page_element_detail"><img src="/icon/add.png" width='30' height='30'/></a> ]
 	</fieldset>
 	<fieldset><legend>页面元素详情</legend>
 		<table width="99%" align="center" class="table table-bordered table-striped" >
@@ -44,8 +44,8 @@
 			{tpl:loop $elementInfo.detail $pos $picInfo}
 			<tr class="hover">
 				<td align="center"><img src="{tpl:$picInfo.img_url/}" width='150' height='130'/><p>{tpl:$picInfo.img_jump_url/}</td>
-				<td align="center"><a  href="javascript:;" onclick="pageElementDetailDelete('{tpl:$pos/}')">删除</a>
-					|  <a href="javascript:;" onclick="pageElementDetailModify('{tpl:$pos/}');">修改</a></td>
+				<td align="center"><a  href="javascript:;" onclick="pageElementDetailDelete('{tpl:$pos/}')"><img src="/icon/del.png" width='30' height='30'/></a>
+					|  <a href="javascript:;" onclick="pageElementDetailModify('{tpl:$pos/}');"><img src="/icon/edit2.png" width='30' height='30'/></a></td>
 			</tr>
 			{/tpl:loop}
 			<tr class="noborder"><td></td>

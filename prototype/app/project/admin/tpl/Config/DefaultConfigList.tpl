@@ -17,7 +17,7 @@ function configModify(mid){
 </script>
 
 <fieldset><legend>操作</legend>
-[ <a href="javascript:;" id="add_config">添加配置</a> ]
+[ <a href="javascript:;" id="add_config"><img src="/icon/add.png" width='30' height='30'/></a> ]
 </fieldset>
 
 <fieldset><legend> 配置列表 </legend>
@@ -49,8 +49,8 @@ function configModify(mid){
     <td align="center" style="word-break : break-all; overflow:hidden; "> {tpl:if($configInfo.config_type=="source")}<a href="{tpl:$this.sign/}&ac=source.detail&config_sign={tpl:$configInfo.config_sign/}">内容更新</a>{tpl:else}{tpl:$configInfo.content/}{/tpl:if}</td>
       <td align="center">{tpl:$configInfo.create_time/}</td>
       <td align="center">{tpl:$configInfo.update_time/}</td>
-      <td align="center"><a  href="javascript:;" onclick="configDelete('{tpl:$configInfo.config_sign/}','{tpl:$configInfo.parent_id/}','{tpl:$configInfo.config_name/}')">删除</a>
- |  <a href="javascript:;" onclick="configModify('{tpl:$configInfo.config_sign/}');">修改</a></td>
+      <td align="center"><a  href="javascript:;" onclick="configDelete('{tpl:$configInfo.config_sign/}','{tpl:$configInfo.parent_id/}','{tpl:$configInfo.config_name/}')"><img src="/icon/del.png" width='30' height='30'/></a>
+ |  <a href="javascript:;" onclick="configModify('{tpl:$configInfo.config_sign/}');"><img src="/icon/edit2.png" width='30' height='30'/></a></td>
   </tr>
 {/tpl:loop}
 </table>

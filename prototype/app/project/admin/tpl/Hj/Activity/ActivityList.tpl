@@ -18,7 +18,7 @@ function activityModify(mid){
 </script>
 
 <fieldset><legend>操作</legend>
-[ <a href="javascript:;" id="add_activity">添加活动</a> ]
+[ <a href="javascript:;" id="add_activity"><img src="/icon/add.png" width='30' height='30'/></a> ]
 </fieldset>
 
 <fieldset><legend>活动列表 </legend>
@@ -60,8 +60,8 @@ function activityModify(mid){
       <td align="center">{tpl:$activityInfo.start_time/}<P>{tpl:$activityInfo.end_time/}</td>
       <td align="center">{tpl:$activityInfo.apply_start_time/}<P>{tpl:$activityInfo.apply_end_time/}</td>
       <td align="center">{tpl:$activityInfo.update_time/}</td>
-      <td align="center"><a  href="javascript:;" onclick="activityDelete('{tpl:$activityInfo.activity_id/}','{tpl:$activityInfo.activity_name/}')">删除</a>
- | <a href="javascript:;" onclick="activityModify('{tpl:$activityInfo.activity_id/}');">修改</a> | <a href="{tpl:$this.sign/}&ac=activity.log&activity_id={tpl:$activityInfo.activity_id/}">报名记录{tpl:if($activityInfo.count>0)}({tpl:$activityInfo.count/}){/tpl:if}</a></td>
+      <td align="center"><a  href="javascript:;" onclick="activityDelete('{tpl:$activityInfo.activity_id/}','{tpl:$activityInfo.activity_name/}')"><img src="/icon/del.png" width='30' height='30'/></a>
+ | <a href="javascript:;" onclick="activityModify('{tpl:$activityInfo.activity_id/}');"><img src="/icon/edit2.png" width='30' height='30'/></a> | <a href="{tpl:$this.sign/}&ac=activity.log&activity_id={tpl:$activityInfo.activity_id/}">报名记录{tpl:if($activityInfo.count>0)}({tpl:$activityInfo.count/}){/tpl:if}</a></td>
   </tr>
 {/tpl:loop}
   <tr><th colspan="10" align="center" class="rowtip">{tpl:$page_content/}</th></tr>

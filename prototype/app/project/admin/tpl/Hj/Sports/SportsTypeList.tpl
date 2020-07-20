@@ -39,7 +39,7 @@ function sportsTypeParamsModify(mid){
     <td align="center">{tpl:$SportsTypeInfo.SportsTypeName/}</td>
     <td align="center">{tpl:if($SportsTypeInfo.SpeedDisplayType=="0")}不显示{tpl:else}{tpl:$SportsTypeInfo.SpeedDisplayType/}{/tpl:if}</td>
 
-      <td align="center"><a  href="javascript:;" onclick="sportsTypeDelete('{tpl:$SportsTypeInfo.SportsTypeId/}','{tpl:$SportsTypeInfo.SportsTypeName/}')">删除</a> |  <a href="javascript:;" onclick="sportsTypeModify('{tpl:$SportsTypeInfo.SportsTypeId/}');">修改</a></td>
+      <td align="center"><a  href="javascript:;" onclick="sportsTypeDelete('{tpl:$SportsTypeInfo.SportsTypeId/}','{tpl:$SportsTypeInfo.SportsTypeName/}')"><img src="/icon/del.png" width='30' height='30'/></a> |  <a href="javascript:;" onclick="sportsTypeModify('{tpl:$SportsTypeInfo.SportsTypeId/}');"><img src="/icon/edit2.png" width='30' height='30'/></a></td>
   </tr>
 {/tpl:loop}
 </table>

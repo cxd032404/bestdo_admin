@@ -26,7 +26,7 @@ function token(mid,title,name){
 </script>
 
 <fieldset><legend>操作</legend>
-[ <a href="javascript:;" id="add_manager">添加管理员</a> ]
+[ <a href="javascript:;" id="add_manager"><img src="/icon/add.png" width='30' height='30'/></a> ]
 
 <form id="form1" name="form1" method="post" action="">
   
@@ -77,10 +77,10 @@ function token(mid,title,name){
 <td>{tpl:$row.reg_time/}</td>
 
 <td>
-<a href="javascript:;" onclick="managerModify({tpl:$row.id/});">修改</a> |
+<a href="javascript:;" onclick="managerModify({tpl:$row.id/});"><img src="/icon/edit2.png" width='30' height='30'/></a> |
 
 <?php if($this->manager->name != $row['name']): ?>
-<a  href="javascript:;" onclick="promptDelete('{tpl:$row.id/}','{tpl:$row.name/}')">删除</a> |
+<a  href="javascript:;" onclick="promptDelete('{tpl:$row.id/}','{tpl:$row.name/}')"><img src="/icon/del.png" width='30' height='30'/></a> |
 <?php endif; ?>
 
 <a href="javascript:;" onclick="pwdReset('{tpl:$row.id/}','{tpl:$row.name/}');">重置密码</a>
