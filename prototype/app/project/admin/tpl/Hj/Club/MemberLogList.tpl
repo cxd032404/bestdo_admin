@@ -4,7 +4,7 @@
 </script>
 
 <fieldset><legend>操作</legend>
-[ <a href="{tpl:$this.sign/}&club_id={tpl:$clubInfo.club_id/}">返回</a> ]
+[ <a href="{tpl:$this.sign/}&club_id={tpl:$clubInfo.club_id/}"><img src="/icon/return.png" width='30' height='30'/></a> ]
 </fieldset>
 
 <fieldset><legend>{tpl:$clubInfo.club_name/} 成员记录</legend>

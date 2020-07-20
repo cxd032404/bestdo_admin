@@ -19,7 +19,7 @@
 			{tpl:if($listInfo.detail.header_url!="")}
 			已选图片:<img src="{tpl:$listInfo.detail.header_url/}" width="30px;" height="30px;"/>
 		<br>
-			<a  href="javascript:;" onclick="headerImgDelete('{tpl:$listInfo.list_id/}','{tpl:$key/}')">删除</a> {/tpl:if}
+			<a  href="javascript:;" onclick="headerImgDelete('{tpl:$listInfo.list_id/}','{tpl:$key/}')"><img src="/icon/del.png" width='30' height='30'/></a> {/tpl:if}
 		</td>
 	</tr>
 <tr class="hover"><td>类型</td>

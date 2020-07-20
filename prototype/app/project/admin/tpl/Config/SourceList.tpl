@@ -21,7 +21,7 @@
 	<input type="hidden" name="config_sign" id="config_sign" value="{tpl:$configInfo.config_sign/}" />
 	<input type="hidden" name="config_name" id="config_name" value="{tpl:$configInfo.config_name/}" />
 	<fieldset>
-		[ <a href="{tpl:$this.sign/}&config_sign={tpl:$configInfo.config_sign/}">返回</a> | <a href="javascript:;" id="add_source">添加资源</a> ]
+		[ <a href="{tpl:$this.sign/}&config_sign={tpl:$configInfo.config_sign/}"><img src="/icon/return.png" width='30' height='30'/></a> | <a href="javascript:;" id="add_source"><img src="/icon/add.png" width='30' height='30'/></a> ]
 	</fieldset>
 	<fieldset><legend>{tpl:$configInfo.config_name/} 资源列表</legend>
 		<table width="99%" align="center" class="table table-bordered table-striped" >
@@ -29,8 +29,8 @@
 			{tpl:loop $configInfo.content $pos $picInfo}
 			<tr class="hover">
 				<td align="center"><img src="{tpl:$picInfo.img_url/}" width='150' height='130'/><p>文字：{tpl:$picInfo.text/}<p>跳转：{tpl:$picInfo.img_jump_url/}<p>标签：{tpl:$picInfo.title/}</td>
-				<td align="center"><a  href="javascript:;" onclick="SourceDelete('{tpl:$pos/}')">删除</a>
-					|  <a href="javascript:;" onclick="SourceModify('{tpl:$pos/}');">修改</a></td>
+				<td align="center"><a  href="javascript:;" onclick="SourceDelete('{tpl:$pos/}')"><img src="/icon/del.png" width='30' height='30'/></a>
+					|  <a href="javascript:;" onclick="SourceModify('{tpl:$pos/}');"><img src="/icon/edit2.png" width='30' height='30'/></a></td>
 			</tr>
 			{/tpl:loop}
 		</table>

@@ -22,7 +22,7 @@
     <td align="center">{tpl:$companyInfo.company_name/}</td>
     <td align="center">{tpl:$companyInfo.parent_name/}</td>
     <td align="center">{tpl:$companyInfo.display_name/}</td>
-    <td align="center">{tpl:if($companyInfo.icon=="")}未定义{tpl:else}<img src="{tpl:$RootUrl/}{tpl:$companyInfo.icon/}" width='150' height='130'/>{/tpl:if}</td>
+    <td align="center">{tpl:if($companyInfo.icon=="")}未定义{tpl:else}<img src="{tpl:$RootUrl/}{tpl:$companyInfo.icon/}" width='120' height='120'/>{/tpl:if}</td>
     <td align="center">{tpl:$companyInfo.update_time/}</td>
       <td align="center">
         <a href="{tpl:$this.sign/}&ac=banner.list&banner_type=clubBanner&company_id={tpl:$companyInfo.company_id/}&currentPage={tpl:$currentPage/}">俱乐部Banner({tpl:$companyInfo.detail.clubBanner func="count(@@)"/})</a>

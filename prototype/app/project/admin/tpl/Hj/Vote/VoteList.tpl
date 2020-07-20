@@ -50,8 +50,8 @@ function voteModify(mid){
       <td align="center">{tpl:$voteInfo.activity_name/}</td>
       <td align="center">{tpl:$voteInfo.start_time/}<P>{tpl:$voteInfo.end_time/}</td>
       <td align="center">{tpl:$voteInfo.update_time/}</td>
-      <td align="center"><a  href="javascript:;" onclick="voteDelete('{tpl:$voteInfo.vote_id/}','{tpl:$voteInfo.vote_name/}')">删除</a>
- |  <a href="javascript:;" onclick="voteModify('{tpl:$voteInfo.vote_id/}');">修改</a> |  <a href="{tpl:$this.sign/}&ac=vote.detail&vote_id={tpl:$voteInfo.vote_id/}">详情</a></td>
+      <td align="center"><a  href="javascript:;" onclick="voteDelete('{tpl:$voteInfo.vote_id/}','{tpl:$voteInfo.vote_name/}')"><img src="/icon/del.png" width='30' height='30'/></a>
+ |  <a href="javascript:;" onclick="voteModify('{tpl:$voteInfo.vote_id/}');"><img src="/icon/edit2.png" width='30' height='30'/></a> |  <a href="{tpl:$this.sign/}&ac=vote.detail&vote_id={tpl:$voteInfo.vote_id/}">详情</a></td>
   </tr>
 {/tpl:loop}
 </table>

@@ -1,7 +1,7 @@
 {tpl:tpl contentHeader/}
 
 <fieldset>
-	[ <a href="{tpl:$this.sign/}">返回</a> ]
+	[ <a href="{tpl:$this.sign/}"><img src="/icon/return.png" width='30' height='30'/></a> ]
 </fieldset>
 <div class="br_bottom"></div>
 <form id="boutique_update_form" name="boutique_update_form" action="{tpl:$this.sign/}&ac=list.update" method="post">

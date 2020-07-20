@@ -18,7 +18,7 @@ function pageModify(mid){
 </script>
 
 <fieldset><legend>操作</legend>
-[ <a href="javascript:;" id="add_page">添加页面</a> ]
+[ <a href="javascript:;" id="add_page"><img src="/icon/add.png" width='30' height='30'/></a> ]
 </fieldset>
 
 <fieldset><legend>页面列表 </legend>
@@ -50,8 +50,8 @@ function pageModify(mid){
       <td align="center">{tpl:$pageInfo.page_sign/}</td>
       <td align="center">{tpl:$pageInfo.company_name/}</td>
     <td align="center">{tpl:$pageInfo.update_time/}</td>
-      <td align="center"><a  href="javascript:;" onclick="pageDelete('{tpl:$pageInfo.page_id/}','{tpl:$pageInfo.page_name/}')">删除</a>
- |  <a href="javascript:;" onclick="pageModify('{tpl:$pageInfo.page_id/}');">修改</a> | <a href="{tpl:$this.sign/}&ac=page.detail&page_id={tpl:$pageInfo.page_id/}">页面元素 ({tpl:$pageInfo.element_count/})</a> | <a target="_blank" href="{tpl:$pageInfo.test_url/}?{tpl:$pageInfo.page_params/}">测试页面</a></td>
+      <td align="center"><a  href="javascript:;" onclick="pageDelete('{tpl:$pageInfo.page_id/}','{tpl:$pageInfo.page_name/}')"><img src="/icon/del.png" width='30' height='30'/></a>
+ |  <a href="javascript:;" onclick="pageModify('{tpl:$pageInfo.page_id/}');"><img src="/icon/edit2.png" width='30' height='30'/></a> | <a href="{tpl:$this.sign/}&ac=page.detail&page_id={tpl:$pageInfo.page_id/}">页面元素 ({tpl:$pageInfo.element_count/})</a> | <a target="_blank" href="{tpl:$pageInfo.test_url/}?{tpl:$pageInfo.page_params/}">测试页面</a></td>
   </tr>
 {/tpl:loop}
 </table>

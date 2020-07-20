@@ -19,7 +19,7 @@
 {/tpl:loop}
 
 <tr class="noborder"><td colspan="22">
-<button type="submit">修改</button>
+<button type="submit"><img src="/icon/edit2.png" width='30' height='30'/></button>
 </td></tr>
 </table>
 </form>

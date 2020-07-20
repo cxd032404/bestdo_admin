@@ -17,7 +17,7 @@ function pageElementModify(e_id){
 
 </script>
 <fieldset>
-[ <a href="{tpl:$this.sign/}&company_id={tpl:$pageInfo.company_id/}">返回</a> | <a href="javascript:;" id="add_page_element">添加页面元素</a> ]
+[ <a href="{tpl:$this.sign/}&company_id={tpl:$pageInfo.company_id/}"><img src="/icon/return.png" width='30' height='30'/></a> | <a href="javascript:;" id="add_page_element"><img src="/icon/add.png" width='30' height='30'/></a> ]
 </fieldset>
 <input type="hidden" id="page_id" name="page_id" value="{tpl:$pageInfo.page_id/}" />
 <input type="hidden" id="page_name" name="page_name" value="{tpl:$pageInfo.page_name/}" />
@@ -38,8 +38,8 @@ function pageElementModify(e_id){
     <td align="center">{tpl:$elementInfo.element_sign/}</td>
     <td align="center">{tpl:$elementInfo.element_type_name/}-{tpl:$elementInfo.element_type/}</td>
     <td align="center">{tpl:$elementInfo.update_time/}</td>
-      <td align="center"><a  href="javascript:;" onclick="pageElementDelete('{tpl:$elementInfo.element_id/}','{tpl:$elementInfo.element_name/}')">删除</a>
- |  <a href="javascript:;" onclick="pageElementModify('{tpl:$elementInfo.element_id/}');">修改</a>
+      <td align="center"><a  href="javascript:;" onclick="pageElementDelete('{tpl:$elementInfo.element_id/}','{tpl:$elementInfo.element_name/}')"><img src="/icon/del.png" width='30' height='30'/></a>
+ |  <a href="javascript:;" onclick="pageElementModify('{tpl:$elementInfo.element_id/}');"><img src="/icon/edit2.png" width='30' height='30'/></a>
         {tpl:if($elementInfo.editable==1)}
         |  <a href="{tpl:$this.sign/}&ac=page.element.detail&element_id={tpl:$elementInfo.element_id/}">元素详情</a>
         {/tpl:if}

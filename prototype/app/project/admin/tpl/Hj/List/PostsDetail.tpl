@@ -4,7 +4,7 @@
 		souceDeleteBox = divBox.confirmBox({content:'是否确认删除吗?删除后将不可恢复，需要重新上传',ok:function(){location.href = '{tpl:$sourceRemoveUrl/}&post_id=' + pid + '&sid='+ sid;}});
 	}
 </script>
-[ <a href="{tpl:$this.sign/}&ac=list&list_id={tpl:$postsInfo.list_id/}">返回</a> ]
+[ <a href="{tpl:$this.sign/}&ac=list&list_id={tpl:$postsInfo.list_id/}"><img src="/icon/return.png" width='30' height='30'/></a> ]
 <div class="br_bottom"></div>
 <form id="post_form" name="post_form" enctype="multipart/form-data" action="{tpl:$postUrl/}" method="post">
 <input type="hidden" name="post_id" id="post_id" value="{tpl:$postsInfo.post_id/}" />
@@ -18,7 +18,7 @@
 		<tr class="hover">
 			{tpl:if($i==1)}<td rowspan="{tpl:$postsInfo.source func="count(@@)"/}">已上传：</td>{/tpl:if}
 			<td align="left">
-				<img src="<?php echo $file.(strpos($key,'video')>0?$video_suffix:'');?>" width="30px;" height="30px;"/> <a  href="javascript:;" onclick="sourceDelete('{tpl:$postsInfo.post_id/}','{tpl:$key/}')">删除</a></td>
+				<img src="<?php echo $file.(strpos($key,'video')>0?$video_suffix:'');?>" width="30px;" height="30px;"/> <a  href="javascript:;" onclick="sourceDelete('{tpl:$postsInfo.post_id/}','{tpl:$key/}')"><img src="/icon/del.png" width='30' height='30'/></a></td>
 		</tr>
 		<?php $i++;}?>
 		<?php
