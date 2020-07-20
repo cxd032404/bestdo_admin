@@ -42,7 +42,7 @@
 	$('#post_submit').click(function(){
 		var options = {
 			dataType:'json',
-			babeforeSubmit:function(formData, jqForm, options) {},
+			beforeSubmit:function(formData, jqForm, options) {},
 			success:function(jsonResponse) {
 				if (jsonResponse.success == "false") {
 					divBox.alertBox(jsonResponse.msg,function(){});
