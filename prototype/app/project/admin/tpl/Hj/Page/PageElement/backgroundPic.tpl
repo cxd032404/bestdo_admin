@@ -7,7 +7,7 @@
 <input type="hidden" name="page_id" id="page_id" value="{tpl:$pageInfo.page_id/}" />
 
 	<fieldset>
-	[ <a href="{tpl:$this.sign/}&ac=page.detail&page_id={tpl:$elementInfo.page_id/}"><img src="/icon/return.png" width='30' height='30'/></a> ]
+	[ <a class = "pb_btn_light_1" href="{tpl:$this.sign/}&ac=page.detail&page_id={tpl:$elementInfo.page_id/}">返回</a> ]
 </fieldset>
 <fieldset><legend>页面元素详情</legend>
 

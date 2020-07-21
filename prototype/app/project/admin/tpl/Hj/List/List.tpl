@@ -22,7 +22,7 @@ function post(lid){
 </script>
 
 <fieldset><legend>操作</legend>
-[ <a href="{tpl:$return_url/}"><img src="/icon/return.png" width='30' height='30'/></a> | <a href="javascript:;" id="post">发布</a> ]
+[ <a class = "pb_btn_light_1" href="{tpl:$return_url/}">返回</a> | <a class = "pb_btn_dark_1" href="javascript:;" id="post">发布</a> ]
 </fieldset>
 
 <fieldset><legend>列表详情</legend>
@@ -52,11 +52,11 @@ function post(lid){
     <td align="center">{tpl:$postsInfo.update_time/}</td>
       <td align="center">
         {tpl:if($postsInfo.visible==1)}
-        <a href="{tpl:$display_url/}&post_id={tpl:$postsInfo.post_id/}">隐藏</a>
+        <a class = "pb_btn_grey_1" href="{tpl:$display_url/}&post_id={tpl:$postsInfo.post_id/}">隐藏</a>
         {tpl:else}
-        <a href="{tpl:$display_url/}&post_id={tpl:$postsInfo.post_id/}&display=1">显示</a>
+        <a class = "pb_btn_dark_1" href="{tpl:$display_url/}&post_id={tpl:$postsInfo.post_id/}&display=1">显示</a>
         {/tpl:if}
-        | <a href="{tpl:$this.sign/}&ac=posts.detail&post_id={tpl:$postsInfo.post_id/}&currentPage={tpl:$currentPage/}">详情</a></td>
+        | <a class = "pb_btn_light_1" href="{tpl:$this.sign/}&ac=posts.detail&post_id={tpl:$postsInfo.post_id/}&currentPage={tpl:$currentPage/}">详情</a></td>
   </tr>
 {/tpl:loop}
   <tr><th colspan="10" align="center" class="rowtip">{tpl:$page_content/}</th></tr>

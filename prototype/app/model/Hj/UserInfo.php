@@ -707,7 +707,7 @@ class Hj_UserInfo extends Base_Widget
         //获取用户数量
         if(isset($params['getCount'])&&$params['getCount']==1)
         {
-            $UserCount = $this->getUserActivityLogCount($whereCondition);
+            $UserCount = $this->getUserActivityLogCount($params);
         }
         else
         {
@@ -750,10 +750,6 @@ class Hj_UserInfo extends Base_Widget
         $whereUser = (isset($params['user_id']) && ($params['user_id']>0))?" user_id = '".$params['user_id']."' ":"";
         //所有查询条件置入数组
         $whereCondition = array($whereCompany,$whereActivity,$whereUser);
-        //生成条件列
-        $where = Base_common::getSqlWhere($whereCondition);
-        //生成条件列
-        $where = Base_common::getSqlWhere($whereCondition);
         //生成条件列
         $where = Base_common::getSqlWhere($whereCondition);
         $sql = "SELECT $fields FROM $table_to_process where 1 ".$where;
