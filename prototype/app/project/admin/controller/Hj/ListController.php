@@ -467,7 +467,7 @@ class Hj_ListController extends AbstractController
             //获取列表类型列表
             $listTypeList = $this->oList->getListType();
             $typeInfo  = $listTypeList[$listInfo['list_type']];
-            $max_files = 10;
+            $max_files = $listInfo['detail']['limit']['pic'] + $listInfo['detail']['limit']['video'];
             $postUrl = $this->config->apiUrl.$this->config->api['api']['post'];
             $token = (new Hj_UserInfo())->getTokenForManager($this->manager->id);
             //渲染模版
@@ -566,7 +566,8 @@ class Hj_ListController extends AbstractController
             $listInfo = $this->oList->getList($postsInfo['list_id'],'list_id,list_type,detail');
             //数据解包
             $listInfo['detail'] = json_decode($listInfo['detail'],true);
-            $max_files = 10;
+            $max_files = $listInfo['detail']['limit']['pic'] + $listInfo['detail']['limit']['video'] -count($postsInfo['source']);
+
             //获取列表类型列表
             $listTypeList = $this->oList->getListType();
             $typeInfo  = $listTypeList[$listInfo['list_type']];

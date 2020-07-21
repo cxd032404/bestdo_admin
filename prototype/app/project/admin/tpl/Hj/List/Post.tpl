@@ -44,7 +44,6 @@
 			dataType:'json',
 			beforeSubmit:function(formData, jqForm, options) {},
 			success:function(jsonResponse) {
-
 				if (jsonResponse.success == "false") {
 					divBox.alertBox(jsonResponse.msg,function(){});
 				} else {
