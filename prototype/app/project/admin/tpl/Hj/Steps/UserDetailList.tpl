@@ -12,7 +12,8 @@
         <option value="{tpl:$company_info.company_id/}"{tpl:if($company_info.company_id==$params.company_id)}selected="selected"{/tpl:if} >{tpl:$company_info.company_name/}</option>
         {/tpl:loop}
     </select>
-    部门:
+    姓名:<input type="text" class="span3" name="true_name" value="{tpl:$params.true_name/}" />
+        <p>部门:
     <select name="department_id_1"  id="department_id_1" size="1" onchange="getDepartmentByCompany_2()">
         <option value="0" {tpl:if(0==$params.department_id_1)}selected="selected"{/tpl:if} >不选择</option>
         {tpl:loop $departmentList_1  $d_info}
