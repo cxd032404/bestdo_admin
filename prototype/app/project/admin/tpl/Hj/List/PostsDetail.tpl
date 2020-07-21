@@ -12,6 +12,10 @@
 	<input type="hidden" name="list_id" id="list_id" value="{tpl:$postsInfo.list_id/}" />
 	<input type="hidden" name="UserToken" id="UserToken" value="{tpl:$token/}" />
 	<table width="99%" align="center" class="table table-bordered table-striped" >
+	<tr class="hover"><td>标题</td>
+		<td align="left"><input type="text" class="span5" name="title"  id="title" value="{tpl:$postsInfo.title/}" size="50" /></td>
+		</td>
+	</tr>
 		<?php $i = 1;foreach($postsInfo['source'] as $key => $file)
 		{
 		?>
@@ -55,10 +59,6 @@
 		<?php
 		}?>
 		{/tpl:if}
-		<tr class="hover"><td>标题</td>
-			<td align="left"><input type="text" class="span3" name="title"  id="title" value="{tpl:$postsInfo.title/}" size="50" /></td>
-			</td>
-		</tr>
 		{tpl:if($listInfo.detail.limit.textarea==1)}
 			<tr class="hover"><td colspan = 2>文本</td></tr>
 			<tr class="hover"><td colspan = 2>

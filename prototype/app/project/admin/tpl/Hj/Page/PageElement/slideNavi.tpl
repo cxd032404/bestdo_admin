@@ -10,7 +10,7 @@
 	[ <a href="{tpl:$this.sign/}&ac=page.detail&page_id={tpl:$elementInfo.page_id/}"><img src="/icon/return.png" width='30' height='30'/></a> ]
 </fieldset>
 <fieldset><legend>页面元素详情</legend>
-<table width="99%" align="center" class="table table-bordered table-striped" width="99%">
+<table width="99%" align="center" class="table table-bordered table-striped">
 <tr class="hover">
 <td>元素名称</td>
 <td align="left">{tpl:$elementInfo.element_name/}</td>

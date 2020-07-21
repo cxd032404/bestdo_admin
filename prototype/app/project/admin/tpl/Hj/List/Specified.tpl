@@ -65,7 +65,7 @@ function post(lid){
       <td align="center">{tpl:$listInfo.update_time/}</td>
       <td align="center"><a  href="javascript:;" onclick="listDelete('{tpl:$listInfo.list_id/}','{tpl:$listInfo.list_name/}')"><img src="/icon/del.png" width='30' height='30'/></a>
  |  <a href="javascript:;" onclick="listModify('{tpl:$listInfo.list_id/}');"><img src="/icon/edit2.png" width='30' height='30'/></a>
-          | <a href="{tpl:$this.sign/}&ac=list&list_id={tpl:$listInfo.list_id/}&currentPage={tpl:$currentPage/}">列表 {tpl:if($listInfo.posts_count>0)}({tpl:$listInfo.posts_count/}){/tpl:if} </a></td>
+          | <a href="{tpl:$this.sign/}&ac=list&list_id={tpl:$listInfo.list_id/}&currentPage={tpl:$currentPage/}"><img src="/icon/list.png" width='30' height='30'/> {tpl:if($listInfo.posts_count>0)}({tpl:$listInfo.posts_count/}){/tpl:if} </a></td>
   </tr>
 {/tpl:loop}
 </table>

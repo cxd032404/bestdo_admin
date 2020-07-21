@@ -2,7 +2,7 @@
 <div class="br_bottom"></div>
 <form id="credit_update_form" name="credit_update_form" action="{tpl:$this.sign/}&ac=credit.update" method="post">
 <input type="hidden" name="CreditId" value="{tpl:$CreditInfo.CreditId/}" />
-<table width="99%" align="center" class="table table-bordered table-striped" widtd="99%">
+<table width="99%" align="center" class="table table-bordered table-striped">
 <tr class="hover">
 <td>积分类目名称</td>
 <td align="left"><input name="CreditName" type="text" class="span2" id="CreditName" value="{tpl:$CreditInfo.CreditName/}" size="50" /></td>

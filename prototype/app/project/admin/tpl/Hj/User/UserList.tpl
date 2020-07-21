@@ -48,18 +48,19 @@
     <input type="submit" name="submit" value="查询" />{tpl:$export_var/}
 </form>
 <fieldset><legend>用户列表</legend>
-<table width="99%" align="center" class="table table-bordered table-striped">
+<div style="height: auto;overflow: scroll !important;width: 60%;">
+    <table  align="center" class="table table-bordered table-striped" style="overflow: scroll;max-width: none;width: 1800px;">
       <tr>
-        <th align="center" class="rowtip">用户ID</th>
-          <th align="center" class="rowtip">企业</th>
-          <th align="center" class="rowtip">部门</th>
-          <th align="center" class="rowtip">真实姓名</th>
-          <th align="center" class="rowtip">昵称</th>
-        <th align="center" class="rowtip">联系电话</th>
-        <th align="center" class="rowtip">性别</th>
-        <th align="center" class="rowtip">注册时间</th>
-        <th align="center" class="rowtip">最后登陆</th>
-        <th align="center" class="rowtip">操作</th>
+        <th align="center" width = "5%" class="rowtip">用户ID</th>
+          <th align="center" width = "10%" class="rowtip">企业</th>
+          <th align="center" width = "10%" class="rowtip">部门</th>
+          <th align="center" width = "10%" class="rowtip">真实姓名</th>
+          <th align="center" width = "10%" class="rowtip">昵称</th>
+        <th align="center" width = "5%" class="rowtip">联系电话</th>
+        <th align="center" width = "3%" class="rowtip">性别</th>
+        <th align="center" width = "10%" class="rowtip">注册时间</th>
+        <th align="center" width = "10%" class="rowtip">最后登陆</th>
+        <th align="center" width = "20%" class="rowtip">操作</th>
       </tr>
     {tpl:loop $UserList.UserList $UserInfo}
       <tr class="hover">
@@ -82,7 +83,7 @@
       </tr>
     {/tpl:loop}
     <tr><th colspan="10" align="center" class="rowtip">{tpl:$page_content/}</th></tr>
-
 </table>
+</div>
 </fieldset>
 {tpl:tpl contentFooter/}

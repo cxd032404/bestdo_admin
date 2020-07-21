@@ -38,7 +38,6 @@ function clubModify(mid){
     <th align="center" class="rowtip">对应企业</th>
     <th align="center" class="rowtip">人数限制</th>
     <th align="center" class="rowtip">是否允许加入</th>
-    <th align="center" class="rowtip">更新时间</th>
     <th align="center" class="rowtip">操作</th>
   </tr>
 
@@ -49,9 +48,8 @@ function clubModify(mid){
       <td align="center">{tpl:$clubInfo.company_name/}</td>
       <td align="center">{tpl:$clubInfo.member_limit/}</td>
       <td align="center">{tpl:if($clubInfo.allow_enter==1)}允许{tpl:else}拒绝{/tpl:if}</td>
-      <td align="center">{tpl:$clubInfo.update_time/}</td>
       <td align="center"><a  href="javascript:;" onclick="clubDelete('{tpl:$clubInfo.club_id/}','{tpl:$clubInfo.club_name/}')"><img src="/icon/del.png" width='30' height='30'/></a>
- | <a href="javascript:;" onclick="clubModify('{tpl:$clubInfo.club_id/}');"><img src="/icon/edit2.png" width='30' height='30'/></a> | <a href="{tpl:$this.sign/}&ac=member.list&club_id={tpl:$clubInfo.club_id/}">名单{tpl:if($clubInfo.member_count>0)}({tpl:$clubInfo.member_count/}){/tpl:if}</a> | <a href="{tpl:$this.sign/}&ac=member.log&club_id={tpl:$clubInfo.club_id/}">记录</a> | <a href="{tpl:$this.sign/}&ac=banner&club_id={tpl:$clubInfo.club_id/}">Banner({tpl:$clubInfo.detail.banner func="count(@@)"/})</a></td>
+ | <a href="javascript:;" onclick="clubModify('{tpl:$clubInfo.club_id/}');"><img src="/icon/edit2.png" width='30' height='30'/></a> | <a href="{tpl:$this.sign/}&ac=member.list&club_id={tpl:$clubInfo.club_id/}"><img src="/icon/userList.png" width='30' height='30'/>{tpl:if($clubInfo.member_count>0)}({tpl:$clubInfo.member_count/}){/tpl:if}</a> | <a href="{tpl:$this.sign/}&ac=member.log&club_id={tpl:$clubInfo.club_id/}"><img src="/icon/list.png" width='30' height='30'/></a> | <a href="{tpl:$this.sign/}&ac=banner&club_id={tpl:$clubInfo.club_id/}">Banner({tpl:$clubInfo.detail.banner func="count(@@)"/})</a></td>
   </tr>
 {/tpl:loop}
 </table>
