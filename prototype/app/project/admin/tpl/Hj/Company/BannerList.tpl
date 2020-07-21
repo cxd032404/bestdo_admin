@@ -23,7 +23,7 @@
 	<input type="hidden" name="company_id" id="company_id" value="{tpl:$companyInfo.company_id/}" />
 	<input type="hidden" name="company_name" id="company_name" value="{tpl:$companyInfo.company_name/}" />
 	<fieldset>
-		[ <a href="?{tpl:$currentPage func='urldecode(@@)'/}&company_id={tpl:$companyInfo.company_id/}"><img src="/icon/return.png" width='30' height='30'/></a> | <a href="javascript:;" id="add_banner"><img src="/icon/add.png" width='30' height='30'/></a> ]
+		[ <a class = "pb_btn_light_1" href="?{tpl:$currentPage func='urldecode(@@)'/}&company_id={tpl:$companyInfo.company_id/}">返回</a> | <a class = "pb_btn_dark_1" href="javascript:;" id="add_banner">新增</a> ]
 	</fieldset>
 	<fieldset><legend>{tpl:$typeName/}列表</legend>
 		<table width="99%" align="center" class="table table-bordered table-striped" >
@@ -32,8 +32,8 @@
 			<tr class="hover">
 				<td align="center"><img src="{tpl:$picInfo.img_url/}" width='150' height='130'/><p>文字：{tpl:$picInfo.text/}<p>跳转：{tpl:$picInfo.img_jump_url/}<p>标签：{tpl:$picInfo.title/}<p>排序：{tpl:$picInfo.sort/}<p>
 				<p>生效时间：<p>{tpl:$picInfo.start_time/}<p>{tpl:$picInfo.end_time/}</td>
-				<td align="center"><a  href="javascript:;" onclick="BannerDelete('{tpl:$pos/}')"><img src="/icon/del.png" width='30' height='30'/></a>
-					|  <a href="javascript:;" onclick="BannerModify('{tpl:$pos/}');"><img src="/icon/edit2.png" width='30' height='30'/></a></td>
+				<td align="center"><a class = "pb_btn_grey_1" href="javascript:;" onclick="BannerDelete('{tpl:$pos/}')">删除</a>
+					|  <a class = "pb_btn_light_1" href="javascript:;" onclick="BannerModify('{tpl:$pos/}');">修改</a></td>
 			</tr>
 			{/tpl:loop}
 		</table>
