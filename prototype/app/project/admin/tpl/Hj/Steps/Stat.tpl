@@ -34,7 +34,7 @@
         {/tpl:loop}
     </select>
 
-    <input type="submit" name="submit" value="查询" />{tpl:$export_var/}
+    <input type="image" name="submit" value="查询" src="/icon/search.png" width='30' height='30'/>{tpl:$export_var/}
 </form>
 <fieldset><legend>详情列表</legend>
 <table width="99%" align="center" class="table table-bordered table-striped">

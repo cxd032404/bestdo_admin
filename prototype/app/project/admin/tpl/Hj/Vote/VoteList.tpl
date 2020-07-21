@@ -29,7 +29,7 @@ function voteModify(mid){
       <option value="{tpl:$activity_info.activity_id/}"{tpl:if($activity_info.activity_id==$activity_id)}selected="selected"{/tpl:if} >{tpl:$activity_info.activity_name/}</option>
       {/tpl:loop}
     </select>
-  <input type="submit" name="submit" value="查询" />
+  <input type="image" name="submit" value="查询" src="/icon/search.png" width='30' height='30'/>
 </form>
 <table width="99%" align="center" class="table table-bordered table-striped">
   <tr>

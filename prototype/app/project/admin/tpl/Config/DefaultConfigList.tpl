@@ -28,7 +28,7 @@ function configModify(mid){
             <option value="{tpl:$type/}"{tpl:if($type==$config_type)}selected="selected"{/tpl:if} >{tpl:$name/}</option>
             {/tpl:loop}
         </select>
-        <input type="submit" name="submit" value="查询" />
+        <input type="image" name="submit" value="查询" src="/icon/search.png" width='30' height='30'/>
     </form>
 <table width="99%" align="center" class="table table-bordered table-striped">
   <tr>
