@@ -123,5 +123,14 @@ class Hj_Posts extends Base_Widget
 		$table_to_process = Base_Widget::getDbTable($this->table);
 		return $this->db->delete($table_to_process, '`list_id` = ?', $list_id);
 	}
+	/*
+	 * 条件查询post
+	 */
+    public function getPost($list_id,$fields = '*'){
+        $where = 'list_id ='.$list_id;
+        $table_to_process = Base_Widget::getDbTable($this->table);
+        $sql = "select $fields from $table_to_process where $where";
+        return $this->db->getAll($sql);
+    }
 
 }

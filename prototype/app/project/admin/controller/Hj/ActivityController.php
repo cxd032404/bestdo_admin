@@ -20,6 +20,8 @@ class Hj_ActivityController extends AbstractController
 	protected $oCompany;
 	protected $oActivityElement;
     protected $oUserInfo;
+    protected $oList;
+    protected $oPosts;
 
 	/**
 	 * 初始化
@@ -33,6 +35,8 @@ class Hj_ActivityController extends AbstractController
 		$this->oCompany = new Hj_Company();
         $this->oUserInfo = new Hj_UserInfo();
         $this->oClub = new Hj_Club();
+        $this->oList = new Hj_List();
+        $this->oPosts = new Hj_Posts();
     }
 	//活动配置列表页面
 	public function indexAction()
@@ -82,12 +86,25 @@ class Hj_ActivityController extends AbstractController
                         }
                     }
                 }
+                $list_info = $this->oList->getlists($activityInfo['activity_id']);
+                if($list_info)
+                {
+                    $activityList['ActivityList'][$key]['download'] = 1;
+                }else
+                {
+                    $activityList['ActivityList'][$key]['download'] = 0;
+                }
+
                 $activityList['ActivityList'][$key]['create_user_name'] = $userList[$activityInfo['create_user_id']]['true_name']??"未知用户";
                 $activityList['ActivityList'][$key]['club_name'] = $clubList[$activityInfo['club_id']]['club_name']??"未指定";
             }
             $page_url = Base_Common::getUrl('',$this->ctl,'index',$params)."&Page=~page~";
             $page_content =  base_common::multi($activityList['ActivityCount'], $page_url, $params['Page'], $params['PageSize'], 10, $maxpage = 100, $prevWord = '上一页', $nextWord = '下一页');
-			//渲染模版
+
+
+
+
+            //渲染模版
 			include $this->tpl('Hj_Activity_ActivityList');
 		}
 		else
@@ -380,5 +397,70 @@ class Hj_ActivityController extends AbstractController
             $home = $this->sign;
             include $this->tpl('403');
         }
+    }
+    
+    /*
+     * 下载活动详细信息
+     */
+    public function activityDownloadAction()
+    {
+        $activity_id = $this->request->get('activity_id');
+        $activityInfo = $this->oActivity->getActivity($activity_id, '*');
+        $activity_name = $activityInfo['activity_name'];
+        $list_info = $this->oList->getlists($activity_id);
+
+
+//        $oExcel = new Third_Excel();
+//        $FileName = (iconv('gbk', 'utf-8', $activity_name . '参赛作品'));
+//        $oExcel_file = $oExcel->download($FileName);
+        //多个列表
+        foreach ($list_info as $kye => $value) {
+            $userList = [];
+            $post_list = $this->oPosts->getPost($value['list_id']);
+            foreach ($post_list as $key =>$post_info)
+            {
+                $user_info = $this->oUserInfo->getUser($post_info['user_id'],'user_id,true_name');
+
+                $userList[$post_info['user_id']]['user_id'] = $user_info['user_id']??$post_info['user_id'];
+                $userList[$post_info['user_id']]['true_name'] = $user_info['true_name']??'未知用户';
+                if(!isset($userList[$post_info['user_id']]['kudos']))
+                {
+                    $userList[$post_info['user_id']]['kudos'] = $post_info['kudos'];
+                }else
+                {
+                    $userList[$post_info['user_id']]['kudos'] = $userList[$post_info['user_id']]['kudos']+$post_info['kudos'];
+                }
+                if(!isset($userList[$post_info['user_id']]['postCount']))
+                {
+                    $userList[$post_info['user_id']]['postCount'] = 1;
+                }else
+                {
+                    $userList[$post_info['user_id']]['postCount'] = $userList[$post_info['user_id']]['postCount']+1;
+                }
+            }
+            $userList = array_values($userList);
+            $kudos = array_column($userList,'kudos');
+            array_multisort($kudos,SORT_DESC,$userList);
+            print_r($userList);
+
+//
+//            $oExcel_file->addSheet($value['list_name']);
+//            //标题栏
+//            $title = array("用户ID", "姓名", "文章数量","投票数");
+//            $oExcel->addRows(array($title));
+//            //
+//            foreach ($userList as $userId => $userInfo) {
+//                $t = array();
+//                $t['UserId'] = $userInfo['user_id'];
+//                $t['UserName'] = $userInfo['true_name'];
+//                $t['postCount'] = $userInfo['postCount'];
+//                $t['kudos'] = $userInfo['kudos'];
+//                $oExcel->addRows(array($t));
+//                unset($t);
+//            }
+//            unset($userList);
+//            $oExcel->closeSheet();
+        }
+      //  $oExcel->close();
     }
 }
