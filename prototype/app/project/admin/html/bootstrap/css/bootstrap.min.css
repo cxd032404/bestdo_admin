@@ -21,7 +21,7 @@
     font-weight: 400;
     text-align: center;
     outline: none !important;
-    padding: 6px 0px;
+    line-height: 35px;
     vertical-align: middle;
     color:#0486FE;
 }
@@ -37,7 +37,7 @@
     font-weight: 400;
     text-align: center;
     outline: none !important;
-    padding: 6px 0px;
+    line-height: 35px;
     vertical-align: middle;
     color:#0486FE;
 }
@@ -53,7 +53,7 @@
     font-weight: 400;
     text-align: center;
     outline: none !important;
-    padding: 6px 0px;
+    line-height: 35px;
     vertical-align: middle;
     color:#0486FE;
 }
@@ -70,6 +70,7 @@
     font-weight:400;
     text-align: center;
     line-height: 35px;
+    vertical-align: middle;
 }
 .pb_btn_dark_2{
     display: inline-block;
@@ -84,6 +85,7 @@
     font-weight:400;
     text-align: center;
     line-height: 35px;
+    vertical-align: middle;
 }
 .pb_btn_grey_1{
     display: inline-block;
@@ -97,6 +99,7 @@
     font-weight:400;
     color:rgba(102,102,102,1);
     text-align: center;
+    vertical-align: middle;
     line-height:35px;
 }
 .pb_btn_grey_2{
@@ -112,6 +115,7 @@
     color:rgba(102,102,102,1);
     text-align: center;
     line-height:35px;
+    vertical-align: middle;
 }
 .pb_btn_grey_3{
     display: inline-block;
@@ -126,4 +130,5 @@
     color:rgba(102,102,102,1);
     text-align: center;
     line-height:35px;
+    vertical-align: middle;
 }
