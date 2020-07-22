@@ -26,16 +26,23 @@
 		[ <a class = "pb_btn_light_1" href="?{tpl:$currentPage func='urldecode(@@)'/}&company_id={tpl:$companyInfo.company_id/}">返回</a> | <a class = "pb_btn_dark_1" href="javascript:;" id="add_banner">新增</a> ]
 	</fieldset>
 	<fieldset><legend>{tpl:$typeName/}列表</legend>
-		<table width="99%" align="center" class="table table-bordered table-striped" >
-			<tr class="hover"><td colspan="2">Banner列表</td></tr>
+		<div style="height: auto;overflow: scroll !important;width: 80%;">
+			<table  align="center" class="table table-bordered table-striped" style="overflow: scroll;max-width: none;width: 1200px;">
+				<tr class="hover">
+					<td width = "15%">Banner</td><td>文字</td><td>跳转链接</td><td>标签</td><td width = "5%">排序</td><td width = "12%">生效时间</td><td width = "15%">操作</td></tr>
 			{tpl:loop $bannerList $pos $picInfo}
 			<tr class="hover">
-				<td align="center"><img src="{tpl:$picInfo.img_url/}" width='150' height='130'/><p>文字：{tpl:$picInfo.text/}<p>跳转：{tpl:$picInfo.img_jump_url/}<p>标签：{tpl:$picInfo.title/}<p>排序：{tpl:$picInfo.sort/}<p>
-				<p>生效时间：<p>{tpl:$picInfo.start_time/}<p>{tpl:$picInfo.end_time/}</td>
+				<td align="center"><img src="{tpl:$picInfo.img_url/}" width='150' height='130'/></td>
+				<td align="center">{tpl:$picInfo.text/}</td>
+				<td align="center">{tpl:$picInfo.img_jump_url/}</td>
+				<td align="center">{tpl:$picInfo.title/}</td>
+				<td align="center">{tpl:$picInfo.sort/}</td>
+				<td align="center">{tpl:$picInfo.start_time/}<p>{tpl:$picInfo.end_time/}</td>
 				<td align="center"><a class = "pb_btn_grey_1" href="javascript:;" onclick="BannerDelete('{tpl:$pos/}')">删除</a>
 					|  <a class = "pb_btn_light_1" href="javascript:;" onclick="BannerModify('{tpl:$pos/}');">修改</a></td>
 			</tr>
 			{/tpl:loop}
-		</table>
+			</table>
+		</div>
 </form>
 {tpl:tpl contentFooter/}
