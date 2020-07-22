@@ -26,7 +26,7 @@ function token(mid,title,name){
 </script>
 
 <fieldset><legend>操作</legend>
-[ <a href="javascript:;" id="add_manager"><img src="/icon/add.png" width='30' height='30'/></a> ]
+[ <a class = "pb_btn_dark_1" href="javascript:;" id="add_manager">新增</a> ]
 
 <form id="form1" name="form1" method="post" action="">
   
@@ -77,14 +77,15 @@ function token(mid,title,name){
 <td>{tpl:$row.reg_time/}</td>
 
 <td>
-<a href="javascript:;" onclick="managerModify({tpl:$row.id/});"><img src="/icon/edit2.png" width='30' height='30'/></a> |
+<a class = "pb_btn_light_1" href="javascript:;" onclick="managerModify({tpl:$row.id/});">修改</a> |
 
 <?php if($this->manager->name != $row['name']): ?>
-<a  href="javascript:;" onclick="promptDelete('{tpl:$row.id/}','{tpl:$row.name/}')"><img src="/icon/del.png" width='30' height='30'/></a> |
+<a  class = "pb_btn_dark_1" href="javascript:;" onclick="promptDelete('{tpl:$row.id/}','{tpl:$row.name/}')">删除</a> |
 <?php endif; ?>
 
-<a href="javascript:;" onclick="pwdReset('{tpl:$row.id/}','{tpl:$row.name/}');">重置密码</a>
-    | {tpl:if ($row.openid=="") } <a href="javascript:;" onclick="openIdBind('{tpl:$row.id/}','微信绑定','{tpl:$row.name/}')">微信绑定</a>{tpl:else}<a href="javascript:;" onclick="openIdBind('{tpl:$row.id/}','微信解绑','{tpl:$row.name/}')">微信解绑</a> | <a href="javascript:;" onclick="token('{tpl:$row.id/}','用户token','{tpl:$row.name/}')">用户token</a>{/tpl:if}
+<a class = "pb_btn_dark_1" href="javascript:;" onclick="pwdReset('{tpl:$row.id/}','{tpl:$row.name/}');">重置密码</a>
+    | {tpl:if ($row.openid=="") } <a class = "pb_btn_dark_1" href="javascript:;" onclick="openIdBind('{tpl:$row.id/}','微信绑定','{tpl:$row.name/}')">微信绑定</a>{tpl:else}<a class = "pb_btn_light_1" href="javascript:;" onclick="openIdBind('{tpl:$row.id/}','微信解绑','{tpl:$row.name/}')">微信解绑</a>
+    | <a class = "pb_btn_light_1" href="javascript:;" onclick="token('{tpl:$row.id/}','token','{tpl:$row.name/}')">token</a>{/tpl:if}
 </td>
 </tr>
 {/tpl:loop}

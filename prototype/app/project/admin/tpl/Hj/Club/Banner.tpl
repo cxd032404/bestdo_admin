@@ -21,7 +21,7 @@
 	<input type="hidden" name="club_id" id="club_id" value="{tpl:$clubInfo.club_id/}" />
 	<input type="hidden" name="club_name" id="club_name" value="{tpl:$clubInfo.club_name/}" />
 	<fieldset>
-		[ <a href="{tpl:$this.sign/}&company_id={tpl:$clubInfo.company_id/}"><img src="/icon/return.png" width='30' height='30'/></a> | <a href="javascript:;" id="add_banner"><img src="/icon/add.png" width='30' height='30'/></a> ]
+		[ <a href="{tpl:$this.sign/}&company_id={tpl:$clubInfo.company_id/}"><img src="/icon/return.png" width='30' height='30'/></a> | <a class = "pb_btn_dark_1" href="javascript:;" id="add_banner">新增</a> ]
 	</fieldset>
 	<fieldset><legend>banner列表</legend>
 		<table width="99%" align="center" class="table table-bordered table-striped" >
@@ -34,7 +34,7 @@
 			</tr>
 			{/tpl:loop}
 			<tr class="noborder"><td></td>
-				<td><button type="submit" id="club_banner_submit">提交</button></td>
+				<td><button type="submit" id="club_banner_submit" class="pb_btn_dark_1">提交</button></td>
 			</tr>
 		</table>
 </form>

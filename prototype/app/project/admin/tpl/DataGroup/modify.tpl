@@ -14,7 +14,7 @@
 	</tr>
 	<tr class="noborder">
 		<th></th><td>
-		<button type="submit" id="group_update_submit">提交</button></td>
+		<button type="submit" id="group_update_submit" class="pb_btn_dark_1">提交</button></td>
 	</tr>
 </table>
 </form>

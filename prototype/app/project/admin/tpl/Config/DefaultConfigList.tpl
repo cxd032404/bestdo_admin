@@ -17,7 +17,7 @@ function configModify(mid){
 </script>
 
 <fieldset><legend>操作</legend>
-[ <a href="javascript:;" id="add_config"><img src="/icon/add.png" width='30' height='30'/></a> ]
+[ <a class = "pb_btn_dark_1" href="javascript:;" id="add_config">新增</a> ]
 </fieldset>
 
 <fieldset><legend> 配置列表 </legend>

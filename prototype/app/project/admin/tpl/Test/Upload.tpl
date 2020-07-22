@@ -27,7 +27,7 @@
 			</td>
 		</tr>
 		<tr class="noborder"><td></td>
-			<td><button type="submit" id="upload_submit">提交</button></td>
+			<td><button type="submit" id="upload_submit" class="pb_btn_dark_1">提交</button></td>
 		</tr>
 	</table>
 </form>

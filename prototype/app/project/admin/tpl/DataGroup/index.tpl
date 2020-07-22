@@ -13,7 +13,7 @@ function promptDelete(p_id, p_name){
 }
 </script>
 <fieldset><legend>操作</legend>
-[ <a href="javascript:;" id="add_group"><img src="/icon/add.png" width='30' height='30'/></a> ]
+[ <a class = "pb_btn_dark_1" href="javascript:;" id="add_group">新增</a> ]
 </fieldset>
 
 <fieldset><legend>列表</legend>

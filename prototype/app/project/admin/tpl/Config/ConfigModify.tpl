@@ -16,7 +16,7 @@
 	<td align="left"><textarea style="width:450px; height:200px" name="content" id="content" >{tpl:$configInfo.content/}</textarea>
 </td>
 </tr>
-<td colspan = 2><button type="submit" id="config_update_submit">提交</button></td>
+<td colspan = 2><button type="submit" id="config_update_submit" class="pb_btn_dark_1">提交</button></td>
 </tr>
 </table>
 </form>

@@ -16,7 +16,7 @@
 <td align="left"><input type="text" class="span4" name="reason"  id="reason" value="{tpl:$clubInfo.club_sign/}" size="50" /></td>
 </tr>
 <tr class="noborder"><td></td>
-<td><button type="submit" id="leave_club_submit">提交</button></td>
+<td><button type="submit" id="leave_club_submit" class="pb_btn_dark_1">提交</button></td>
 </tr>
 </table>
 </form>

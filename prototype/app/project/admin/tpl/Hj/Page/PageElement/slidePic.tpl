@@ -24,7 +24,7 @@
 <input type="hidden" name="page_id" id="page_id" value="{tpl:$pageInfo.page_id/}" />
 
 	<fieldset>
-		[ <a class = "pb_btn_light_1" href="{tpl:$this.sign/}&ac=page.detail&page_id={tpl:$elementInfo.page_id/}">返回</a> | <a href="javascript:;" id="add_page_element_detail"><img src="/icon/add.png" width='30' height='30'/></a> ]
+		[ <a class = "pb_btn_light_1" href="{tpl:$this.sign/}&ac=page.detail&page_id={tpl:$elementInfo.page_id/}">返回</a> | <a class = "pb_btn_dark_1" href="javascript:;" id="add_page_element_detail"></a> ]
 	</fieldset>
 	<fieldset><legend>页面元素详情</legend>
 		<table width="99%" align="center" class="table table-bordered table-striped" >
@@ -49,7 +49,7 @@
 			</tr>
 			{/tpl:loop}
 			<tr class="noborder"><td></td>
-				<td><button type="submit" id="page_element_detail_update_submit">提交</button></td>
+				<td><button type="submit" id="page_element_detail_update_submit" class="pb_btn_dark_1">提交</button></td>
 			</tr>
 		</table>
 </form>

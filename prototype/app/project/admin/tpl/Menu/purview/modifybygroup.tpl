@@ -22,7 +22,7 @@
 {/tpl:loop}
 
 <tr class="noborder"><td colspan="22">
-<button type="submit" class="btn btn-info btn-small"><img src="/icon/edit2.png" width='30' height='30'/></button>
+<button type="submit" class="pb_btn_dark_1"><img src="/icon/edit2.png" width='30' height='30'/></button>
 </td></tr>
 </table>
 </form>

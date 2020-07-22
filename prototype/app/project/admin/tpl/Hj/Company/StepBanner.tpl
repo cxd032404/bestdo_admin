@@ -22,7 +22,7 @@
 	<input type="hidden" name="company_id" id="company_id" value="{tpl:$companyInfo.company_id/}" />
 	<input type="hidden" name="company_name" id="company_name" value="{tpl:$companyInfo.company_name/}" />
 	<fieldset>
-		[ <a href="?{tpl:$currentPage func='urldecode(@@)'/}&company_id={tpl:$companyInfo.company_id/}"><img src="/icon/return.png" width='30' height='30'/></a> | <a href="javascript:;" id="add_banner"><img src="/icon/add.png" width='30' height='30'/></a> ]
+		[ <a href="?{tpl:$currentPage func='urldecode(@@)'/}&company_id={tpl:$companyInfo.company_id/}"><img src="/icon/return.png" width='30' height='30'/></a> | <a class = "pb_btn_dark_1" href="javascript:;" id="add_banner">新增</a> ]
 	</fieldset>
 	<fieldset><legend>健步走banner列表</legend>
 		<table width="99%" align="center" class="table table-bordered table-striped" >

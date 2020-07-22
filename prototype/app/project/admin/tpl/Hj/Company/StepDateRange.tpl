@@ -21,7 +21,7 @@
 	<input type="hidden" name="company_id" id="company_id" value="{tpl:$companyInfo.company_id/}" />
 	<input type="hidden" name="company_name" id="company_name" value="{tpl:$companyInfo.company_name/}" />
 	<fieldset>
-		[ <a href="{tpl:$this.sign/}&company_id={tpl:$companyInfo.company_id/}"><img src="/icon/return.png" width='30' height='30'/></a> | <a href="javascript:;" id="add_date"><img src="/icon/add.png" width='30' height='30'/></a> ]
+		[ <a href="{tpl:$this.sign/}&company_id={tpl:$companyInfo.company_id/}"><img src="/icon/return.png" width='30' height='30'/></a> | <a class = "pb_btn_dark_1" href="javascript:;" id="add_date">新增</a> ]
 	</fieldset>
 	<fieldset><legend>{tpl:$companyInfo.company_name/} 健步走自定义日期段列表列表</legend>
 		<table width="99%" align="center" class="table table-bordered table-striped" >

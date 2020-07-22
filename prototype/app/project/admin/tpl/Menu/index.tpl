@@ -1,6 +1,6 @@
 {tpl:tpl contentHeader/}
 <fieldset><legend>操作</legend>
-[ <a href="javascript:;" onclick="divBox.showBox('?ctl=menu&ac=add', {title:'添加菜单',height:450,width:620});"><img src="/icon/add.png" width='30' height='30'/></a> ]
+[ <a class = "pb_btn_dark_1" href="javascript:;" onclick="divBox.showBox('?ctl=menu&ac=add', {title:'添加菜单',height:450,width:620});">新增</a> ]
 </fieldset>
 
 <fieldset><legend>列表</legend>

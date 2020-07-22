@@ -28,7 +28,7 @@
 	{tpl:loop $dataGroup $row}<input type="checkbox" name="data_groups[]" id="data_groups[]" value="{tpl:$row.group_id/}" />{tpl:$row.name/}&nbsp;{/tpl:loop}</td>
 </tr>
 <tr class="noborder"><th></th><td>
-<button type="submit" id="user_add_submit">提交</button></td></tr>
+<button type="submit" id="user_add_submit" class="pb_btn_dark_1">提交</button></td></tr>
 </table>
 </form>
 
