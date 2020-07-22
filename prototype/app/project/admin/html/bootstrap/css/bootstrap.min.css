@@ -10,46 +10,52 @@
 
 
 .pb_btn_light_1{
-    display: inline-block;
-    width:60px;
+    display: inline-block !important;
+    width: 60px;
     height:35px;
-    background:rgba(230,241,252,1);
-    border-radius:4px;
-    border:1px solid rgba(163,208,253,1);
-    font-size:14px;
-    font-family:PingFangSC-Regular,PingFang SC;
-    font-weight:400;
+    background: rgba(230,241,252,1);
+    border-radius: 4px;
+    border: 1px solid rgba(163,208,253,1);
+    font-size: 14px;
+    font-family: PingFangSC-Regular,PingFang SC;
+    font-weight: 400;
     text-align: center;
-    line-height: 36px;
     outline: none !important;
+    padding: 6px 0px;
+    vertical-align: middle;
+    color:#0486FE;
 }
 .pb_btn_light_2{
     display: inline-block;
     width:100px;
     height:35px;
-    background:rgba(230,241,252,1);
-    border-radius:4px;
-    border:1px solid rgba(163,208,253,1);
-    font-size:14px;
-    font-family:PingFangSC-Regular,PingFang SC;
-    font-weight:400;
+    background: rgba(230,241,252,1);
+    border-radius: 4px;
+    border: 1px solid rgba(163,208,253,1);
+    font-size: 14px;
+    font-family: PingFangSC-Regular,PingFang SC;
+    font-weight: 400;
     text-align: center;
-    line-height: 36px;
     outline: none !important;
+    padding: 6px 0px;
+    vertical-align: middle;
+    color:#0486FE;
 }
 .pb_btn_light_3{
     display: inline-block;
     width:140px;
     height:35px;
-    background:rgba(230,241,252,1);
-    border-radius:4px;
-    border:1px solid rgba(163,208,253,1);
-    font-size:14px;
-    font-family:PingFangSC-Regular,PingFang SC;
-    font-weight:400;
+    background: rgba(230,241,252,1);
+    border-radius: 4px;
+    border: 1px solid rgba(163,208,253,1);
+    font-size: 14px;
+    font-family: PingFangSC-Regular,PingFang SC;
+    font-weight: 400;
     text-align: center;
-    line-height: 36px;
     outline: none !important;
+    padding: 6px 0px;
+    vertical-align: middle;
+    color:#0486FE;
 }
 .pb_btn_dark_1{
     display: inline-block;

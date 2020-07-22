@@ -20,7 +20,7 @@
     姓名:<input type="text" class="span2" name="true_name" value="{tpl:$params.true_name/}" />
     手机:<input type="text" class="span2" name="mobile" value="{tpl:$params.mobile/}" />
     工号:<input type="text" class="span2" name="worker_id" value="{tpl:$params.worker_id/}" />
-    <input type="image" name="submit" value="查询" src="/icon/search.png" width='30' height='30'/>{tpl:$export_var/}
+    <button type="submit" class="pb_btn_light_1">搜索</button>{tpl:$export_var/}
 </form>
 <fieldset><legend>用户列表</legend>
 <table width="99%" align="center" class="table table-bordered table-striped">

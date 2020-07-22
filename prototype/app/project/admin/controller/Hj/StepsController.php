@@ -134,7 +134,7 @@ class Hj_StepsController extends AbstractController
             $page_url = Base_Common::getUrl('',$this->ctl,'index',$params)."&Page=~page~";
             $page_content =  base_common::multi($StepsDetailList['LogCount'], $page_url, $params['Page'], $params['PageSize'], 10, $maxpage = 100, $prevWord = '上一页', $nextWord = '下一页');
             //导出EXCEL链接
-            $export_var = "<a class = 'pb_btn_light_1'  href =".(Base_Common::getUrl('',$this->ctl,'steps.download',$params)).">导出表格</a>";
+            $export_var = "<a class = 'pb_btn_light_1' href =".(Base_Common::getUrl('',$this->ctl,'steps.download',$params)).">导出表格</a>";
 
 			//渲染模版
 			include $this->tpl('Hj_Steps_UserDetailList');
@@ -579,7 +579,7 @@ class Hj_StepsController extends AbstractController
             $page_url = Base_Common::getUrl('',$this->ctl,'stat',$params)."&Page=~page~";
             $page_content =  base_common::multi($StepsStatList['Count'], $page_url, $params['Page'], $params['PageSize'], 10, $maxpage = 100, $prevWord = '上一页', $nextWord = '下一页');
             //导出EXCEL链接
-            $export_var = "<a href =".(Base_Common::getUrl('',$this->ctl,'department.download',$params))."><导出表格></a>";
+            $export_var = "<a class = 'pb_btn_light_1' href =".(Base_Common::getUrl('',$this->ctl,'department.download',$params)).">导出表格</a>";
             //渲染模版
             include $this->tpl('Hj_Steps_DepartmentStat');
         }

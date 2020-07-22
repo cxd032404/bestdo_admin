@@ -44,7 +44,7 @@
         <option value="{tpl:$sexSymble/}" {tpl:if($params.sex==$sexSymble)}selected="selected"{/tpl:if}>{tpl:$sexName/}</option>
         {/tpl:loop}
     </select>
-    <input type="image" name="submit" value="查询" src="/icon/search.png" width='30' height='30'/>{tpl:$export_var/}
+    <button type="submit" class="pb_btn_light_1">搜索</button>{tpl:$export_var/}
 </form>
 <fieldset><legend>用户列表</legend>
 <div style="height: auto;overflow: scroll !important;width: 60%;">

@@ -42,7 +42,7 @@ function post(lid){
     <option value="{tpl:$type/}"{tpl:if($type==$list_type)}selected="selected"{/tpl:if} >{tpl:$type_info.name/}</option>
     {/tpl:loop}
   </select>
-  <input type="image" name="submit" value="查询" src="/icon/search.png" width='30' height='30'/>
+  <button type="submit" class="pb_btn_light_1">搜索</button>
 </form>
 <table width="99%" align="center" class="table table-bordered table-striped">
   <tr>

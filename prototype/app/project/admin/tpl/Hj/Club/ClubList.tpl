@@ -29,7 +29,7 @@ function clubModify(mid){
       <option value="{tpl:$company_info.company_id/}"{tpl:if($company_info.company_id==$company_id)}selected="selected"{/tpl:if} >{tpl:$company_info.company_name/}</option>
       {/tpl:loop}
     </select>
-  <input type="image" name="submit" value="查询" src="/icon/search.png" width='30' height='30'/>
+  <button type="submit" class="pb_btn_light_1">搜索</button>
 </form>
 <table width="99%" align="center" class="table table-bordered table-striped">
   <tr>
