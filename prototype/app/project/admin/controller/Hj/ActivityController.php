@@ -409,9 +409,9 @@ class Hj_ActivityController extends AbstractController
         $list_info = $this->oList->getlists($activity_id);
 
 
-//        $oExcel = new Third_Excel();
-//        $FileName = (iconv('gbk', 'utf-8', $activity_name . '参赛作品'));
-//        $oExcel_file = $oExcel->download($FileName);
+        $oExcel = new Third_Excel();
+        $FileName = (iconv('gbk', 'utf-8', $activity_name . '参赛作品'));
+        $oExcel_file = $oExcel->download($FileName);
         //多个列表
         foreach ($list_info as $kye => $value) {
             $userList = [];
@@ -440,26 +440,25 @@ class Hj_ActivityController extends AbstractController
             $userList = array_values($userList);
             $kudos = array_column($userList,'kudos');
             array_multisort($kudos,SORT_DESC,$userList);
-            print_r($userList);
 
-//
-//            $oExcel_file->addSheet($value['list_name']);
-//            //标题栏
-//            $title = array("用户ID", "姓名", "文章数量","投票数");
-//            $oExcel->addRows(array($title));
-//            //
-//            foreach ($userList as $userId => $userInfo) {
-//                $t = array();
-//                $t['UserId'] = $userInfo['user_id'];
-//                $t['UserName'] = $userInfo['true_name'];
-//                $t['postCount'] = $userInfo['postCount'];
-//                $t['kudos'] = $userInfo['kudos'];
-//                $oExcel->addRows(array($t));
-//                unset($t);
-//            }
-//            unset($userList);
-//            $oExcel->closeSheet();
+
+            $oExcel_file->addSheet($value['list_name']);
+            //标题栏
+            $title = array("用户ID", "姓名", "文章数量","投票数");
+            $oExcel->addRows(array($title));
+            //
+            foreach ($userList as $userId => $userInfo) {
+                $t = array();
+                $t['UserId'] = $userInfo['user_id'];
+                $t['UserName'] = $userInfo['true_name'];
+                $t['postCount'] = $userInfo['postCount'];
+                $t['kudos'] = $userInfo['kudos'];
+                $oExcel->addRows(array($t));
+                unset($t);
+            }
+            unset($userList);
+            $oExcel->closeSheet();
         }
-      //  $oExcel->close();
+        $oExcel->close();
     }
 }
