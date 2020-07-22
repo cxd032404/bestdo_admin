@@ -4,7 +4,7 @@
 		souceDeleteBox = divBox.confirmBox({content:'是否确认删除吗?删除后将不可恢复，需要重新上传',ok:function(){location.href = '{tpl:$sourceRemoveUrl/}&post_id=' + pid + '&sid='+ sid;}});
 	}
 </script>
-[ <a href="{tpl:$this.sign/}&ac=list&list_id={tpl:$postsInfo.list_id/}">返回</a> ]
+[ <a class = "pb_btn_light_1" href="{tpl:$this.sign/}&ac=list&list_id={tpl:$postsInfo.list_id/}&currentPage={tpl:$currentPage/}">返回</a> ]
 <div class="br_bottom"></div>
 <form id="post_form" name="post_form" enctype="multipart/form-data" action="{tpl:$postUrl/}" method="post">
 <input type="hidden" name="post_id" id="post_id" value="{tpl:$postsInfo.post_id/}" />
@@ -12,13 +12,17 @@
 	<input type="hidden" name="list_id" id="list_id" value="{tpl:$postsInfo.list_id/}" />
 	<input type="hidden" name="UserToken" id="UserToken" value="{tpl:$token/}" />
 	<table width="99%" align="center" class="table table-bordered table-striped" >
+	<tr class="hover"><td>标题</td>
+		<td align="left"><input type="text" class="span5" name="title"  id="title" value="{tpl:$postsInfo.title/}" size="50" /></td>
+		</td>
+	</tr>
 		<?php $i = 1;foreach($postsInfo['source'] as $key => $file)
 		{
 		?>
 		<tr class="hover">
 			{tpl:if($i==1)}<td rowspan="{tpl:$postsInfo.source func="count(@@)"/}">已上传：</td>{/tpl:if}
 			<td align="left">
-				<img src="<?php echo $file.(strpos($key,'video')>0?$video_suffix:'');?>" width="30px;" height="30px;"/> <a  href="javascript:;" onclick="sourceDelete('{tpl:$postsInfo.post_id/}','{tpl:$key/}')">删除</a></td>
+				<img src="<?php echo $file.(strpos($key,'video')>0?$video_suffix:'');?>" width="30px;" height="30px;"/> <a class = "pb_btn_grey_1" href="javascript:;" onclick="sourceDelete('{tpl:$postsInfo.post_id/}','{tpl:$key/}')">删除</a></td>
 		</tr>
 		<?php $i++;}?>
 		<?php
@@ -55,10 +59,6 @@
 		<?php
 		}?>
 		{/tpl:if}
-		<tr class="hover"><td>标题</td>
-			<td align="left"><input type="text" class="span3" name="title"  id="title" value="{tpl:$postsInfo.title/}" size="50" /></td>
-			</td>
-		</tr>
 		{tpl:if($listInfo.detail.limit.textarea==1)}
 			<tr class="hover"><td colspan = 2>文本</td></tr>
 			<tr class="hover"><td colspan = 2>
@@ -71,7 +71,7 @@
 		{/tpl:if}
 
 <tr class="noborder"><td></td>
-<td><button type="submit" id="post_submit">提交</button></td>
+<td><button type="submit" id="post_submit" class="pb_btn_dark_1">提交</button></td>
 </tr>
 </table>
 </form>

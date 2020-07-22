@@ -6,13 +6,13 @@
 </fieldset>
 <form action="{tpl:$this.sign/}&ac=stat" name="form" id="form" method="post">
     日期：<input type="text" name="start_date"  id="start_date " class="input-medium" value="{tpl:$params.start_date/}"  onFocus="WdatePicker({isShowClear:false,readOnly:true,dateFmt:'yyyy-MM-dd'})" >-<input type="text" name="end_date" id="end_date" class="input-medium"  value="{tpl:$params.end_date/}" onFocus="WdatePicker({isShowClear:false,readOnly:true,dateFmt:'yyyy-MM-dd'})" >
-    <p>企业：<select name="company_id"  id="company_id" size="1" onchange="getDepartmentByCompany()">
+    企业：<select name="company_id"  id="company_id" size="1" onchange="getDepartmentByCompany()">
         <option value="0" {tpl:if(0==$params.company_id)}selected="selected"{/tpl:if} >全部</option>
         {tpl:loop $companyList  $company_info}
         <option value="{tpl:$company_info.company_id/}"{tpl:if($company_info.company_id==$params.company_id)}selected="selected"{/tpl:if} >{tpl:$company_info.company_name/}</option>
         {/tpl:loop}
     </select>
-    部门:
+    <p>部门:
     <select name="department_id_1"  id="department_id_1" size="1" onchange="getDepartmentByCompany_2()">
         <option value="0" {tpl:if(0==$params.department_id_1)}selected="selected"{/tpl:if} >不选择</option>
         {tpl:loop $departmentList_1  $d_info}
@@ -34,7 +34,7 @@
         {/tpl:loop}
     </select>
 
-    <input type="submit" name="submit" value="查询" />{tpl:$export_var/}
+    <button type="submit" class="pb_btn_light_1">搜索</button>{tpl:$export_var/}
 </form>
 <fieldset><legend>详情列表</legend>
 <table width="99%" align="center" class="table table-bordered table-striped">

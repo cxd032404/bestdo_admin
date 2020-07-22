@@ -29,7 +29,7 @@
 	<td align="left"><input type="text" class="span4" name="detail[params]"  id="detail[params]" value="" size="50" /></td>
 	</tr>
 	<tr class="noborder"><td></td>
-<td><button type="submit" id="page_add_submit">提交</button></td>
+<td><button type="submit" id="page_add_submit" class="pb_btn_dark_1">提交</button></td>
 </tr>
 </table>
 </form>

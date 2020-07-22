@@ -60,7 +60,7 @@ function iconDelete(cid,name){
 		<td align="left"><input type="text" class="span2" name="detail[daily_step]"  id="detail[daily_step]" value="{tpl:$companyInfo.detail.daily_step/}" size="50" /></td>
 	</tr>
 <tr class="noborder"><td></td>
-<td><button type="submit" id="company_update_submit">提交</button></td>
+<td><button type="submit" id="company_update_submit" class="pb_btn_dark_1">提交</button></td>
 </tr>
 </table>
 </form>

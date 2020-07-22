@@ -1,6 +1,6 @@
 {tpl:tpl contentHeader/}
 <fieldset>
-	[ <a href="{tpl:$this.sign/}">返回</a> ]
+	[ <a href="{tpl:$this.sign/}"><img src="/icon/return.png" width='30' height='30'/></a> ]
 </fieldset>
 <form name="group_permission_update_form" id="group_permission_update_form" action="?ctl=data.group&ac=permission.modify" method="post">
 <table class="tbv" width="100%">
@@ -22,7 +22,7 @@
 </fieldset>
 	<tr class="noborder">
 		<th></th><td>
-		<button type="submit" id="group_update_submit">提交</button></td><td>&nbsp;</td>
+		<button type="submit" id="group_update_submit" class="pb_btn_dark_1">提交</button></td><td>&nbsp;</td>
 	</tr>
 </table>
 </form>

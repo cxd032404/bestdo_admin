@@ -18,7 +18,7 @@ function voteModify(mid){
 </script>
 
 <fieldset><legend>操作</legend>
-[ <a href="javascript:;" id="add_vote">添加投票</a> ]
+[ <a class="pb_btn_dark_1" href="javascript:;" id="add_vote">新增</a> ]
 </fieldset>
 
 <fieldset><legend>投票列表 </legend>
@@ -29,8 +29,9 @@ function voteModify(mid){
       <option value="{tpl:$activity_info.activity_id/}"{tpl:if($activity_info.activity_id==$activity_id)}selected="selected"{/tpl:if} >{tpl:$activity_info.activity_name/}</option>
       {/tpl:loop}
     </select>
-  <input type="submit" name="submit" value="查询" />
-</form>
+    <button type="submit" class="pb_btn_light_1">搜索</button>
+
+    </form>
 <table width="99%" align="center" class="table table-bordered table-striped">
   <tr>
     <th align="center" class="rowtip">投票ID</th>
@@ -50,8 +51,8 @@ function voteModify(mid){
       <td align="center">{tpl:$voteInfo.activity_name/}</td>
       <td align="center">{tpl:$voteInfo.start_time/}<P>{tpl:$voteInfo.end_time/}</td>
       <td align="center">{tpl:$voteInfo.update_time/}</td>
-      <td align="center"><a  href="javascript:;" onclick="voteDelete('{tpl:$voteInfo.vote_id/}','{tpl:$voteInfo.vote_name/}')">删除</a>
- |  <a href="javascript:;" onclick="voteModify('{tpl:$voteInfo.vote_id/}');">修改</a> |  <a href="{tpl:$this.sign/}&ac=vote.detail&vote_id={tpl:$voteInfo.vote_id/}">详情</a></td>
+      <td align="center"><a  class="pb_btn_grey_1" href="javascript:;" onclick="voteDelete('{tpl:$voteInfo.vote_id/}','{tpl:$voteInfo.vote_name/}')">删除</a>
+ |  <a class="pb_btn_light_1" href="javascript:;" onclick="voteModify('{tpl:$voteInfo.vote_id/}');">修改</a> |  <a class="pb_btn_grey_1" href="{tpl:$this.sign/}&ac=vote.detail&vote_id={tpl:$voteInfo.vote_id/}">详情</a></td>
   </tr>
 {/tpl:loop}
 </table>

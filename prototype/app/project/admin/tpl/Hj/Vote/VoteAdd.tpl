@@ -26,7 +26,7 @@
 	<td align="left"><input name="upload_img[1]" type="file" id="upload_img[1]" /></td>
 </tr>
 	<tr class="noborder"><td></td>
-<td><button type="submit" id="vote_add_submit">提交</button></td>
+<td><button type="submit" id="vote_add_submit" class="pb_btn_dark_1">提交</button></td>
 </tr>
 </table>
 </form>

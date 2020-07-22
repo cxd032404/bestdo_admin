@@ -36,7 +36,6 @@ abstract class Base_Widget
 		if (is_string($this->table) && $this->table != '') {
 			$this->db = Base_Db_Hash::getInstance()->prepare($this->table);
 		}
-
 		$config = (@include Base_Common::$config['config_file']);
 		$this->config = Base_Config::factory($config);
 		$this->auto();

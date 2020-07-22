@@ -23,7 +23,7 @@ class Base_Cache_Redis implements Base_Cache_Interface
             throw new Exception('没有加载redis扩展！');
         }
         //$connections = [];
-        $CacheConf = (@include dirname(dirname(dirname(dirname(dirname(__FILE__)))))."/CommonConfig/cacheConfig.php");
+        $CacheConf = (@include dirname(dirname(dirname(dirname(dirname(__FILE__)))))."/CommonConfig/CacheConfig.php");
         if(is_array($CacheConf['REDIS_SERVER']))
         {
             foreach($CacheConf['REDIS_SERVER'] as $k => $r)

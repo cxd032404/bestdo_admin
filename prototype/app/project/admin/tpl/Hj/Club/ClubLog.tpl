@@ -4,7 +4,7 @@
 </script>
 
 <fieldset><legend>操作</legend>
-[ <a href="{tpl:$this.sign/}&company_id={tpl:$clubInfo.company_id/}">返回</a> ]
+[ <a class="pb_btn_light_1" href="{tpl:$this.sign/}&company_id={tpl:$clubInfo.company_id/}">返回</a> ]
 </fieldset>
 
 <fieldset><legend>报名记录</legend>

@@ -1,6 +1,6 @@
 {tpl:tpl contentHeader/}
 <fieldset><legend>操作</legend>
-[ <a href="?ctl=group&ac=add">添加组</a> ]
+[ <a class = "pb_btn_dark_1" href="?ctl=group&ac=add">新增</a> ]
 </fieldset>
 
 <fieldset><legend>列表</legend>
@@ -11,8 +11,8 @@
 <tr class="hover"><td>{tpl:$row.group_id/}</td>
 <td>{tpl:$row.name/}</a></td>
 <td>
-<a href="?ctl=group&ac=modify&group_id={tpl:$row.group_id/}">修改</a>
-| <a href="?ctl=group&ac=delete&group_id={tpl:$row.group_id/}" onclick="return confirm('确定要删除管理员组？');">删除</a>
+<a href="?ctl=group&ac=modify&group_id={tpl:$row.group_id/}"><img src="/icon/edit2.png" width='30' height='30'/></a>
+| <a href="?ctl=group&ac=delete&group_id={tpl:$row.group_id/}" onclick="return confirm('确定要删除管理员组？');"><img src="/icon/del.png" width='30' height='30'/></a>
 | <a href="?ctl=menu/permission&ac=modify.by.group&group_id={tpl:$row.group_id/}">菜单权限</a>
 | <a href="?ctl=config/permission&ac=list.partner.permission&group_id={tpl:$row.group_id/}">数据权限</a></td>
 </tr>

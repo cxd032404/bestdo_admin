@@ -1,6 +1,6 @@
 {tpl:tpl contentHeader/}
 <fieldset><legend>操作</legend>
-[ <a href="javascript:;" onclick="divBox.showBox('?ctl=menu&ac=add', {title:'添加菜单',height:450,width:620});">添加</a> ]
+[ <a class = "pb_btn_dark_1" href="javascript:;" onclick="divBox.showBox('?ctl=menu&ac=add', {title:'添加菜单',height:450,width:620});">新增</a> ]
 </fieldset>
 
 <fieldset><legend>列表</legend>
@@ -22,8 +22,8 @@
             <td style="text-align:left" width="500">{tpl:$menu.name/}</td>
             <td width="400">{tpl:$menu.link/}</td>
             <td width="400">{tpl:$menu.permission_list/}</td>
-            <td width="200"><a href="javascript:;" onclick="divBox.showBox('?ctl=menu&ac=modify&menu_id={tpl:$menu.menu_id/}', {title:'修改菜单',height:550,width:620});">修改</a>
-            | <a href="javascript:;" onclick="divBox.confirmBox({content:'是否确认删除 {tpl:$menu.name/} ?',ok:function(){location.href='?ctl=menu&ac=delete&menu_id={tpl:$menu.menu_id/}';}});">删除</a>
+            <td width="200"><a href="javascript:;" onclick="divBox.showBox('?ctl=menu&ac=modify&menu_id={tpl:$menu.menu_id/}', {title:'修改菜单',height:550,width:620});"><img src="/icon/edit2.png" width='30' height='30'/></a>
+            | <a href="javascript:;" onclick="divBox.confirmBox({content:'是否确认删除 {tpl:$menu.name/} ?',ok:function(){location.href='?ctl=menu&ac=delete&menu_id={tpl:$menu.menu_id/}';}});"><img src="/icon/del.png" width='30' height='30'/></a>
             {tpl:if($menu.Child!=1)}| <a href="?ctl=menu/permission&ac=modify.by.menu&menu_id={tpl:$menu.menu_id/}">权限</a>{/tpl:if}
             </td>
         </tr>

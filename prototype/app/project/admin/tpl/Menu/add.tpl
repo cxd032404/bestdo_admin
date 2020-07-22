@@ -60,7 +60,7 @@ function getChildMenu(Id,level)
 	</tr>
 	<tr class="noborder">
 		<th></th><td>
-		<button type="submit" class="btn btn-gebo pull-left" id="menu_add_submit">提交</button></td><td>&nbsp;</td>
+		<button type="submit" class="btn btn-gebo pull-left" id="menu_add_submit" class="pb_btn_dark_1">提交</button></td><td>&nbsp;</td>
 	</tr>
 </table>
 </form>

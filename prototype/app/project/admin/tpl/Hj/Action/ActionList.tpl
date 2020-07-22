@@ -44,7 +44,7 @@ function CreditDelete(aid,cid,c_name){
     <td align="center">{tpl:$ActionInfo.ActionName/}</td>
     <td align="center">{tpl:$ActionInfo.CreditListHtml/}</td>
 
-      <td align="center"><a  href="javascript:;" onclick="actionDelete('{tpl:$ActionInfo.ActionId/}','{tpl:$ActionInfo.ActionName/}')">删除</a> |  <a href="javascript:;" onclick="actionModify('{tpl:$ActionInfo.ActionId/}');">修改</a></td>
+      <td align="center"><a  href="javascript:;" onclick="actionDelete('{tpl:$ActionInfo.ActionId/}','{tpl:$ActionInfo.ActionName/}')"><img src="/icon/del.png" width='30' height='30'/></a> |  <a href="javascript:;" onclick="actionModify('{tpl:$ActionInfo.ActionId/}');"><img src="/icon/edit2.png" width='30' height='30'/></a></td>
   </tr>
 {/tpl:loop}
 </table>

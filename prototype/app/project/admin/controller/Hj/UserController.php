@@ -56,7 +56,7 @@ class Hj_UserController extends AbstractController
 			//获取用户列表
             $UserList = $this->oUserInfo->getUserList(array_merge($params,["permissionList"=>$totalPermission]));
 			//导出EXCEL链接
-			$export_var = "<a href =".(Base_Common::getUrl('',$this->ctl,'user.list.download',$params))."><导出表格></a>";
+			$export_var = "<a class = 'pb_btn_light_1' href =".(Base_Common::getUrl('',$this->ctl,'user.list.download',$params)).">导出表格</a>";
 			//翻页参数
 			$page_url = Base_Common::getUrl('',$this->ctl,'index',$params)."&Page=~page~";
 			$page_content =  base_common::multi($UserList['UserCount'], $page_url, $params['Page'], $params['PageSize'], 10, $maxpage = 100, $prevWord = '上一页', $nextWord = '下一页');
@@ -131,12 +131,14 @@ class Hj_UserController extends AbstractController
 			//分页参数
 			$params['PageSize'] = 500;
 
+
 			$oExcel = new Third_Excel();
             $FileName= (iconv('gbk','utf-8','用户列表'));
 			$oExcel->download($FileName)->addSheet('用户');
 			//标题栏
 			$title = array("用户ID","企业","部门","真实姓名","昵称","联系电话","性别","注册时间","最后登录时间","最后登录方式");
 			$oExcel->addRows(array($title));
+
 			$Count = 1;$params['Page'] =1;
             $departmentList = [];
             do
@@ -186,10 +188,10 @@ class Hj_UserController extends AbstractController
 					unset($t);
 				}
 				$params['Page']++;
-				$oExcel->closeSheet()->close();
 			}
 			while($Count>0);
-		}
+            $oExcel->closeSheet()->close();
+        }
 		else
 		{
 			$home = $this->sign;

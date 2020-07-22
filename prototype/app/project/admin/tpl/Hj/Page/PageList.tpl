@@ -18,7 +18,7 @@ function pageModify(mid){
 </script>
 
 <fieldset><legend>操作</legend>
-[ <a href="javascript:;" id="add_page">添加页面</a> ]
+[ <a class = "pb_btn_dark_1" href="javascript:;" id="add_page">新增</a> ]
 </fieldset>
 
 <fieldset><legend>页面列表 </legend>
@@ -29,9 +29,10 @@ function pageModify(mid){
       <option value="{tpl:$company_info.company_id/}"{tpl:if($company_info.company_id==$company_id)}selected="selected"{/tpl:if} >{tpl:$company_info.company_name/}</option>
       {/tpl:loop}
     </select>
-  <input type="submit" name="submit" value="查询" />
+  <button type="submit" class="pb_btn_light_1">搜索</button>
 </form>
-<table width="99%" align="center" class="table table-bordered table-striped">
+    <div style="height: auto;overflow: scroll !important;width: 60%;">
+        <table  align="center" class="table table-bordered table-striped" style="overflow: scroll;max-width: none;width: 1600px;">
   <tr>
     <th align="center" class="rowtip">页面ID</th>
     <th align="center" class="rowtip">页面名称</th>
@@ -50,10 +51,11 @@ function pageModify(mid){
       <td align="center">{tpl:$pageInfo.page_sign/}</td>
       <td align="center">{tpl:$pageInfo.company_name/}</td>
     <td align="center">{tpl:$pageInfo.update_time/}</td>
-      <td align="center"><a  href="javascript:;" onclick="pageDelete('{tpl:$pageInfo.page_id/}','{tpl:$pageInfo.page_name/}')">删除</a>
- |  <a href="javascript:;" onclick="pageModify('{tpl:$pageInfo.page_id/}');">修改</a> | <a href="{tpl:$this.sign/}&ac=page.detail&page_id={tpl:$pageInfo.page_id/}">页面元素 ({tpl:$pageInfo.element_count/})</a> | <a target="_blank" href="{tpl:$pageInfo.test_url/}?{tpl:$pageInfo.page_params/}">测试页面</a></td>
+      <td align="center"><a class="pb_btn_grey_1" href="javascript:;" onclick="pageDelete('{tpl:$pageInfo.page_id/}','{tpl:$pageInfo.page_name/}')">删除</a>
+ |  <a class = "pb_btn_light_1" href="javascript:;" onclick="pageModify('{tpl:$pageInfo.page_id/}');">修改</a> | <a class = "pb_btn_grey_2" href="{tpl:$this.sign/}&ac=page.detail&page_id={tpl:$pageInfo.page_id/}">页面元素 ({tpl:$pageInfo.element_count/})</a> | <a class = "pb_btn_grey_1" target="_blank" href="{tpl:$pageInfo.test_url/}?{tpl:$pageInfo.page_params/}">测试页面</a></td>
   </tr>
 {/tpl:loop}
 </table>
+    </div>
 </fieldset>
 {tpl:tpl contentFooter/}

@@ -10,6 +10,6 @@ return array
 
     'REDIS_SERVER' => array('r-uf6nx1m4r5ed4djrcg.redis.rds.aliyuncs.com'),
 	'REDIS_PORT'   => '6379',
-    'REDIS_PASSWORD' => 'unionfit@2020'
+    'REDIS_PASSWORD' => 'unionfit@2020!'
 )
 ?>

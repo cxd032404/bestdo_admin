@@ -22,7 +22,7 @@ function post(lid){
 </script>
 
 <fieldset><legend>操作</legend>
-[ <a href="javascript:;" id="add_list">添加列表</a> ]
+[ <a class = "pb_btn_dark_1" href="javascript:;" id="add_list">新增</a> ]
 </fieldset>
 
 <fieldset><legend>列表</legend>
@@ -41,7 +41,7 @@ function post(lid){
     <option value="{tpl:$type/}"{tpl:if($type==$list_type)}selected="selected"{/tpl:if} >{tpl:$type_info.name/}</option>
     {/tpl:loop}
   </select>
-  <input type="submit" name="submit" value="查询" />
+  <button type="submit" class="pb_btn_light_1">搜索</button>
 </form>
 <table width="99%" align="center" class="table table-bordered table-striped">
   <tr>
@@ -64,9 +64,9 @@ function post(lid){
       <td align="center">{tpl:$listInfo.list_type_name/}</td>
 
       <td align="center">{tpl:$listInfo.update_time/}</td>
-      <td align="center"><a  href="javascript:;" onclick="listDelete('{tpl:$listInfo.list_id/}','{tpl:$listInfo.list_name/}')">删除</a>
- |  <a href="javascript:;" onclick="listModify('{tpl:$listInfo.list_id/}');">修改</a>
-          | <a href="{tpl:$this.sign/}&ac=list&list_id={tpl:$listInfo.list_id/}&currentPage={tpl:$currentPage/}">列表 {tpl:if($listInfo.posts_count>0)}({tpl:$listInfo.posts_count/}){/tpl:if} </a></td>
+      <td align="center"><a class = "pb_btn_grey_1" href="javascript:;" onclick="listDelete('{tpl:$listInfo.list_id/}','{tpl:$listInfo.list_name/}')">删除</a>
+ |  <a class = "pb_btn_light_1" href="javascript:;" onclick="listModify('{tpl:$listInfo.list_id/}');">修改</a>
+          | <a class = "pb_btn_grey_1" href="{tpl:$this.sign/}&ac=list&list_id={tpl:$listInfo.list_id/}&currentPage={tpl:$currentPage/}">列表{tpl:if($listInfo.posts_count>0)}({tpl:$listInfo.posts_count/}){/tpl:if} </a></td>
   </tr>
 {/tpl:loop}
 </table>

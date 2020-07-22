@@ -29,7 +29,7 @@ function questionModify(mid){
       <option value="{tpl:$activity_info.activity_id/}"{tpl:if($activity_info.activity_id==$activity_id)}selected="selected"{/tpl:if} >{tpl:$activity_info.activity_name/}</option>
       {/tpl:loop}
     </select>
-  <input type="submit" name="submit" value="查询" />
+  <button type="submit" class="pb_btn_light_1">搜索</button>
 </form>
 <table width="99%" align="center" class="table table-bordered table-striped">
   <tr>
@@ -50,8 +50,8 @@ function questionModify(mid){
       <td align="center">{tpl:$questionInfo.activity_name/}</td>
       <td align="center">{tpl:$questionInfo.create_time/}</td>
       <td align="center">{tpl:$questionInfo.update_time/}</td>
-      <td align="center"><a  href="javascript:;" onclick="questionDelete('{tpl:$questionInfo.question_id/}','{tpl:$questionInfo.question_name/}')">删除</a>
- |  <a href="javascript:;" onclick="questionModify('{tpl:$questionInfo.question_id/}');">修改</a></td>
+      <td align="center"><a  href="javascript:;" onclick="questionDelete('{tpl:$questionInfo.question_id/}','{tpl:$questionInfo.question_name/}')"><img src="/icon/del.png" width='30' height='30'/></a>
+ |  <a href="javascript:;" onclick="questionModify('{tpl:$questionInfo.question_id/}');"><img src="/icon/edit2.png" width='30' height='30'/></a></td>
   </tr>
 {/tpl:loop}
 </table>

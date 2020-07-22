@@ -14,7 +14,7 @@ function promptDelete(p_id, p_name){
 </script>
 
 <fieldset><legend>操作</legend>
-[ <a href="javascript:;" id="add_group">添加菜单权限组</a> ]
+[ <a class = "pb_btn_dark_1" href="javascript:;" id="add_group">新增/a> ]
 </fieldset>
 
 <fieldset><legend>列表</legend>
@@ -26,8 +26,8 @@ function promptDelete(p_id, p_name){
 <tr class="hover"><td>{tpl:$row.group_id/}</td>
 <td><a href="?ctl=manager&menu_group_id={tpl:$row.group_id/}">{tpl:$row.name/}</a></td>
 <td>
-<a href="javascript:;" onclick="groupModify('{tpl:$row.group_id/}')">修改</a>
-| <a  href="javascript:;" onclick="promptDelete('{tpl:$row.group_id/}','{tpl:$row.name/}')">删除</a>
+<a href="javascript:;" onclick="groupModify('{tpl:$row.group_id/}')"><img src="/icon/edit2.png" width='30' height='30'/></a>
+| <a  href="javascript:;" onclick="promptDelete('{tpl:$row.group_id/}','{tpl:$row.name/}')"><img src="/icon/del.png" width='30' height='30'/></a>
 | <a href="?ctl=menu/permission&ac=modify.by.group&group_id={tpl:$row.group_id/}">菜单权限</a></td>
 </tr>
 {/tpl:loop}

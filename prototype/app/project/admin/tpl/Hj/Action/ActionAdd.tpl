@@ -10,7 +10,7 @@
 	<td align="left"><input type="text" class="span2" name="ActionName"  id="ActionName" value="" size="50" /></td>
 </tr>
 	<tr class="noborder"><td></td>
-<td><button type="submit" id="app_add_submit">提交</button></td>
+<td><button type="submit" id="app_add_submit" class="pb_btn_dark_1">提交</button></td>
 </tr>
 </table>
 </form>

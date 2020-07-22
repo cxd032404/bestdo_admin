@@ -18,7 +18,7 @@ function voteOptionModify(mid){
 </script>
 
 <fieldset><legend>操作</legend>
-[ <a href="{tpl:$this.sign/}&activity_id={tpl:$voteInfo.activity_id/}">返回</a> ｜ <a href="javascript:;" id="add_vote_option">添加选项</a> ]
+[ <a href="{tpl:$this.sign/}&activity_id={tpl:$voteInfo.activity_id/}"><img src="/icon/return.png" width='30' height='30'/></a> ｜ <a href="javascript:;" id="add_vote_option">添加选项</a> ]
 </fieldset>
 
 <fieldset><legend>投票选项列表 </legend>
@@ -38,8 +38,8 @@ function voteOptionModify(mid){
     <td align="center">{tpl:$optionInfo.vote_option_name/}</td>
     <td align="center">{tpl:$optionSign/}</td>
       <td align="center">{tpl:$optionInfo.source_from_name/}</td>
-      <td align="center"><a  href="javascript:;" onclick="voteOptionDelete('{tpl:$optionSign/}','{tpl:$optionInfo.vote_option_name/}')">删除</a>
- |  <a href="javascript:;" onclick="voteOptionModify('{tpl:$optionSign/}');">修改</a> |  <a href="{tpl:$this.sign/}&ac=vote.detail&vote_id={tpl:$voteInfo.vote_id/}">详情</a></td>
+      <td align="center"><a  href="javascript:;" onclick="voteOptionDelete('{tpl:$optionSign/}','{tpl:$optionInfo.vote_option_name/}')"><img src="/icon/del.png" width='30' height='30'/></a>
+ |  <a href="javascript:;" onclick="voteOptionModify('{tpl:$optionSign/}');"><img src="/icon/edit2.png" width='30' height='30'/></a> |  <a href="{tpl:$this.sign/}&ac=vote.detail&vote_id={tpl:$voteInfo.vote_id/}">详情</a></td>
   </tr>
 {/tpl:loop}
 </table>

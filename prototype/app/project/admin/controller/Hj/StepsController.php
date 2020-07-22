@@ -44,6 +44,7 @@ class Hj_StepsController extends AbstractController
 		{
 			//企业ID
 			$params['company_id'] = intval($this->request->company_id??0);
+            $params['true_name'] = urldecode(trim($this->request->true_name))?substr(urldecode(trim($this->request->true_name)),0,20):"";
             //一级部门ID
             $params['department_id_1'] = intval($this->request->department_id_1??0);
             //二级部门ID
@@ -65,8 +66,17 @@ class Hj_StepsController extends AbstractController
             $departmentList_1 = $params['company_id']>0?$this->oDepartment->getDepartmentList(["company_id"=>$params['company_id'],"parent_id"=>0],"department_id,department_name"):[];
             $departmentList_2 = $params['department_id_1']>0?$this->oDepartment->getDepartmentList(["company_id"=>$params['company_id'],"parent_id"=>$params['department_id_1']],"department_id,department_name"):[];
             $departmentList_3 = $params['department_id_2']>0?$this->oDepartment->getDepartmentList(["company_id"=>$params['company_id'],"parent_id"=>$params['department_id_2']],"department_id,department_name"):[];
+            if($params['true_name'] != "")
+            {
+                //获取用户列表
+                $UserList = $this->oUserInfo->getUserList(array_merge(['true_name'=>$params['true_name']],["permissionList"=>$totalPermission]),["user_id"]);
+            }
+            else
+            {
+                $UserList = ['UserList'=>[]];
+            }
             //获取步数详情列表
-			$StepsDetailList = $this->oSteps->getStepsDetailList(array_merge($params,["permissionList"=>$totalPermission]));
+			$StepsDetailList = $this->oSteps->getStepsDetailList(array_merge($params,["permissionList"=>$totalPermission],['user_id'=>array_column($UserList['UserList'],"user_id")]));
             $userList  = $goalList = $departmentList = [];
 
             $spepsConfig = $this->config->steps;
@@ -124,7 +134,7 @@ class Hj_StepsController extends AbstractController
             $page_url = Base_Common::getUrl('',$this->ctl,'index',$params)."&Page=~page~";
             $page_content =  base_common::multi($StepsDetailList['LogCount'], $page_url, $params['Page'], $params['PageSize'], 10, $maxpage = 100, $prevWord = '上一页', $nextWord = '下一页');
             //导出EXCEL链接
-            $export_var = "<a href =".(Base_Common::getUrl('',$this->ctl,'steps.download',$params))."><导出表格></a>";
+            $export_var = "<a class = 'pb_btn_light_1' href =".(Base_Common::getUrl('',$this->ctl,'steps.download',$params)).">导出表格</a>";
 
 			//渲染模版
 			include $this->tpl('Hj_Steps_UserDetailList');
@@ -144,6 +154,7 @@ class Hj_StepsController extends AbstractController
         {
             //企业ID
             $params['company_id'] = intval($this->request->company_id??0);
+            $params['true_name'] = urldecode(trim($this->request->true_name))?substr(urldecode(trim($this->request->true_name)),0,20):"";
             //一级部门ID
             $params['department_id_1'] = intval($this->request->department_id_1??0);
             //二级部门ID
@@ -165,7 +176,15 @@ class Hj_StepsController extends AbstractController
             $departmentList_1 = $params['company_id']>0?$this->oDepartment->getDepartmentList(["company_id"=>$params['company_id'],"parent_id"=>0],"department_id,department_name"):[];
             $departmentList_2 = $params['department_id_1']>0?$this->oDepartment->getDepartmentList(["company_id"=>$params['company_id'],"parent_id"=>$params['department_id_1']],"department_id,department_name"):[];
             $departmentList_3 = $params['department_id_2']>0?$this->oDepartment->getDepartmentList(["company_id"=>$params['company_id'],"parent_id"=>$params['department_id_2']],"department_id,department_name"):[];
-
+            if($params['true_name'] != "")
+            {
+                //获取用户列表
+                $UserList = $this->oUserInfo->getUserList(array_merge(['true_name'=>$params['true_name']],["permissionList"=>$totalPermission]),["user_id"]);
+            }
+            else
+            {
+                $UserList = ['UserList'=>[]];
+            }
 
             $oExcel = new Third_Excel();
             $FileName= (iconv('gbk','utf-8','步数详情'));
@@ -179,7 +198,7 @@ class Hj_StepsController extends AbstractController
             $spepsConfig = $this->config->steps;
             do{
                 //获取步数详情列表
-                $StepsDetailList = $this->oSteps->getStepsDetailList(array_merge($params,["permissionList"=>$totalPermission]));
+                $StepsDetailList = $this->oSteps->getStepsDetailList(array_merge($params,["permissionList"=>$totalPermission],['user_id'=>array_column($UserList['UserList'],"user_id")]));
                 $Count = count($StepsDetailList['DetailList']);
                 foreach($StepsDetailList['DetailList'] as $key => $detail)
                 {
@@ -346,7 +365,7 @@ class Hj_StepsController extends AbstractController
             $page_url = Base_Common::getUrl('',$this->ctl,'stat',$params)."&Page=~page~";
             $page_content =  base_common::multi($StepsStatList['Count'], $page_url, $params['Page'], $params['PageSize'], 10, $maxpage = 100, $prevWord = '上一页', $nextWord = '下一页');
             //导出EXCEL链接
-            $export_var = "<a href =".(Base_Common::getUrl('',$this->ctl,'stat.download',$params))."><导出表格></a>";
+            $export_var = "<a class = 'pb_btn_light_1' href =".(Base_Common::getUrl('',$this->ctl,'stat.download',$params)).">导出表格</a>";
             //渲染模版
             include $this->tpl('Hj_Steps_Stat');
         }
@@ -560,7 +579,7 @@ class Hj_StepsController extends AbstractController
             $page_url = Base_Common::getUrl('',$this->ctl,'stat',$params)."&Page=~page~";
             $page_content =  base_common::multi($StepsStatList['Count'], $page_url, $params['Page'], $params['PageSize'], 10, $maxpage = 100, $prevWord = '上一页', $nextWord = '下一页');
             //导出EXCEL链接
-            $export_var = "<a href =".(Base_Common::getUrl('',$this->ctl,'department.download',$params))."><导出表格></a>";
+            $export_var = "<a class = 'pb_btn_light_1' href =".(Base_Common::getUrl('',$this->ctl,'department.download',$params)).">导出表格</a>";
             //渲染模版
             include $this->tpl('Hj_Steps_DepartmentStat');
         }

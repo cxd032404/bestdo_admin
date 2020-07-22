@@ -70,7 +70,7 @@ function getChildMenu(Id,level)
 	</tr>
 	<tr>
 		<th>&nbsp;</th><td>
-		<button type="submit" id="menu_update_submit">提交</button></td><td>&nbsp;</td>
+		<button type="submit" id="menu_update_submit" class="pb_btn_dark_1">提交</button></td><td>&nbsp;</td>
 	</tr>
 </table>
 </form>

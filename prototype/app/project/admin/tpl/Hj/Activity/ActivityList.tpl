@@ -18,7 +18,7 @@ function activityModify(mid){
 </script>
 
 <fieldset><legend>操作</legend>
-[ <a href="javascript:;" id="add_activity">添加活动</a> ]
+[ <a class = "pb_btn_dark_1" href="javascript:;" id="add_activity">新增</a> ]
 </fieldset>
 
 <fieldset><legend>活动列表 </legend>
@@ -29,7 +29,7 @@ function activityModify(mid){
       <option value="{tpl:$company_info.company_id/}"{tpl:if($company_info.company_id==$company_id)}selected="selected"{/tpl:if} >{tpl:$company_info.company_name/}</option>
       {/tpl:loop}
     </select>
-  <input type="submit" name="submit" value="查询" />
+  <button type="submit" class="pb_btn_light_1">搜索</button>
 </form>
 <table width="99%" align="center" class="table table-bordered table-striped">
   <tr>
@@ -60,8 +60,9 @@ function activityModify(mid){
       <td align="center">{tpl:$activityInfo.start_time/}<P>{tpl:$activityInfo.end_time/}</td>
       <td align="center">{tpl:$activityInfo.apply_start_time/}<P>{tpl:$activityInfo.apply_end_time/}</td>
       <td align="center">{tpl:$activityInfo.update_time/}</td>
-      <td align="center"><a  href="javascript:;" onclick="activityDelete('{tpl:$activityInfo.activity_id/}','{tpl:$activityInfo.activity_name/}')">删除</a>
- | <a href="javascript:;" onclick="activityModify('{tpl:$activityInfo.activity_id/}');">修改</a> | <a href="{tpl:$this.sign/}&ac=activity.log&activity_id={tpl:$activityInfo.activity_id/}">报名记录{tpl:if($activityInfo.count>0)}({tpl:$activityInfo.count/}){/tpl:if}</a>{tpl:if($activityInfo.download == 1)}<a href="{tpl:$this.sign/}&ac=activity.download&activity_id={tpl:$activityInfo.activity_id/}">|下载</a>{/tpl:if}</td>
+
+      <td align="center"><a class = "pb_btn_grey_1" href="javascript:;" onclick="activityDelete('{tpl:$activityInfo.activity_id/}','{tpl:$activityInfo.activity_name/}')">删除</a>
+ | <a class = "pb_btn_light_1" href="javascript:;" onclick="activityModify('{tpl:$activityInfo.activity_id/}');">修改</a> | <a class = "pb_btn_light_2" href="{tpl:$this.sign/}&ac=activity.log&activity_id={tpl:$activityInfo.activity_id/}">报名记录{tpl:if($activityInfo.count>0)}({tpl:$activityInfo.count/}){/tpl:if}</a>{/tpl:if}</a>{tpl:if($activityInfo.download == 1)}<a href="{tpl:$this.sign/}&ac=activity.download&activity_id={tpl:$activityInfo.activity_id/}">|下载</a>{/tpl:if}</td>
   </tr>
 {/tpl:loop}
   <tr><th colspan="10" align="center" class="rowtip">{tpl:$page_content/}</th></tr>

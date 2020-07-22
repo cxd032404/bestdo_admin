@@ -44,22 +44,22 @@
         <option value="{tpl:$sexSymble/}" {tpl:if($params.sex==$sexSymble)}selected="selected"{/tpl:if}>{tpl:$sexName/}</option>
         {/tpl:loop}
     </select>
-
-    <input type="submit" name="submit" value="查询" />{tpl:$export_var/}
+    <button type="submit" class="pb_btn_light_1">搜索</button>{tpl:$export_var/}
 </form>
 <fieldset><legend>用户列表</legend>
-<table width="99%" align="center" class="table table-bordered table-striped">
+<div style="height: auto;overflow: scroll !important;width: 60%;">
+    <table  align="center" class="table table-bordered table-striped" style="overflow: scroll;max-width: none;width: 1800px;">
       <tr>
-        <th align="center" class="rowtip">用户ID</th>
-          <th align="center" class="rowtip">企业</th>
-          <th align="center" class="rowtip">部门</th>
-          <th align="center" class="rowtip">真实姓名</th>
-          <th align="center" class="rowtip">昵称</th>
-        <th align="center" class="rowtip">联系电话</th>
-        <th align="center" class="rowtip">性别</th>
-        <th align="center" class="rowtip">注册时间</th>
-        <th align="center" class="rowtip">最后登陆</th>
-        <th align="center" class="rowtip">操作</th>
+        <th align="center" width = "4%" class="rowtip">用户ID</th>
+          <th align="center" width = "7%" class="rowtip">企业</th>
+          <th align="center" width = "10%" class="rowtip">部门</th>
+          <th align="center" width = "10%" class="rowtip">真实姓名</th>
+          <th align="center" width = "10%" class="rowtip">昵称</th>
+        <th align="center" width = "5%" class="rowtip">联系电话</th>
+        <th align="center" width = "3%" class="rowtip">性别</th>
+        <th align="center" width = "8%" class="rowtip">注册时间</th>
+        <th align="center" width = "8%" class="rowtip">最后登陆</th>
+        <th align="center" width = "20%" class="rowtip">操作</th>
       </tr>
     {tpl:loop $UserList.UserList $UserInfo}
       <tr class="hover">
@@ -72,17 +72,17 @@
         <td align="center">{tpl:$UserInfo.sex/}</td>
         <td align="center">{tpl:$UserInfo.reg_time/}</td>
         <td align="center">{tpl:$UserInfo.last_login_time/}<br>{tpl:$UserInfo.LoginSourceName/}</td>
-          <td align="center"><a  href="javascript:;" onclick="userDetail('{tpl:$UserInfo.user_id/}','{tpl:$UserInfo.true_name/}')">详细</a>{tpl:if($UserInfo.is_del!=1)}｜<a  href="javascript:;" onclick="userDisable('{tpl:$UserInfo.user_id/}','{tpl:$UserInfo.true_name/}')">停用</a>{/tpl:if}
-              {tpl:if($UserInfo.test==1)} | <a  href="javascript:;" onclick="setTestUser('{tpl:$UserInfo.user_id/}','{tpl:$UserInfo.true_name/}',0)">设为普通用户</a>
+          <td align="center"><a class = "pb_btn_light_1" href="javascript:;" onclick="userDetail('{tpl:$UserInfo.user_id/}','{tpl:$UserInfo.true_name/}')">详细</a>{tpl:if($UserInfo.is_del!=1)}｜<a class = "pb_btn_grey_1" href="javascript:;" onclick="userDisable('{tpl:$UserInfo.user_id/}','{tpl:$UserInfo.true_name/}')">停用</a>{/tpl:if}
+              {tpl:if($UserInfo.test==1)} | <a class = "pb_btn_dark_2" href="javascript:;" onclick="setTestUser('{tpl:$UserInfo.user_id/}','{tpl:$UserInfo.true_name/}',0)">设为普通用户</a>
               {tpl:else}
-               | <a  href="javascript:;" onclick="setTestUser('{tpl:$UserInfo.user_id/}','{tpl:$UserInfo.true_name/}',1)">设为测试用户</a>
+               | <a  class = "pb_btn_light_2" href="javascript:;" onclick="setTestUser('{tpl:$UserInfo.user_id/}','{tpl:$UserInfo.true_name/}',1)">设为测试用户</a>
               {/tpl:if}
           </td>
 
       </tr>
     {/tpl:loop}
     <tr><th colspan="10" align="center" class="rowtip">{tpl:$page_content/}</th></tr>
-
 </table>
+</div>
 </fieldset>
 {tpl:tpl contentFooter/}

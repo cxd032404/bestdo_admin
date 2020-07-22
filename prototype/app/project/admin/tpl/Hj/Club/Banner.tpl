@@ -21,7 +21,7 @@
 	<input type="hidden" name="club_id" id="club_id" value="{tpl:$clubInfo.club_id/}" />
 	<input type="hidden" name="club_name" id="club_name" value="{tpl:$clubInfo.club_name/}" />
 	<fieldset>
-		[ <a href="{tpl:$this.sign/}&company_id={tpl:$clubInfo.company_id/}">返回</a> | <a href="javascript:;" id="add_banner">添加Banner</a> ]
+		[ <a href="{tpl:$this.sign/}&company_id={tpl:$clubInfo.company_id/}"><img src="/icon/return.png" width='30' height='30'/></a> | <a class = "pb_btn_dark_1" href="javascript:;" id="add_banner">新增</a> ]
 	</fieldset>
 	<fieldset><legend>banner列表</legend>
 		<table width="99%" align="center" class="table table-bordered table-striped" >
@@ -29,12 +29,12 @@
 			{tpl:loop $clubInfo.detail.banner $pos $picInfo}
 			<tr class="hover">
 				<td align="center"><img src="{tpl:$picInfo.img_url/}" width='150' height='130'/><p>文字：{tpl:$picInfo.text/}<p>跳转：{tpl:$picInfo.img_jump_url/}<p>标签：{tpl:$picInfo.title/}</td>
-				<td align="center"><a  href="javascript:;" onclick="BannerDelete('{tpl:$pos/}')">删除</a>
-					|  <a href="javascript:;" onclick="BannerModify('{tpl:$pos/}');">修改</a></td>
+				<td align="center"><a  href="javascript:;" onclick="BannerDelete('{tpl:$pos/}')"><img src="/icon/del.png" width='30' height='30'/></a>
+					|  <a href="javascript:;" onclick="BannerModify('{tpl:$pos/}');"><img src="/icon/edit2.png" width='30' height='30'/></a></td>
 			</tr>
 			{/tpl:loop}
 			<tr class="noborder"><td></td>
-				<td><button type="submit" id="club_banner_submit">提交</button></td>
+				<td><button type="submit" id="club_banner_submit" class="pb_btn_dark_1">提交</button></td>
 			</tr>
 		</table>
 </form>

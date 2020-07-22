@@ -34,7 +34,7 @@ function updaetLogModify(lid){
           {/tpl:loop}
             {tpl:loop $LogList $LogId $Log}
               <tr class="hover"><th align="center" class="rowtip" colspan="2">{tpl:$Log.comment/}</th>
-                  <td align="center"><a href="javascript:;" onclick="updaetLogModify('{tpl:$Log.UpdateLogId/}');">修改</a> |  <a  href="javascript:;" onclick="updateLogDelete('{tpl:$Log.UpdateLogId/}}')">删除</a></td></tr>
+                  <td align="center"><a href="javascript:;" onclick="updaetLogModify('{tpl:$Log.UpdateLogId/}');"><img src="/icon/edit2.png" width='30' height='30'/></a> |  <a  href="javascript:;" onclick="updateLogDelete('{tpl:$Log.UpdateLogId/}}')"><img src="/icon/del.png" width='30' height='30'/></a></td></tr>
             {/tpl:loop}
       {/tpl:loop}
   </tr>

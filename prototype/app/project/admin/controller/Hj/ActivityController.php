@@ -364,13 +364,12 @@ class Hj_ActivityController extends AbstractController
             $params['PageSize'] = 20;
             //获取列表时需要获得记录总数
             $params['getCount'] = 1;
-            //获取列表信息
             //获取活动信息
             $activityInfo = $this->oActivity->getActivity($activity_id,'*');
             //数据解包
             $activityInfo['detail'] = json_decode($activityInfo['detail'],true);
             $params['activity_id'] = $activityInfo['activity_id'];
-            //获取文章列表
+            //获取活动列表
             $activityList = $this->oUserInfo->getUserActivityLog($params);
             $userList = [];
             //循环页面列表

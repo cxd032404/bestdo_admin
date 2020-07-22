@@ -22,7 +22,7 @@
         <td align="left"><textarea name="comment" id="comment" class="span5" rows="4">{tpl:$UpdateLogInfo.comment/}</textarea></td>
     </tr>
     <tr class="noborder"><td></td>
-        <td><button type="submit" id="update_log_update_submit">提交</button></td>
+        <td><button type="submit" id="update_log_update_submit" class="pb_btn_dark_1">提交</button></td>
     </tr>
 </table>
 </form>

@@ -28,9 +28,10 @@ class Base_Upload
 	//protected $allowImageExtArr = array('gif', 'jpg', 'jpeg', 'png', 'bmp');
 
 	protected $allowFileExtArr = [
-	    "txt" => ["txt"],
+	    "txt" => ["txt",'xls','xlsx'],
         "img" => ['gif', 'jpg', 'jpeg', 'png', 'bmp'],
-        "video" => []
+        "video" => [],
+
     ];
 	/**
 	 * 最大文件
