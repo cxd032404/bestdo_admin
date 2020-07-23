@@ -32,7 +32,7 @@ function activityModify(mid){
   <button type="submit" class="pb_btn_light_1">搜索</button>
 </form>
   <div class="ifm_all">
-    <table  align="center" class="table table-bordered table-striped" style="overflow: scroll;max-width: none;width: 2200px;">
+    <table  align="center" class="table table-bordered table-striped" >
       <tr>
     <th align="center" class="rowtip">活动ID</th>
     <th align="center" class="rowtip">活动名称</th>
@@ -63,7 +63,7 @@ function activityModify(mid){
       <td align="center">{tpl:$activityInfo.update_time/}</td>
 
       <td align="center"><a class = "pb_btn_grey_1" href="javascript:;" onclick="activityDelete('{tpl:$activityInfo.activity_id/}','{tpl:$activityInfo.activity_name/}')">删除</a>
- | <a class = "pb_btn_light_1" href="javascript:;" onclick="activityModify('{tpl:$activityInfo.activity_id/}');">修改</a> | <a class = "pb_btn_light_2" href="{tpl:$this.sign/}&ac=activity.log&activity_id={tpl:$activityInfo.activity_id/}">报名记录{tpl:if($activityInfo.count>0)}({tpl:$activityInfo.count/}){/tpl:if}</a>{tpl:if($activityInfo.download == 1)}<a href="{tpl:$this.sign/}&ac=activity.download&activity_id={tpl:$activityInfo.activity_id/}">下载</a>{/tpl:if}</td>
+ | <a class = "pb_btn_light_1" href="javascript:;" onclick="activityModify('{tpl:$activityInfo.activity_id/}');">修改</a> | <a class = "pb_btn_light_2" href="{tpl:$this.sign/}&ac=activity.log&activity_id={tpl:$activityInfo.activity_id/}">报名记录{tpl:if($activityInfo.count>0)}({tpl:$activityInfo.count/}){/tpl:if}</a>{tpl:if($activityInfo.download == 1)}<a href="{tpl:$this.sign/}&ac=activity.download&activity_id={tpl:$activityInfo.activity_id/}">下载</a>|<a href="javascript:;" class="activityJudgeUpload">上传用户</a>{/tpl:if}</td>
   </tr>
 {/tpl:loop}
   <tr><th colspan="10" align="center" class="rowtip">{tpl:$page_content/}</th></tr>
@@ -72,3 +72,11 @@ function activityModify(mid){
 
 </fieldset>
 {tpl:tpl contentFooter/}
+
+<script type="text/javascript">
+  $(document).ready(function(){
+    $('.activityJudgeUpload').click(function(){
+      uploadUserBox = divBox.showBox("{tpl:$this.sign/}&ac=activity.judge.upload.submit&activity_id={tpl:$activityInfo.activity_id/}", {title:'上传评价',width:600,height:300});
+    });
+  });
+</script>

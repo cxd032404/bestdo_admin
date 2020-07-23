@@ -444,4 +444,60 @@ class Hj_ActivityController extends AbstractController
         }
         $oExcel->close();
     }
+
+    /*
+     * 上传页面渲染
+     */public function activityJudgeUploadSubmitAction()
+{
+    $activity_id = $this->request->get("activity_id")??0;
+    //检查权限
+    $PermissionCheck = $this->manager->checkMenuPermission(0,$this->sign);
+    if($PermissionCheck['return'])
+    {
+        //模板渲染
+        include $this->tpl('Hj_Activity_ActivityJudgeUpload');
+    }
+    else
+    {
+        $home = $this->sign;
+        include $this->tpl('403');
+    }
+}
+
+
+    /*
+     * 评价导入
+     */
+    public function activityJudgeUploadAction(){
+        $activity_id = $this->request->activity_id??0;
+        $oUpload = new Base_Upload('upload_txt');
+        $upload = $oUpload->upload('upload_txt');
+        $upload = $upload->resultArr;
+        print_r($upload);die();
+        if($upload[1]['errno']==0) {
+            //$index = (new Base_Cache_Elasticsearch())->checkIndex("company_user_list",['company_id'=>$company_id]);
+            $file_path = $upload[1]['path'];
+        }
+
+        require_once "../../../../lib/Third/PHPExcel.php";
+        $inputFileType = PHPExcel_IOFactory::identify($file_path);
+        print_r($inputFileType);die();
+        $objReader = PHPExcel_IOFactory::createReader($inputFileType);
+
+        $PHPExcel = $objReader->load($file_path); //读取文件
+        print_r($PHPExcel);DIE();
+        $currentSheet = $PHPExcel->getSheet("0"); //读取第一个工作簿
+        $allColumn = $currentSheet->getHighestColumn(); // 所有列数
+        $allRow = $currentSheet->getHighestRow(); // 所有行数
+        $data = array(); //下面是读取想要获取的列的内容
+        for ($rowIndex = 2; $rowIndex <= $allRow; $rowIndex++)
+        {
+            $data[] = array(
+                'id' => $cell = $currentSheet->getCell('A'.$rowIndex)->getValue(),
+                'score' => $cell = $currentSheet->getCell('H'.$rowIndex)->getValue(),
+                'ranking' => $cell = $currentSheet->getCell('I'.$rowIndex)->getValue(),
+             );
+         }
+        print_r($data);die();
+    }
 }
