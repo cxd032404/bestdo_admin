@@ -1,6 +1,8 @@
 {tpl:tpl contentHeader/}
 <fieldset>
-	[ <a href="{tpl:$this.sign/}"><img src="/icon/return.png" width='30' height='30'/></a> ]
+	<div>
+		<span style="float:right;"><a class  = "pb_btn_dark_1" href="{tpl:$this.sign/}">返回</a></span>
+	</div>
 </fieldset>
 <form name="group_permission_update_form" id="group_permission_update_form" action="?ctl=data.group&ac=permission.modify" method="post">
 <table class="tbv" width="100%">
@@ -9,7 +11,7 @@
 	<legend>{tpl:$group.name/} 数据权限列表</legend>
 	<table width="99%" align="center" class="table table-bordered table-striped">
 		<tr>
-			<th align="center" class="rowtip">赛事</th>
+			<th align="center" class="rowtip">企业</th>
 			<th align="center" class="rowtip">权限</th>
 		</tr>
 		{tpl:loop $totalPermission $company_id $companyInfo}
