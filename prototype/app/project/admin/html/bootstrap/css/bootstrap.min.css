@@ -141,25 +141,26 @@
 #company_id{margin-right: 10px;}
 
 select{
-border: 1px solid #ccc;
-vertical-align: middle !important;
-display: inline-block !important;
-margin-bottom: 0px;
+    border: 1px solid #ccc;
+    vertical-align: middle !important;
+    display: inline-block !important;
+    margin-bottom: 0px;
 }
+.selectnav{display: none !important;}
 input{margin-bottom:0px;}
 
 td a img{width:18px;}
 
 @media screen and (max-width: 1600px){
-   .ifm_all{height: auto;overflow: scroll !important;width: 75%;}
- } 
+    .ifm_all{height: auto;overflow: scroll !important;width: 75%;}
+}
 @media screen and (max-width: 1450px){
 
-.ifm_all{height: auto;overflow: scroll !important;width: 64%;}
+    .ifm_all{height: auto;overflow: scroll !important;width: 64%;}
 
-} 
+}
 @media screen and (max-width: 1366px){
 
-.ifm_all{height: auto;overflow: scroll !important;width: 60%;}
+    .ifm_all{height: auto;overflow: scroll !important;width: 60%;}
 
-} 
+}
