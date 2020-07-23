@@ -32,7 +32,7 @@ function pageModify(mid){
   <button type="submit" class="pb_btn_light_1">搜索</button>
 </form>
     <div class="ifm_all">
-        <table  align="center" class="table table-bordered table-striped" style="overflow: scroll;max-width: none;width: 2200px;">
+        <table  align="center" class="table table-bordered table-striped" >
   <tr>
     <th align="center" class="rowtip">页面ID</th>
     <th align="center" class="rowtip">页面名称</th>

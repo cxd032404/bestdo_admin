@@ -48,10 +48,10 @@
 </form>
 <fieldset><legend>用户列表</legend>
 <div class="ifm_all">
-    <table  align="center" class="table table-bordered table-striped" style="overflow: scroll;max-width: none;width: 2200px;">
+    <table  align="center" class="table table-bordered table-striped" >
       <tr>
         <th align="center" width = "4%" class="rowtip">用户ID</th>
-          <th align="center" width = "7%" class="rowtip">企业</th>
+          <th align="center" width = "8%" class="rowtip">企业</th>
           <th align="center" width = "10%" class="rowtip">部门</th>
           <th align="center" width = "10%" class="rowtip">真实姓名</th>
           <th align="center" width = "10%" class="rowtip">昵称</th>
