@@ -446,13 +446,15 @@ class Hj_UserInfo extends Base_Widget
         //性别判断
         $wheresex = isset($this->sex[$params['sex']])?" sex = '".$params['sex']."' ":"";
         //姓名
+        $whereMobile = (isset($params['mobile']) && trim($params['mobile']))?" mobile like '%".$params['mobile']."%' ":"";
+        //姓名
         $whereName = (isset($params['true_name']) && trim($params['true_name']))?" true_name like '%".$params['true_name']."%' ":"";
         //昵称
         $whereNickName = (isset($params['NickName']) && trim($params['nick_name']))?" nick_name like '%".$params['nick_name']."%' ":"";
         //注册日期
         $whereReg = (isset($params['regDate']) && strtotime($params['regDate'])>0)?" reg_time >= '".$params['regDate']."' and reg_time <= '".$params['regDate']." 23:59:59"."' ":"";
         //所有查询条件置入数组
-        $whereCondition = array($wherePermission,$whereCompany,$wheresex,$whereName,$whereNickName,$whereReg);
+        $whereCondition = array($wherePermission,$whereCompany,$wheresex,$whereName,$whereMobile,$whereNickName,$whereReg);
         //生成条件列
         $where = Base_common::getSqlWhere($whereCondition);
         //获取用户数量
@@ -495,6 +497,8 @@ class Hj_UserInfo extends Base_Widget
             :" 0 "):"";
         //企业
         $whereCompany = (isset($params['company_id']) && ($params['company_id']>0))?" company_id = '".$params['company_id']."' ":"";
+        //姓名
+        $whereMobile = (isset($params['mobile']) && trim($params['mobile']))?" mobile like '%".$params['mobile']."%' ":"";
         //性别判断
         $wheresex = isset($this->sex[$params['sex']])?" sex = '".$params['sex']."' ":"";
         //姓名
@@ -504,7 +508,7 @@ class Hj_UserInfo extends Base_Widget
         //注册日期
         $whereReg = (isset($params['regDate']) && strtotime($params['regDate'])>0)?" reg_time >= '".$params['regDate']."' and reg_time <= '".$params['regDate']." 23:59:59"."' ":"";
         //所有查询条件置入数组
-        $whereCondition = array($wherePermission,$whereCompany,$wheresex,$whereName,$whereNickName,$whereReg);
+        $whereCondition = array($wherePermission,$whereCompany,$wheresex,$whereName,$whereNickName,$whereMobile,$whereReg);
         //生成条件列
         $where = Base_common::getSqlWhere($whereCondition);
         $sql = "SELECT $fields FROM $table_to_process where 1 ".$where;

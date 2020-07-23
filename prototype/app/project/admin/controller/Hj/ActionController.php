@@ -59,7 +59,7 @@ class Hj_ActionController extends AbstractController
 	public function actionAddAction()
 	{
 		//检查权限
-		$PermissionCheck = $this->manager->checkMenuPermission("ActionInsert");
+		$PermissionCheck = $this->manager->checkMenuPermission("ActionInsert",$this->sign);
 		if($PermissionCheck['return'])
 		{
 			//渲染模板
@@ -75,7 +75,7 @@ class Hj_ActionController extends AbstractController
 	public function actionInsertAction()
 	{
 		//检查权限
-		$PermissionCheck = $this->manager->checkMenuPermission("ActionInsert");
+		$PermissionCheck = $this->manager->checkMenuPermission("ActionInsert",$this->sign);
 		if($PermissionCheck['return'])
 		{
 			//获取页面参数
@@ -118,7 +118,7 @@ class Hj_ActionController extends AbstractController
 	public function actionModifyAction()
 	{
 		//检查权限
-		$PermissionCheck = $this->manager->checkMenuPermission("ActionModify");
+		$PermissionCheck = $this->manager->checkMenuPermission("ActionModify",$this->sign);
 		if($PermissionCheck['return'])
 		{
 			//动作ID
@@ -142,7 +142,7 @@ class Hj_ActionController extends AbstractController
 	public function actionUpdateAction()
 	{
 		//检查权限
-		$PermissionCheck = $this->manager->checkMenuPermission("ActionModify");
+		$PermissionCheck = $this->manager->checkMenuPermission("ActionModify",$this->sign);
 		if($PermissionCheck['return'])
 		{
 
@@ -176,7 +176,7 @@ class Hj_ActionController extends AbstractController
 	public function actionDeleteAction()
 	{
 		//检查权限
-		$PermissionCheck = $this->manager->checkMenuPermission("ActionDelete");
+		$PermissionCheck = $this->manager->checkMenuPermission("ActionDelete",$this->sign);
 		if($PermissionCheck['return'])
 		{
 			//动作ID
@@ -195,7 +195,7 @@ class Hj_ActionController extends AbstractController
     public function actionCreditAddAction()
     {
         //检查权限
-        $PermissionCheck = $this->manager->checkMenuPermission("ActionModify");
+        $PermissionCheck = $this->manager->checkMenuPermission("ActionModify",$this->sign);
         if($PermissionCheck['return'])
         {
             //动作ID
@@ -219,7 +219,7 @@ class Hj_ActionController extends AbstractController
     public function actionCreditModifyAction()
     {
         //检查权限
-        $PermissionCheck = $this->manager->checkMenuPermission("ActionModify");
+        $PermissionCheck = $this->manager->checkMenuPermission("ActionModify",$this->sign);
         if($PermissionCheck['return'])
         {
             //动作ID
@@ -252,7 +252,7 @@ class Hj_ActionController extends AbstractController
     public function actionCreditInsertAction()
     {
         //检查权限
-        $PermissionCheck = $this->manager->checkMenuPermission("ActionModify");
+        $PermissionCheck = $this->manager->checkMenuPermission("ActionModify",$this->sign);
         if($PermissionCheck['return'])
         {
             //动作ID
@@ -290,7 +290,7 @@ class Hj_ActionController extends AbstractController
     public function actionCreditUpdateAction()
     {
         //检查权限
-        $PermissionCheck = $this->manager->checkMenuPermission("ActionModify");
+        $PermissionCheck = $this->manager->checkMenuPermission("ActionModify",$this->sign);
         if($PermissionCheck['return'])
         {
             //动作ID
@@ -319,11 +319,11 @@ class Hj_ActionController extends AbstractController
             include $this->tpl('403');
         }
     }
-    //修改动作
+    //删除动作
     public function actionCreditDeleteAction()
     {
         //检查权限
-        $PermissionCheck = $this->manager->checkMenuPermission("ActionModify");
+        $PermissionCheck = $this->manager->checkMenuPermission("ActionDelete",$this->sign);
         if($PermissionCheck['return'])
         {
             //动作ID

@@ -3,11 +3,11 @@
 $(document).ready(function()
 {
 	$('#add_action').click(function(){
-		addActionBox = divBox.showBox('{tpl:$this.sign/}&ac=action.add', {title:'添加动作',width:400,height:200});
+		addActionBox = divBox.showBox('{tpl:$this.sign/}&ac=action.add', {title:'添加动作',width:500,height:200});
 	});
 });
 function CreditModify(aid,cid){
-    addCreditBox = divBox.showBox('{tpl:$this.sign/}&ac=action.credit.modify&ActionId=' + aid + '&CId=' + cid, {title:'修改积分',width:500,height:500});
+    addCreditBox = divBox.showBox('{tpl:$this.sign/}&ac=action.credit.modify&ActionId=' + aid + '&CId=' + cid, {title:'修改积分',width:600,height:500});
 }
 
 function actionDelete(p_id, p_name){
@@ -15,7 +15,7 @@ function actionDelete(p_id, p_name){
 }
 
 function actionModify(mid){
-	modifyActionBox = divBox.showBox('{tpl:$this.sign/}&ac=action.modify&ActionId=' + mid, {title:'修改动作',width:400,height:300});
+	modifyActionBox = divBox.showBox('{tpl:$this.sign/}&ac=action.modify&ActionId=' + mid, {title:'修改动作',width:500,height:300});
 }
 
 function CreditDelete(aid,cid,c_name){
@@ -25,7 +25,9 @@ function CreditDelete(aid,cid,c_name){
 </script>
 
 <fieldset><legend>操作</legend>
-[ <a href="javascript:;" id="add_action">添加动作</a> ]
+    <div>
+        <span style="float:right;"><a class="pb_btn_dark_1" href="javascript:;" id="add_action">新增</a></span>
+    </div>
 </fieldset>
 <fieldset><legend>动作列表 </legend>
 <table width="99%" align="center" class="table table-bordered table-striped">
@@ -44,7 +46,7 @@ function CreditDelete(aid,cid,c_name){
     <td align="center">{tpl:$ActionInfo.ActionName/}</td>
     <td align="center">{tpl:$ActionInfo.CreditListHtml/}</td>
 
-      <td align="center"><a  href="javascript:;" onclick="actionDelete('{tpl:$ActionInfo.ActionId/}','{tpl:$ActionInfo.ActionName/}')"><img src="/icon/del.png" width='30' height='30'/></a> |  <a href="javascript:;" onclick="actionModify('{tpl:$ActionInfo.ActionId/}');"><img src="/icon/edit2.png" width='30' height='30'/></a></td>
+      <td align="center"><a class="pb_btn_dark_1" href="javascript:;" onclick="actionDelete('{tpl:$ActionInfo.ActionId/}','{tpl:$ActionInfo.ActionName/}')">删除</a> <a class="pb_btn_light_1" href="javascript:;" onclick="actionModify('{tpl:$ActionInfo.ActionId/}');">修改</a></td>
   </tr>
 {/tpl:loop}
 </table>

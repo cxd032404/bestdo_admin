@@ -30,7 +30,7 @@ class Hj_CreditController extends AbstractController
 	//积分列表页面
 	public function indexAction()
 	{
-		//检查权限
+	    //检查权限
 		$PermissionCheck = $this->manager->checkMenuPermission(0);
 		if($PermissionCheck['return'])
 		{
@@ -57,7 +57,7 @@ class Hj_CreditController extends AbstractController
 	public function creditAddAction()
 	{
 		//检查权限
-		$PermissionCheck = $this->manager->checkMenuPermission("CreditInsert");
+		$PermissionCheck = $this->manager->checkMenuPermission("CreditInsert",$this->ctl);
 		if($PermissionCheck['return'])
 		{
 			//渲染模板
@@ -73,7 +73,7 @@ class Hj_CreditController extends AbstractController
 	public function creditInsertAction()
 	{
 		//检查权限
-		$PermissionCheck = $this->manager->checkMenuPermission("CreditInsert");
+		$PermissionCheck = $this->manager->checkMenuPermission("CreditInsert",$this->ctl);
 		if($PermissionCheck['return'])
 		{
 			//获取页面参数
@@ -104,7 +104,7 @@ class Hj_CreditController extends AbstractController
 	public function creditModifyAction()
 	{
 		//检查权限
-		$PermissionCheck = $this->manager->checkMenuPermission("CreditModify");
+		$PermissionCheck = $this->manager->checkMenuPermission("CreditModify",$this->sign);
 		if($PermissionCheck['return'])
 		{
 			//积分ID
@@ -124,7 +124,7 @@ class Hj_CreditController extends AbstractController
 	public function creditUpdateAction()
 	{
 		//检查权限
-		$PermissionCheck = $this->manager->checkMenuPermission("CreditModify");
+		$PermissionCheck = $this->manager->checkMenuPermission("CreditModify",$this->sign);
 		if($PermissionCheck['return'])
 		{
 
@@ -156,7 +156,7 @@ class Hj_CreditController extends AbstractController
 	public function creditDeleteAction()
 	{
 		//检查权限
-		$PermissionCheck = $this->manager->checkMenuPermission("CreditDelete");
+		$PermissionCheck = $this->manager->checkMenuPermission("CreditDelete",$this->sign);
 		if($PermissionCheck['return'])
 		{
 			$CreditId = trim($this->request->CreditId);
@@ -173,7 +173,7 @@ class Hj_CreditController extends AbstractController
     public function getFrequencyConditionAction()
     {
         //检查权限
-        $PermissionCheck = $this->manager->checkMenuPermission("CreditModify");
+        $PermissionCheck = $this->manager->checkMenuPermission("CreditModify",$this->sign);
         if($PermissionCheck['return'])
         {
             $this->oAction = new Hj_Action();

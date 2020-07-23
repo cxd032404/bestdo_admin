@@ -52,7 +52,6 @@ function clubModify(mid){
   <a class="pb_btn_light_1"  href="javascript:;" onclick="clubModify('{tpl:$clubInfo.club_id/}');">修改</a>
            <a class="pb_btn_grey_1" href="{tpl:$this.sign/}&ac=member.list&club_id={tpl:$clubInfo.club_id/}">名单{tpl:if($clubInfo.member_count>0)}({tpl:$clubInfo.member_count/}){/tpl:if}</a>
            <a class="pb_btn_grey_1" href="{tpl:$this.sign/}&ac=member.log&club_id={tpl:$clubInfo.club_id/}">记录</a>
-           <a class="pb_btn_light_2" href="{tpl:$this.sign/}&ac=banner&club_id={tpl:$clubInfo.club_id/}">Banner({tpl:$clubInfo.detail.banner func="count(@@)"/})</a></td>
   </tr>
 {/tpl:loop}
 </table>

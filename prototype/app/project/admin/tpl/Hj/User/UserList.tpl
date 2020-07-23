@@ -38,6 +38,7 @@
     </select>
     姓名:<input type="text" class="span2" name="true_name" value="{tpl:$params.true_name/}" />
     昵称:<input type="text" class="span2" name="nick_name" value="{tpl:$params.nick_name/}" />
+    电话:<input type="text" class="span2" name="mobile" value="{tpl:$params.mobile/}" />
     性别:<select name="sex" class="span2" size="1">
         <option value="-1" {tpl:if($params.sex==-1)}selected="selected"{/tpl:if}>全部</option>
         {tpl:loop $sexList $sexSymble $sexName}
