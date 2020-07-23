@@ -72,10 +72,10 @@
         <td align="center">{tpl:$UserInfo.sex/}</td>
         <td align="center">{tpl:$UserInfo.reg_time/}</td>
         <td align="center">{tpl:$UserInfo.last_login_time/}<br>{tpl:$UserInfo.LoginSourceName/}</td>
-          <td align="center"><a class = "pb_btn_light_1" href="javascript:;" onclick="userDetail('{tpl:$UserInfo.user_id/}','{tpl:$UserInfo.true_name/}')">详细</a>{tpl:if($UserInfo.is_del!=1)}｜<a class = "pb_btn_grey_1" href="javascript:;" onclick="userDisable('{tpl:$UserInfo.user_id/}','{tpl:$UserInfo.true_name/}')">停用</a>{/tpl:if}
-              {tpl:if($UserInfo.test==1)} | <a class = "pb_btn_dark_2" href="javascript:;" onclick="setTestUser('{tpl:$UserInfo.user_id/}','{tpl:$UserInfo.true_name/}',0)">设为普通用户</a>
+          <td align="center"><a class = "pb_btn_light_1" href="javascript:;" onclick="userDetail('{tpl:$UserInfo.user_id/}','{tpl:$UserInfo.true_name/}')">详细</a>{tpl:if($UserInfo.is_del!=1)} <a class = "pb_btn_grey_1" href="javascript:;" onclick="userDisable('{tpl:$UserInfo.user_id/}','{tpl:$UserInfo.true_name/}')">停用</a>{/tpl:if}
+              {tpl:if($UserInfo.test==1)}  <a class = "pb_btn_dark_2" href="javascript:;" onclick="setTestUser('{tpl:$UserInfo.user_id/}','{tpl:$UserInfo.true_name/}',0)">设为普通用户</a>
               {tpl:else}
-               | <a  class = "pb_btn_light_2" href="javascript:;" onclick="setTestUser('{tpl:$UserInfo.user_id/}','{tpl:$UserInfo.true_name/}',1)">设为测试用户</a>
+                <a  class = "pb_btn_light_2" href="javascript:;" onclick="setTestUser('{tpl:$UserInfo.user_id/}','{tpl:$UserInfo.true_name/}',1)">设为测试用户</a>
               {/tpl:if}
           </td>
 

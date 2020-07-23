@@ -23,7 +23,10 @@
 	<input type="hidden" name="company_id" id="company_id" value="{tpl:$companyInfo.company_id/}" />
 	<input type="hidden" name="company_name" id="company_name" value="{tpl:$companyInfo.company_name/}" />
 	<fieldset>
-		[ <a class = "pb_btn_light_1" href="?{tpl:$currentPage func='urldecode(@@)'/}&company_id={tpl:$companyInfo.company_id/}">返回</a> | <a class = "pb_btn_dark_1" href="javascript:;" id="add_banner">新增</a> ]
+	<div>
+	<span style="float:left;"> <a class = "pb_btn_light_1" href="?{tpl:$currentPage func='urldecode(@@)'/}&company_id={tpl:$companyInfo.company_id/}">返回</a></span>
+		<span style="float:right;"><a class = "pb_btn_dark_1" href="javascript:;" id="add_banner">新增</a> </span>
+</div>
 	</fieldset>
 	<fieldset><legend>{tpl:$typeName/}列表</legend>
 		<div style="height: auto;overflow: scroll !important;width: 80%;">
@@ -39,7 +42,7 @@
 				<td align="center">{tpl:$picInfo.sort/}</td>
 				<td align="center">{tpl:$picInfo.start_time/}<p>{tpl:$picInfo.end_time/}</td>
 				<td align="center"><a class = "pb_btn_grey_1" href="javascript:;" onclick="BannerDelete('{tpl:$pos/}')">删除</a>
-					|  <a class = "pb_btn_light_1" href="javascript:;" onclick="BannerModify('{tpl:$pos/}');">修改</a></td>
+					  <a class = "pb_btn_light_1" href="javascript:;" onclick="BannerModify('{tpl:$pos/}');">修改</a></td>
 			</tr>
 			{/tpl:loop}
 			</table>

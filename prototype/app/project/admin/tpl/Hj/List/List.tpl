@@ -22,7 +22,10 @@ function post(lid){
 </script>
 
 <fieldset><legend>操作</legend>
-[ <a class = "pb_btn_light_1" href="{tpl:$return_url/}">返回</a> | <a class = "pb_btn_dark_1" href="javascript:;" id="post">发布</a> ]
+  <div>
+    <span style="float:left;"><a class = "pb_btn_light_1" href="{tpl:$return_url/}">返回</a></span>
+    <span style="float:right;"><a class = "pb_btn_dark_1" href="javascript:;" id="post">发布</a></span>
+  </div>
 </fieldset>
 
 <fieldset><legend>列表详情</legend>
@@ -56,7 +59,7 @@ function post(lid){
         {tpl:else}
         <a class = "pb_btn_dark_1" href="{tpl:$display_url/}&post_id={tpl:$postsInfo.post_id/}&display=1">显示</a>
         {/tpl:if}
-        | <a class = "pb_btn_light_1" href="{tpl:$this.sign/}&ac=posts.detail&post_id={tpl:$postsInfo.post_id/}&currentPage={tpl:$currentPage/}">详情</a></td>
+        <a class = "pb_btn_light_1" href="{tpl:$this.sign/}&ac=posts.detail&post_id={tpl:$postsInfo.post_id/}&currentPage={tpl:$currentPage/}">详情</a></td>
   </tr>
 {/tpl:loop}
   <tr><th colspan="10" align="center" class="rowtip">{tpl:$page_content/}</th></tr>

@@ -12,7 +12,12 @@
 </script>
 
 <fieldset><legend>操作</legend>
-[ <a href="{tpl:$this.sign/}&club_id={tpl:$clubInfo.club_id/}"><img src="/icon/return.png" width='30' height='30'/></a> ｜ <a href="javascript:;" onclick="invite();">邀请</a> ]
+  <div>
+    <span style="float:left;"><a class = "pb_btn_light_1"  href="{tpl:$this.sign/}&club_id={tpl:$clubInfo.club_id/}">返回</a></span>
+    <span style="float:right;"><a class = "pb_btn_dark_1"  href="javascript:;" onclick="invite();">邀请</a></span>
+  </div>
+
+
 </fieldset>
 
 <fieldset><legend>{tpl:$clubInfo.club_name/} 成员列表</legend>
@@ -31,7 +36,7 @@
     <td align="center">{tpl:$memberInfo.user_name/}</td>
     <td align="center">{tpl:if($memberInfo.user_img=="")}无{tpl:else}<img src="{tpl:$memberInfo.user_img/}" width="30px;" height="30px;"/>{/tpl:if}</td>
     <td align="center">{tpl:$memberInfo.create_time/}</td>
-    <td align="center"><a  href="javascript:;" onclick="leaveClub('{tpl:$memberInfo.user_id/}')">踢出</a></td>
+    <td align="center"><a class = "pb_btn_light_1"   href="javascript:;" onclick="leaveClub('{tpl:$memberInfo.user_id/}')">踢出</a></td>
     <td align="center">{tpl:$memberInfo.detail.comment/}</td>
   </tr>
 {/tpl:loop}

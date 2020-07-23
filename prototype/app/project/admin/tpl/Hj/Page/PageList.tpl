@@ -18,7 +18,7 @@ function pageModify(mid){
 </script>
 
 <fieldset><legend>操作</legend>
-[ <a class = "pb_btn_dark_1" href="javascript:;" id="add_page">新增</a> ]
+    <div align=right> <a class = "pb_btn_dark_1" href="javascript:;" id="add_page">新增</a></div>
 </fieldset>
 
 <fieldset><legend>页面列表 </legend>
@@ -52,7 +52,7 @@ function pageModify(mid){
       <td align="center">{tpl:$pageInfo.company_name/}</td>
     <td align="center">{tpl:$pageInfo.update_time/}</td>
       <td align="center"><a class="pb_btn_grey_1" href="javascript:;" onclick="pageDelete('{tpl:$pageInfo.page_id/}','{tpl:$pageInfo.page_name/}')">删除</a>
- |  <a class = "pb_btn_light_1" href="javascript:;" onclick="pageModify('{tpl:$pageInfo.page_id/}');">修改</a> | <a class = "pb_btn_grey_2" href="{tpl:$this.sign/}&ac=page.detail&page_id={tpl:$pageInfo.page_id/}">页面元素 ({tpl:$pageInfo.element_count/})</a> | <a class = "pb_btn_grey_1" target="_blank" href="{tpl:$pageInfo.test_url/}?{tpl:$pageInfo.page_params/}">测试页面</a></td>
+   <a class = "pb_btn_light_1" href="javascript:;" onclick="pageModify('{tpl:$pageInfo.page_id/}');">修改</a>  <a class = "pb_btn_grey_2" href="{tpl:$this.sign/}&ac=page.detail&page_id={tpl:$pageInfo.page_id/}">页面元素 ({tpl:$pageInfo.element_count/})</a>  <a class = "pb_btn_grey_1" target="_blank" href="{tpl:$pageInfo.test_url/}?{tpl:$pageInfo.page_params/}">测试页面</a></td>
   </tr>
 {/tpl:loop}
 </table>

@@ -18,7 +18,7 @@ function clubModify(mid){
 </script>
 
 <fieldset><legend>操作</legend>
-[ <a class="pb_btn_dark_2" href="javascript:;" id="add_club">+添加俱乐部</a> ]
+    <div align=right><a class="pb_btn_dark_2" href="javascript:;" id="add_club">+添加俱乐部</a></div>
 </fieldset>
 
 <fieldset><legend>俱乐部列表 </legend>
@@ -49,10 +49,10 @@ function clubModify(mid){
       <td align="center">{tpl:$clubInfo.member_limit/}</td>
       <td align="center">{tpl:if($clubInfo.allow_enter==1)}允许{tpl:else}拒绝{/tpl:if}</td>
       <td align="center"><a class="pb_btn_grey_1" href="javascript:;" onclick="clubDelete('{tpl:$clubInfo.club_id/}','{tpl:$clubInfo.club_name/}')">删除</a>
- | <a class="pb_btn_light_1"  href="javascript:;" onclick="clubModify('{tpl:$clubInfo.club_id/}');">修改</a>
-          | <a class="pb_btn_grey_1" href="{tpl:$this.sign/}&ac=member.list&club_id={tpl:$clubInfo.club_id/}">名单{tpl:if($clubInfo.member_count>0)}({tpl:$clubInfo.member_count/}){/tpl:if}</a>
-          | <a class="pb_btn_grey_1" href="{tpl:$this.sign/}&ac=member.log&club_id={tpl:$clubInfo.club_id/}">记录</a>
-          | <a class="pb_btn_light_2" href="{tpl:$this.sign/}&ac=banner&club_id={tpl:$clubInfo.club_id/}">Banner({tpl:$clubInfo.detail.banner func="count(@@)"/})</a></td>
+  <a class="pb_btn_light_1"  href="javascript:;" onclick="clubModify('{tpl:$clubInfo.club_id/}');">修改</a>
+           <a class="pb_btn_grey_1" href="{tpl:$this.sign/}&ac=member.list&club_id={tpl:$clubInfo.club_id/}">名单{tpl:if($clubInfo.member_count>0)}({tpl:$clubInfo.member_count/}){/tpl:if}</a>
+           <a class="pb_btn_grey_1" href="{tpl:$this.sign/}&ac=member.log&club_id={tpl:$clubInfo.club_id/}">记录</a>
+           <a class="pb_btn_light_2" href="{tpl:$this.sign/}&ac=banner&club_id={tpl:$clubInfo.club_id/}">Banner({tpl:$clubInfo.detail.banner func="count(@@)"/})</a></td>
   </tr>
 {/tpl:loop}
 </table>
