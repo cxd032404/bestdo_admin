@@ -47,8 +47,8 @@
     <button type="submit" class="pb_btn_light_1">搜索</button>{tpl:$export_var/}
 </form>
 <fieldset><legend>用户列表</legend>
-<div style="height: auto;overflow: scroll !important;width: 60%;">
-    <table  align="center" class="table table-bordered table-striped" style="overflow: scroll;max-width: none;width: 1800px;">
+<div class="ifm_all">
+    <table  align="center" class="table table-bordered table-striped" style="overflow: scroll;max-width: none;width: 2200px;">
       <tr>
         <th align="center" width = "4%" class="rowtip">用户ID</th>
           <th align="center" width = "7%" class="rowtip">企业</th>

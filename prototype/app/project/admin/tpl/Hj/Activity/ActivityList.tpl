@@ -31,8 +31,9 @@ function activityModify(mid){
     </select>
   <button type="submit" class="pb_btn_light_1">搜索</button>
 </form>
-<table width="99%" align="center" class="table table-bordered table-striped">
-  <tr>
+  <div class="ifm_all">
+    <table  align="center" class="table table-bordered table-striped" style="overflow: scroll;max-width: none;width: 2200px;">
+      <tr>
     <th align="center" class="rowtip">活动ID</th>
     <th align="center" class="rowtip">活动名称</th>
     <th align="center" class="rowtip">对应企业</th>
@@ -67,5 +68,7 @@ function activityModify(mid){
 {/tpl:loop}
   <tr><th colspan="10" align="center" class="rowtip">{tpl:$page_content/}</th></tr>
 </table>
+  </div>
+
 </fieldset>
 {tpl:tpl contentFooter/}

@@ -37,8 +37,8 @@ function regPage_miniprogram(mid,name){
 </fieldset>
 
 <fieldset><legend>企业列表 </legend>
-    <div style="height: auto;overflow: scroll !important;width: 70%;">
-        <table  align="center" class="table table-bordered table-striped" style="overflow: scroll;max-width: none;width: 1500px;">
+    <div class="ifm_all">
+        <table  align="center" class="table table-bordered table-striped" style="overflow: scroll;max-width: none;width: 2200px;">
   <tr>
     <th align="center" class="rowtip">企业ID</th>
     <th align="center" class="rowtip">企业名称</th>
