@@ -15,7 +15,7 @@ class Menu_PermissionController extends AbstractController
 	 */
 	public function modifyByMenuAction()
 	{
-		$returnUrl = "<a href='".Base_Common::getUrl('','menu')."'>返回</a>";
+		$returnUrl = "<a class = 'pb_btn_dark_1' href='".Base_Common::getUrl('','menu')."'>返回</a>";
 				
 		$this->manager->checkMenuPermission($this->sign, Widget_Manager::MENU_PURVIEW_SELECT);
 
@@ -67,7 +67,7 @@ class Menu_PermissionController extends AbstractController
 	 */
 	public function modifyByGroupAction()
 	{				
-		$returnUrl = "<a href='".Base_Common::getUrl('','menu.group')."'>返回</a>";
+		$returnUrl = "<a class = 'pb_btn_dark_1' href='".Base_Common::getUrl('','menu.group')."'>返回</a>";
 
 		$this->manager->checkMenuPermission($this->sign, Widget_Manager::MENU_PURVIEW_DELETE);
 

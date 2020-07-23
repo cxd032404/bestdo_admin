@@ -18,7 +18,9 @@ function activityModify(mid){
 </script>
 
 <fieldset><legend>操作</legend>
-[ <a class = "pb_btn_dark_1" href="javascript:;" id="add_activity">新增</a> ]
+  <div>
+    <span style="float:right;"><a class="pb_btn_dark_1" href="javascript:;" id="add_activity">新增</a></span>
+  </div>
 </fieldset>
 
 <fieldset><legend>活动列表 </legend>

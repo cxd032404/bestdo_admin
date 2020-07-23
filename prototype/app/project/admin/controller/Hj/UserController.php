@@ -45,6 +45,7 @@ class Hj_UserController extends AbstractController
 			$sexList = $this->oUserInfo->getsexList();
 			//页面参数预处理
             $params['company_id'] = $this->request->company_id??0;
+            $params['mobile'] = urldecode(trim($this->request->mobile))?substr(urldecode(trim($this->request->mobile)),0,11):"";
             $params['sex'] = isset($sexList[intval($this->request->sex??-1)])?intval($this->request->sex):-1;
 			$params['true_name'] = urldecode(trim($this->request->true_name))?substr(urldecode(trim($this->request->true_name)),0,20):"";
 			$params['nick_name'] = urldecode(trim($this->request->nick_name))?substr(urldecode(trim($this->request->nick_name)),0,20):"";
@@ -127,7 +128,7 @@ class Hj_UserController extends AbstractController
             $params['sex'] = isset($sexList[intval($this->request->sex??-1)])?intval($this->request->sex):-1;
             $params['true_name'] = urldecode(trim($this->request->true_name))?substr(urldecode(trim($this->request->true_name)),0,8):"";
             $params['nick_name'] = urldecode(trim($this->request->nick_name))?substr(urldecode(trim($this->request->nick_name)),0,8):"";
-
+            $params['mobile'] = urldecode(trim($this->request->mobile))?substr(urldecode(trim($this->request->mobile)),0,11):"";
 			//分页参数
 			$params['PageSize'] = 500;
 

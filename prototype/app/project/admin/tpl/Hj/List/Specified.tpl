@@ -22,7 +22,7 @@ function post(lid){
 </script>
 
 <fieldset><legend>操作</legend>
-[ <a class="pb_btn_dark_1" href="javascript:;" id="add_list">+添加</a> ]
+    <div align=right><a class="pb_btn_dark_1" href="javascript:;" id="add_list">+添加</a></div>
 </fieldset>
 
 <fieldset><legend>列表</legend>
@@ -64,8 +64,8 @@ function post(lid){
       <td align="center">{tpl:$listInfo.list_type_name/}</td>
       <td align="center">{tpl:$listInfo.update_time/}</td>
       <td align="center"><a class = "pb_btn_grey_1" href="javascript:;" onclick="listDelete('{tpl:$listInfo.list_id/}','{tpl:$listInfo.list_name/}')">删除</a>
- |  <a class = "pb_btn_light_1" href="javascript:;" onclick="listModify('{tpl:$listInfo.list_id/}');">修改</a>
-          | <a class = "pb_btn_grey_2" href="{tpl:$this.sign/}&ac=list&list_id={tpl:$listInfo.list_id/}&currentPage={tpl:$currentPage/}">列表{tpl:if($listInfo.posts_count>0)}({tpl:$listInfo.posts_count/}){/tpl:if} </a></td>
+   <a class = "pb_btn_light_1" href="javascript:;" onclick="listModify('{tpl:$listInfo.list_id/}');">修改</a>
+           <a class = "pb_btn_grey_2" href="{tpl:$this.sign/}&ac=list&list_id={tpl:$listInfo.list_id/}&currentPage={tpl:$currentPage/}">列表{tpl:if($listInfo.posts_count>0)}({tpl:$listInfo.posts_count/}){/tpl:if} </a></td>
   </tr>
 {/tpl:loop}
 </table>

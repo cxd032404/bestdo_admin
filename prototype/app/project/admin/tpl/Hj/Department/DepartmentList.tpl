@@ -18,7 +18,9 @@ function departmentModify(mid){
 </script>
 
 <fieldset><legend>操作</legend>
-[ <a class="pb_btn_dark_1" href="javascript:;" id="add_department">新增</a> ]
+
+  <div align=right><a class="pb_btn_dark_1" href="javascript:;" id="add_department">新增</a></div>
+
 </fieldset>
 
 <fieldset><legend>部门列表 </legend>
@@ -47,7 +49,7 @@ function departmentModify(mid){
     <td align="center">{tpl:$departmentInfo.parent_department_name/}</td>
       <td align="center">{tpl:$departmentInfo.company_name/}</td>
     <td align="center">{tpl:$departmentInfo.update_time/}</td>
-      <td align="center"> {tpl:if(0==$departmentInfo.child_count)}  <a class="pb_btn_grey_1" href="javascript:;" onclick="departmentDelete('{tpl:$departmentInfo.department_id/}','{tpl:$departmentInfo.department_name/}')">删除</a> |{/tpl:if}
+      <td align="center"> {tpl:if(0==$departmentInfo.child_count)}  <a class="pb_btn_grey_1" href="javascript:;" onclick="departmentDelete('{tpl:$departmentInfo.department_id/}','{tpl:$departmentInfo.department_name/}')">删除</a> {/tpl:if}
   <a class="pb_btn_light_1" href="javascript:;" onclick="departmentModify('{tpl:$departmentInfo.department_id/}');">修改</a></td>
   </tr>
 {/tpl:loop}

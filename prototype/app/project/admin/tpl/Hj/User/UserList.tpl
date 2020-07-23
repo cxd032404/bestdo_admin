@@ -38,6 +38,7 @@
     </select>
     姓名:<input type="text" class="span2" name="true_name" value="{tpl:$params.true_name/}" />
     昵称:<input type="text" class="span2" name="nick_name" value="{tpl:$params.nick_name/}" />
+    电话:<input type="text" class="span2" name="mobile" value="{tpl:$params.mobile/}" />
     性别:<select name="sex" class="span2" size="1">
         <option value="-1" {tpl:if($params.sex==-1)}selected="selected"{/tpl:if}>全部</option>
         {tpl:loop $sexList $sexSymble $sexName}
@@ -48,10 +49,10 @@
 </form>
 <fieldset><legend>用户列表</legend>
 <div class="ifm_all">
-    <table  align="center" class="table table-bordered table-striped" style="overflow: scroll;max-width: none;width: 2200px;">
+    <table  align="center" class="table table-bordered table-striped" >
       <tr>
         <th align="center" width = "4%" class="rowtip">用户ID</th>
-          <th align="center" width = "7%" class="rowtip">企业</th>
+          <th align="center" width = "8%" class="rowtip">企业</th>
           <th align="center" width = "10%" class="rowtip">部门</th>
           <th align="center" width = "10%" class="rowtip">真实姓名</th>
           <th align="center" width = "10%" class="rowtip">昵称</th>
@@ -72,10 +73,10 @@
         <td align="center">{tpl:$UserInfo.sex/}</td>
         <td align="center">{tpl:$UserInfo.reg_time/}</td>
         <td align="center">{tpl:$UserInfo.last_login_time/}<br>{tpl:$UserInfo.LoginSourceName/}</td>
-          <td align="center"><a class = "pb_btn_light_1" href="javascript:;" onclick="userDetail('{tpl:$UserInfo.user_id/}','{tpl:$UserInfo.true_name/}')">详细</a>{tpl:if($UserInfo.is_del!=1)}｜<a class = "pb_btn_grey_1" href="javascript:;" onclick="userDisable('{tpl:$UserInfo.user_id/}','{tpl:$UserInfo.true_name/}')">停用</a>{/tpl:if}
-              {tpl:if($UserInfo.test==1)} | <a class = "pb_btn_dark_2" href="javascript:;" onclick="setTestUser('{tpl:$UserInfo.user_id/}','{tpl:$UserInfo.true_name/}',0)">设为普通用户</a>
+          <td align="center"><a class = "pb_btn_light_1" href="javascript:;" onclick="userDetail('{tpl:$UserInfo.user_id/}','{tpl:$UserInfo.true_name/}')">详细</a>{tpl:if($UserInfo.is_del!=1)} <a class = "pb_btn_grey_1" href="javascript:;" onclick="userDisable('{tpl:$UserInfo.user_id/}','{tpl:$UserInfo.true_name/}')">停用</a>{/tpl:if}
+              {tpl:if($UserInfo.test==1)}  <a class = "pb_btn_dark_2" href="javascript:;" onclick="setTestUser('{tpl:$UserInfo.user_id/}','{tpl:$UserInfo.true_name/}',0)">设为普通用户</a>
               {tpl:else}
-               | <a  class = "pb_btn_light_2" href="javascript:;" onclick="setTestUser('{tpl:$UserInfo.user_id/}','{tpl:$UserInfo.true_name/}',1)">设为测试用户</a>
+                <a  class = "pb_btn_light_2" href="javascript:;" onclick="setTestUser('{tpl:$UserInfo.user_id/}','{tpl:$UserInfo.true_name/}',1)">设为测试用户</a>
               {/tpl:if}
           </td>
 
