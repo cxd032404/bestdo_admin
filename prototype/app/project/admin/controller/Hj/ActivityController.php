@@ -86,7 +86,7 @@ class Hj_ActivityController extends AbstractController
                         }
                     }
                 }
-                $list_info = $this->oList->getlists($activityInfo['activity_id']);
+                $list_info = $this->oList->getlistsWithActivityId($activityInfo['activity_id']);
                 if($list_info)
                 {
                     $activityList['ActivityList'][$key]['download'] = 1;
@@ -403,10 +403,10 @@ class Hj_ActivityController extends AbstractController
      */
     public function activityDownloadAction()
     {
-        $activity_id = $this->request->get('activity_id');
-        $activityInfo = $this->oActivity->getActivity($activity_id, '*');
+        $activity_id = $this->request->get('activity_id')??0;
+        $activityInfo = $this->oActivity->getActivity($activity_id, 'activity_id,activity_name');
         $activity_name = $activityInfo['activity_name'];
-        $list_info = $this->oList->getlists($activity_id);
+        $list_info = $this->oList->getlistsWithActivityId($activity_id);
 
 
         $oExcel = new Third_Excel();
@@ -415,32 +415,15 @@ class Hj_ActivityController extends AbstractController
         //多个列表
         foreach ($list_info as $kye => $value) {
             $userList = [];
-            $post_list = $this->oPosts->getPost($value['list_id']);
+            $post_list = $this->oPosts->getPostWithList($value['list_id']);
             foreach ($post_list as $key =>$post_info)
             {
                 $user_info = $this->oUserInfo->getUser($post_info['user_id'],'user_id,true_name');
-
-                $userList[$post_info['user_id']]['user_id'] = $user_info['user_id']??$post_info['user_id'];
-                $userList[$post_info['user_id']]['true_name'] = $user_info['true_name']??'未知用户';
-                if(!isset($userList[$post_info['user_id']]['kudos']))
-                {
-                    $userList[$post_info['user_id']]['kudos'] = $post_info['kudos'];
-                }else
-                {
-                    $userList[$post_info['user_id']]['kudos'] = $userList[$post_info['user_id']]['kudos']+$post_info['kudos'];
-                }
-                if(!isset($userList[$post_info['user_id']]['postCount']))
-                {
-                    $userList[$post_info['user_id']]['postCount'] = 1;
-                }else
-                {
-                    $userList[$post_info['user_id']]['postCount'] = $userList[$post_info['user_id']]['postCount']+1;
-                }
+                $userList[$key]['user_id'] = $user_info['user_id']??$post_info['user_id'];
+                $userList[$key]['true_name'] = $user_info['true_name']??'未知用户';
+                $userList[$key]['kudosSum'] = $post_info['kudosSum'];
+                $userList[$key]['postCount'] = $post_info['postCount'];
             }
-            $userList = array_values($userList);
-            $kudos = array_column($userList,'kudos');
-            array_multisort($kudos,SORT_DESC,$userList);
-
 
             $oExcel_file->addSheet($value['list_name']);
             //标题栏
@@ -452,7 +435,7 @@ class Hj_ActivityController extends AbstractController
                 $t['UserId'] = $userInfo['user_id'];
                 $t['UserName'] = $userInfo['true_name'];
                 $t['postCount'] = $userInfo['postCount'];
-                $t['kudos'] = $userInfo['kudos'];
+                $t['kudosSum'] = $userInfo['kudosSum'];
                 $oExcel->addRows(array($t));
                 unset($t);
             }

@@ -125,11 +125,10 @@ class Hj_List extends Base_Widget
 	/*
 	 * 获取单条list(查询参数activity_id)
 	 */
-    public function getlists($activity_id,$fields = '*'){
+    public function getlistsWithActivityId($activity_id,$fields = 'list_id'){
         $where = ' activity_id = '.$activity_id;
         $table_to_process = Base_Widget::getDbTable($this->table);
         $sql ="select $fields from $table_to_process where $where";
-
         return $this->db->getAll($sql);
     }
 
