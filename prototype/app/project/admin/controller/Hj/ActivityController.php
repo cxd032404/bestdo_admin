@@ -403,7 +403,6 @@ class Hj_ActivityController extends AbstractController
      */
     public function activityDownloadAction()
     {
-        require_once "../../../../lib/Third/PHPExcel.php";
         $activity_id = $this->request->get('activity_id')??0;
         $activityInfo = $this->oActivity->getActivity($activity_id, 'activity_id,activity_name');
         $activity_name = $activityInfo['activity_name'];
@@ -487,8 +486,6 @@ class Hj_ActivityController extends AbstractController
             $file_path = $upload[1]['path'];
         }
 
-
-        require_once "../../../../lib/Third/PHPExcel.php";
         $inputFileType = PHPExcel_IOFactory::identify($file_path);
         $objReader = PHPExcel_IOFactory::createReader($inputFileType);
 
@@ -505,6 +502,7 @@ class Hj_ActivityController extends AbstractController
             $sheet_name = $PHPExcel->getSheet($i)->getTitle(); //读取名称
             if($sheet_name != $list_info[$i]['list_name'])
             {
+                //文件里的内容与下载的不符合
                 exit;
             }
             $allRow = $currentSheet->getHighestRow(); // 所有行数
@@ -520,6 +518,7 @@ class Hj_ActivityController extends AbstractController
             }
             $list_data[] = $sheet_data;
         }
+        print_r($list_data);die();
         //下面是数据处理
     }
 }
