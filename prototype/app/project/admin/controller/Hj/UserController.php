@@ -110,11 +110,11 @@ class Hj_UserController extends AbstractController
 	public function userListDownloadAction()
 	{
 		//检查权限
-		$PermissionCheck = $this->manager->checkMenuPermission("UserListDownload");
+		$PermissionCheck = $this->manager->checkMenuPermission("UserListDownload",$this->sign);
 		if($PermissionCheck['return'])
 		{
-            $totalPermission = $this->manager->getPermissionWhere($this->manager->data_groups);
-		    //获取企业列表
+            $totalPermission = $this->manager->getPermissionList($this->manager->data_groups,"only");
+            //获取企业列表
             $companyList = (new Hj_Company())->getCompanyList([],"company_id,company_name");
 		    //获取登录方式列表
             $LoginSourceList = $this->oUserInfo->getLoginSourceList();
@@ -132,22 +132,31 @@ class Hj_UserController extends AbstractController
 			//分页参数
 			$params['PageSize'] = 500;
 
+            $oExcel = new PHPExcel();
 
-			$oExcel = new Third_Excel();
-            $FileName= (iconv('gbk','utf-8','用户列表'));
-			$oExcel->download($FileName)->addSheet('用户');
-			//标题栏
+            $oExcel->setActiveSheetIndex(0);           //设置sheet的起始位置
+            $oExcel->getActiveSheet()->setTitle('用户列表');      //设置sheet的名称
+
+            //标题栏
 			$title = array("用户ID","企业","部门","真实姓名","昵称","联系电话","性别","注册时间","最后登录时间","最后登录方式");
-			$oExcel->addRows(array($title));
-
+			$startColumn = "A";
+			$j = $startColumn;
+			$startRow = 1;
+			$i = $startRow;
+			foreach($title as $value)
+			{
+			    $oExcel->getActiveSheet()->setCellValue($j.$i,$value);
+                $j++;
+			}
 			$Count = 1;$params['Page'] =1;
             $departmentList = [];
             do
 			{
-				$UserList = $this->oUserInfo->getUserList(array_merge($params,["permissionList"=>$totalPermission]));
+			    $UserList = $this->oUserInfo->getUserList(array_merge($params,["permissionList"=>$totalPermission]));
 				$Count = count($UserList['UserList']);
 				foreach($UserList['UserList'] as $userId => $userInfo)
 				{
+                    $i++;$j=$startColumn;
                     if(!isset($departmentList[$userInfo['company_id']][$userInfo['department_id_1']]))
                     {
                         $departmentInfo = $this->oDepartment->getDepartment($userInfo['department_id_1']);
@@ -174,24 +183,35 @@ class Hj_UserController extends AbstractController
                     }
                     $UserList['UserList'][$userId]['department_name'] = implode("_",$departmentName);
 				    //生成单行数据
-					$t = array();
-					$t['UserId'] = $userInfo['user_id'];
-					$t['companyName'] = isset($companyList[$userInfo['company_id']])?$companyList[$userInfo['company_id']]['company_name']:"未知";
-                    $t['departmentName'] = implode("_",$departmentName);
-                    $t['TrueName'] = $userInfo['true_name'];
-					$t['NickName'] = $userInfo['nick_name'];
-                    $t['Mobile'] = $userInfo['mobile'];
-					$t['sex'] = isset($sexList[$userInfo['sex']])?$sexList[$userInfo['sex']]:"保密";
-                    $t['RegTime'] = $userInfo['reg_time'];
-                    $t['LastLoginTime'] = $userInfo['last_login_time'];
-                    $t['LoginSourceName'] = isset($LoginSourceList[$userInfo['last_login_source']])?$LoginSourceList[$userInfo['last_login_source']]:"未知";
-					$oExcel->addRows(array($t));
-					unset($t);
+                    $oExcel->getActiveSheet()->setCellValue($j.$i,$userInfo['user_id']);$j++;
+                    $oExcel->getActiveSheet()->setCellValue($j.$i,isset($companyList[$userInfo['company_id']])?$companyList[$userInfo['company_id']]['company_name']:"未知");$j++;
+                    $oExcel->getActiveSheet()->setCellValue($j.$i,implode("_",$departmentName));$j++;
+                    $oExcel->getActiveSheet()->setCellValue($j.$i,$userInfo['true_name']);$j++;
+                    $oExcel->getActiveSheet()->setCellValue($j.$i,$userInfo['nick_name']);$j++;
+                    $oExcel->getActiveSheet()->setCellValue($j.$i,$userInfo['mobile']);$j++;
+                    $oExcel->getActiveSheet()->setCellValue($j.$i,isset($sexList[$userInfo['sex']])?$sexList[$userInfo['sex']]:"保密");$j++;
+                    $oExcel->getActiveSheet()->setCellValue($j.$i,$userInfo['reg_time']);$j++;
+                    $oExcel->getActiveSheet()->setCellValue($j.$i,$userInfo['last_login_time']);$j++;
+                    $oExcel->getActiveSheet()->setCellValue($j.$i,isset($LoginSourceList[$userInfo['last_login_source']])?$LoginSourceList[$userInfo['last_login_source']]:"未知");$j++;
 				}
 				$params['Page']++;
 			}
 			while($Count>0);
-            $oExcel->closeSheet()->close();
+            $objWriter = PHPExcel_IOFactory::createWriter($oExcel, 'Excel2007');   //通过PHPExcel_IOFactory的写函数将上面数据
+
+            $outputFileName = "用户列表.xls";
+            ob_end_clean();
+            header("Content-Type: application/force-download");//标头您的浏览器并告诉它下载，而不是在浏览器中运行的文件
+            header("Content-Type: application/octet-stream");//文件流
+            header("Content-Type: application/download"); //下载文件
+            header('Content-Disposition:attachment;filename='.$outputFileName);  //到文件
+            header("Content-Transfer-Encoding: binary");
+            header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
+            header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");//上一次修改时间
+            header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+            header("Pragma: no-cache"); //不缓存页面
+            $objWriter->save('php://output');
+            die();
         }
 		else
 		{
@@ -199,6 +219,101 @@ class Hj_UserController extends AbstractController
 			include $this->tpl('403');
 		}
 	}
+    //用户列表下载
+    public function userListDownloadActionOld()
+    {
+        //检查权限
+        $PermissionCheck = $this->manager->checkMenuPermission("UserListDownload",$this->sign);
+        if($PermissionCheck['return'])
+        {
+            $totalPermission = $this->manager->getPermissionList($this->manager->data_groups,"only");
+            //获取企业列表
+            $companyList = (new Hj_Company())->getCompanyList([],"company_id,company_name");
+            //获取登录方式列表
+            $LoginSourceList = $this->oUserInfo->getLoginSourceList();
+            //获取性别列表
+            $sexList = $this->oUserInfo->getsexList();
+            //获取实名认证状态列表
+            $AuthStatusList = $this->oUserInfo->getAuthStatus();
+            //获取实名认证证件类型列表
+            $AuthIdTypesList = $this->oUserInfo->getAuthIdType();
+            //页面参数预处理
+            $params['sex'] = isset($sexList[intval($this->request->sex??-1)])?intval($this->request->sex):-1;
+            $params['true_name'] = urldecode(trim($this->request->true_name))?substr(urldecode(trim($this->request->true_name)),0,8):"";
+            $params['nick_name'] = urldecode(trim($this->request->nick_name))?substr(urldecode(trim($this->request->nick_name)),0,8):"";
+            $params['mobile'] = urldecode(trim($this->request->mobile))?substr(urldecode(trim($this->request->mobile)),0,11):"";
+            //分页参数
+            $params['PageSize'] = 500;
+
+
+
+            $oExcel = new Third_Excel();
+            $FileName= (iconv('gbk','utf-8','用户列表'));
+            $oExcel->download($FileName)->addSheet('用户');
+
+            //标题栏
+            $title = array("用户ID","企业","部门","真实姓名","昵称","联系电话","性别","注册时间","最后登录时间","最后登录方式");
+            $oExcel->addRows(array($title));
+
+            $Count = 1;$params['Page'] =1;
+            $departmentList = [];
+            do
+            {
+                $UserList = $this->oUserInfo->getUserList(array_merge($params,["permissionList"=>$totalPermission]));
+                $Count = count($UserList['UserList']);
+                foreach($UserList['UserList'] as $userId => $userInfo)
+                {
+                    if(!isset($departmentList[$userInfo['company_id']][$userInfo['department_id_1']]))
+                    {
+                        $departmentInfo = $this->oDepartment->getDepartment($userInfo['department_id_1']);
+                        $departmentList[$userInfo['company_id']][$userInfo['department_id_1']] = $departmentInfo;
+                    }
+                    $departmentName = [$departmentList[$userInfo['company_id']][$userInfo['department_id_1']]["department_name"]];
+                    if($userInfo['department_id_2'] >0)
+                    {
+                        if(!isset($departmentList[$userInfo['company_id']][$userInfo['department_id_2']]))
+                        {
+                            $departmentInfo = $this->oDepartment->getDepartment($userInfo['department_id_2']);
+                            $departmentList[$userInfo['company_id']][$userInfo['department_id_2']] = $departmentInfo;
+                        }
+                        $departmentName[] = $departmentList[$userInfo['company_id']][$userInfo['department_id_2']]["department_name"];
+                    }
+                    if($userInfo['department_id_3'] >0)
+                    {
+                        if(!isset($departmentList[$userInfo['company_id']][$userInfo['department_id_3']]))
+                        {
+                            $departmentInfo = $this->oDepartment->getDepartment($userInfo['department_id_3']);
+                            $departmentList[$userInfo['company_id']][$userInfo['department_id_3']] = $departmentInfo;
+                        }
+                        $departmentName[] = $departmentList[$userInfo['company_id']][$userInfo['department_id_3']]["department_name"];
+                    }
+                    $UserList['UserList'][$userId]['department_name'] = implode("_",$departmentName);
+                    //生成单行数据
+                    $t = array();
+                    $t['UserId'] = $userInfo['user_id'];
+                    $t['companyName'] = isset($companyList[$userInfo['company_id']])?$companyList[$userInfo['company_id']]['company_name']:"未知";
+                    $t['departmentName'] = implode("_",$departmentName);
+                    $t['TrueName'] = $userInfo['true_name'];
+                    $t['NickName'] = $userInfo['nick_name'];
+                    $t['Mobile'] = $userInfo['mobile'];
+                    $t['sex'] = isset($sexList[$userInfo['sex']])?$sexList[$userInfo['sex']]:"保密";
+                    $t['RegTime'] = $userInfo['reg_time'];
+                    $t['LastLoginTime'] = $userInfo['last_login_time'];
+                    $t['LoginSourceName'] = isset($LoginSourceList[$userInfo['last_login_source']])?$LoginSourceList[$userInfo['last_login_source']]:"未知";
+                    $oExcel->addRows(array($t));
+                    unset($t);
+                }
+                $params['Page']++;
+            }
+            while($Count>0);
+            $oExcel->closeSheet()->close();
+        }
+        else
+        {
+            $home = $this->sign;
+            include $this->tpl('403');
+        }
+    }
 	//用户详情
 	public function userDetailAction()
 	{
