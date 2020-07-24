@@ -1367,4 +1367,31 @@ EOF;
         $url =$config->apiUrl.$config->api['api']['refresh']."?type=".$type."&id=".$id;
         return json_decode(file_get_contents($url),true);
     }
+    //从excel读取文件
+    public function readDataFromExcel($filePath)
+    {
+        $oExcel = new PHPExcel_Reader_Excel2007();
+        $sheetInfo = $oExcel->listWorksheetInfo($filePath);
+        $sheet = $oExcel->load($filePath);
+        $data = [];
+        foreach($sheetInfo as $key => $value)
+        {
+            $sheetName = $value['worksheetName'];
+            $currentSheet = $sheet->getSheet($key);
+            $maxColumn = $value['lastColumnLetter'];
+            $maxRow = $value['lastColumnIndex']+1;
+            $data[$sheetName] = array();
+            for($rowIndex=1;$rowIndex<=$maxRow;$rowIndex++){        //循环读取每个单元格的内容。注意行从1开始，列从A开始
+                for($colIndex='A';$colIndex<=$maxColumn;$colIndex++){
+                    $addr = $colIndex.$rowIndex;
+                    $cell = $currentSheet->getCell($addr)->getValue();
+                    if($cell instanceof PHPExcel_RichText){ //富文本转换字符串
+                        $cell = $cell->__toString();
+                    }
+                    $data[$sheetName][$rowIndex][$colIndex] = $cell;
+                }
+            }
+        }
+        return $data;
+    }
 }
