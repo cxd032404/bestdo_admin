@@ -95,7 +95,7 @@ class Hj_UserController extends AbstractController
                     }
                     $departmentName[] = $departmentList[$userInfo['company_id']][$userInfo['department_id_3']]["department_name"];
                 }
-                $UserList['UserList'][$userId]['department_name'] = (count($departmentName)>0 || strlen(implode("|",$departmentName))>0)?implode("|",$departmentName):"未定义";
+                $UserList['UserList'][$userId]['department_name'] = (count($departmentName)>0 || strlen(implode("_",$departmentName))>0)?implode("_",$departmentName):"未定义";
 			}
 			//模板渲染
 			include $this->tpl('Hj_User_UserList');
@@ -172,12 +172,12 @@ class Hj_UserController extends AbstractController
                         }
                         $departmentName[] = $departmentList[$userInfo['company_id']][$userInfo['department_id_3']]["department_name"];
                     }
-                    $UserList['UserList'][$userId]['department_name'] = implode("|",$departmentName);
+                    $UserList['UserList'][$userId]['department_name'] = implode("_",$departmentName);
 				    //生成单行数据
 					$t = array();
 					$t['UserId'] = $userInfo['user_id'];
 					$t['companyName'] = isset($companyList[$userInfo['company_id']])?$companyList[$userInfo['company_id']]['company_name']:"未知";
-                    $t['departmentName'] = implode("|",$departmentName);
+                    $t['departmentName'] = implode("_",$departmentName);
                     $t['TrueName'] = $userInfo['true_name'];
 					$t['NickName'] = $userInfo['nick_name'];
                     $t['Mobile'] = $userInfo['mobile'];
@@ -240,7 +240,7 @@ class Hj_UserController extends AbstractController
                 }
                 $departmentName[] = $departmentList[$userInfo['company_id']][$userInfo['department_id_3']]["department_name"];
             }
-            $userInfo['department_name'] = implode("|",$departmentName);
+            $userInfo['department_name'] = implode("_",$departmentName);
             //渲染模板
 			include $this->tpl('Hj_User_UserDetail');
 		}
