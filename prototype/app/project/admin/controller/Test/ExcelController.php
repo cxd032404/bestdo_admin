@@ -45,10 +45,35 @@ class Test_ExcelController extends AbstractController
 	//上传图片
 	public function uploadAction()
 	{
-	    $oUpload = new Base_Upload('upload_img');
-        $upload = $oUpload->upload('upload_img',$this->config->oss);
-        $oss_urls = array_column($upload->resultArr,'oss');
-        $response = array('errno' => 0,'url'=>implode("<br>",$oss_urls));
+        $oUpload = new Base_Upload('upload_txt');
+        $upload = $oUpload->upload('upload_txt');
+        $upload = $upload->resultArr;
+        $oExcel = new PHPExcel_Reader_Excel2007();
+        //$sheetList = $oExcel->listWorksheetNames($upload[1]['path']);
+        $sheetInfo = $oExcel->listWorksheetInfo($upload[1]['path']);
+        $sheet = $oExcel->load($upload[1]['path']);
+        echo "<pre>";
+
+        foreach($sheetInfo as $key => $value)
+        {
+            $currentSheet = $sheet->getSheet($key);
+            $maxColumn = $value['lastColumnLetter'];
+            $maxRow = $value['lastColumnIndex']+1;
+            $data = array();
+            for($rowIndex=1;$rowIndex<=$maxRow;$rowIndex++){        //循环读取每个单元格的内容。注意行从1开始，列从A开始
+                for($colIndex='A';$colIndex<=$maxColumn;$colIndex++){
+                    $addr = $colIndex.$rowIndex;
+                    $cell = $currentSheet->getCell($addr)->getValue();
+                    if($cell instanceof PHPExcel_RichText){ //富文本转换字符串
+                        $cell = $cell->__toString();
+                    }
+                    $data[$rowIndex][$colIndex] = $cell;
+                }
+            }
+            print_R($data);
+        }
+        print_R($sheetInfo);
+        die();
         echo json_encode($response);
 		return true;
 	}
