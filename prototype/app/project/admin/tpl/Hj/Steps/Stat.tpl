@@ -37,8 +37,9 @@
     <button type="submit" class="pb_btn_light_1">搜索</button>{tpl:$export_var/}
 </form>
 <fieldset><legend>详情列表</legend>
-<table width="99%" align="center" class="table table-bordered table-striped">
-      <tr>
+    <div class="ifm_all">
+        <table  align="center" class="table table-bordered table-striped" >
+            <tr>
         <th align="center" class="rowtip">企业</th>
           <th align="center" class="rowtip">部门</th>
           <th align="center" class="rowtip">姓名</th>
@@ -65,6 +66,7 @@
     <tr><th colspan="10" align="center" class="rowtip">{tpl:$page_content/}</th></tr>
 
 </table>
+    </div>
 </fieldset>
 <script type="text/javascript">
     function getDepartmentByCompany()

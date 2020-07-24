@@ -95,7 +95,7 @@ class Hj_UserController extends AbstractController
                     }
                     $departmentName[] = $departmentList[$userInfo['company_id']][$userInfo['department_id_3']]["department_name"];
                 }
-                $UserList['UserList'][$userId]['department_name'] = (count($departmentName)>0 || strlen(implode("|",$departmentName))>0)?implode("|",$departmentName):"未定义";
+                $UserList['UserList'][$userId]['department_name'] = (count($departmentName)>0 || strlen(implode("_",$departmentName))>0)?implode("_",$departmentName):"未定义";
 			}
 			//模板渲染
 			include $this->tpl('Hj_User_UserList');
@@ -172,12 +172,12 @@ class Hj_UserController extends AbstractController
                         }
                         $departmentName[] = $departmentList[$userInfo['company_id']][$userInfo['department_id_3']]["department_name"];
                     }
-                    $UserList['UserList'][$userId]['department_name'] = implode("|",$departmentName);
+                    $UserList['UserList'][$userId]['department_name'] = implode("_",$departmentName);
 				    //生成单行数据
 					$t = array();
 					$t['UserId'] = $userInfo['user_id'];
 					$t['companyName'] = isset($companyList[$userInfo['company_id']])?$companyList[$userInfo['company_id']]['company_name']:"未知";
-                    $t['departmentName'] = implode("|",$departmentName);
+                    $t['departmentName'] = implode("_",$departmentName);
                     $t['TrueName'] = $userInfo['true_name'];
 					$t['NickName'] = $userInfo['nick_name'];
                     $t['Mobile'] = $userInfo['mobile'];
@@ -240,7 +240,7 @@ class Hj_UserController extends AbstractController
                 }
                 $departmentName[] = $departmentList[$userInfo['company_id']][$userInfo['department_id_3']]["department_name"];
             }
-            $userInfo['department_name'] = implode("|",$departmentName);
+            $userInfo['department_name'] = implode("_",$departmentName);
             //渲染模板
 			include $this->tpl('Hj_User_UserDetail');
 		}
@@ -323,7 +323,8 @@ class Hj_UserController extends AbstractController
         if($PermissionCheck['return'])
         {
             //获取企业列表
-            $companyList = (new Hj_Company())->getCompanyList([],"company_id,company_name");
+            $totalPermission = $this->manager->getPermissionList($this->manager->data_groups,"only");
+            $companyList = (new Hj_Company())->getCompanyList(["permissionList"=>$totalPermission],"company_name,company_id");
             $params['company_id'] = $this->request->company_id??0;
             $params['name'] = urldecode(trim($this->request->true_name))?substr(urldecode(trim($this->request->true_name)),0,8):"";
             $params['mobile'] = urldecode(trim($this->request->mobile))?substr(urldecode(trim($this->request->mobile)),0,11):"";
@@ -334,7 +335,7 @@ class Hj_UserController extends AbstractController
             //获取用户列表时需要获得记录总数
             $params['getCount'] = 1;
             //获取用户列表
-            $UserList = $this->oUserInfo->getCompanyUserList($params);
+            $UserList = $this->oUserInfo->getCompanyUserList(array_merge($params,["permissionList"=>$totalPermission]));
             //翻页参数
             $page_url = Base_Common::getUrl('',$this->ctl,'company.user.list',$params)."&Page=~page~";
             $page_content =  base_common::multi($UserList['UserCount'], $page_url, $params['Page'], $params['PageSize'], 10, $maxpage = 100, $prevWord = '上一页', $nextWord = '下一页');
@@ -369,7 +370,8 @@ class Hj_UserController extends AbstractController
         $PermissionCheck = $this->manager->checkMenuPermission(0,$this->sign);
         if($PermissionCheck['return'])
         {
-            $companyList = (new Hj_Company())->getCompanyList([],"company_name,company_id");
+            $totalPermission = $this->manager->getPermissionList($this->manager->data_groups,"only");
+            $companyList = (new Hj_Company())->getCompanyList(["permissionList"=>$totalPermission],"company_name,company_id");
             $companyUserAuthType = $this->oUserInfo->getCompanyUserAuthType();
             //模板渲染
             include $this->tpl('Hj_User_CompanyUserUpload');

@@ -121,7 +121,7 @@ class Hj_StepsController extends AbstractController
                     }
                     $departmentName[] = $departmentList[$userInfo['company_id']][$userInfo['department_id_3']]["department_name"];
                 }
-                $StepsDetailList['DetailList'][$key]['department_name'] = implode("|",$departmentName);
+                $StepsDetailList['DetailList'][$key]['department_name'] = implode("_",$departmentName);
                 if(!isset($goalList[$detail['company_id']]))
                 {
                     $companyDetail = json_decode($companyList[$detail['company_id']]['detail'],true);
@@ -240,7 +240,7 @@ class Hj_StepsController extends AbstractController
                         }
                         $departmentName[] = $departmentList[$userInfo['company_id']][$userInfo['department_id_3']]["department_name"];
                     }
-                    $StepsDetailList['DetailList'][$key]['department_name'] = implode("|",$departmentName);
+                    $StepsDetailList['DetailList'][$key]['department_name'] = implode("_",$departmentName);
                     if(!isset($goalList[$detail['company_id']]))
                     {
                         $companyDetail = json_decode($companyList[$detail['company_id']]['detail'],true);
@@ -357,7 +357,7 @@ class Hj_StepsController extends AbstractController
                     }
                     $departmentName[] = $departmentList[$userInfo['company_id']][$userInfo['department_id_3']]["department_name"];
                 }
-                $StepsStatList['List'][$key]['department_name'] = implode("|",$departmentName);
+                $StepsStatList['List'][$key]['department_name'] = implode("_",$departmentName);
                 $StepsStatList['List'][$key]['achive'] = $detail['totalStep']>=$goalList[$userList[$detail['user_id']]['company_id']]?1:0;
                 $StepsStatList['List'][$key]['achive_rate'] = intval(100*($detail['totalStep']/$goalList[$userList[$detail['user_id']]['company_id']]));
             }
@@ -470,7 +470,7 @@ class Hj_StepsController extends AbstractController
                         }
                         $departmentName[] = $departmentList[$userInfo['company_id']][$userInfo['department_id_3']]["department_name"];
                     }
-                    $StepsStatList['List'][$key]['department_name'] = implode("|",$departmentName);
+                    $StepsStatList['List'][$key]['department_name'] = implode("_",$departmentName);
                     $StepsStatList['List'][$key]['achive'] = $detail['totalStep']>=$goalList[$userList[$detail['user_id']]['company_id']]?1:0;
                     $StepsStatList['List'][$key]['achive_rate'] = intval(100*($detail['totalStep']/$goalList[$userList[$detail['user_id']]['company_id']]));
                     //生成单行数据
