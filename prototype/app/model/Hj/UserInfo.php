@@ -527,6 +527,10 @@ class Hj_UserInfo extends Base_Widget
         //获取需要用到的表名
         $table_to_process = Base_Widget::getDbTable($this->table_company_user);
         $order = " ORDER BY id desc";
+        $wherePermission = isset($params['permissionList'])?(
+        count($params['permissionList'])>0?
+            ( " company_id in (".implode(",",array_column($params['permissionList'],"company_id")).") ")
+            :" 0 "):"";
         //企业
         $whereCompany = (isset($params['company_id']) && ($params['company_id']>0))?" company_id = '".$params['company_id']."' ":"";
         //姓名
@@ -538,7 +542,7 @@ class Hj_UserInfo extends Base_Widget
         //id列表
         $whereIdList = (isset($params['idList']) && count($params['idList']))?" id in (".implode(",",$params['idList']).") ":"";
         //所有查询条件置入数组
-        $whereCondition = array($whereCompany,$whereMobile,$whereName,$wherWorkerId,$whereIdList);
+        $whereCondition = array($wherePermission,$whereCompany,$whereMobile,$whereName,$wherWorkerId,$whereIdList);
         //生成条件列
         $where = Base_common::getSqlWhere($whereCondition);
         //获取用户数量
@@ -579,7 +583,10 @@ class Hj_UserInfo extends Base_Widget
         $table_to_process = Base_Widget::getDbTable($this->table_company_user);
         //生成查询列
         $fields = Base_common::getSqlFields(array("UserCount"=>"count(user_id)"));
-        //企业
+        $wherePermission = isset($params['permissionList'])?(
+        count($params['permissionList'])>0?
+            ( " company_id in (".implode(",",array_column($params['permissionList'],"company_id")).") ")
+            :" 0 "):"";        //企业
         $whereCompany = (isset($params['company_id']) && ($params['company_id']>0))?" company_id = '".$params['company_id']."' ":"";
         //姓名
         $whereMobile = (isset($params['mobile']) && trim($params['mobile']))?" mobile like '%".$params['mobile']."%' ":"";
@@ -588,9 +595,7 @@ class Hj_UserInfo extends Base_Widget
         //昵称
         $wherWorkerId = (isset($params['worker_id']) && trim($params['worker_id']))?" worker_id like '%".$params['worker_id']."%' ":"";
         //所有查询条件置入数组
-        $whereCondition = array($whereCompany,$whereMobile,$whereName,$wherWorkerId);
-        //生成条件列
-        $where = Base_common::getSqlWhere($whereCondition);
+        $whereCondition = array($wherePermission,$whereCompany,$whereMobile,$whereName,$wherWorkerId);
         //生成条件列
         $where = Base_common::getSqlWhere($whereCondition);
         $sql = "SELECT $fields FROM $table_to_process where 1 ".$where;

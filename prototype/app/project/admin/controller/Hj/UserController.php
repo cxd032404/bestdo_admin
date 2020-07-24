@@ -323,7 +323,8 @@ class Hj_UserController extends AbstractController
         if($PermissionCheck['return'])
         {
             //获取企业列表
-            $companyList = (new Hj_Company())->getCompanyList([],"company_id,company_name");
+            $totalPermission = $this->manager->getPermissionList($this->manager->data_groups,"only");
+            $companyList = (new Hj_Company())->getCompanyList(["permissionList"=>$totalPermission],"company_name,company_id");
             $params['company_id'] = $this->request->company_id??0;
             $params['name'] = urldecode(trim($this->request->true_name))?substr(urldecode(trim($this->request->true_name)),0,8):"";
             $params['mobile'] = urldecode(trim($this->request->mobile))?substr(urldecode(trim($this->request->mobile)),0,11):"";
@@ -334,7 +335,7 @@ class Hj_UserController extends AbstractController
             //获取用户列表时需要获得记录总数
             $params['getCount'] = 1;
             //获取用户列表
-            $UserList = $this->oUserInfo->getCompanyUserList($params);
+            $UserList = $this->oUserInfo->getCompanyUserList(array_merge($params,["permissionList"=>$totalPermission]));
             //翻页参数
             $page_url = Base_Common::getUrl('',$this->ctl,'company.user.list',$params)."&Page=~page~";
             $page_content =  base_common::multi($UserList['UserCount'], $page_url, $params['Page'], $params['PageSize'], 10, $maxpage = 100, $prevWord = '上一页', $nextWord = '下一页');
@@ -369,7 +370,8 @@ class Hj_UserController extends AbstractController
         $PermissionCheck = $this->manager->checkMenuPermission(0,$this->sign);
         if($PermissionCheck['return'])
         {
-            $companyList = (new Hj_Company())->getCompanyList([],"company_name,company_id");
+            $totalPermission = $this->manager->getPermissionList($this->manager->data_groups,"only");
+            $companyList = (new Hj_Company())->getCompanyList(["permissionList"=>$totalPermission],"company_name,company_id");
             $companyUserAuthType = $this->oUserInfo->getCompanyUserAuthType();
             //模板渲染
             include $this->tpl('Hj_User_CompanyUserUpload');
