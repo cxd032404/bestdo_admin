@@ -424,14 +424,14 @@ class Hj_UserController extends AbstractController
                             {
                                 if($existUser[0]['department_id'] != $departmentInfo['department_id'])
                                 {
-                                    $this->oUserInfo->updateCompanyUser($existUser[0]['id'],['department_id'=>$departmentInfo['department_id']]);
+                                    $this->oUserInfo->updateCompanyUser($existUser[0]['id'],['department_id'=>$departmentInfo['department_id']??0]);
                                 }
                                 $successList = array_merge($successList,array_column(array_values($existUser),"id"));
                                 $exist ++;
                             }
                             else
                             {
-                                $userInfo = ["company_id" => $company_id, "name" => trim($text[0]),"department_id" => $departmentInfo['department_id'] ,$auth_type => trim($text[1])];
+                                $userInfo = ["company_id" => $company_id, "name" => trim($text[0]),"department_id" => $departmentInfo['department_id']??0 ,$auth_type => trim($text[1])];
                                 $insert = $this->oUserInfo->insertCompanyUser($userInfo);
                                 if($insert)
                                 {
