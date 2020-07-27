@@ -425,15 +425,18 @@ class Hj_ActivityController extends AbstractController
                 $bind['user_id'] = $post_info['user_id'];
                 $bind['post_count'] = $post_info['postCount'];
                 $bind['kudos_count'] = $post_info['kudosCount'];
-                $log = $oActivityListRank->getActivityRankLog($params);
-                if(!$log)
+                $log_info = $oActivityListRank->getActivityRankLog($params);
+                if(!$log_info)
                 {
                     $bind['plus'] = 0;
                     $bind['detail'] = '';
                     $oActivityListRank->insertActivityRankLog($bind);
                 }else
                 {
-                    $oActivityListRank->updateActivityRankLog($params,$bind);
+                    if($log_info['post_count'] != $post_info['postCount'] || $log_info['kudos_count'] != $post_info['kudosCount'])
+                    {
+                        $oActivityListRank->updateActivityRankLog($params,$bind);
+                    }
                 }
             }
             if($k !== 0) $objPHPExcel->createSheet();
