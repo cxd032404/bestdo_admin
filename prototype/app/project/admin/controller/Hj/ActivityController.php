@@ -407,13 +407,9 @@ class Hj_ActivityController extends AbstractController
         $activityInfo = $this->oActivity->getActivity($activity_id, 'activity_id,activity_name');
         $activity_name = $activityInfo['activity_name'];
         $list_info = $this->oList->getlistsWithActivityId($activity_id);
+        $objPHPExcel = new PHPExcel();
 
-
-        $oExcel = new Third_Excel();
-        $FileName = (iconv('gbk', 'utf-8', $activity_name . '参赛作品'));
-        $oExcel_file = $oExcel->download($FileName);
-        //多个列表
-        foreach ($list_info as $kye => $value) {
+        foreach ($list_info as $k => $value) {
             $userList = [];
             $post_list = $this->oPosts->getPostWithList($value['list_id']);
             foreach ($post_list as $key =>$post_info)
@@ -424,24 +420,105 @@ class Hj_ActivityController extends AbstractController
                 $userList[$key]['kudosSum'] = $post_info['kudosSum'];
                 $userList[$key]['postCount'] = $post_info['postCount'];
             }
-
-            $oExcel_file->addSheet($value['list_name']);
-            //标题栏
-            $title = array("用户ID", "姓名", "文章数量","投票数");
-            $oExcel->addRows(array($title));
-            //
-            foreach ($userList as $userId => $userInfo) {
-                $t = array();
-                $t['UserId'] = $userInfo['user_id'];
-                $t['UserName'] = $userInfo['true_name'];
-                $t['postCount'] = $userInfo['postCount'];
-                $t['kudosSum'] = $userInfo['kudosSum'];
-                $oExcel->addRows(array($t));
-                unset($t);
+            if($k !== 0) $objPHPExcel->createSheet();
+            $objPHPExcel->setactivesheetindex($k);
+            /** 设置工作表名称 */
+            $objPHPExcel->getActiveSheet($k)->setTitle($value['list_name']);
+            $objPHPExcel->getActiveSheet($k)
+                   ->setCellValue('A1', '用户id')
+                   ->setCellValue('B1', '姓名')
+                   ->setCellValue('C1', '文章数量')
+                   ->setCellValue('D1', '投票数');
+            $count = 2;
+            foreach ($userList as $userId =>$userInfo)
+            {
+                $objPHPExcel->getActiveSheet($k)
+                    ->setCellValue('A'.$count,$userInfo['user_id'])
+                    ->setCellValue('B'.$count,$userInfo['true_name'])
+                    ->setCellValue('C'.$count,$userInfo['postCount'])
+                    ->setCellValue('D'.$count,$userInfo['kudosSum']);
+                $count++;
             }
-            unset($userList);
-            $oExcel->closeSheet();
         }
-        $oExcel->close();
+        $activity_name = iconv("UTF-8", "GBK//IGNORE", $activity_name);
+        $objPHPExcel->setactivesheetindex(0);
+        ob_end_clean();
+        @header('pragma:public');
+        @header('Content-type:application/vnd.ms-excel;charset=utf-8;name="'.$activity_name.'.xls"');
+        @header("Content-Disposition:attachment;filename=$activity_name.xls");//attachment新窗口打印inline本窗口打印
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+        $objWriter->save('php://output');
+
+
+    }
+
+    /*
+     * 上传页面渲染
+     */public function activityJudgeUploadSubmitAction()
+{
+    $activity_id = $this->request->get("activity_id")??0;
+    //检查权限
+    $PermissionCheck = $this->manager->checkMenuPermission(0,$this->sign);
+    if($PermissionCheck['return'])
+    {
+        //模板渲染
+        include $this->tpl('Hj_Activity_ActivityJudgeUpload');
+    }
+    else
+    {
+        $home = $this->sign;
+        include $this->tpl('403');
+    }
+}
+
+
+    /*
+     * 评价导入
+     */
+    public function activityJudgeUploadAction(){
+        $activity_id = $this->request->activity_id??0;
+        $list_info = $this->oList->getlistsWithActivityId($activity_id);
+        $oUpload = new Base_Upload('upload_txt');
+        $upload = $oUpload->upload('upload_txt');
+        $upload = $upload->resultArr;
+        if($upload[1]['errno']==0) {
+            //$index = (new Base_Cache_Elasticsearch())->checkIndex("company_user_list",['company_id'=>$company_id]);
+            $file_path = $upload[1]['path'];
+        }
+
+        $inputFileType = PHPExcel_IOFactory::identify($file_path);
+        $objReader = PHPExcel_IOFactory::createReader($inputFileType);
+
+        $PHPExcel = $objReader->load($file_path); //读取文件
+        $list_data = [];
+
+        $sheetCount = $PHPExcel->getSheetCount();
+
+        for ($i=0;$i<$sheetCount;$i++)
+        {
+
+            $sheet_data = [];
+            $currentSheet = $PHPExcel->getSheet($i); //读取第一个工作簿
+            $sheet_name = $PHPExcel->getSheet($i)->getTitle(); //读取名称
+            if($sheet_name != $list_info[$i]['list_name'])
+            {
+                //文件里的内容与下载的不符合
+                exit;
+            }
+            $allRow = $currentSheet->getHighestRow(); // 所有行数
+            for ($rowIndex = 2; $rowIndex <= $allRow; $rowIndex++)
+            {
+                $row_data = array(
+                    'user_id' => $cell = $currentSheet->getCell('A'.$rowIndex)->getValue(),
+                    'username' => $cell = $currentSheet->getCell('B'.$rowIndex)->getValue(),
+                    'postCount' => $cell = $currentSheet->getCell('C'.$rowIndex)->getValue(),
+                    'kudos' => $cell = $currentSheet->getCell('D'.$rowIndex)->getValue(),
+                );
+                $sheet_data[]=$row_data;
+            }
+            $list_data[] = $sheet_data;
+        }
+        print_r($list_data);die();
+        //下面是数据处理
     }
 }
