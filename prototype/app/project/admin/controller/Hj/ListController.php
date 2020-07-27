@@ -44,38 +44,41 @@ class Hj_ListController extends AbstractController
 		{
             $currentPage = urlencode($_SERVER['QUERY_STRING']);
             //企业ID
-			$company_id = intval($this->request->company_id??0);
+			$params['company_id'] = intval($this->request->company_id??0);
             //列表分类
-            $list_type = trim($this->request->list_type??0);
+            $params['list_type'] = trim($this->request->list_type??0);
+            $params['Page'] = abs(intval($this->request->Page??1));
+            $params['PageSize'] = 10;
+            $params['getCount'] = 1;
             $totalPermission = $this->manager->getPermissionList($this->manager->data_groups,"only");
             //获取企业列表
 			$companyList = $this->oCompany->getCompanyList(["permissionList"=>$totalPermission],"company_id,company_name,detail");
             $boutiqueList = [];
 			foreach($companyList as $key => $companyInfo)
             {
-                if($company_id==0 || $company_id == $companyInfo['company_id'])
+                if($params['company_id']==0 || $params['company_id'] == $companyInfo['company_id'])
                 {
                     $companyInfo['detail'] = json_decode($companyInfo['detail'],true);
                     $boutiqueList = array_merge($boutiqueList,$companyInfo['detail']['boutique']??[]);
                 }
             }
             //获取页面列表
-            $listList = $this->oList->getListList(["permissionList"=>$totalPermission,'company_id'=>$company_id,'list_type'=>$list_type,'id_not_in'=>$boutiqueList]);
+            $ListList = $this->oList->getListList(array_merge(["permissionList"=>$totalPermission,'id_not_in'=>$boutiqueList],$params));
 			//获取列表类型列表
             $listTypeList = $this->oList->getListType();
             //初始化空的活动列表
             $activityList = [];
 			//循环页面列表
-			foreach($listList as $key => $listInfo)
+			foreach($ListList['ListList'] as $key => $listInfo)
             {
                 //数据解包
-                $listList[$key]['detail'] = json_decode($listInfo['detail'],true);
-                $listList[$key]['company_name'] = ($listInfo['company_id']==0)?"无对应":($companyList[$listInfo['company_id']]['company_name']??"未知");
-                $listList[$key]['list_type_name'] = ($listInfo['company_id']==0)?"无对应":($listTypeList[$listInfo['list_type']]['name']??"未知");
-                $listList[$key]['posts_count'] = $this->oPosts->getPostCountByList($listInfo['list_id']);
+                $ListList['ListList'][$key]['detail'] = json_decode($listInfo['detail'],true);
+                $ListList['ListList'][$key]['company_name'] = ($listInfo['company_id']==0)?"无对应":($companyList[$listInfo['company_id']]['company_name']??"未知");
+                $ListList['ListList'][$key]['list_type_name'] = ($listInfo['company_id']==0)?"无对应":($listTypeList[$listInfo['list_type']]['name']??"未知");
+                $ListList['ListList'][$key]['posts_count'] = $this->oPosts->getPostCountByList($listInfo['list_id']);
                 if($listInfo['activity_id']==0)
                 {
-                    $listList[$key]['activity_name'] = "未指定";
+                    $ListList['ListList'][$key]['activity_name'] = "未指定";
                 }
                 else
                 {
@@ -87,11 +90,12 @@ class Hj_ListController extends AbstractController
                             $activityList[$listInfo['activity_id']] = $activityInfo;
                         }
                     }
-                    $listList[$key]['activity_name'] = $activityList[$listInfo['activity_id']]['activity_name']??"未指定";
+                    $ListList['ListList'][$key]['activity_name'] = $activityList[$listInfo['activity_id']]['activity_name']??"未指定";
                 }
-
             }
-			//渲染模版
+			$page_url = Base_Common::getUrl('',$this->ctl,'index',$params)."&Page=~page~";
+            $page_content =  base_common::multi($ListList['ListCount'], $page_url, $params['Page'], $params['PageSize'], 10, $maxpage = 100, $prevWord = '上一页', $nextWord = '下一页');
+            //渲染模版
 			include $this->tpl('Hj_List_index');
 		}
 		else
@@ -131,22 +135,22 @@ class Hj_ListController extends AbstractController
                 $list = [0];
             }
             //获取页面列表
-            $listList = $this->oList->getListList(['company_id'=>$company_id,'type'=>$list_type,'id_in'=>$list]);
+            $ListList = $this->oList->getListList(['company_id'=>$company_id,'type'=>$list_type,'id_in'=>$list,'getCount'=>1]);
             //获取列表类型列表
             $listTypeList = $this->oList->getListType();
             //初始化空的活动列表
             $activityList = [];
             //循环页面列表
-            foreach($listList as $key => $listInfo)
+            foreach($ListList['ListList'] as $key => $listInfo)
             {
                 //数据解包
-                $listList[$key]['detail'] = json_decode($listInfo['detail'],true);
-                $listList[$key]['company_name'] = ($listInfo['company_id']==0)?"无对应":($companyList[$listInfo['company_id']]['company_name']??"未知");
-                $listList[$key]['list_type_name'] = ($listInfo['company_id']==0)?"无对应":($listTypeList[$listInfo['list_type']]['name']??"未知");
-                $listList[$key]['posts_count'] = $this->oPosts->getPostCountByList($listInfo['list_id']);
+                $ListList['ListList'][$key]['detail'] = json_decode($listInfo['detail'],true);
+                $ListList['ListList'][$key]['company_name'] = ($listInfo['company_id']==0)?"无对应":($companyList[$listInfo['company_id']]['company_name']??"未知");
+                $ListList['ListList'][$key]['list_type_name'] = ($listInfo['company_id']==0)?"无对应":($listTypeList[$listInfo['list_type']]['name']??"未知");
+                $ListList['ListList'][$key]['posts_count'] = $this->oPosts->getPostCountByList($listInfo['list_id']);
                 if($listInfo['activity_id']==0)
                 {
-                    $listList[$key]['activity_name'] = "未指定";
+                    $ListList['ListList'][$key]['activity_name'] = "未指定";
                 }
                 else
                 {
@@ -158,7 +162,7 @@ class Hj_ListController extends AbstractController
                             $activityList[$listInfo['activity_id']] = $activityInfo;
                         }
                     }
-                    $listList[$key]['activity_name'] = $activityList[$listInfo['activity_id']]['activity_name']??"未指定";
+                    $ListList['ListList'][$key]['activity_name'] = $activityList[$listInfo['activity_id']]['activity_name']??"未指定";
                 }
             }
             //渲染模版
@@ -194,11 +198,11 @@ class Hj_ListController extends AbstractController
 		}
 	}
 
-	//添加新页面
+	//添加新列表
 	public function listInsertAction()
 	{
 		$bind=$this->request->from('list_name','company_id','activity_id','list_type','detail','type','specifiedType');
-		//页面名称不能为空
+		//列表名称不能为空
 		if(trim($bind['list_name'])=="")
 		{
 			$response = array('errno' => 1);
@@ -213,8 +217,8 @@ class Hj_ListController extends AbstractController
             }
             else
             {
-                $listExists = $this->oList->getListList(['company_id'=>$bind['company_id'],'list_name'=>trim($bind['list_name'])],'list_id');
-                if(count($listExists)>0)
+                $listExists = $this->oList->getListList(['getCount'=>1,'Page'=>1,'PageCount'=>1,'company_id'=>$bind['company_id'],'list_name'=>trim($bind['list_name'])],'list_id');
+                if($listExists['ListCount']>0)
                 {
                     $response = array('errno' => 2);
                 }
@@ -293,7 +297,7 @@ class Hj_ListController extends AbstractController
             //获取活动列表
             $activityList = (new Hj_Activity())->getActivityList(['company_id'=>$listInfo['company_id']],"activity_id,activity_name");
             //本企业下的列表
-            $listList = $this->oList->getListList(['company_id'=>$listInfo['company_id']],'list_id,list_name');
+            $ListList = $this->oList->getListList(['company_id'=>$listInfo['company_id']],'list_id,list_name');
             //提交后跳转
             $afterActionList = $this->oList->getAfterAction();
             //渲染模版
@@ -311,7 +315,7 @@ class Hj_ListController extends AbstractController
 	{
 	    //接收页面参数
         $bind=$this->request->from('list_id','list_name','company_id','activity_id','list_type','detail','type');
-        //页面名称不能为空
+        //列表名称不能为空
 		if(trim($bind['list_name'])=="")
 		{
 			$response = array('errno' => 1);
@@ -326,8 +330,8 @@ class Hj_ListController extends AbstractController
             }
             else
             {
-                $listExists = $this->oList->getListList(['company_id'=>$bind['company_id'],'list_name'=>$bind['list_name'],'exclude_id'=>$bind['list_id']],'list_id');
-                if(count($listExists)>0)
+                $listExists = $this->oList->getListList(['getCount'=>1,'Page'=>1,'PageCount'=>1,'company_id'=>$bind['company_id'],'list_name'=>$bind['list_name'],'exclude_id'=>$bind['list_id']],'list_id');
+                if($listExists['ListCount']>0)
                 {
                     $response = array('errno' => 2);
                 }
@@ -400,7 +404,7 @@ class Hj_ListController extends AbstractController
         $PermissionCheck = $this->manager->checkMenuPermission("updateList",$this->request->currentPage);
 		if($PermissionCheck['return'])
 		{
-			//页面ID
+			//列表ID
 			$list_id = trim($this->request->list_id);
             $listInfo = $this->oList->getList($list_id,'list_id,company_id');
 			//删除页面
@@ -430,7 +434,7 @@ class Hj_ListController extends AbstractController
         $PermissionCheck = $this->manager->checkMenuPermission("updateList");
         if($PermissionCheck['return'])
         {
-            //页面ID
+            //列表ID
             $list_id = trim($this->request->list_id);
             //获取列表信息
             $listInfo = $this->oList->getList($list_id,'list_id,detail');

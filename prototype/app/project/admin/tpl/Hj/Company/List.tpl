@@ -1,7 +1,7 @@
 {tpl:tpl contentHeader/}
 
 <fieldset>
-	[ <a href="{tpl:$this.sign/}"><img src="/icon/return.png" width='30' height='30'/></a> ]
+	<a class = "pb_btn_grey_1" href="{tpl:$this.sign/}">返回</a>
 </fieldset>
 <div class="br_bottom"></div>
 <form id="boutique_update_form" name="boutique_update_form" action="{tpl:$this.sign/}&ac=list.update" method="post">
@@ -12,7 +12,7 @@
 	<tr class="hover">
 		<td colspan="1">{tpl:$typeName/}对应文章列表</td>
 	</tr>
-		{tpl:loop $listList  $list_info}
+		{tpl:loop $ListList.ListList  $list_info}
 	<tr class="noborder">
 	<td><input type="checkbox" name="list[{tpl:$list_info.list_id/}]" value="{tpl:$list_info.list_id/}" {tpl:if($list_info.checked == 1)}checked{/tpl:if} />{tpl:$list_info.list_name/}
 	</td>

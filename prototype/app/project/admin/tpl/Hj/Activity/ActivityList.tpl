@@ -58,14 +58,13 @@ function activityModify(mid){
     <td align="center">{tpl:$activityInfo.create_user_name/}</td>
       <td align="center">{tpl:if($activityInfo.club_member_only==1)}是{tpl:else}否{/tpl:if}</td>
       <td align="center">{tpl:$activityInfo.member_limit/}</td>
-
-
       <td align="center">{tpl:$activityInfo.start_time/}<P>{tpl:$activityInfo.end_time/}</td>
       <td align="center">{tpl:$activityInfo.apply_start_time/}<P>{tpl:$activityInfo.apply_end_time/}</td>
       <td align="center">{tpl:$activityInfo.update_time/}</td>
-
       <td align="center"><a class = "pb_btn_grey_1" href="javascript:;" onclick="activityDelete('{tpl:$activityInfo.activity_id/}','{tpl:$activityInfo.activity_name/}')">删除</a>
- | <a class = "pb_btn_light_1" href="javascript:;" onclick="activityModify('{tpl:$activityInfo.activity_id/}');">修改</a> | <a class = "pb_btn_light_2" href="{tpl:$this.sign/}&ac=activity.log&activity_id={tpl:$activityInfo.activity_id/}">报名记录{tpl:if($activityInfo.count>0)}({tpl:$activityInfo.count/}){/tpl:if}</a>{tpl:if($activityInfo.download == 1)}<a href="{tpl:$this.sign/}&ac=activity.download&activity_id={tpl:$activityInfo.activity_id/}">下载</a>|<a href="javascript:;" class="activityJudgeUpload" activity_id = {tpl:$activityInfo.activity_id/}>上传用户</a>{/tpl:if}</td>
+  <a class = "pb_btn_light_1" href="javascript:;" onclick="activityModify('{tpl:$activityInfo.activity_id/}');">修改</a>  <a class = "pb_btn_light_2" href="{tpl:$this.sign/}&ac=activity.log&activity_id={tpl:$activityInfo.activity_id/}">报名记录{tpl:if($activityInfo.count>0)}({tpl:$activityInfo.count/}){/tpl:if}</a>
+        {tpl:if($activityInfo.download == 1)}<a class = "pb_btn_grey_2" href="{tpl:$this.sign/}&ac=activity.list.ranking.download&activity_id={tpl:$activityInfo.activity_id/}">下载投票排行</a>
+        <a class = "pb_btn_dark_2" href="javascript:;" class="activityJudgeUpload" activity_id = {tpl:$activityInfo.activity_id/}>上传用户</a>{/tpl:if}</td>
   </tr>
 {/tpl:loop}
   <tr><th colspan="10" align="center" class="rowtip">{tpl:$page_content/}</th></tr>

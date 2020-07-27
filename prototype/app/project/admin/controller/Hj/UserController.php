@@ -595,6 +595,7 @@ class Hj_UserController extends AbstractController
                     $detail['authType'] = $auth_type;
                     $detail = json_encode($detail);
                     $oCompany->updateCompany($company_id,['detail'=>$detail]);
+                    Base_Common::refreshCache($this->config,"company",$company_id);
                 }
             }
         }
