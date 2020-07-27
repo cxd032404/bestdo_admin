@@ -86,24 +86,13 @@ class Hj_ActivityController extends AbstractController
                         }
                     }
                 }
-                $list_info = $this->oList->getlistsWithActivityId($activityInfo['activity_id']);
-                if($list_info)
-                {
-                    $activityList['ActivityList'][$key]['download'] = 1;
-                }else
-                {
-                    $activityList['ActivityList'][$key]['download'] = 0;
-                }
-
+                $list_info = $this->oList->getListList(["activity_id"=>$activityInfo['activity_id'],"Page"=>1,"PageSize"=>1,"getCount"=>1]);
+                $activityList['ActivityList'][$key]['ListCount'] = $list_info['ListCount'];
                 $activityList['ActivityList'][$key]['create_user_name'] = $userList[$activityInfo['create_user_id']]['true_name']??"未知用户";
                 $activityList['ActivityList'][$key]['club_name'] = $clubList[$activityInfo['club_id']]['club_name']??"未指定";
             }
             $page_url = Base_Common::getUrl('',$this->ctl,'index',$params)."&Page=~page~";
             $page_content =  base_common::multi($activityList['ActivityCount'], $page_url, $params['Page'], $params['PageSize'], 10, $maxpage = 100, $prevWord = '上一页', $nextWord = '下一页');
-
-
-
-
             //渲染模版
 			include $this->tpl('Hj_Activity_ActivityList');
 		}
@@ -401,15 +390,15 @@ class Hj_ActivityController extends AbstractController
     /*
      * 下载活动详细信息
      */
-    public function activityDownloadAction()
+    public function activityListRankingDownloadAction()
     {
         $activity_id = $this->request->get('activity_id')??0;
         $activityInfo = $this->oActivity->getActivity($activity_id, 'activity_id,activity_name');
         $activity_name = $activityInfo['activity_name'];
         $list_info = $this->oList->getlistsWithActivityId($activity_id);
+        $list_info = $this->oList->getListList(["activity_id"=>$activity_id,"Page"=>1,"PageSize"=>100,"getCount"=>1],"list_id,list_name");
         $objPHPExcel = new PHPExcel();
-
-        foreach ($list_info as $k => $value) {
+        foreach ($list_info['ListList'] as $k => $value) {
             $userList = [];
             $post_list = $this->oPosts->getPostWithList($value['list_id']);
             foreach ($post_list as $key =>$post_info)
@@ -417,7 +406,7 @@ class Hj_ActivityController extends AbstractController
                 $user_info = $this->oUserInfo->getUser($post_info['user_id'],'user_id,true_name');
                 $userList[$key]['user_id'] = $user_info['user_id']??$post_info['user_id'];
                 $userList[$key]['true_name'] = $user_info['true_name']??'未知用户';
-                $userList[$key]['kudosSum'] = $post_info['kudosSum'];
+                $userList[$key]['kudosCount'] = $post_info['kudosCount'];
                 $userList[$key]['postCount'] = $post_info['postCount'];
             }
             if($k !== 0) $objPHPExcel->createSheet();
@@ -436,7 +425,7 @@ class Hj_ActivityController extends AbstractController
                     ->setCellValue('A'.$count,$userInfo['user_id'])
                     ->setCellValue('B'.$count,$userInfo['true_name'])
                     ->setCellValue('C'.$count,$userInfo['postCount'])
-                    ->setCellValue('D'.$count,$userInfo['kudosSum']);
+                    ->setCellValue('D'.$count,$userInfo['kudosCount']);
                 $count++;
             }
         }

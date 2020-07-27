@@ -55,7 +55,7 @@ function post(lid){
     <th align="center" class="rowtip">操作</th>
   </tr>
 
-{tpl:loop $listList $listInfo}
+{tpl:loop $ListList.ListList $listInfo}
   <tr class="hover">
     <td align="center">{tpl:$listInfo.list_id/}</td>
     <td align="center">{tpl:$listInfo.list_name/}</td>

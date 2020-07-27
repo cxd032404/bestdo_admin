@@ -269,7 +269,7 @@ class Hj_VoteController extends AbstractController
             //获取活动信息
             $activityInfo = (new Hj_Activity())->getActivity($voteInfo['activity_id'],'activity_id,company_id');
             //获取列表列表
-            $listList = (new Hj_List())->getListList(['company_id'=>$activityInfo['company_id']],"list_id,list_name");
+            $ListList = (new Hj_List())->getListList(['company_id'=>$activityInfo['company_id']],"list_id,list_name");
             //渲染模版
             include $this->tpl('Hj_Vote_VoteOptionAdd');
         }
@@ -298,7 +298,7 @@ class Hj_VoteController extends AbstractController
             //获取活动信息
             $activityInfo = (new Hj_Activity())->getActivity($voteInfo['activity_id'],'activity_id,company_id');
             //获取列表列表
-            $listList = (new Hj_List())->getListList(['company_id'=>$activityInfo['company_id']],"list_id,list_name");
+            $ListList = (new Hj_List())->getListList(['company_id'=>$activityInfo['company_id']],"list_id,list_name");
             //渲染模版
             include $this->tpl('Hj_Vote_VoteOptionModify');
         }

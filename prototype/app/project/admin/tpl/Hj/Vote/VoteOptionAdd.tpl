@@ -16,7 +16,7 @@
 	<td align="left">
 		<input type="radio" name="detail[source_from]" id="detail[source_from]" value="from_list" /> 来自列表：
 		<select name="detail[list_id]"  id="detail[list_id]" size="1">
-	{tpl:loop $listList  $list_info}
+	{tpl:loop $ListList.ListList  $list_info}
 	<option value="{tpl:$list_info.list_id/}">{tpl:$list_info.list_name/}</option>
 	{/tpl:loop}
 </select>

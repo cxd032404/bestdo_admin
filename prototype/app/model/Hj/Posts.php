@@ -129,7 +129,7 @@ class Hj_Posts extends Base_Widget
     public function getPostWithList($list_id,$fields = '*'){
         $where = 'list_id ='.$list_id;
         $table_to_process = Base_Widget::getDbTable($this->table);
-        $sql = "select count(1) as postCount,sum(kudos) as kudosSum,user_id from $table_to_process where $where group by user_id order by kudosSum desc ";
+        $sql = "select count(1) as postCount,sum(kudos) as kudosCount,user_id from $table_to_process where $where group by user_id order by kudosCount desc ";
         return $this->db->getAll($sql);
     }
 

@@ -181,7 +181,7 @@ class Hj_CompanyController extends AbstractController
 			//获取顶级企业列表
 			$companyList = $this->oCompany->getCompanyList(['parent_id'=>0],"company_id,company_name");
             //获取页面列表
-            $listList = (new Hj_List())->getListList(['company_id'=>$company_id],"list_id,list_name");
+            $ListList = (new Hj_List())->getListList(['company_id'=>$company_id],"list_id,list_name");
             //渲染模版
 			include $this->tpl('Hj_Company_CompanyModify');
 		}
@@ -337,16 +337,16 @@ class Hj_CompanyController extends AbstractController
             $listType = (new Hj_List())->getSpecifiedListType();
             $typeName = $listType[$type];
             //获取页面列表
-            $listList = (new Hj_List())->getListList(['company_id'=>$company_id],"list_id,list_name");
-            foreach($listList as $key => $listInfo)
+            $ListList = (new Hj_List())->getListList(['company_id'=>$company_id],"list_id,list_name");
+            foreach($ListList['ListList'] as $key => $listInfo)
             {
                 if(isset($companyInfo['detail'][$type][$listInfo['list_id']]))
                 {
-                    $listList[$key]['checked'] = 1;
+                    $ListList['ListList'][$key]['checked'] = 1;
                 }
                 else
                 {
-                    $listList[$key]['checked'] = 0;
+                    $ListList['ListList'][$key]['checked'] = 0;
                 }
             }
             //渲染模版
@@ -802,5 +802,35 @@ class Hj_CompanyController extends AbstractController
         }
         $img_url = $this->config->adminUrl.'/'.$filePath;
         include $this->tpl('Hj_Company_RegQRM');
+    }
+    public function getAuthByCompanyAction()
+    {
+        $company_id = intval($this->request->company_id);
+        //获取企业信息
+        $companyInfo = $this->oCompany->getCompany($company_id,'*');
+        //数据解包
+        $companyInfo['detail'] = json_decode($companyInfo['detail'],true);
+        $companyUserAuthType = (new Hj_UserInfo())->getCompanyUserAuthType();
+        $currentAuthType = $companyInfo['detail']['authType']??"";
+        $text = "";
+        foreach($companyUserAuthType as $authType => $authTypeName)
+        {
+            if($currentAuthType==$authType)
+            {
+                $text .= ('<input name="auth_type" id="auth_type" type="radio" value="'.$authType.'" checked /> '.$authTypeName);
+            }
+            else
+            {
+                if(isset($companyUserAuthType[$currentAuthType]))
+                {
+                    $text .= ('<input name="auth_type" id="auth_type" type="radio" value="'.$authType.'" disabled /> '.$authTypeName);
+                }
+                else
+                {
+                    $text .= ('<input name="auth_type" id="auth_type" type="radio" value="'.$authType.'"/> '.$authTypeName);
+                }
+            }
+        }
+        echo $text;
     }
 }

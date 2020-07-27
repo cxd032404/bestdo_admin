@@ -3,7 +3,7 @@
 <form id="company_user_upload_form" name="company_user_upload_form" action="{tpl:$this.sign/}&ac=company.user.upload" method="post">
 	<table width="99%" align="center" class="table table-bordered table-striped">
 <tr class="hover"><td>属于企业</td>
-	<td align="left">	<select name="company_id"  id="company_id" size="1">
+	<td align="left">	<select name="company_id"  id="company_id" size="1" onchange="getAuthTypeByCompany()">
 			{tpl:loop $companyList  $companyInfo}
 			<option value="{tpl:$companyInfo.company_id/}">{tpl:$companyInfo.company_name/}</option>
 			{/tpl:loop}
@@ -11,9 +11,11 @@
 </tr>
 <tr class="hover"><td>验证方式</td>
 	<td align="left">
-			{tpl:loop $companyUserAuthType $authType $authTypeName}
-				<input name="auth_type" id="auth_type" type="radio" value="{tpl:$authType/}" /> {tpl:$authTypeName/}
+		<div id="authTypeRadio">
+		{tpl:loop $companyUserAuthType $authType $authTypeName}
+				<input name="auth_type" id="auth_type" type="radio" value="{tpl:$authType/}" {tpl:if($detail.authType==$authType)}checked{tpl:else}{tpl:if($isset==1)}disabled{/tpl:if}{/tpl:if}/> {tpl:$authTypeName/}
 			{/tpl:loop}
+		</div>
 		</td>
 </tr>
 <td>文件上传：<p>姓名,验证方式</td>
@@ -45,5 +47,18 @@ $('#company_user_upload_submit').click(function(){
 	};
 	$('#company_user_upload_form').ajaxForm(options);
 });
+
+function getAuthTypeByCompany()
+{
+	company=$("#company_id");
+	$.ajax
+	({
+		type: "GET",
+		url: "?ctl=hj/company&ac=get.auth.by.company&company_id="+company.val(),
+		success: function(msg)
+		{
+			$("#authTypeRadio").html(msg);
+		}});
+}
 </script>
 {tpl:tpl contentFooter/}
