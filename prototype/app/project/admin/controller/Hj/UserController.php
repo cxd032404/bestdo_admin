@@ -486,8 +486,11 @@ class Hj_UserController extends AbstractController
         if($PermissionCheck['return'])
         {
             $totalPermission = $this->manager->getPermissionList($this->manager->data_groups,"only");
-            $companyList = (new Hj_Company())->getCompanyList(["permissionList"=>$totalPermission],"company_name,company_id");
+            $companyList = (new Hj_Company())->getCompanyList(["permissionList"=>$totalPermission],"company_name,company_id,detail");
+            $currentCompany = current($companyList);
+            $detail = json_decode($currentCompany['detail'],true);
             $companyUserAuthType = $this->oUserInfo->getCompanyUserAuthType();
+            $isset = isset($companyUserAuthType[$detail['authType']??""]);
             //模板渲染
             include $this->tpl('Hj_User_CompanyUserUpload');
         }
@@ -503,6 +506,19 @@ class Hj_UserController extends AbstractController
         //元素ID
         $company_id = intval($this->request->company_id);
         $auth_type = $this->request->auth_type??"";
+        $oCompany = (new Hj_Company());
+        $companyInfo = $oCompany->getCompany($company_id,"company_id,detail");
+        $detail = json_decode($companyInfo['detail'],true);
+        if(!isset($detail['authType']))
+        {
+            //$detail['authType'] = $auth_type;
+            //$detail = json_encode($detail);
+            //$oCompany->updateCompany($company_id,['detail'=>$detail]);
+        }
+        else
+        {
+            $auth_type = $detail['authType'];
+        }
         //没有选择验证方式
         if($auth_type=="")
         {
@@ -572,6 +588,15 @@ class Hj_UserController extends AbstractController
             //$index = (new Base_Cache_Elasticsearch())->companyUserIndex($userToEs,$this->config->elasticsearch);
             $index = 1;
             $response = array('errno' => 0,'result'=>["success"=>$success,"error"=>$error,"exist"=>$exist,"index"=>$index]);
+            if($success>0)
+            {
+                if(!isset($detail['authType']))
+                {
+                    $detail['authType'] = $auth_type;
+                    $detail = json_encode($detail);
+                    $oCompany->updateCompany($company_id,['detail'=>$detail]);
+                }
+            }
         }
         echo json_encode($response);
         return true;

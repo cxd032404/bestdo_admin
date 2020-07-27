@@ -803,4 +803,34 @@ class Hj_CompanyController extends AbstractController
         $img_url = $this->config->adminUrl.'/'.$filePath;
         include $this->tpl('Hj_Company_RegQRM');
     }
+    public function getAuthByCompanyAction()
+    {
+        $company_id = intval($this->request->company_id);
+        //获取企业信息
+        $companyInfo = $this->oCompany->getCompany($company_id,'*');
+        //数据解包
+        $companyInfo['detail'] = json_decode($companyInfo['detail'],true);
+        $companyUserAuthType = (new Hj_UserInfo())->getCompanyUserAuthType();
+        $currentAuthType = $companyInfo['detail']['authType']??"";
+        $text = "";
+        foreach($companyUserAuthType as $authType => $authTypeName)
+        {
+            if($currentAuthType==$authType)
+            {
+                $text .= ('<input name="auth_type" id="auth_type" type="radio" value="'.$authType.'" checked /> '.$authTypeName);
+            }
+            else
+            {
+                if(isset($companyUserAuthType[$currentAuthType]))
+                {
+                    $text .= ('<input name="auth_type" id="auth_type" type="radio" value="'.$authType.'" disabled /> '.$authTypeName);
+                }
+                else
+                {
+                    $text .= ('<input name="auth_type" id="auth_type" type="radio" value="'.$authType.'"/> '.$authTypeName);
+                }
+            }
+        }
+        echo $text;
+    }
 }
