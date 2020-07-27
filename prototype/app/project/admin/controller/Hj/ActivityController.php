@@ -22,6 +22,7 @@ class Hj_ActivityController extends AbstractController
     protected $oUserInfo;
     protected $oList;
     protected $oPosts;
+    protected $oActivityListRank;
 
 	/**
 	 * 初始化
@@ -37,6 +38,7 @@ class Hj_ActivityController extends AbstractController
         $this->oClub = new Hj_Club();
         $this->oList = new Hj_List();
         $this->oPosts = new Hj_Posts();
+        $this->oActivityListRank = new Hj_ActivityListRank();
     }
 	//活动配置列表页面
 	public function indexAction()
@@ -392,22 +394,47 @@ class Hj_ActivityController extends AbstractController
      */
     public function activityListRankingDownloadAction()
     {
+        $oActivityListRank = $this->oActivityListRank;
         $activity_id = $this->request->get('activity_id')??0;
         $activityInfo = $this->oActivity->getActivity($activity_id, 'activity_id,activity_name');
         $activity_name = $activityInfo['activity_name'];
-        $list_info = $this->oList->getlistsWithActivityId($activity_id);
-        $list_info = $this->oList->getListList(["activity_id"=>$activity_id,"Page"=>1,"PageSize"=>100,"getCount"=>1],"list_id,list_name");
+        $list_info = $this->oList->getListList(["activity_id"=>$activity_id,"Page"=>1,"PageSize"=>100,"getCount"=>1],"list_id,company_id,list_name");
+        $list_list = array_values($list_info['ListList']);
         $objPHPExcel = new PHPExcel();
-        foreach ($list_info['ListList'] as $k => $value) {
+
+        foreach ($list_list as $k => $value) {
             $userList = [];
             $post_list = $this->oPosts->getPostWithList($value['list_id']);
             foreach ($post_list as $key =>$post_info)
             {
+
                 $user_info = $this->oUserInfo->getUser($post_info['user_id'],'user_id,true_name');
                 $userList[$key]['user_id'] = $user_info['user_id']??$post_info['user_id'];
                 $userList[$key]['true_name'] = $user_info['true_name']??'未知用户';
                 $userList[$key]['kudosCount'] = $post_info['kudosCount'];
                 $userList[$key]['postCount'] = $post_info['postCount'];
+
+                $bind = [];
+                $params = [];
+                $params['list_id'] = $value['list_id'];
+                $params['user_id'] = $post_info['user_id'];
+
+                $bind['company_id'] = $value['company_id'];
+                $bind['activity_id'] = $activity_id;
+                $bind['list_id'] = $value['list_id'];
+                $bind['user_id'] = $post_info['user_id'];
+                $bind['post_count'] = $post_info['postCount'];
+                $bind['kudos_count'] = $post_info['kudosCount'];
+                $log = $oActivityListRank->getActivityRankLog($params);
+                if(!$log)
+                {
+                    $bind['plus'] = 0;
+                    $bind['detail'] = '';
+                    $oActivityListRank->insertActivityRankLog($bind);
+                }else
+                {
+                    $oActivityListRank->updateActivityRankLog($params,$bind);
+                }
             }
             if($k !== 0) $objPHPExcel->createSheet();
             $objPHPExcel->setactivesheetindex($k);
