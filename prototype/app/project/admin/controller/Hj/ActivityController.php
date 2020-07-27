@@ -401,7 +401,7 @@ class Hj_ActivityController extends AbstractController
     /*
      * 下载活动详细信息
      */
-    public function activityDownloadAction()
+    public function activityListRankingDownloadAction()
     {
         $activity_id = $this->request->get('activity_id')??0;
         $activityInfo = $this->oActivity->getActivity($activity_id, 'activity_id,activity_name');

@@ -27,7 +27,7 @@ function iconDelete(cid,name){
 <tr class="hover"><td>精彩回顾</td>
 	<td align="left">	<select name="detail[hot]"  id="detail[hot]" size="1">
 			<option value="0" {tpl:if(0==$companyInfo.detail.hot)}selected="selected"{/tpl:if}>不选择</option>
-			{tpl:loop $listList  $list_info}
+			{tpl:loop $ListList.ListList  $list_info}
 			<option value="{tpl:$list_info.list_id/}" {tpl:if($companyInfo.detail.hot==$list_info.list_id)}selected="selected"{/tpl:if} >{tpl:$list_info.list_name/}</option>
 			{/tpl:loop}
 		</select></td>
@@ -35,7 +35,7 @@ function iconDelete(cid,name){
 	<tr class="hover"><td>荣誉堂</td>
 		<td align="left">	<select name="detail[hornor]"  id="detail[hornor]" size="1">
 				<option value="0" {tpl:if(0==$companyInfo.detail.hornor)}selected="selected"{/tpl:if}>不选择</option>
-				{tpl:loop $listList  $list_info}
+				{tpl:loop $ListList.ListList  $list_info}
 				<option value="{tpl:$list_info.list_id/}" {tpl:if($companyInfo.detail.hornor==$list_info.list_id)}selected="selected"{/tpl:if} >{tpl:$list_info.list_name/}</option>
 				{/tpl:loop}
 			</select></td>

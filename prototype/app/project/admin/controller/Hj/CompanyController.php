@@ -181,7 +181,7 @@ class Hj_CompanyController extends AbstractController
 			//获取顶级企业列表
 			$companyList = $this->oCompany->getCompanyList(['parent_id'=>0],"company_id,company_name");
             //获取页面列表
-            $listList = (new Hj_List())->getListList(['company_id'=>$company_id],"list_id,list_name");
+            $ListList = (new Hj_List())->getListList(['company_id'=>$company_id],"list_id,list_name");
             //渲染模版
 			include $this->tpl('Hj_Company_CompanyModify');
 		}
@@ -337,16 +337,16 @@ class Hj_CompanyController extends AbstractController
             $listType = (new Hj_List())->getSpecifiedListType();
             $typeName = $listType[$type];
             //获取页面列表
-            $listList = (new Hj_List())->getListList(['company_id'=>$company_id],"list_id,list_name");
-            foreach($listList as $key => $listInfo)
+            $ListList = (new Hj_List())->getListList(['company_id'=>$company_id],"list_id,list_name");
+            foreach($ListList['ListList'] as $key => $listInfo)
             {
                 if(isset($companyInfo['detail'][$type][$listInfo['list_id']]))
                 {
-                    $listList[$key]['checked'] = 1;
+                    $ListList['ListList'][$key]['checked'] = 1;
                 }
                 else
                 {
-                    $listList[$key]['checked'] = 0;
+                    $ListList['ListList'][$key]['checked'] = 0;
                 }
             }
             //渲染模版

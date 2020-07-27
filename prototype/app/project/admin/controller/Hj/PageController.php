@@ -409,7 +409,7 @@ class Hj_PageController extends AbstractController
             elseif(in_array($elementInfo['element_type'] ,[ "list","rankByKudos","post"]))
             {
                 //获取列表列表
-                $listList = (new Hj_List())->getListList(['company_id'=>$pageInfo['company_id']],"list_id,list_name");
+                $ListList = (new Hj_List())->getListList(['company_id'=>$pageInfo['company_id']],"list_id,list_name");
             }
             elseif(in_array($elementInfo['element_type'] ,[ "clubInfo","clubApply","clubPermission","clubMemberList","clubMemberLog"]))
             {

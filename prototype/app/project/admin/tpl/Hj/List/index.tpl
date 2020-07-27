@@ -54,7 +54,7 @@ function post(lid){
     <th align="center" class="rowtip">操作</th>
   </tr>
 
-{tpl:loop $listList $listInfo}
+{tpl:loop $ListList.ListList $listInfo}
   <tr class="hover">
     <td align="center">{tpl:$listInfo.list_id/}</td>
     <td align="center">{tpl:$listInfo.list_name/}</td>
@@ -69,6 +69,8 @@ function post(lid){
            <a class = "pb_btn_grey_1" href="{tpl:$this.sign/}&ac=list&list_id={tpl:$listInfo.list_id/}&currentPage={tpl:$currentPage/}">列表{tpl:if($listInfo.posts_count>0)}({tpl:$listInfo.posts_count/}){/tpl:if} </a></td>
   </tr>
 {/tpl:loop}
+    <tr><th colspan="10" align="center" class="rowtip">{tpl:$page_content/}</th></tr>
+
 </table>
 </fieldset>
 {tpl:tpl contentFooter/}

@@ -54,6 +54,7 @@ class Hj_List extends Base_Widget
             ( " company_id in (".implode(",",array_column($params['permissionList'],"company_id")).") ")
             :" 0 "):"";
 	    $whereCompany = (isset($params['company_id']) && $params['company_id']>0)?" company_id = ".$params['company_id']:"";
+        $whereAcitvity = (isset($params['activity_id']) && $params['activity_id']!="0")?" activity_id = '".$params['activity_id']."'":"";
         $whereType = (isset($params['list_type']) && $params['list_type']!="0")?" list_type = '".$params['list_type']."'":"";
         $whereName = (isset($params['list_name']) && trim($params['list_name'])!="")?" list_name = '".trim($params['list_name'])."'":"";
         $whereExclude = (isset($params['exclude_id']) && $params['exclude_id'])>0?" list_id != ".$params['exclude_id']:"";
@@ -61,18 +62,54 @@ class Hj_List extends Base_Widget
         $whereNotIn = (isset($params['id_not_in']) && count($params['id_not_in'])>0)?" list_id not in ( ".implode(",",$params['id_not_in']).")":"";
         $whereCondition = array($wherePermission,$whereCompany,$whereExclude,$whereName,$whereType,$whereIn,$whereNotIn);
         $where = Base_common::getSqlWhere($whereCondition);
-		$sql = "SELECT $fields FROM " . $table_to_process . " where 1 ".$where." ORDER BY list_id ASC";
-		$return = $this->db->getAll($sql);
-		$List = array();
+        if(isset($params['getCount'])&&$params['getCount']==1)
+        {
+            $listCount = $this->getListCount($params);
+        }
+        else
+        {
+            $listCount = 0;
+        }
+        $limit  = isset($params['Page'])&&$params['Page']?" limit ".($params['Page']-1)*$params['PageSize'].",".$params['PageSize']." ":"";
+        $sql = "SELECT $fields FROM " . $table_to_process . " where 1 ".$where." ORDER BY list_id ASC ".$limit;
+        $return = $this->db->getAll($sql);
+		$List = ['ListCount'=>$listCount,'ListList'=>[]];
 		if(count($return))
 		{
 			foreach($return as $key => $value)
 			{
-                $List[$value['list_id']] = $value;
+                $List['ListList'][$value['list_id']] = $value;
 			}
 		}
 		return $List;
 	}
+    /**
+     * 获取记录数量
+     * @param $where  查询条件
+     * @return integer
+     */
+        public function getListCount($params)
+        {
+            //获取需要用到的表名
+            $table_to_process = Base_Widget::getDbTable($this->table);
+            //生成查询列
+            $fields = Base_common::getSqlFields(array("ListCount"=>"count(list_id)"));
+            $wherePermission = isset($params['permissionList'])?(
+            count($params['permissionList'])>0?
+                ( " company_id in (".implode(",",array_column($params['permissionList'],"company_id")).") ")
+                :" 0 "):"";
+            $whereCompany = (isset($params['company_id']) && $params['company_id']>0)?" company_id = ".$params['company_id']:"";
+            $whereAcitvity = (isset($params['activity_id']) && $params['activity_id']!="0")?" activity_id = '".$params['activity_id']."'":"";
+            $whereType = (isset($params['list_type']) && $params['list_type']!="0")?" list_type = '".$params['list_type']."'":"";
+            $whereName = (isset($params['list_name']) && trim($params['list_name'])!="")?" list_name = '".trim($params['list_name'])."'":"";
+            $whereExclude = (isset($params['exclude_id']) && $params['exclude_id'])>0?" list_id != ".$params['exclude_id']:"";
+            $whereIn = (isset($params['id_in']) && count($params['id_in'])>0)?" list_id in ( ".implode(",",$params['id_in']).")":"";
+            $whereNotIn = (isset($params['id_not_in']) && count($params['id_not_in'])>0)?" list_id not in ( ".implode(",",$params['id_not_in']).")":"";
+            $whereCondition = array($wherePermission,$whereCompany,$whereExclude,$whereName,$whereType,$whereIn,$whereNotIn);
+            $where = Base_common::getSqlWhere($whereCondition);
+            $sql = "SELECT $fields FROM $table_to_process where 1 ".$where;
+            return $this->db->getOne($sql);
+        }
 	/**
 	 * 获取单条记录
 	 * @param integer $list_id
