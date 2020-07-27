@@ -86,15 +86,8 @@ class Hj_ActivityController extends AbstractController
                         }
                     }
                 }
-                $list_info = $this->oList->getlistsWithActivityId($activityInfo['activity_id']);
-                if($list_info)
-                {
-                    $activityList['ActivityList'][$key]['download'] = 1;
-                }else
-                {
-                    $activityList['ActivityList'][$key]['download'] = 0;
-                }
-
+                $list_info = $this->oList->getListList(["activity_id"=>$activityInfo['activity_id'],"Page"=>1,"PageSize"=>1,"getCount"=>1]);
+                $activityList['ActivityList'][$key]['ListCount'] = $list_info['ListCount'];
                 $activityList['ActivityList'][$key]['create_user_name'] = $userList[$activityInfo['create_user_id']]['true_name']??"未知用户";
                 $activityList['ActivityList'][$key]['club_name'] = $clubList[$activityInfo['club_id']]['club_name']??"未指定";
             }
