@@ -60,7 +60,7 @@ class Hj_List extends Base_Widget
         $whereExclude = (isset($params['exclude_id']) && $params['exclude_id'])>0?" list_id != ".$params['exclude_id']:"";
         $whereIn = (isset($params['id_in']) && count($params['id_in'])>0)?" list_id in ( ".implode(",",$params['id_in']).")":"";
         $whereNotIn = (isset($params['id_not_in']) && count($params['id_not_in'])>0)?" list_id not in ( ".implode(",",$params['id_not_in']).")":"";
-        $whereCondition = array($wherePermission,$whereCompany,$whereExclude,$whereName,$whereType,$whereIn,$whereNotIn);
+        $whereCondition = array($wherePermission,$whereCompany,$whereAcitvity,$whereExclude,$whereName,$whereType,$whereIn,$whereNotIn);
         $where = Base_common::getSqlWhere($whereCondition);
         if(isset($params['getCount'])&&$params['getCount']==1)
         {
@@ -105,7 +105,7 @@ class Hj_List extends Base_Widget
             $whereExclude = (isset($params['exclude_id']) && $params['exclude_id'])>0?" list_id != ".$params['exclude_id']:"";
             $whereIn = (isset($params['id_in']) && count($params['id_in'])>0)?" list_id in ( ".implode(",",$params['id_in']).")":"";
             $whereNotIn = (isset($params['id_not_in']) && count($params['id_not_in'])>0)?" list_id not in ( ".implode(",",$params['id_not_in']).")":"";
-            $whereCondition = array($wherePermission,$whereCompany,$whereExclude,$whereName,$whereType,$whereIn,$whereNotIn);
+            $whereCondition = array($wherePermission,$whereCompany,$whereAcitvity,$whereExclude,$whereName,$whereType,$whereIn,$whereNotIn);
             $where = Base_common::getSqlWhere($whereCondition);
             $sql = "SELECT $fields FROM $table_to_process where 1 ".$where;
             return $this->db->getOne($sql);
