@@ -1,6 +1,6 @@
 {tpl:tpl contentHeader/}
 <div class="br_bottom"></div>
-<form id="company_user_upload_form" name="company_user_upload_form" action="{tpl:$this.sign/}&ac=activity.judge.upload&activity_id={tpl:$activity_id/}" method="post">
+<form id="company_user_upload_form" name="company_user_upload_form" action="{tpl:$this.sign/}&ac=activity.judge.upload&activity_id={tpl:$activity_id/}" method="post" enctype="multipart/form-data">
 	<table width="99%" align="center" class="table table-bordered table-striped">
 
 <td>文件上传：</td>
@@ -20,13 +20,16 @@ $('#company_user_upload_submit').click(function(){
 		beforeSubmit:function(formData, jqForm, options) {},
 		success:function(jsonResponse) {
 			if (jsonResponse.errno) {
-				var errors = [];
-				errors[1] = '必须选择一个验证方式，以组合证明用户的唯一性，请修正后再次提交';
-				errors[9] = '入库失败，请修正后再次提交';
 				divBox.alertBox(errors[jsonResponse.errno],function(){});
 			} else {
-				var message = '上传完毕 总计成功：'+jsonResponse.result.success + '人，失败：'+ jsonResponse.result.error+ '人，已经存在：'+jsonResponse.result.exist +'人，加入索引：'+jsonResponse.result.index +'人';
-				divBox.confirmBox({content:message,ok:function(){windowParent.getRightHtml('{tpl:$this.sign/}' + '&ac=activity.judge&activity_id=' + $('#activity_id').val());}});
+				if(jsonResponse.result.error != 0 )
+					{
+						var message = '上传完毕,'+jsonResponse.result.error+'条评分为负,请修改后上传'
+					}else
+						{
+							var message = '上传完毕'
+						}
+				divBox.confirmBox({content:message,ok:function(){windowParent.getRightHtml('{tpl:$this.sign/}')}});
 			}
 		}
 	};

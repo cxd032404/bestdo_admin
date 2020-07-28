@@ -425,29 +425,37 @@ class Hj_ActivityController extends AbstractController
                 $bind['user_id'] = $post_info['user_id'];
                 $bind['post_count'] = $post_info['postCount'];
                 $bind['kudos_count'] = $post_info['kudosCount'];
-                $log_info = $oActivityListRank->getActivityRankLog($params);
+                $log_info = $oActivityListRank->getActivityRankLog($params,'log_id,post_count,kudos_count,plus,detail');
                 if(!$log_info)
                 {
+                    //没有发现数据 插入数据
                     $bind['plus'] = 0;
                     $bind['detail'] = '';
                     $oActivityListRank->insertActivityRankLog($bind);
                 }else
                 {
+                    //有数据但数据不相同 更新数据
                     if($log_info['post_count'] != $post_info['postCount'] || $log_info['kudos_count'] != $post_info['kudosCount'])
                     {
                         $oActivityListRank->updateActivityRankLog($params,$bind);
                     }
+                    //取出评分和评论
+                    $userList[$key]['plus'] = $log_info['plus'];
+                    $detail = json_decode($log_info['detail'],true);
+                    $userList[$key]['comment'] = $detail['comment']??'';
                 }
             }
             if($k !== 0) $objPHPExcel->createSheet();
             $objPHPExcel->setactivesheetindex($k);
             /** 设置工作表名称 */
-            $objPHPExcel->getActiveSheet($k)->setTitle($value['list_name']);
+            $objPHPExcel->getActiveSheet($k)->setTitle($value['list_id'].'-'.$value['list_name']);
             $objPHPExcel->getActiveSheet($k)
                    ->setCellValue('A1', '用户id')
                    ->setCellValue('B1', '姓名')
                    ->setCellValue('C1', '文章数量')
-                   ->setCellValue('D1', '投票数');
+                   ->setCellValue('D1', '投票数')
+                   ->setCellValue('E1', '评分')
+                   ->setCellValue('F1', '备注');
             $count = 2;
             foreach ($userList as $userId =>$userInfo)
             {
@@ -455,11 +463,13 @@ class Hj_ActivityController extends AbstractController
                     ->setCellValue('A'.$count,$userInfo['user_id'])
                     ->setCellValue('B'.$count,$userInfo['true_name'])
                     ->setCellValue('C'.$count,$userInfo['postCount'])
-                    ->setCellValue('D'.$count,$userInfo['kudosCount']);
+                    ->setCellValue('D'.$count,$userInfo['kudosCount'])
+                    ->setCellValue('E'.$count,$userInfo['plus'])
+                    ->setCellValue('F'.$count,$userInfo['comment']);
                 $count++;
             }
         }
-        $activity_name = iconv("UTF-8", "GBK//IGNORE", $activity_name);
+       // $activity_name = iconv("UTF-8", "GBK//IGNORE", $activity_name);
         $objPHPExcel->setactivesheetindex(0);
         ob_end_clean();
         @header('pragma:public');
@@ -467,8 +477,6 @@ class Hj_ActivityController extends AbstractController
         @header("Content-Disposition:attachment;filename=$activity_name.xls");//attachment新窗口打印inline本窗口打印
         $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
         $objWriter->save('php://output');
-
-
     }
 
     /*
@@ -495,8 +503,8 @@ class Hj_ActivityController extends AbstractController
      * 评价导入
      */
     public function activityJudgeUploadAction(){
-        $activity_id = $this->request->activity_id??0;
-        $list_info = $this->oList->getlistsWithActivityId($activity_id);
+        $oActivityListRank = $this->oActivityListRank;
+        $response = ['errno'=>0];
         $oUpload = new Base_Upload('upload_txt');
         $upload = $oUpload->upload('upload_txt');
         $upload = $upload->resultArr;
@@ -512,32 +520,52 @@ class Hj_ActivityController extends AbstractController
         $list_data = [];
 
         $sheetCount = $PHPExcel->getSheetCount();
-
+         $error = 0;
         for ($i=0;$i<$sheetCount;$i++)
         {
 
             $sheet_data = [];
             $currentSheet = $PHPExcel->getSheet($i); //读取第一个工作簿
             $sheet_name = $PHPExcel->getSheet($i)->getTitle(); //读取名称
-            if($sheet_name != $list_info[$i]['list_name'])
-            {
-                //文件里的内容与下载的不符合
-                exit;
-            }
+            $sheet_list_id = substr($sheet_name,0,strpos($sheet_name,'-')); //list_id
             $allRow = $currentSheet->getHighestRow(); // 所有行数
             for ($rowIndex = 2; $rowIndex <= $allRow; $rowIndex++)
             {
-                $row_data = array(
-                    'user_id' => $cell = $currentSheet->getCell('A'.$rowIndex)->getValue(),
-                    'username' => $cell = $currentSheet->getCell('B'.$rowIndex)->getValue(),
-                    'postCount' => $cell = $currentSheet->getCell('C'.$rowIndex)->getValue(),
-                    'kudos' => $cell = $currentSheet->getCell('D'.$rowIndex)->getValue(),
-                );
-                $sheet_data[]=$row_data;
+                $user_id  = $currentSheet->getCell('A'.$rowIndex)->getValue()??0;
+                $plus = $currentSheet->getCell('E'.$rowIndex)->getValue()??0;
+                if($plus<0)
+                {
+                    $error++;
+                    continue;
+                }
+                $comment = $currentSheet->getCell('F'.$rowIndex)->getValue()??'';
+                $comment = mb_substr($comment,0,64);
+
+                $params = [];
+                $params['list_id'] = $sheet_list_id;
+                $params['user_id'] = $user_id;
+                $log_info = $oActivityListRank->getActivityRankLog($params,'log_id,plus,detail');
+                $detail = json_decode($log_info['detail'],true);
+                $log_comment = $detail['comment']??'';
+                if(!$log_info)
+                {
+                    //如果没有本条记录就不作操作
+                    continue;
+                }else
+                {
+                    //数据不一样才更新
+                    if($log_info['plus'] != $plus || $log_comment != $comment)
+                    {
+                        $bind_detail = json_encode(['comment'=>$comment]);
+                        $bind['plus'] = $plus;
+                        $bind['detail'] = $bind_detail;
+                        $oActivityListRank->updateActivityRankLog($params,$bind);
+                    }
+                }
             }
-            $list_data[] = $sheet_data;
         }
-        print_r($list_data);die();
-        //下面是数据处理
+        $response['result']['error'] = $error;
+        echo json_encode($response) ;
+        return;
     }
 }
