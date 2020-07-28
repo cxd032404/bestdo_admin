@@ -146,10 +146,13 @@ select{
     display: inline-block !important;
     margin-bottom: 0px;
 }
+.selectnav{display:none !important;}
 input{margin-bottom:0px;}
-.selectnav{display: none !important;}
+
 td a img{width:18px;}
 
 .ifm_all{height: auto;overflow: scroll !important;width: 100%;}
 .ifm_all table{width: 151% !important;max-width: none !important;}
 
+#form p{margin:10px 0px;}
+#form input{margin-bottom:0px;}

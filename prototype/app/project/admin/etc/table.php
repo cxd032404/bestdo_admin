@@ -158,4 +158,8 @@ $table['config_default']['num'] = 1;
 #资源配置
 $table['config_source']['db'] = 'hj_config';
 $table['config_source']['num'] = 1;
+
+#活动排名列表
+$table['user_activity_list_rank']['db'] = 'hj_user';
+$table['user_activity_list_rank']['num'] = 1;
 return $table;
