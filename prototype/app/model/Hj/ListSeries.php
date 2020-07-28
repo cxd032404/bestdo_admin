@@ -131,7 +131,6 @@ class Hj_ListSeries extends Base_Widget
      */
     public function getSeriesDetailList($series_id,$params = [],$fields = "*")
     {
-        print_R($params);
         $table_to_process = Base_Widget::getDbTable($this->table_detail);
         $whereSeries = (isset($params['series_id']) && $params['series_id']>0)?" series_id = ".$params['series_id']:"";
         $whereCondition = array($whereSeries);
@@ -146,7 +145,6 @@ class Hj_ListSeries extends Base_Widget
         }
         $limit  = isset($params['Page'])&&$params['Page']?" limit ".($params['Page']-1)*$params['PageSize'].",".$params['PageSize']." ":"";
         $sql = "SELECT $fields FROM " . $table_to_process . " where 1 ".$where." ORDER BY detail_id ASC ".$limit;
-        echo $sql;
         $return = $this->db->getAll($sql);
         $List = ['SeriesDetailCount'=>$listCount,'SeriesDetailList'=>[]];
         if(count($return))
@@ -174,6 +172,53 @@ class Hj_ListSeries extends Base_Widget
         $where = Base_common::getSqlWhere($whereCondition);
         $sql = "SELECT $fields FROM $table_to_process where 1 ".$where;
         return $this->db->getOne($sql);
+    }
+    /**
+     * 获取单条记录
+     * @param integer $detail_id
+     * @param string $fields
+     * @return array
+     */
+    public function getSeriesDetail($detail_id, $fields = '*')
+    {
+        $detail_id = intval($detail_id);
+        $table_to_process = Base_Widget::getDbTable($this->table_detail);
+        return $this->db->selectRow($table_to_process, $fields, '`detail_id` = ?', $detail_id);
+    }
+    /**
+     * 插入
+     * @param array $bind
+     * @return boolean
+     */
+    public function insertSeriesDetail(array $bind)
+    {
+        $bind['create_time'] = $bind['update_time'] = date("Y-m-d H:i:s");
+        $table_to_process = Base_Widget::getDbTable($this->table_detail);
+        return $this->db->insert($table_to_process, $bind);
+    }
+    /**
+     * 更新
+     * @param integer $detail_id
+     * @param array $bind
+     * @return boolean
+     */
+    public function updateSeriesDetail($detail_id, array $bind)
+    {
+        $detail_id = intval($detail_id);
+        $bind['update_time'] = date("Y-m-d H:i:s");
+        $table_to_process = Base_Widget::getDbTable($this->table_detail);
+        return $this->db->update($table_to_process, $bind, '`detail_id` = ?', $detail_id);
+    }
+    /**
+     * 删除
+     * @param integer $detail_id
+     * @return boolean
+     */
+    public function deleteSeriesDetail($detail_id)
+    {
+        $detail_id = intval($detail_id);
+        $table_to_process = Base_Widget::getDbTable($this->table_detail);
+        return $this->db->delete($table_to_process, '`detail_id` = ?', $detail_id);
     }
 
 }

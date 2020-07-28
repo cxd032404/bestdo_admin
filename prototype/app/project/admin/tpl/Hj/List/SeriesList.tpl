@@ -27,7 +27,7 @@ function seriesModify(lid){
 <select name="company_id"  id="company_id" size="1">
       <option value="0"{tpl:if(0==$company_id)}selected="selected"{/tpl:if} >全部</option>
       {tpl:loop $companyList  $company_info}
-      <option value="{tpl:$company_info.company_id/}"{tpl:if($company_info.company_id==$company_id)}selected="selected"{/tpl:if} >{tpl:$company_info.company_name/}</option>
+      <option value="{tpl:$company_info.company_id/}"{tpl:if($company_info.company_id==$params.company_id)}selected="selected"{/tpl:if} >{tpl:$company_info.company_name/}</option>
       {/tpl:loop}
     </select>
   <button type="submit" class="pb_btn_light_1">搜索</button>

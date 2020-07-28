@@ -248,13 +248,25 @@ class Hj_ListSeriesController extends AbstractController
             $params['PageSize'] = 20;
             $params['getCount'] = 1;
             //获取系列信息
-			$seriesInfo = $this->oListSeries->getSeries($series_id,'*');
-            //获取元素信息
+            $seriesInfo = $this->oListSeries->getSeries($series_id,'*');
+            //获取列表
+            $ListList = $this->oList->getListList(['company_id'=>$seriesInfo['company_id']],"list_id,list_name");
+			//获取元素信息
 			$seriesDetailList = $this->oListSeries->getSeriesDetailList($series_id,$params,"*");
-            foreach
-            ($seriesDetailList as $elementSign => $elementInfo)
+			foreach ($seriesDetailList['SeriesDetailList'] as $key => $detailInfo)
             {
-            	//$seriesElementList[$elementSign]['element_type_name'] = $elementTypeList[$elementInfo['element_type']]['element_type_name']??"未知类型";
+                $detailInfo['detail'] = json_decode($detailInfo['detail'],true);
+                foreach($detailInfo['detail']['list_id'] as $key_2 => $list_id)
+                {
+                    $detailInfo['detail']['list_id'][$key_2] = $ListList['ListList'][$list_id]['list_name']??"未定义";
+                }
+                $seriesDetailList['SeriesDetailList'][$key] = $detailInfo;
+            }
+            $max_series = $seriesInfo['series_count'];
+            $countList = [];
+            for($i=1;$i<=$max_series;$i++)
+            {
+                $countList[] = $i;
             }
             //渲染模版
 			include $this->tpl('Hj_List_SeriesDetail');
@@ -269,7 +281,7 @@ class Hj_ListSeriesController extends AbstractController
     public function seriesDetailAddAction()
     {
         //检查权限
-        $PermissionCheck = $this->manager->checkMenuPermission("addSeries",$this->sign);
+        $PermissionCheck = $this->manager->checkMenuPermission("updateSeries",$this->sign);
         if($PermissionCheck['return'])
         {
             //系列ID
@@ -278,7 +290,7 @@ class Hj_ListSeriesController extends AbstractController
             $seriesInfo = $this->oListSeries->getSeries($series_id,'*');
             //数据解包
             $seriesInfo['detail'] = json_decode($seriesInfo['detail'],true);
-            //获取页面列表
+            //获取列表
             $ListList = $this->oList->getListList(['company_id'=>$seriesInfo['company_id']],"list_id,list_name");
             $countList = [];
             for($i=1;$i<=$seriesInfo['series_count'];$i++)
@@ -293,5 +305,79 @@ class Hj_ListSeriesController extends AbstractController
             $home = $this->sign;
             include $this->tpl('403');
         }
+    }
+
+    //添加新系列
+    public function seriesDetailInsertAction()
+    {
+        //检查权限
+        $bind=$this->request->from('series_id','detail_name','detail');
+        //系列名称不能为空
+        if(trim($bind['detail_name'])=="")
+        {
+            $response = array('errno' => 1);
+        }
+        else
+        {
+            //数据打包
+            $bind['detail'] = json_encode($bind['detail']);
+            //添加系列
+            $res = $this->oListSeries->insertSeriesDetail($bind);
+            $response = $res ? array('errno' => 0) : array('errno' => 9);
+        }
+        echo json_encode($response);
+        return true;
+    }
+    //添加系列填写配置页面
+    public function seriesDetailModifyAction()
+    {
+        //检查权限
+        $PermissionCheck = $this->manager->checkMenuPermission("updateSeries",$this->sign);
+        if($PermissionCheck['return'])
+        {
+            //详情ID
+            $detail_id= intval($this->request->detail_id);
+            //获取系列详情信息
+            $detailInfo = $this->oListSeries->getSeriesDetail($detail_id,'*');
+            //数据解包
+            $detailInfo['detail'] = json_decode($detailInfo['detail'],true);
+            //获取列表
+            //获取系列信息
+            $seriesInfo = $this->oListSeries->getSeries($detailInfo['series_id'],'series_id,series_count');
+            $ListList = $this->oList->getListList(['company_id'=>$seriesInfo['company_id']],"list_id,list_name");
+            $countList = [];
+            for($i=1;$i<=$seriesInfo['series_count'];$i++)
+            {
+                $countList[] = $i;
+            }
+            //渲染模版
+            include $this->tpl('Hj_List_SeriesDetailModify');
+        }
+        else
+        {
+            $home = $this->sign;
+            include $this->tpl('403');
+        }
+    }
+    //修改系列
+    public function seriesDetailUpdateAction()
+    {
+        //检查权限
+        $bind=$this->request->from('detail_id','detail_name','detail');
+        //系列名称不能为空
+        if(trim($bind['detail_name'])=="")
+        {
+            $response = array('errno' => 1);
+        }
+        else
+        {
+            //数据打包
+            $bind['detail'] = json_encode($bind['detail']);
+            //添加系列
+            $res = $this->oListSeries->updateSeriesDetail($bind['detail_id'],$bind);
+            $response = $res ? array('errno' => 0) : array('errno' => 9);
+        }
+        echo json_encode($response);
+        return true;
     }
 }
