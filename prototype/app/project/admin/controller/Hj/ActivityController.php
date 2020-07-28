@@ -398,6 +398,7 @@ class Hj_ActivityController extends AbstractController
         $list_info = $this->oList->getlistsWithActivityId($activity_id);
         $list_info = $this->oList->getListList(["activity_id"=>$activity_id,"Page"=>1,"PageSize"=>100,"getCount"=>1],"list_id,list_name");
         $objPHPExcel = new PHPExcel();
+        $list_info['ListList'] = array_values($list_info['ListList']);
         foreach ($list_info['ListList'] as $k => $value) {
             $userList = [];
             $post_list = $this->oPosts->getPostWithList($value['list_id']);
