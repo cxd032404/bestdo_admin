@@ -162,4 +162,12 @@ $table['config_source']['num'] = 1;
 #活动排名列表
 $table['user_activity_list_rank']['db'] = 'hj_user';
 $table['user_activity_list_rank']['num'] = 1;
+
+#列表集合表
+$table['config_list_series']['db'] = 'hj_config';
+$table['config_list_series']['num'] = 1;
+
+#列表集合详情表
+$table['config_list_series_detail']['db'] = 'hj_config';
+$table['config_list_series_detail']['num'] = 1;
 return $table;
