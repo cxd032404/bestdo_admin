@@ -15,10 +15,6 @@ function seriesModify(lid){
   modifyactivityBox = divBox.showBox('{tpl:$this.sign/}&ac=series.modify&series_id=' + lid+ '&currentPage='+$('#currentPage').val(), {title:'修改系列',width:600,height:700});
 }
 
-function post(lid){
-  postBox = divBox.showBox('{tpl:$this.sign/}&ac=post&series_id=' + lid+ '&currentPage='+$('#currentPage').val(), {title:'提交',width:600,height:800});
-}
-
 </script>
 
 <fieldset><legend>操作</legend>
@@ -63,7 +59,7 @@ function post(lid){
       <td align="center">{tpl:$seriesInfo.update_time/}</td>
       <td align="center"><a class = "pb_btn_grey_1" href="javascript:;" onclick="seriesDelete('{tpl:$seriesInfo.series_id/}','{tpl:$seriesInfo.series_name/}')">删除</a>
    <a class = "pb_btn_light_1" href="javascript:;" onclick="seriesModify('{tpl:$seriesInfo.series_id/}');">修改</a>
-           <a class = "pb_btn_grey_1" href="{tpl:$this.sign/}&ac=series&series_id={tpl:$seriesInfo.series_id/}&currentPage={tpl:$currentPage/}">详细{tpl:if($seriesInfo.posts_count>0)}({tpl:$seriesInfo.posts_count/}){/tpl:if} </a></td>
+           <a class = "pb_btn_grey_1" href="{tpl:$this.sign/}&ac=series.detail&series_id={tpl:$seriesInfo.series_id/}&currentPage={tpl:$currentPage/}">详细{tpl:if($seriesInfo.posts_count>0)}({tpl:$seriesInfo.posts_count/}){/tpl:if} </a></td>
   </tr>
 {/tpl:loop}
     <tr><th colspan="10" align="center" class="rowtip">{tpl:$page_content/}</th></tr>

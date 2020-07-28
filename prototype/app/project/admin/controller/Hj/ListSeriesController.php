@@ -71,7 +71,7 @@ class Hj_ListSeriesController extends AbstractController
 			include $this->tpl('403');
 		}
 	}
-	//添加系列类型填写配置系列
+	//添加系列填写配置页面
 	public function seriesAddAction()
 	{
 		//检查权限
@@ -217,13 +217,13 @@ class Hj_ListSeriesController extends AbstractController
 	public function seriesDeleteAction()
 	{
 		//检查权限
-		$PermissionCheck = $this->manager->checkMenuPermission("deleteListSeries",$this->sign);
+		$PermissionCheck = $this->manager->checkMenuPermission("deleteSeries",$this->sign);
 		if($PermissionCheck['return'])
 		{
 			//系列ID
 			$series_id = trim($this->request->series_id);
 			//删除系列
-			$this->oListSeries->deleteListSeries($series_id);
+			$this->oListSeries->deleteSeries($series_id);
 			//返回之前的系列
 			$this->response->goBack();
 		}
@@ -238,26 +238,26 @@ class Hj_ListSeriesController extends AbstractController
 	public function seriesDetailAction()
 	{
 		//检查权限
-		$PermissionCheck = $this->manager->checkMenuPermission("updatePage",$this->sign);
+		$PermissionCheck = $this->manager->checkMenuPermission("updateSeries",$this->sign);
 		if($PermissionCheck['return'])
 		{
 			//系列ID
 			$series_id= intval($this->request->series_id);
-			//获取系列信息
-			$seriesInfo = $this->oListSeries->getPage($series_id,'*');
-			//获取元素信息
-			$seriesElementList = $this->oListSeriesElement->getElementList(['series_id'=>$series_id]);
-			//获取元素类型列表
-			$elementTypeList = $this->oElementType->getElementTypeList();
-            $totalPermission = $this->manager->getPermissionList($this->manager->data_groups,"only");
-            //获取企业列表
-			$companyList = $this->oCompany->getCompanyList(["permissionList"=>$totalPermission],"company_id,company_name");
-            foreach ($seriesElementList as $elementSign => $elementInfo)
+            //分页参数
+            $params['Page'] = abs(intval($this->request->Page??1));
+            $params['PageSize'] = 20;
+            $params['getCount'] = 1;
+            //获取系列信息
+			$seriesInfo = $this->oListSeries->getSeries($series_id,'*');
+            //获取元素信息
+			$seriesDetailList = $this->oListSeries->getSeriesDetailList($series_id,$params,"*");
+            foreach
+            ($seriesDetailList as $elementSign => $elementInfo)
             {
-            	$seriesElementList[$elementSign]['element_type_name'] = $elementTypeList[$elementInfo['element_type']]['element_type_name']??"未知类型";
+            	//$seriesElementList[$elementSign]['element_type_name'] = $elementTypeList[$elementInfo['element_type']]['element_type_name']??"未知类型";
             }
             //渲染模版
-			include $this->tpl('Hj_List_ListSeriesDetail');
+			include $this->tpl('Hj_List_SeriesDetail');
 		}
 		else
 		{
@@ -265,4 +265,33 @@ class Hj_ListSeriesController extends AbstractController
 			include $this->tpl('403');
 		}
 	}
+    //添加系列填写配置页面
+    public function seriesDetailAddAction()
+    {
+        //检查权限
+        $PermissionCheck = $this->manager->checkMenuPermission("addSeries",$this->sign);
+        if($PermissionCheck['return'])
+        {
+            //系列ID
+            $series_id= intval($this->request->series_id);
+            //获取系列信息
+            $seriesInfo = $this->oListSeries->getSeries($series_id,'*');
+            //数据解包
+            $seriesInfo['detail'] = json_decode($seriesInfo['detail'],true);
+            //获取页面列表
+            $ListList = $this->oList->getListList(['company_id'=>$seriesInfo['company_id']],"list_id,list_name");
+            $countList = [];
+            for($i=1;$i<=$seriesInfo['series_count'];$i++)
+            {
+                $countList[] = $i;
+            }
+            //渲染模版
+            include $this->tpl('Hj_List_SeriesDetailAdd');
+        }
+        else
+        {
+            $home = $this->sign;
+            include $this->tpl('403');
+        }
+    }
 }
