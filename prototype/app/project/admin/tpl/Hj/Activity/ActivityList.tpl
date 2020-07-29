@@ -63,7 +63,7 @@ function activityModify(mid){
       <td align="center">{tpl:$activityInfo.update_time/}</td>
       <td align="center"><a class = "pb_btn_grey_1" href="javascript:;" onclick="activityDelete('{tpl:$activityInfo.activity_id/}','{tpl:$activityInfo.activity_name/}')">删除</a>
   <a class = "pb_btn_light_1" href="javascript:;" onclick="activityModify('{tpl:$activityInfo.activity_id/}');">修改</a>  <a class = "pb_btn_light_2" href="{tpl:$this.sign/}&ac=activity.log&activity_id={tpl:$activityInfo.activity_id/}">报名记录{tpl:if($activityInfo.count>0)}({tpl:$activityInfo.count/}){/tpl:if}</a>
-        {tpl:if($activityInfo.ListCount >0)}<a class = "pb_btn_grey_2" href="{tpl:$this.sign/}&ac=activity.list.ranking.download&activity_id={tpl:$activityInfo.activity_id/}">投票排行({tpl:$activityInfo.ListCount/})</a> <a class = "pb_btn_dark_2" href="javascript:;" class="activityJudgeUpload" activity_id = {tpl:$activityInfo.activity_id/}>上传评审</a>
+        {tpl:if($activityInfo.ListCount >0)}<a class = "pb_btn_grey_2" href="{tpl:$this.sign/}&ac=activity.list.ranking.download&activity_id={tpl:$activityInfo.activity_id/}">投票排行({tpl:$activityInfo.ListCount/})</a> <a class = "pb_btn_dark_2 activityJudgeUpload" href="javascript:;"  activity_id = {tpl:$activityInfo.activity_id/}>上传评审</a>
       {/tpl:if}</td>
   </tr>
 {/tpl:loop}

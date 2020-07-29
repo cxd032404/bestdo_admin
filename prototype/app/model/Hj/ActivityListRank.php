@@ -13,7 +13,7 @@ class Hj_ActivityListRank extends Base_Widget
 	/*
 	 * 查询
 	 */
-    public function getActivityRankLog($params = [],$fields = 'log_id'){
+    public function getActivityRankLog($params = [],$fields = 'log_id,post_count,kudos_count'){
         $where = '';
         foreach ($params as $key=>$value)
         {
@@ -21,8 +21,7 @@ class Hj_ActivityListRank extends Base_Widget
         }
         $where = substr($where,4);
         $table_to_process = Base_Widget::getDbTable($this->table);
-        $sql = "SELECT $fields FROM $table_to_process where $where";
-        return $this->db->getOne($sql);
+        return $this->db->selectRow($table_to_process, $fields, $where);
     }
 
 	/**
