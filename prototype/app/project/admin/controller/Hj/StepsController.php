@@ -186,20 +186,33 @@ class Hj_StepsController extends AbstractController
                 $UserList = ['UserList'=>[]];
             }
 
-            $oExcel = new Third_Excel();
-            $FileName= (iconv('gbk','utf-8','步数详情'));
-            $oExcel->download($FileName)->addSheet('步数详情');
-            //标题栏
-            $title = array("企业","部门","姓名","日期","步数","热量","估测时间","估测距离","达标率","是否达标","更新时间");
-            $oExcel->addRows(array($title));
+            $objPHPExcel = new PHPExcel();
+            $objPHPExcel->setactivesheetindex(0);
+            /** 设置工作表名称 */
+            $objPHPExcel->getActiveSheet(0)->setTitle('步数详情');
+            $objPHPExcel->getActiveSheet(0)
+                ->setCellValue('A1', '企业')
+                ->setCellValue('B1', '部门')
+                ->setCellValue('C1', '姓名')
+                ->setCellValue('D1', '日期')
+                ->setCellValue('E1', '步数')
+                ->setCellValue('F1', '热量')
+                ->setCellValue('G1', '估测时间')
+                ->setCellValue('H1', '估测距离')
+                ->setCellValue('I1', '达标率')
+                ->setCellValue('J1', '是否达标')
+                ->setCellValue('K1', '更新时间');
 
             $Count = 1;$params['Page'] =1;
             $userList  = $goalList = [];
             $spepsConfig = $this->config->steps;
+
             do{
                 //获取步数详情列表
                 $StepsDetailList = $this->oSteps->getStepsDetailList(array_merge($params,["permissionList"=>$totalPermission],['user_id'=>array_column($UserList['UserList'],"user_id")]));
                 $Count = count($StepsDetailList['DetailList']);
+
+                $row = $params['PageSize']*($params['Page']-1)+2;
                 foreach($StepsDetailList['DetailList'] as $key => $detail)
                 {
                     if(!isset($userList[$detail['user_id']]))
@@ -249,25 +262,31 @@ class Hj_StepsController extends AbstractController
                     $StepsDetailList['DetailList'][$key]['achive'] = $detail['step']>=$goalList[$detail['company_id']]?1:0;
                     $StepsDetailList['DetailList'][$key]['achive_rate'] = intval(100*($detail['step']/$goalList[$detail['company_id']]));
                     //生成单行数据
-                    $t = array();
-                    $t['companyName'] = $StepsDetailList['DetailList'][$key]['company_name'];
-                    $t['departmentName'] = $StepsDetailList['DetailList'][$key]['department_name'];
-                    $t['userName'] = $StepsDetailList['DetailList'][$key]['user_name'];
-                    $t['date'] = $StepsDetailList['DetailList'][$key]['date'];
-                    $t['step'] = $StepsDetailList['DetailList'][$key]['step'];
-                    $t['kcal'] = $StepsDetailList['DetailList'][$key]['kcal']."kcal";
-                    $t['time'] = $StepsDetailList['DetailList'][$key]['time']."分钟";
-                    $t['distance'] = $StepsDetailList['DetailList'][$key]['distance']."米";
-                    $t['achiveRate'] = $StepsDetailList['DetailList'][$key]['achive_rate']."%";
-                    $t['achive'] = $StepsDetailList['DetailList'][$key]['achive']==1?"达标":"未达标";
-                    $t['updateTime'] = $StepsDetailList['DetailList'][$key]['update_time'];
-                    $oExcel->addRows(array($t));
-                    unset($t);
+                    $objPHPExcel->getActiveSheet(0)
+                        ->setCellValue('A'.$row,$StepsDetailList['DetailList'][$key]['company_name'])
+                        ->setCellValue('B'.$row,$StepsDetailList['DetailList'][$key]['department_name'])
+                        ->setCellValue('C'.$row,$StepsDetailList['DetailList'][$key]['user_name'])
+                        ->setCellValue('D'.$row,$StepsDetailList['DetailList'][$key]['date'])
+                        ->setCellValue('E'.$row,$StepsDetailList['DetailList'][$key]['step'])
+                        ->setCellValue('F'.$row,$StepsDetailList['DetailList'][$key]['kcal']."kcal")
+                        ->setCellValue('G'.$row,$StepsDetailList['DetailList'][$key]['time']."分钟")
+                        ->setCellValue('H'.$row,$StepsDetailList['DetailList'][$key]['distance']."米")
+                        ->setCellValue('I'.$row,$StepsDetailList['DetailList'][$key]['achive_rate']."%")
+                        ->setCellValue('J'.$row,$StepsDetailList['DetailList'][$key]['achive']==1?"达标":"未达标")
+                        ->setCellValue('K'.$row,$StepsDetailList['DetailList'][$key]['update_time']);
+                    $row++;
                 }
                 $params['Page']++;
             }
             while($Count>0);
-            $oExcel->closeSheet()->close();
+            $objPHPExcel->setactivesheetindex(0);
+            ob_end_clean();
+            @header('pragma:public');
+            @header('Content-type:application/vnd.ms-excel;charset=utf-8;name="'.'步数详情'.'.xls"');
+            @header("Content-Disposition:attachment;filename=步数详情.xls");//attachment新窗口打印inline本窗口打印
+            $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+            $objWriter->save('php://output');
+            //$oExcel->closeSheet()->close();
         }
         else
         {
