@@ -286,7 +286,6 @@ class Hj_StepsController extends AbstractController
             @header("Content-Disposition:attachment;filename=步数详情.xls");//attachment新窗口打印inline本窗口打印
             $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
             $objWriter->save('php://output');
-            //$oExcel->closeSheet()->close();
         }
         else
         {
@@ -426,13 +425,21 @@ class Hj_StepsController extends AbstractController
             $departmentList_3 = $params['department_id_2']>0?$this->oDepartment->getDepartmentList(["company_id"=>$params['company_id'],"parent_id"=>$params['department_id_2']],"department_id,department_name"):[];
 
 
+            $objPHPExcel = new PHPExcel();
+            $objPHPExcel->setactivesheetindex(0);
+            /** 设置工作表名称 */
+            $objPHPExcel->getActiveSheet(0)->setTitle('步数统计');
+            $objPHPExcel->getActiveSheet(0)
+                ->setCellValue('A1', '企业')
+                ->setCellValue('B1', '部门')
+                ->setCellValue('C1', '姓名')
+                ->setCellValue('D1', '步数')
+                ->setCellValue('E1', '热量')
+                ->setCellValue('F1', '估测时间')
+                ->setCellValue('G1', '估测距离')
+                ->setCellValue('H1', '达标率')
+                ->setCellValue('I1', '是否达标');
 
-            $oExcel = new Third_Excel();
-            $FileName= (iconv('gbk','utf-8','步数统计'));
-            $oExcel->download($FileName)->addSheet('步数统计');
-            //标题栏
-            $title = array("企业","部门","姓名","步数","热量","估测时间","估测距离","达标率","是否达标");
-            $oExcel->addRows(array($title));
 
             $Count = 1;$params['Page'] =1;
             $userList  = $goalList = [];
@@ -442,7 +449,9 @@ class Hj_StepsController extends AbstractController
                 //获取步数详情列表
                 $StepsStatList = $this->oSteps->getStepsStatList(array_merge($params,["permissionList"=>$totalPermission]));
                 $Count = count($StepsStatList['List']);
-                echo $Count;
+
+                $row = $params['PageSize']*($params['Page']-1)+2; //行下标
+
                 foreach($StepsStatList['List'] as $key => $detail)
                 {
                     if(!isset($userList[$detail['user_id']]))
@@ -493,23 +502,28 @@ class Hj_StepsController extends AbstractController
                     $StepsStatList['List'][$key]['achive'] = $detail['totalStep']>=$goalList[$userList[$detail['user_id']]['company_id']]?1:0;
                     $StepsStatList['List'][$key]['achive_rate'] = intval(100*($detail['totalStep']/$goalList[$userList[$detail['user_id']]['company_id']]));
                     //生成单行数据
-                    $t = array();
-                    $t['companyName'] = $StepsStatList['List'][$key]['company_name'];
-                    $t['departmentName'] = $StepsStatList['List'][$key]['department_name'];
-                    $t['userName'] = $StepsStatList['List'][$key]['user_name'];
-                    $t['step'] = $StepsStatList['List'][$key]['totalStep'];
-                    $t['kcal'] = $StepsStatList['List'][$key]['kcal']."kcal";
-                    $t['time'] = $StepsStatList['List'][$key]['time']."分钟";
-                    $t['distance'] = $StepsStatList['List'][$key]['distance']."米";
-                    $t['achiveRate'] = $StepsStatList['List'][$key]['achive_rate']."%";
-                    $t['achive'] = $StepsStatList['List'][$key]['achive']==1?"达标":"未达标";
-                    $oExcel->addRows(array($t));
-                    unset($t);
+                    $objPHPExcel->getActiveSheet(0)
+                        ->setCellValue('A'.$row,$StepsStatList['List'][$key]['company_name'])
+                        ->setCellValue('B'.$row,$StepsStatList['List'][$key]['department_name'])
+                        ->setCellValue('C'.$row,$StepsStatList['List'][$key]['user_name'])
+                        ->setCellValue('D'.$row,$StepsStatList['List'][$key]['totalStep'])
+                        ->setCellValue('E'.$row,$StepsStatList['List'][$key]['kcal']."kcal")
+                        ->setCellValue('F'.$row,$StepsStatList['List'][$key]['time']."分钟")
+                        ->setCellValue('G'.$row,$StepsStatList['List'][$key]['distance']."米")
+                        ->setCellValue('H'.$row,$StepsStatList['List'][$key]['achive_rate']."%")
+                        ->setCellValue('I'.$row,$StepsStatList['List'][$key]['achive']==1?"达标":"未达标");
+                    $row++;
                 }
                 $params['Page']++;
             }
             while($Count>0);
-            $oExcel->closeSheet()->close();
+            $objPHPExcel->setactivesheetindex(0);
+            ob_end_clean();
+            @header('pragma:public');
+            @header('Content-type:application/vnd.ms-excel;charset=utf-8;name="'.'步数统计'.'.xls"');
+            @header("Content-Disposition:attachment;filename=步数统计.xls");//attachment新窗口打印inline本窗口打印
+            $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+            $objWriter->save('php://output');
         }
         else
         {
@@ -655,14 +669,20 @@ class Hj_StepsController extends AbstractController
             $params['company_id'] = intval($this->request->company_id??$default_company);
 
 
+            $objPHPExcel = new PHPExcel();
+            $objPHPExcel->setactivesheetindex(0);
+            /** 设置工作表名称 */
+            $objPHPExcel->getActiveSheet(0)->setTitle('部门达成率统计');
+            $objPHPExcel->getActiveSheet(0)
+                ->setCellValue('A1', '企业')
+                ->setCellValue('B1', '部门')
+                ->setCellValue('C1', '步数')
+                ->setCellValue('D1', '热量')
+                ->setCellValue('E1', '估测时间')
+                ->setCellValue('F1', '估测距离')
+                ->setCellValue('G1', '达标率')
+                ->setCellValue('H1', '是否达标');
 
-            $oExcel = new Third_Excel();
-
-            $FileName= iconv('gbk','utf-8','达标率');
-            $oExcel->download($FileName)->addSheet('部门达成率统计');
-            //标题栏
-            $title = array("企业","部门","步数","热量","估测时间","估测距离","达标率","是否达标");
-            $oExcel->addRows(array($title));
 
             $Count = 1;$params['Page'] =1;
             $departmentList  = [];
@@ -676,6 +696,8 @@ class Hj_StepsController extends AbstractController
                 //获取步数详情列表
                 $StepsStatList = $this->oSteps->getStepsStatList(array_merge($params,["permissionList"=>$totalPermission]),$groupKey);
                 $Count = count($StepsStatList['List']);
+
+                $row = $params['PageSize']*($params['Page']-1)+2; //行下标
                 foreach($StepsStatList['List'] as $key => $detail)
                 {
                     if(!isset($departmentList[$detail[$groupKey]]))
@@ -692,23 +714,29 @@ class Hj_StepsController extends AbstractController
                     $StepsStatList['List'][$key]['distance'] = intval($spepsConfig['distancePerStep']*$detail['totalStep']);
                     $StepsStatList['List'][$key]['achive'] = $detail['totalStep']>=$goal*$detail['userCount']?1:0;
                     $StepsStatList['List'][$key]['achive_rate'] = intval(100*($detail['totalStep']/($goal*$detail['userCount'])));
+
                     //生成单行数据
-                    $t = array();
-                    $t['companyName'] = $companyInfo['company_name'];
-                    $t['departmentName'] = $StepsStatList['List'][$key]['department_name'];
-                    $t['step'] = $StepsStatList['List'][$key]['totalStep'];
-                    $t['kcal'] = $StepsStatList['List'][$key]['kcal']."kcal";
-                    $t['time'] = $StepsStatList['List'][$key]['time']."分钟";
-                    $t['distance'] = $StepsStatList['List'][$key]['distance']."米";
-                    $t['achiveRate'] = $StepsStatList['List'][$key]['achive_rate']."%";
-                    $t['achive'] = $StepsStatList['List'][$key]['achive']==1?"达标":"未达标";
-                    $oExcel->addRows(array($t));
-                    unset($t);
+                    $objPHPExcel->getActiveSheet(0)
+                        ->setCellValue('A'.$row,$companyInfo['company_name'])
+                        ->setCellValue('B'.$row,$StepsStatList['List'][$key]['department_name'])
+                        ->setCellValue('C'.$row,$StepsStatList['List'][$key]['totalStep'])
+                        ->setCellValue('D'.$row,$StepsStatList['List'][$key]['kcal']."kcal")
+                        ->setCellValue('E'.$row,$StepsStatList['List'][$key]['time']."分钟")
+                        ->setCellValue('F'.$row,$StepsStatList['List'][$key]['distance']."米")
+                        ->setCellValue('G'.$row,$StepsStatList['List'][$key]['achive_rate']."%")
+                        ->setCellValue('H'.$row,$StepsStatList['List'][$key]['achive']==1?"达标":"未达标");
+                    $row++;
                 }
                 $params['Page']++;
             }
             while($Count>0);
-            $oExcel->closeSheet()->close();
+            $objPHPExcel->setactivesheetindex(0);
+            ob_end_clean();
+            @header('pragma:public');
+            @header('Content-type:application/vnd.ms-excel;charset=utf-8;name="'.'部门达成率统计'.'.xls"');
+            @header("Content-Disposition:attachment;filename=部门达成率统计.xls");//attachment新窗口打印inline本窗口打印
+            $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+            $objWriter->save('php://output');
         }
         else
         {
