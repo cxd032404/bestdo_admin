@@ -132,12 +132,12 @@ class Hj_ListSeries extends Base_Widget
     public function getSeriesDetailList($series_id,$params = [],$fields = "*")
     {
         $table_to_process = Base_Widget::getDbTable($this->table_detail);
-        $whereSeries = (isset($params['series_id']) && $params['series_id']>0)?" series_id = ".$params['series_id']:"";
+        $whereSeries = (isset($series_id) && $series_id>0)?" series_id = ".$series_id:"";
         $whereCondition = array($whereSeries);
         $where = Base_common::getSqlWhere($whereCondition);
         if(isset($params['getCount'])&&$params['getCount']==1)
         {
-            $listCount = $this->getSeriesDetailCount($params);
+            $listCount = $this->getSeriesDetailCount($series_id,$params);
         }
         else
         {
@@ -161,13 +161,13 @@ class Hj_ListSeries extends Base_Widget
      * @param $where  查询条件
      * @return integer
      */
-    public function getSeriesDetailCount($params)
+    public function getSeriesDetailCount($series_id,$params =[])
     {
         //获取需要用到的表名
         $table_to_process = Base_Widget::getDbTable($this->table_detail);
         //生成查询列
         $fields = Base_common::getSqlFields(array("DetailCount"=>"count(detail)"));
-        $whereSeries = (isset($params['series_id']) && $params['series_id']>0)?" series_id = ".$params['series_id']:"";
+        $whereSeries = (isset($series_id) && $series_id>0)?" series_id = ".$series_id:"";
         $whereCondition = array($whereSeries);
         $where = Base_common::getSqlWhere($whereCondition);
         $sql = "SELECT $fields FROM $table_to_process where 1 ".$where;

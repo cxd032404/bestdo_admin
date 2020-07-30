@@ -149,7 +149,7 @@ class Hj_StepsController extends AbstractController
     public function stepsDownloadAction()
     {
         //检查权限
-        $PermissionCheck = $this->manager->checkMenuPermission(0);
+        $PermissionCheck = $this->manager->checkMenuPermission(0,$this->sign);
         if($PermissionCheck['return'])
         {
             //企业ID
@@ -379,7 +379,7 @@ class Hj_StepsController extends AbstractController
     public function statDownloadAction()
     {
         //检查权限
-        $PermissionCheck = $this->manager->checkMenuPermission(0);
+        $PermissionCheck = $this->manager->checkMenuPermission(0,$this->sign);
         if($PermissionCheck['return'])
         {
             //企业ID
@@ -593,7 +593,7 @@ class Hj_StepsController extends AbstractController
     public function departmentDownloadAction()
     {
         //检查权限
-        $PermissionCheck = $this->manager->checkMenuPermission(0);
+        $PermissionCheck = $this->manager->checkMenuPermission(0,$this->sign);
         if($PermissionCheck['return'])
         {
             //企业ID

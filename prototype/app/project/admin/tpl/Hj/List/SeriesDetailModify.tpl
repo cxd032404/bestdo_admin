@@ -1,7 +1,8 @@
 {tpl:tpl contentHeader/}
 <div class="br_bottom"></div>
 <form id="series_detail_modify_form" name="series_detail_modify_form" action="{tpl:$this.sign/}&ac=series.detail.update" method="post">
-<input type="hidden" name="detail_id" id="detail_id"  value="{tpl:$detailInfo.detail_id/}" />
+	<input type="hidden" name="series_id" id="series_id"  value="{tpl:$detailInfo.series_id/}" />
+	<input type="hidden" name="detail_id" id="detail_id"  value="{tpl:$detailInfo.detail_id/}" />
 	<table width="99%" align="center" class="table table-bordered table-striped" >
 		<tr class="hover">
 			<td>名称</td>

@@ -8,7 +8,7 @@ $(document).ready(function(){
 
 function detailDelete(p_id,p_name){
     msg = '是否删除 ' + p_name + '?'
-  deleteDetailBox = divBox.confirmBox({content:msg,ok:function(){location.href = '{tpl:$this.sign/}&ac=list.delete&list_id=' + p_id;}});
+  deleteDetailBox = divBox.confirmBox({content:msg,ok:function(){location.href = '{tpl:$this.sign/}&ac=series.detail.delete&detail_id=' + p_id;}});
 }
 
 function detailModify(lid){
@@ -55,6 +55,7 @@ function detailModify(lid){
     <td align="center">{tpl:$detailInfo.create_time/}</td>
     <td align="center">{tpl:$detailInfo.update_time/}</td>
       <td align="center">
+        <a class = "pb_btn_grey_1" href="javascript:;" onclick="detailDelete('{tpl:$detailInfo.detail_id/}','{tpl:$detailInfo.detail_name/}')">删除</a>
         <a class = "pb_btn_light_1" href="javascript:;" onclick="detailModify('{tpl:$detailInfo.detail_id/}');">修改</a>
       </td>
   </tr>
