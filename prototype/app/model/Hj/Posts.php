@@ -127,7 +127,7 @@ class Hj_Posts extends Base_Widget
 	 * 条件查询post
 	 */
     public function getPostWithList($list_id,$fields = '*'){
-        $where = 'list_id ='.$list_id;
+        $where = 'list_id ='.$list_id.' and visible = 1';
         $table_to_process = Base_Widget::getDbTable($this->table);
         $sql = "select count(1) as postCount,sum(kudos) as kudosCount,user_id from $table_to_process where $where group by user_id order by kudosCount desc ";
         return $this->db->getAll($sql);
