@@ -534,25 +534,34 @@ class Hj_UserController extends AbstractController
             {
                 //$index = (new Base_Cache_Elasticsearch())->checkIndex("company_user_list",['company_id'=>$company_id]);
                 $file_path = $upload[1]['path'];
-                $handle = fopen($file_path, 'r');
+
+                $inputFileType = PHPExcel_IOFactory::identify($file_path);
+                $objReader = PHPExcel_IOFactory::createReader($inputFileType);
+                $PHPExcel = $objReader->load($file_path); //读取文件
+                $currentSheet = $PHPExcel->getSheet(0); //读取第一个工作簿
+                $allRow = $currentSheet->getHighestRow(); // 所有行数
+                $user_list = [];
+                for ($rowIndex = 2; $rowIndex <= $allRow; $rowIndex++) {
+                    $user_info = [];
+                    $user_info['user_name'] = $currentSheet->getCell('A' . $rowIndex)->getValue() ?? 0;
+                    $user_info['work_id'] = $currentSheet->getCell('B' . $rowIndex)->getValue() ?? 0;
+                    $user_info['departmentName']= $currentSheet->getCell('C' . $rowIndex)->getValue() ?? 0;
+                    $user_list[] = $user_info;
+                }
                 $error = 0;
                 $success = 0;
                 $exist = 0;
                 $successList = [];
-                //循环到文件结束
-                while(!feof($handle))
+                //循环到文件结束\
+                foreach ($user_list as $key =>$userInfo)
                 {
                     //获取每行信息
-                    $content = fgets($handle, 8080);
-                    if(trim($content)!="" && !is_null($content))
-                    {
-                        $text = explode(",",$content);
-                        $t = explode("|",$text[2]);
+                        $t = explode("|",$userInfo['departmentName']);
                         $departmentName = $t[count($t)-1];
                         $departmentInfo = (new Hj_Department())->getDepartmentByName($company_id,$departmentName);
-                        if(count($text)>=2)
+                        if(count($userInfo)>=2)
                         {
-                            $existUser = $this->oUserInfo->getCompanyUserByColumn($company_id,trim($text['0']),$auth_type,trim($text[1]),"id,name,department_id");
+                            $existUser = $this->oUserInfo->getCompanyUserByColumn($company_id,trim($userInfo['user_name']),$auth_type,trim($userInfo['work_id']),"id,name,department_id");
                             if(count($existUser)>=1)
                             {
                                 if($existUser[0]['department_id'] != $departmentInfo['department_id'])
@@ -564,7 +573,7 @@ class Hj_UserController extends AbstractController
                             }
                             else
                             {
-                                $userInfo = ["company_id" => $company_id, "name" => trim($text[0]),"department_id" => $departmentInfo['department_id']??0 ,$auth_type => trim($text[1])];
+                                $userInfo = ["company_id" => $company_id, "name" => trim($userInfo['user_name']),"department_id" => $departmentInfo['department_id']??0 ,$auth_type => trim($userInfo['work_id'])];
                                 $insert = $this->oUserInfo->insertCompanyUser($userInfo);
                                 if($insert)
                                 {
@@ -581,7 +590,7 @@ class Hj_UserController extends AbstractController
                         {
                             $error++;
                         }
-                    }
+
                 }
             }
             //$userToEs = $this->oUserInfo->getCompanyUserList(["idList"=>$successList],["id","company_id","name","mobile","worker_id","user_id"])['UserList'];

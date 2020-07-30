@@ -516,22 +516,19 @@ class Hj_ActivityController extends AbstractController
         $objReader = PHPExcel_IOFactory::createReader($inputFileType);
 
         $PHPExcel = $objReader->load($file_path); //读取文件
-        $list_data = [];
 
         $sheetCount = $PHPExcel->getSheetCount();
          $error = 0;
         for ($i=0;$i<$sheetCount;$i++)
         {
-
-            $sheet_data = [];
             $currentSheet = $PHPExcel->getSheet($i); //读取第一个工作簿
             $sheet_name = $PHPExcel->getSheet($i)->getTitle(); //读取名称
             $sheet_list_id = substr($sheet_name,0,strpos($sheet_name,'-')); //list_id
             $allRow = $currentSheet->getHighestRow(); // 所有行数
             for ($rowIndex = 2; $rowIndex <= $allRow; $rowIndex++)
             {
-                $user_id  = $currentSheet->getCell('A'.$rowIndex)->getValue()??0;
-                $plus = $currentSheet->getCell('E'.$rowIndex)->getValue()??0;
+                $user_id  = trim($currentSheet->getCell('A'.$rowIndex)->getValue()??0);
+                $plus = trim($currentSheet->getCell('E'.$rowIndex)->getValue()??0);
                 if($plus<0)
                 {
                     $error++;
