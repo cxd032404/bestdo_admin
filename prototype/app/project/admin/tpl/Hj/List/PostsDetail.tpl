@@ -82,7 +82,7 @@
 			dataType:'json',
 			beforeSubmit:function(formData, jqForm, options) {},
 			success:function(jsonResponse) {
-				if (jsonResponse.success == "false") {
+				if (jsonResponse.success == false) {
 					divBox.alertBox(jsonResponse.msg,function(){});
 				} else {
 					var message = '发布成功';
