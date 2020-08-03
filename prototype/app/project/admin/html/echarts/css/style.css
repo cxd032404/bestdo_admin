@@ -1,0 +1,67 @@
+a{outline: none !important;text-decoration: none !important;}
+.backup_all{background: #E3EDFC;width: 100%;height:100vh;float: right;padding: 5px;overflow: hidden;}
+.padd_alls{height:100%;overflow-y: scroll;}
+.padd_all{background: #fff;padding:0 20px;}
+.backup_all ul{margin: 0px;clear: both;}
+.top_cont{padding: 5px !important;height:auto;overflow: hidden;}
+.top_cont ul li{width: 20%;float: left;padding: 20px 0px;text-align: center;}
+.top_cont ul li>img{display: inline-block;vertical-align: middle;float: left;}
+.top_cont ul li div{float: left;text-align: left;margin-left: 15px;}
+.top_ico_rt span{display: block;font-size:14px;color: #999999;}
+.top_ico_rt span img{display: inline-block;margin-left: 5px;}
+.top_ico_rt p{margin: 0px;color: #000000;font-size: 24px;font-family:DINAlternate-Bold,DINAlternate;
+font-weight:bold;}
+.leftbar{width: 70%;float: left;padding: 5px;}
+.rightbar{width: 30%;float: left;padding: 5px;}
+.clear{clear: both;}
+#my_charts{width: 100%;height: 300px;position:relative;}
+#my_charts2{width: 100%;height: 202px;}
+.act_div_a{padding: 10px 20px;}
+.ty_tit{width: 100%;padding: 20px 0px;font-size:16px;font-weight:500;color:rgba(40,40,40,1);height: auto;overflow: hidden;
+border-bottom: 1px solid #ECEEF5;}
+.ty_lt{float: left;}
+.ty_rt{float: right;}
+.jlb_fx{margin-bottom: 10px;}
+.jlb_fx_nr_top span{display: inline-block;width: 25%;text-align: center;height: 50px; line-height: 50px;color: #999999;font-size: 14px;float: left;}
+.jlb_fx_nr_top span:first-child{text-align: left;width: 50%;}
+.jlb_fx_nr_data ul li div:first-child{width: 50%;text-align: left;}
+.jlb_fx_nr_data ul li{height: auto;overflow: hidden;padding: 10px 0px;}
+.jlb_fx_nr_data ul li div{float: left;font-size: 14px;width: 25%;text-align: center;float: left;}
+.jb_a span{display: inline-block;width: 20px;height: 20px;color: #fff;font-size:14px;border-radius: 12px;background: #C7C6CC;text-align: center;margin-right: 10px;}
+.jlb_fx_nr_data ul li:nth-child(1) span{background:  #FC6260 ;}
+.jlb_fx_nr_data ul li:nth-child(2) span{background:  #FFBC34 ;}
+.jlb_fx_nr_data ul li:nth-child(3) span{background:  #35BFB2 ;}
+.jlb_fx_nr_more{text-align: center;height: auto;overflow: hidden;padding: 20px 0px;
+}
+.jlb_fx_nr_more a{display: inline-block;width: 120px;padding: 7px 0px;border-radius: 20px;border: 1px solid #D8DCE6;
+font-size: 14px;color: #666666;text-align: center;}
+.bus_rank{margin-top: 10px;height: auto;overflow: hidden;}
+.bus_rank_list{width: 50%;float: left;}
+.mouth_tog ul li{float: left;margin-left: 10px;}
+.mouth_tog ul li a{display: inline-block;width: 60px;height: auto;border:1px solid rgba(216,220,230,1);font-size:14px;border-radius:4px;text-align: center;
+padding: 10px 0px;color: #666666;}
+.bs_rank_nr_top ul li{float: left;}
+.bs_rank_nr_top ul li:nth-child(1n){width: 14%;}
+.bs_rank_nr_top ul li:nth-child(2n){width: 20%;}
+.bs_rank_nr_top ul li:nth-child(3n){width: 66%;}
+.pam_c_d{float: left;}
+.pam_a{width: 14%;}
+.pam_b{width: 20%;}
+.pam_c{width: 66%;}
+.pam_a,.pam_b,.pam_c,.pam_c_a,.pam_c_b{float: left;}
+.bs_rank_nr_top{padding: 20px 0px;color:  #999999 ;height: auto;overflow: hidden;padding-bottom: 10px;}
+.bs_rank_nr_cont ul li{height: auto;overflow: hidden;padding: 10px 0px;}
+.pam_c_b{width:48%;height:14px;background:rgba(232,237,246,1);border-radius:9px;position: relative;overflow: hidden;margin-left: 20px;}
+.pam_c_b span{position: absolute;background: #1A90FD;top: 0px;left: 0px;height: 100%;border-radius:9px;}
+.ty_lt img{display: inline-block;vertical-align: middle;margin-right: 10px;position: relative;top: -2px;}
+.bus_rank_list_first{padding-right: 20px;border-right: 10px solid #E3EDFC;}
+.bus_rank_list_zb{padding-left: 20px;}
+
+.pam_c_d{width: 20px;height: 20px;margin-left: 40px;}
+.pam_c_d div{width: 100%;height: 100%;}
+.bs_rank_crile_top ul li:nth-child(1n){width: 30%;}
+.bs_rank_crile_top ul li:nth-child(2n){width: 30%;}
+.bs_rank_crile_top ul li:nth-child(3n){width: 40%;}
+.bs_rank_crile  .pam_a{width: 30%;}
+.bs_rank_crile .pam_b{width: 30%;}
+.bs_rank_crile .pam_c{width: 40%;}

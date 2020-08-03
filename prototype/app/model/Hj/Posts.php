@@ -63,8 +63,15 @@ class Hj_Posts extends Base_Widget
      */
     public function getPostCountByList($list_id)
     {
-        $list_id = intval($list_id);
-        $whereList = " list_id = ".$list_id;
+        //$list_id = intval($list_id);
+        if(is_array($list_id))
+        {
+            $whereList = " list_id in (".(count($list_id)>0?implode(',',$list_id):0).")";
+        }
+        else
+        {
+            $whereList = " list_id = ".$list_id;
+        }
         $whereCondition = array($whereList);
         $where = Base_common::getSqlWhere($whereCondition);
         //获取需要用到的表名

@@ -2,7 +2,7 @@
 <script type="text/javascript">
 $(document).ready(function(){
   $('#add_activity').click(function(){
-    addactivityBox = divBox.showBox('{tpl:$this.sign/}&ac=activity.add', {title:'添加活动',width:600,height:500});
+    addactivityBox = divBox.showBox('{tpl:$this.sign/}&ac=activity.add', {title:'添加活动',width:600,height:550});
   });
 });
 
@@ -12,7 +12,7 @@ function activityDelete(p_id,p_name){
 }
 
 function activityModify(mid){
-  modifyactivityBox = divBox.showBox('{tpl:$this.sign/}&ac=activity.modify&activity_id=' + mid, {title:'修改活动',width:600,height:800});
+  modifyactivityBox = divBox.showBox('{tpl:$this.sign/}&ac=activity.modify&activity_id=' + mid, {title:'修改活动',width:600,height:850});
 }
 
 </script>
@@ -23,7 +23,7 @@ function activityModify(mid){
   </div>
 </fieldset>
 
-<fieldset><legend>活动列表 </legend>
+<fieldset><legend> 活动列表 </legend>
 <form action="{tpl:$this.sign/}" name="form" id="form" method="post">
 <select name="company_id"  id="company_id" size="1">
       <option value="0"{tpl:if(0==$company_id)}selected="selected"{/tpl:if} >全部</option>
@@ -31,6 +31,16 @@ function activityModify(mid){
       <option value="{tpl:$company_info.company_id/}"{tpl:if($company_info.company_id==$company_id)}selected="selected"{/tpl:if} >{tpl:$company_info.company_name/}</option>
       {/tpl:loop}
     </select>
+  系统活动:<select name="system"  id="system" size="1">
+    <option value="-1"{tpl:if(-1==$params.system)}selected="selected"{/tpl:if} >全部</option>
+    <option value="0"{tpl:if(0==$params.system)}selected="selected"{/tpl:if} >否</option>
+    <option value="1"{tpl:if(1==$params.system)}selected="selected"{/tpl:if} >是</option>
+  </select>
+  已购买:<select name="purchased"  id="purchased" size="1">
+    <option value="-1"{tpl:if(-1==$params.purchased)}selected="selected"{/tpl:if} >全部</option>
+    <option value="0"{tpl:if(0==$params.purchased)}selected="selected"{/tpl:if} >否</option>
+    <option value="1"{tpl:if(1==$params.purchased)}selected="selected"{/tpl:if} >是</option>
+  </select>
   <button type="submit" class="pb_btn_light_1">搜索</button>
 </form>
   <div class="ifm_all">
@@ -39,7 +49,9 @@ function activityModify(mid){
     <th align="center" class="rowtip">活动ID</th>
     <th align="center" class="rowtip">活动名称</th>
     <th align="center" class="rowtip">对应企业</th>
-    <th align="center" class="rowtip">关联俱乐部</th>
+        <th align="center" class="rowtip">系统活动</th>
+        <th align="center" class="rowtip">购买</th>
+        <th align="center" class="rowtip">关联俱乐部</th>
     <th align="center" class="rowtip">创建者</th>
       <th align="center" class="rowtip">仅俱乐部成员</th>
       <th align="center" class="rowtip">人数限制</th>
@@ -54,6 +66,8 @@ function activityModify(mid){
     <td align="center">{tpl:$activityInfo.activity_id/}</td>
     <td align="center">{tpl:$activityInfo.activity_name/}</td>
       <td align="center">{tpl:$activityInfo.company_name/}</td>
+    <td align="center">{tpl:if($activityInfo.system==1)}是{tpl:else}否{/tpl:if}</td>
+    <td align="center">{tpl:if($activityInfo.purchased==1)}是{tpl:else}否{/tpl:if}</td>
     <td align="center">{tpl:$activityInfo.club_name/}</td>
     <td align="center">{tpl:$activityInfo.create_user_name/}</td>
       <td align="center">{tpl:if($activityInfo.club_member_only==1)}是{tpl:else}否{/tpl:if}</td>

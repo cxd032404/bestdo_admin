@@ -26,6 +26,17 @@
 			{/tpl:loop}
 		</select></td>
 </tr>
+	{tpl:if($activityInfo.system==1)}
+	<tr class="hover"><td>是否购买</td>
+		<td align="left">	<select name="purchased"  id="purchased" size="1" >
+				<option value="0" {tpl:if(0==$activityInfo.purchased)}selected="selected"{/tpl:if} >未购买</option>
+				<option value="1" {tpl:if(1==$activityInfo.purchased)}selected="selected"{/tpl:if} >已购买</option>
+			</select></td>
+	</tr>
+	{tpl:else}
+		<input type="hidden" name="purchased"  id="purchased" value="0" />
+	{/tpl:if}
+
 <tr class="hover"><td>对应俱乐部</td>
 	<td align="left">	<select name="club_id"  id="club_id" size="1">
 			<option value="0"{tpl:if($club_info.club_id==0)}selected="selected"{/tpl:if} >不指定</option>

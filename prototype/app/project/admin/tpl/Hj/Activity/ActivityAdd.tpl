@@ -23,6 +23,12 @@
 			{/tpl:loop}
 		</select></td>
 </tr>
+<tr class="hover"><td>系统活动</td>
+	<td align="left">	<select name="system"  id="system" size="1" >
+			<option value="0" >否</option>
+			<option value="1" >是</option>
+		</select></td>
+</tr>
 	<tr class="hover"><td>对应俱乐部</td>
 		<td align="left">	<select name="club_id"  id="club_id" size="1">
 				<option value="0" selected="selected" >不指定</option>
