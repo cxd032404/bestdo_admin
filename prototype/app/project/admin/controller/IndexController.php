@@ -51,9 +51,76 @@ class IndexController extends AbstractController
         $UpdateLogTypeList = $oUpdateLog->getLogTypeList();
         include $this->tpl();
     }
+    public function home3Action()
+    {
+        $oCompany = new Hj_Company();
+        $oUser = new Hj_UserInfo();
+        $totalPermission = $this->manager->getPermissionList($this->manager->data_groups,"only");
+        //获取企业列表
+        $companyList = $oCompany->getCompanyList(["permissionList"=>$totalPermission],"company_id,company_name");
+        $startDate = date("Y-m-d",time()-7*86400);
+        $endDate = date("Y-m-d",time());
+        $date = $endDate;
+        $regData = [];
+        while($date >= $startDate)
+        {
+            $regData[$date] = $oUser->getUserCount(["permissionList"=>$totalPermission,"regDate"=>$date]);
+            $date = date("Y-m-d",strtotime($date)-86400);
+        }
+        include('Third/fusion/Includes/FusionCharts_Gen.php');
+        $FC = new FusionCharts("MSLine",'100%','400');
+        # Set the relative path of the swf file
+        $FC->setSWFPath( '../Charts/');
+        $Step=1;
+        # Store chart attributes in a variable
+        $strParam="caption='最近7天用户情况';xAxisName='注册';baseFontSize=12;numberPrefix=;numberSuffix=人;decimalPrecision=0;showValues=0;formatNumberScale=0;labelStep=".$Step.";rotateNames=1;yAxisMinValue=0;yAxisMaxValue=100;numDivLines=9;showAlternateHGridColor=1;alternateHGridAlpha=5;alternateHGridColor='CC3300';hoverCapSepChar=，";
+        foreach($regData as $date => $regUser)
+        {
+            $FC->addCategory($date);
+        }
+        foreach($regData as $date => $regUser)
+        {
+            $FC->addChartData($regUser);
+        }
+        include $this->tpl("Hj_Index_Home");
+    }
     public function homeAction()
     {
         $oCompany = new Hj_Company();
+        $oActivity = new Hj_Activity();
+        $oUser = new Hj_UserInfo();
+        $oList = new Hj_List();
+        $oPosts = new Hj_Posts();
+        $totalPermission = $this->manager->getPermissionList($this->manager->data_groups,"only");
+        //获取企业列表
+        $companyList = $oCompany->getCompanyList(["permissionList"=>$totalPermission],"company_id,company_name,detail");
+        $default_company = array_column($companyList,'company_id')['0'];
+        //主页列表序列模块
+        //获取活动列表
+        $nameList = [];
+        $userCount = [];
+        $postCount = [];
+        $activityList = $oActivity->getActivityList(["company_id"=>$default_company,'system'=>1,'purchased'=>1],"activity_id,activity_name");
+        foreach($activityList['ActivityList'] as $activity_id => $activityInfo)
+        {
+            {
+                $nameList[$activity_id] = "'".$activityInfo['activity_name']."'";
+                $userCount[$activity_id] = $oUser->getUserActivityLogCount(["activity_id"=> $activity_id]);
+                $ListList = $oList->getListList(["activity_id"=>$activity_id],"list_id");
+                $postCount[$activity_id] = $oPosts->getPostCountByList(array_keys($ListList['ListList']));
+            }
+        }
+
+        $nameListText = implode(",",$nameList);
+        $userCountText = implode(",",$userCount);
+        $postCountText = implode(",",$postCount);
+        echo $postCountText;
+
+        //主页列表序列模块
+        //
+        include $this->tpl("Index_home2");
+        die();
+
         $oUser = new Hj_UserInfo();
         $totalPermission = $this->manager->getPermissionList($this->manager->data_groups,"only");
         //获取企业列表

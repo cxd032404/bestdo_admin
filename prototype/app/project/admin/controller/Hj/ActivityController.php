@@ -50,6 +50,9 @@ class Hj_ActivityController extends AbstractController
             $totalPermission = $this->manager->getPermissionList($this->manager->data_groups,"only");
             //企业ID
             $params['company_id'] = intval($this->request->company_id??0);
+            $params['system'] = intval($this->request->system??-1);
+            $params['purchased'] = intval($this->request->purchased??-1);
+
             //分页参数
             $params['Page'] = abs(intval($this->request->Page??1));
             $params['PageSize'] = 20;
@@ -135,7 +138,7 @@ class Hj_ActivityController extends AbstractController
         else
         {
             //检查权限
-            $bind=$this->request->from('activity_name','company_id','club_id','member_limit','start_time','end_time','apply_start_time','apply_end_time','detail');
+            $bind=$this->request->from('activity_name','company_id','club_id','member_limit','start_time','end_time','apply_start_time','apply_end_time','detail','system');
             //活动名称不能为空
             if(trim($bind['activity_name'])=="")
             {
@@ -200,7 +203,7 @@ class Hj_ActivityController extends AbstractController
 	public function activityUpdateAction()
 	{
 	    //接收活动参数
-        $bind=$this->request->from('activity_id','activity_name','company_id','club_id','member_limit','start_time','end_time','apply_start_time','apply_end_time','detail');
+        $bind=$this->request->from('activity_id','activity_name','company_id','club_id','member_limit','start_time','end_time','apply_start_time','apply_end_time','detail','purchased');
         //活动名称不能为空
 		if(trim($bind['activity_name'])=="")
 		{

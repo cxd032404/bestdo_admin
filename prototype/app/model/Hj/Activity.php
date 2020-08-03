@@ -25,10 +25,13 @@ class Hj_Activity extends Base_Widget
         $whereCompany = (isset($params['company_id']) && $params['company_id']>0)?" company_id = ".$params['company_id']:"";
         $whereSign = (isset($params['activity_sign']) && trim($params['activity_sign'])!="")?" activity_sign = '".$params['activity_sign']."'":"";
         $whereExclude = (isset($params['exclude_id']) && $params['exclude_id'])>0?" activity_id != ".$params['exclude_id']:"";
-        $whereCondition = array($wherePermission,$whereCompany,$whereSign,$whereExclude);
+        $whereSystem = (isset($params['system']) && $params['system']>=0)?" system = ".$params['system']:"";
+        $wherePurchased = (isset($params['purchased']) && $params['purchased']>=0)?" purchased = ".$params['purchased']:"";
+        $whereCondition = array($wherePermission,$whereCompany,$whereSign,$whereExclude,$whereSystem,$wherePurchased);
         $where = Base_common::getSqlWhere($whereCondition);
         $limit  = isset($params['Page'])&&$params['Page']?" limit ".($params['Page']-1)*$params['PageSize'].",".$params['PageSize']." ":"";
         $sql = "SELECT $fields FROM " . $table_to_process . " where 1 ".$where." ORDER BY activity_id ASC ".$limit;
+
         $return = $this->db->getAll($sql);
         //获取用户数量
         if(isset($params['getCount'])&&$params['getCount']==1)
@@ -65,8 +68,9 @@ class Hj_Activity extends Base_Widget
         $whereCompany = (isset($params['company_id']) && $params['company_id']>0)?" company_id = ".$params['company_id']:"";
         $whereSign = (isset($params['activity_sign']) && trim($params['activity_sign'])!="")?" activity_sign = '".$params['activity_sign']."'":"";
         $whereExclude = (isset($params['exclude_id']) && $params['exclude_id'])>0?" activity_id != ".$params['exclude_id']:"";
-        $whereCondition = array($wherePermission,$whereCompany,$whereSign,$whereExclude);
-        $where = Base_common::getSqlWhere($whereCondition);
+        $whereSystem = (isset($params['system']) && $params['system']>=0)?" system = ".$params['system']:"";
+        $wherePurchased = (isset($params['purchased']) && $params['purchased']>=0)?" purchased = ".$params['purchased']:"";
+        $whereCondition = array($wherePermission,$whereCompany,$whereSign,$whereExclude,$whereSystem,$wherePurchased);        $where = Base_common::getSqlWhere($whereCondition);
         $sql = "SELECT $fields FROM $table_to_process where 1 ".$where;
         return $this->db->getOne($sql);
     }

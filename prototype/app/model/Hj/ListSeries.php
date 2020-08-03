@@ -88,6 +88,19 @@ class Hj_ListSeries extends Base_Widget
         $table_to_process = Base_Widget::getDbTable($this->table);
 		return $this->db->selectRow($table_to_process, $fields, '`series_id` = ?', $series_id);
 	}
+    /**
+     * 获取单条记录(根据sign)
+     * @param integer $series_id
+     * @param string $fields
+     * @return array
+     */
+    public function getSeriesBySign($series_sign,$company_id=0,$fields = '*')
+    {
+        $series_sign = trim($series_sign);
+        $company_id = intval($company_id);
+        $table_to_process = Base_Widget::getDbTable($this->table);
+        return $this->db->selectRow($table_to_process, $fields, '`series_sign` = ? and `company_id` = ?', [$series_sign,$company_id]);
+    }
 	/**
 	 * 更新
 	 * @param integer $series_id
