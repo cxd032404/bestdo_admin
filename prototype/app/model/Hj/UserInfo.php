@@ -749,8 +749,19 @@ class Hj_UserInfo extends Base_Widget
         $table_to_process = Base_Widget::getDbTable($this->table_activity_log);
         //生成查询列
         $fields = Base_common::getSqlFields(array("UserCount"=>"count(user_id)"));
-        //活动
-        $whereActivity = (isset($params['activity_id']) && ($params['activity_id']>0))?" activity_id = '".$params['activity_id']."' ":"";
+        if(isset($params['activity_id']))
+        {
+            if(is_array($params['activity_id']))
+            {
+                //活动
+                $whereActivity = " activity_id in (".(count($params['activity_id'])>0?implode(",",$params['activity_id']):0).")";
+            }
+            else
+            {
+                //活动
+                $whereActivity = ($params['activity_id']>0)?" activity_id = '".$params['activity_id']."' ":"";
+            }
+        }
         //用户
         $whereUser = (isset($params['user_id']) && ($params['user_id']>0))?" user_id = '".$params['user_id']."' ":"";
         //所有查询条件置入数组

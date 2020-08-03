@@ -100,110 +100,24 @@
                           </div>
                           <div class="bs_rank_nr_cont">
                               <ul>
-                                <li>
-                                  <div class="pam_a">  1  </div>
-                                  <div class="pam_b">  销售部  </div>
-                                  <div class="pam_c">
-                                     <div class="pam_c_a">
-                                       243,889,919,800
-                                     </div>
-                                     <div class="pam_c_b">
-                                       <span style="width:60%"></span>
-                                     </div>
-                                  </div>
-                                </li>
-                                <li>
-                                  <div class="pam_a">
-                                    1
-                                  </div>
-                                  <div class="pam_b">
-                                    销售部
-                                  </div>
-                                  <div class="pam_c">
-                                     <div class="pam_c_a">
-                                       243,889,919,800
-                                     </div>
-                                     <div class="pam_c_b">
-                                       <span style="width:80%"></span>
-                                     </div>
-                                  </div>
-                                </li>
-                                <li>
-                                  <div class="pam_a">  1  </div>
-                                  <div class="pam_b">  销售部  </div>
-                                  <div class="pam_c">
-                                     <div class="pam_c_a">
-                                       243,889,919,800
-                                     </div>
-                                     <div class="pam_c_b">
-                                       <span style="width:40%"></span>
-                                     </div>
-                                  </div>
-                                </li>
-                                <li>
-                                  <div class="pam_a">  1  </div>
-                                  <div class="pam_b">  销售部  </div>
-                                  <div class="pam_c">
-                                     <div class="pam_c_a">
-                                       243,889,919,800
-                                     </div>
-                                     <div class="pam_c_b">
-                                       <span style="width:30%"></span>
-                                     </div>
-                                  </div>
-                                </li>
-                                <li>
-                                  <div class="pam_a">  1  </div>
-                                  <div class="pam_b">  销售部  </div>
-                                  <div class="pam_c">
-                                     <div class="pam_c_a">
-                                       243,889,919,800
-                                     </div>
-                                     <div class="pam_c_b">
-                                       <span style="width:60%"></span>
-                                     </div>
-                                  </div>
-                                </li>
-                                <li>
-                                  <div class="pam_a">
-                                    1
-                                  </div>
-                                  <div class="pam_b">
-                                    销售部
-                                  </div>
-                                  <div class="pam_c">
-                                     <div class="pam_c_a">
-                                       243,889,919,800
-                                     </div>
-                                     <div class="pam_c_b">
-                                       <span style="width:80%"></span>
-                                     </div>
-                                  </div>
-                                </li>
-                                <li>
-                                  <div class="pam_a">  1  </div>
-                                  <div class="pam_b">  销售部  </div>
-                                  <div class="pam_c">
-                                     <div class="pam_c_a">
-                                       243,889,919,800
-                                     </div>
-                                     <div class="pam_c_b">
-                                       <span style="width:40%"></span>
-                                     </div>
-                                  </div>
-                                </li>
-                                <li>
-                                  <div class="pam_a">  1  </div>
-                                  <div class="pam_b">  销售部  </div>
-                                  <div class="pam_c">
-                                     <div class="pam_c_a">
-                                       243,889,919,800
-                                     </div>
-                                     <div class="pam_c_b">
-                                       <span style="width:30%"></span>
-                                     </div>
-                                  </div>
-                                </li>
+
+                                  <?php
+                                  $i = 1;
+                                    foreach($StepsStatList['List'] as $key => $value)
+                                  {
+                                      ?><li>
+                                          <div class="pam_a"> <?php echo $i; $i++;?>   </div>
+                                          <div class="pam_b">  <?php echo $value['department_name']; ?>  </div>
+                                          <div class="pam_c">
+                                              <div class="pam_c_a">
+                                                  <?php echo number_format($value['totalStep']); ?>
+                                              </div>
+                                              <div class="pam_c_b">
+                                                  <span style="width:<?php echo $value['bar_rate']; ?>%"></span>
+                                              </div>
+                                          </div>
+                                      </li>
+                                  <?php } ?>
                               </ul>
                           </div>
                         </div>
@@ -232,33 +146,25 @@
                           </div>
                           <div class="bs_rank_nr_cont bs_rank_crile">
                               <ul>
-                                <li>
-                                  <div class="pam_a">  1  </div>
-                                  <div class="pam_b">  销售部  </div>
-                                  <div class="pam_c">
-                                     <div class="pam_c_a">
-                                      25%
-                                     </div>
-                                     <div class="pam_c_d">
-                                            <div id="pcm_cal">
-                                            </div>
-                                     </div>
-                                  </div>
-                                </li>
-                                <li>
-                                  <div class="pam_a">  1  </div>
-                                  <div class="pam_b">  销售部  </div>
-                                  <div class="pam_c">
-                                     <div class="pam_c_a">
-                                      25%
-                                     </div>
-                                     <div class="pam_c_d">
-                                            <div id="pcm_cal2">
-                                            </div>
-                                     </div>
-                                  </div>
-                                </li>
-
+                                  <?php
+                                  $i = 1;
+                                    foreach($StepsStatList['List'] as $key => $value)
+                                  {
+                                  ?>
+                                  <li>
+                                      <div class="pam_a">  <?php echo $i; $i++;?>  </div>
+                                      <div class="pam_b">  <?php echo $value['department_name']; ?>  </div>
+                                      <div class="pam_c">
+                                          <div class="pam_c_a">
+                                              <?php echo $value['circle_rate']; ?>%
+                                          </div>
+                                          <div class="pam_c_d">
+                                              <div id="pcm_cal">
+                                              </div>
+                                          </div>
+                                      </div>
+                                  </li>
+                                  <?php } ?>
                               </ul>
                           </div>
                         </div>
@@ -282,52 +188,17 @@
                     </div>
                     <div class="jlb_fx_nr_data">
                       <ul>
-                        <li>
-                          <div class="jb_a"><span>1</span>沪联邦篮球俱乐部</div>
-                          <div class="jb_b">12</div>
-                          <div class="jb_c">15,465</div>
-                        </li>
-                        <li>
-                          <div class="jb_a"><span>2</span>沪联邦篮球俱乐部</div>
-                          <div class="jb_b">12</div>
-                          <div class="jb_c">15,465</div>
-                        </li>
-                        <li>
-                          <div class="jb_a"><span>3</span>沪联邦篮球俱乐部</div>
-                          <div class="jb_b">12</div>
-                          <div class="jb_c">15,465</div>
-                        </li>
-                        <li>
-                          <div class="jb_a"><span>4</span>沪联邦篮球俱乐部</div>
-                          <div class="jb_b">12</div>
-                          <div class="jb_c">15,465</div>
-                        </li>
-                        <li>
-                          <div class="jb_a"><span>5</span>沪联邦篮球俱乐部</div>
-                          <div class="jb_b">12</div>
-                          <div class="jb_c">15,465</div>
-                        </li>
-                        <li>
-                          <div class="jb_a"><span>6</span>沪联邦篮球俱乐部</div>
-                          <div class="jb_b">12</div>
-                          <div class="jb_c">15,465</div>
-                        </li>
-                        <li>
-                          <div class="jb_a"><span>3</span>沪联邦篮球俱乐部</div>
-                          <div class="jb_b">12</div>
-                          <div class="jb_c">15,465</div>
-                        </li>
-                        <li>
-                          <div class="jb_a"><span>4</span>沪联邦篮球俱乐部</div>
-                          <div class="jb_b">12</div>
-                          <div class="jb_c">15,465</div>
-                        </li>
-                        <li>
-                          <div class="jb_a"><span>5</span>沪联邦篮球俱乐部</div>
-                          <div class="jb_b">12</div>
-                          <div class="jb_c">15,465</div>
-                        </li>
-
+                          <?php
+                                  $i = 1;
+                                    foreach($clubList as $key => $value)
+                          {
+                          ?>
+                          <li>
+                              <div class="jb_a"><span><?php echo $i; $i++;?> </span><?php echo $value['club_name']; ?></div>
+                              <div class="jb_b"><?php echo $value['ActivityCount']; ?></div>
+                              <div class="jb_c"><?php echo number_format($value['user_count']); ?></div>
+                          </li>
+                          <?php } ?>
                       </ul>
                     </div>
                     <div class="jlb_fx_nr_more">

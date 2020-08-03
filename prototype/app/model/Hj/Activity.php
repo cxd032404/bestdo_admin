@@ -27,7 +27,9 @@ class Hj_Activity extends Base_Widget
         $whereExclude = (isset($params['exclude_id']) && $params['exclude_id'])>0?" activity_id != ".$params['exclude_id']:"";
         $whereSystem = (isset($params['system']) && $params['system']>=0)?" system = ".$params['system']:"";
         $wherePurchased = (isset($params['purchased']) && $params['purchased']>=0)?" purchased = ".$params['purchased']:"";
-        $whereCondition = array($wherePermission,$whereCompany,$whereSign,$whereExclude,$whereSystem,$wherePurchased);
+        $whereClub = (isset($params['club_id']) && $params['club_id']>0)?" club_id = ".$params['club_id']:"";
+        $whereEndTime = " end_time <= '".date("Y-m-d H:i:s")."'";
+        $whereCondition = array($wherePermission,$whereCompany,$whereSign,$whereExclude,$whereSystem,$wherePurchased,$whereClub,$whereEndTime);
         $where = Base_common::getSqlWhere($whereCondition);
         $limit  = isset($params['Page'])&&$params['Page']?" limit ".($params['Page']-1)*$params['PageSize'].",".$params['PageSize']." ":"";
         $sql = "SELECT $fields FROM " . $table_to_process . " where 1 ".$where." ORDER BY activity_id ASC ".$limit;
@@ -70,9 +72,9 @@ class Hj_Activity extends Base_Widget
         $whereExclude = (isset($params['exclude_id']) && $params['exclude_id'])>0?" activity_id != ".$params['exclude_id']:"";
         $whereSystem = (isset($params['system']) && $params['system']>=0)?" system = ".$params['system']:"";
         $wherePurchased = (isset($params['purchased']) && $params['purchased']>=0)?" purchased = ".$params['purchased']:"";
-        $whereCondition = array($wherePermission,$whereCompany,$whereSign,$whereExclude,$whereSystem,$wherePurchased);        $where = Base_common::getSqlWhere($whereCondition);
-        $sql = "SELECT $fields FROM $table_to_process where 1 ".$where;
-        return $this->db->getOne($sql);
+        $whereClub = (isset($params['club_id']) && $params['club_id']>0)?" club_id = ".$params['club_id']:"";
+        $whereEndTime = " end_time <= '".date("Y-m-d H:i:s")."'";
+        $whereCondition = array($wherePermission,$whereCompany,$whereSign,$whereExclude,$whereSystem,$wherePurchased,$whereClub,$whereEndTime);        return $this->db->getOne($sql);
     }
 	/**
 	 * 获取单条记录
@@ -122,5 +124,37 @@ class Hj_Activity extends Base_Widget
 		$table_to_process = Base_Widget::getDbTable($this->table);
 		return $this->db->delete($table_to_process, '`activity_id` = ?', $activity_id);
 	}
+    /**
+     * 查询全部
+     * @param $fields
+     * @return array
+     */
+    public function getActivityCountListByClub($params = [])
+    {
+        $fields = Base_common::getSqlFields(array("club_id","ActivityCount"=>"count(activity_id)"));
+        $table_to_process = Base_Widget::getDbTable($this->table);
+        $wherePermission = isset($params['permissionList'])?(
+        count($params['permissionList'])>0?
+            ( " company_id in (".implode(",",array_column($params['permissionList'],"company_id")).") ")
+            :" 0 "):"";
+        $whereCompany = (isset($params['company_id']) && $params['company_id']>0)?" company_id = ".$params['company_id']:"";
+        $whereIsClub = " club_id >0 ";
+        $whereEndTime = " end_time <= '".date("Y-m-d H:i:s")."'";
+        $whereSystem = (isset($params['system']) && $params['system']>=0)?" system = ".$params['system']:"";
+        $wherePurchased = (isset($params['purchased']) && $params['purchased']>=0)?" purchased = ".$params['purchased']:"";
+        $whereCondition = array($wherePermission,$whereCompany,$whereIsClub,$whereEndTime,$whereSystem,$wherePurchased);        $where = Base_common::getSqlWhere($whereCondition);
+        $limit  = isset($params['Page'])&&$params['Page']?" limit ".($params['Page']-1)*$params['PageSize'].",".$params['PageSize']." ":"";
+        $sql = "SELECT $fields FROM $table_to_process where 1 ".$where."group by club_id  ORDER BY ActivityCount desc ".$limit;
+        $return = $this->db->getAll($sql);
+        $ClubList = [];
+        if(count($return))
+        {
+            foreach($return as $key => $value)
+            {
+                $ClubList[$value['club_id']]['ActivityCount'] = $value['ActivityCount'];
+            }
+        }
+        return $ClubList;
+    }
 
 }

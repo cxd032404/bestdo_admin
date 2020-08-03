@@ -91,12 +91,14 @@ class IndexController extends AbstractController
         $oUser = new Hj_UserInfo();
         $oList = new Hj_List();
         $oPosts = new Hj_Posts();
+        $oSteps = new Hj_Steps();
+        $oClub = new Hj_Club();
+        $oDepartment = new Hj_Department();
         $totalPermission = $this->manager->getPermissionList($this->manager->data_groups,"only");
         //获取企业列表
         $companyList = $oCompany->getCompanyList(["permissionList"=>$totalPermission],"company_id,company_name,detail");
         $default_company = array_column($companyList,'company_id')['0'];
-        //主页列表序列模块
-        //获取活动列表
+        //活动报名与上传作品情况分析
         $nameList = [];
         $userCount = [];
         $postCount = [];
@@ -110,13 +112,41 @@ class IndexController extends AbstractController
                 $postCount[$activity_id] = $oPosts->getPostCountByList(array_keys($ListList['ListList']));
             }
         }
-
         $nameListText = implode(",",$nameList);
         $userCountText = implode(",",$userCount);
         $postCountText = implode(",",$postCount);
-        echo $postCountText;
 
-        //主页列表序列模块
+        //部门步数排行榜+部门步数占比排行榜模块
+        //企业ID
+        $currentTime = time();
+        //开始日期
+        $params['start_date']= date("Y-07-01",$currentTime);
+        //结束日期
+        $params['end_date']= date("Y-m-d",$currentTime);
+
+        $params['company_id'] = $default_company;
+        //获取步数统计列表
+        $StepsStatList = $oSteps->getStepsStatList($params,"department_id_1");
+        $maxSteps = max(array_column($StepsStatList['List'],"totalStep"));
+        $totalSteps = array_sum(array_column($StepsStatList['List'],"totalStep"));
+
+        foreach($StepsStatList['List'] as $department_id => $detail)
+        {
+            $departmentInfo = $oDepartment->getDepartment($department_id,'department_name,department_id');
+            $StepsStatList['List'][$department_id]['department_name'] = $departmentInfo['department_name']??"未知部门";
+            $StepsStatList['List'][$department_id]['bar_rate'] = sprintf("%10.2f",$detail['totalStep']/$maxSteps*100);
+            $StepsStatList['List'][$department_id]['circle_rate'] = sprintf("%10.2f",$detail['totalStep']/$totalSteps*100);
+        }
+        //俱乐部活动分析模块
+        $clubList = $oActivity->getActivityCountListByClub(["company_id"=>$default_company,"Page"=>1,"PageSize"=>10]);
+        foreach($clubList as $club_id => $activityInfo)
+        {
+            $clubInfo = $oClub->getClub($club_id,"club_id,club_name");
+            $clubList[$club_id]['club_name'] = $clubInfo['club_name']??"未知俱乐部";
+            $activityList = $oActivity->getActivityList(["club_id"=>$club_id],"activity_id");
+            $clubList[$club_id]['user_count']= $oUser->getUserActivityLogCount(['activity_id'=>array_keys($activityList['ActivityList'])]);
+        }
+        print_r($clubList);
         //
         include $this->tpl("Index_home2");
         die();
