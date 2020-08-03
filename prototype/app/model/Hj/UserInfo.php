@@ -763,13 +763,13 @@ class Hj_UserInfo extends Base_Widget
 
     public function getConnectedUserInfo($manager_id)
     {
-        $managerInfo = (new Widget_Manager())->getRow($manager_id,"id,openid");
-        $userInfo = [];
-        if($managerInfo['openid']!="")
-        {
+//        $managerInfo = (new Widget_Manager())->getRow($manager_id,"id,openid");
+//        $userInfo = [];
+//        if($managerInfo['openid']!="")
+//        {
             $table_to_process = Base_Widget::getDbTable($this->table);
-            $userInfo = $this->db->selectRow($table_to_process, "user_id,wechatid", '`wechatid` = ?', trim($managerInfo['openid']));
-        }
+            $userInfo = $this->db->selectRow($table_to_process, "user_id,wechatid", "manager_id = $manager_id");
+       // }
         return $userInfo;
     }
     /**
