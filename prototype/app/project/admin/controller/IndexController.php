@@ -153,7 +153,7 @@ class IndexController extends AbstractController
         $totalStep_today = $oSteps->getStepsSum(['company_id'=>$default_company,"start_date"=>$currentDate])??0;
         $totalStep_month = $oSteps->getStepsSum(['company_id'=>$default_company,"start_date"=>$monthStartDate])??0;
         $totalStep_total = $oSteps->getStepsSum(['company_id'=>$default_company])??0;
-        $companyInfo = $oCompany->getCompany($default_company,"company_id,detail");
+        $companyInfo = $oCompany->getCompany($default_company,"company_id,company_name,detail");
         $companyInfo['detail'] = json_decode($companyInfo['detail'],true);
         $dailyStep = $companyInfo['detail']['daily_step']??6000;
         $achive_rate_month = $totalStep_month>0?sprintf("%10.2f" ,intval(date("t")) * $totalUserCount * $dailyStep / $totalStep_month * 100):0;

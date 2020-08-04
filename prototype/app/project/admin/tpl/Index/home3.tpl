@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <link href="/favicon.ico" rel="shortcut icon">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>标题</title>
+    <title><?php echo $companyInfo['company_name'];?></title>
     <meta name="keywords" content="关键词">
     <meta name="description" content="描述">
     <link rel="stylesheet" href="echarts/css/common.css" />
