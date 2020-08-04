@@ -112,6 +112,9 @@ class IndexController extends AbstractController
                 $postCount[$activity_id] = $oPosts->getPostCountByList(array_keys($ListList['ListList']));
             }
         }
+        print_R($activityList);
+        print_R($userCount);
+        print_R($postCount);
         $nameListText = implode(",",$nameList);
         $userCountText = implode(",",$userCount);
         $postCountText = implode(",",$postCount);
@@ -146,9 +149,9 @@ class IndexController extends AbstractController
             $activityList = $oActivity->getActivityList(["club_id"=>$club_id],"activity_id");
             $clubList[$club_id]['user_count']= $oUser->getUserActivityLogCount(['activity_id'=>array_keys($activityList['ActivityList'])]);
         }
-        print_r($clubList);
+        //print_r($clubList);
         //
-        include $this->tpl("Index_home2");
+        include $this->tpl("Index_home3");
         die();
 
         $oUser = new Hj_UserInfo();

@@ -312,9 +312,9 @@
                       barBorderRadius:  [ 4, 4, 0, 0]
                       }
                   },
-                  data: [<?php echo $userCountText;?>]
-              },
-              {
+                  data: [<?php  echo $userCountText; ?>]
+      },
+      {
                   name: '上传数量',
                   type: 'bar',
                   barWidth:20,
@@ -328,9 +328,9 @@
                       }
                   },
                   data: [<?php echo $postCountText;?>]
-              },
+      },
 
-          ]
+      ]
       };
       var options2 = {
             tooltip: {
@@ -381,99 +381,99 @@
                 }
             ]
         };
-    //部门占比排行榜
-     var Chart3 = echarts.init(document.getElementById('pcm_cal'));
-     var Chart4 = echarts.init(document.getElementById('pcm_cal2'));
-     var a=25;
-     var b=50;
-     var	options3 = {
-          	title:{
-  			        show:true,
-  			        x:'center',
-  		        	y:'center',
+      //部门占比排行榜
+      var Chart3 = echarts.init(document.getElementById('pcm_cal'));
+      var Chart4 = echarts.init(document.getElementById('pcm_cal2'));
+      var a=25;
+      var b=50;
+      var	options3 = {
+          title:{
+              show:true,
+              x:'center',
+              y:'center',
 
-  		       },
-  		    tooltip: {
-  		        trigger: 'item',
-  		        formatter: "{d}%",
-  		        show:false
-  		    },
-  		    legend: {
-  		        orient: 'vertical',
-  		        x: 'left',
-  		        show:false
-  		    },
-  		    series:
-  		        {
-  		            name:'',
-  		            type:'pie',
-  		            radius: ['65%', '85%'],
-  		            avoidLabelOverlap: true,
-  		            hoverAnimation:false,
-  		            label: {
-  		                normal: {
-  		                    show: false,
-  		                    position: 'center'
-  		                },
-  		                emphasis: {
-  		                    show: false
-  		                }
-  		            },
-  		            labelLine: {
-  		                normal: {
-  		                    show: false
-  		                }
-  		            },
-  		            data:[
-  		                {value:a, name:'',itemStyle: {color: '#0486FE'}},
-  		                {value:100-a, name:'',itemStyle: {color: '#DDDDDD'}}
-  		            ]
-  		        }
-  		};
+          },
+          tooltip: {
+              trigger: 'item',
+              formatter: "{d}%",
+              show:false
+          },
+          legend: {
+              orient: 'vertical',
+              x: 'left',
+              show:false
+          },
+          series:
+              {
+                  name:'',
+                  type:'pie',
+                  radius: ['65%', '85%'],
+                  avoidLabelOverlap: true,
+                  hoverAnimation:false,
+                  label: {
+                      normal: {
+                          show: false,
+                          position: 'center'
+                      },
+                      emphasis: {
+                          show: false
+                      }
+                  },
+                  labelLine: {
+                      normal: {
+                          show: false
+                      }
+                  },
+                  data:[
+                      {value:a, name:'',itemStyle: {color: '#0486FE'}},
+                      {value:100-a, name:'',itemStyle: {color: '#DDDDDD'}}
+                  ]
+              }
+      };
       var	options4 = {
-           	title:{
-   			        show:true,
-   			        x:'center',
-   		        	y:'center',
+          title:{
+              show:true,
+              x:'center',
+              y:'center',
 
-   		       },
-   		    tooltip: {
-   		        trigger: 'item',
-   		        formatter: "{d}%",
-   		        show:false
-   		    },
-   		    legend: {
-   		        orient: 'vertical',
-   		        x: 'left',
-   		        show:false
-   		    },
-   		    series:
-   		        {
-   		            name:'',
-   		            type:'pie',
-   		            radius: ['65%', '85%'],
-   		            avoidLabelOverlap: true,
-   		            hoverAnimation:false,
-   		            label: {
-   		                normal: {
-   		                    show: false,
-   		                    position: 'center'
-   		                },
-   		                emphasis: {
-   		                    show: false
-   		                }
-   		            },
-   		            labelLine: {
-   		                normal: {
-   		                    show: false
-   		                }
-   		            },
-   		            data:[
-   		                {value:b, name:'',itemStyle: {color: '#0486FE'}},
-   		                {value:100-b, name:'',itemStyle: {color: '#DDDDDD'}}
-   		            ]
-   		        }
-   		};
+          },
+          tooltip: {
+              trigger: 'item',
+              formatter: "{d}%",
+              show:false
+          },
+          legend: {
+              orient: 'vertical',
+              x: 'left',
+              show:false
+          },
+          series:
+              {
+                  name:'',
+                  type:'pie',
+                  radius: ['65%', '85%'],
+                  avoidLabelOverlap: true,
+                  hoverAnimation:false,
+                  label: {
+                      normal: {
+                          show: false,
+                          position: 'center'
+                      },
+                      emphasis: {
+                          show: false
+                      }
+                  },
+                  labelLine: {
+                      normal: {
+                          show: false
+                      }
+                  },
+                  data:[
+                      {value:b, name:'',itemStyle: {color: '#0486FE'}},
+                      {value:100-b, name:'',itemStyle: {color: '#DDDDDD'}}
+                  ]
+              }
+      };
 
       myChart.setOption(options);
       myChart2.setOption(options2);
