@@ -123,7 +123,7 @@ class IndexController extends AbstractController
         //企业ID
         $currentTime = time();
         //开始日期
-        $params['start_date']= date("Y-07-01",$currentTime);
+        $params['start_date']= date("Y-m-01",$currentTime);
         //结束日期
         $params['end_date']= date("Y-m-d",$currentTime);
 
@@ -152,7 +152,7 @@ class IndexController extends AbstractController
         //顶部数据模块
         $totalUserCount = $oUser->getUsercount(['company_id'=>$company_id]);
         $currentDate = date("Y-m-d");
-        $monthStartDate = date("Y-07-01");
+        $monthStartDate = date("Y-m-01");
         $totalStep_today = $oSteps->getStepsSum(['company_id'=>$company_id,"start_date"=>$currentDate])??0;
         $totalStep_month = $oSteps->getStepsSum(['company_id'=>$company_id,"start_date"=>$monthStartDate])??0;
         $totalStep_total = $oSteps->getStepsSum(['company_id'=>$company_id])??0;
