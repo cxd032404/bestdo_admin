@@ -16,8 +16,14 @@
 <body>
 
 <div class="backup_all">
+
     <div class="padd_alls">
         <div class="top_cont">
+            <select name="bbxb" id="selecte" class="shortselect">
+                <option value="">---请选择--</option>
+                <option value="0" selected="selected">男</option>
+                <option value="1">女</option>
+            </select>
             <div class="padd_all">
                 <ul>
                     <li>
