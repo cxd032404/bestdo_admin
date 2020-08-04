@@ -24,35 +24,35 @@
                         <img src="echarts/images/cys.png" alt="">
                         <div class="top_ico_rt">
                             <span>参与人数<img src="echarts/images/shuom.png"></span>
-                            <p>20000</p>
+                            <p><?php echo number_format($totalUserCount);?></p>
                         </div>
                     </li>
                     <li>
                         <img src="echarts/images/cys_3.png" alt="">
                         <div class="top_ico_rt">
                             <span>当日步数<img src="echarts/images/shuom.png"></span>
-                            <p>10000</p>
+                            <p><?php echo number_format($totalStep_today);?></p>
                         </div>
                     </li>
                     <li>
                         <img src="echarts/images/cys_4.png" alt="">
                         <div class="top_ico_rt">
                             <span>本月步数<img src="echarts/images/shuom.png"></span>
-                            <p>1820000</p>
+                            <p><?php echo number_format($totalStep_month);?></p>
                         </div>
                     </li>
                     <li>
                         <img src="echarts/images/cys_5.png" alt="">
                         <div class="top_ico_rt">
                             <span>总步数<img src="echarts/images/shuom.png"></span>
-                            <p>9820000</p>
+                            <p><?php echo number_format($totalStep_total);?></p>
                         </div>
                     </li>
                     <li>
                         <img src="echarts/images/cys_2.png" alt="">
                         <div class="top_ico_rt">
                             <span>达成率<img src="echarts/images/shuom.png"></span>
-                            <p>200.06%</p>
+                            <p><?php echo $achive_rate_month;?>%</p>
                         </div>
                     </li>
                 </ul>
@@ -189,51 +189,17 @@
                         </div>
                         <div class="jlb_fx_nr_data">
                             <ul>
+                                <?php
+                                  $i = 1;
+                                    foreach($clubList as $key => $value)
+                                {
+                                ?>
                                 <li>
-                                    <div class="jb_a"><span>1</span>沪联邦篮球俱乐部</div>
-                                    <div class="jb_b">12</div>
-                                    <div class="jb_c">15,465</div>
+                                    <div class="jb_a"><span><?php echo $i; $i++;?> </span><?php echo $value['club_name']; ?></div>
+                                    <div class="jb_b"><?php echo $value['ActivityCount']; ?></div>
+                                    <div class="jb_c"><?php echo number_format($value['user_count']); ?></div>
                                 </li>
-                                <li>
-                                    <div class="jb_a"><span>2</span>沪联邦篮球俱乐部</div>
-                                    <div class="jb_b">12</div>
-                                    <div class="jb_c">15,465</div>
-                                </li>
-                                <li>
-                                    <div class="jb_a"><span>3</span>沪联邦篮球俱乐部</div>
-                                    <div class="jb_b">12</div>
-                                    <div class="jb_c">15,465</div>
-                                </li>
-                                <li>
-                                    <div class="jb_a"><span>4</span>沪联邦篮球俱乐部</div>
-                                    <div class="jb_b">12</div>
-                                    <div class="jb_c">15,465</div>
-                                </li>
-                                <li>
-                                    <div class="jb_a"><span>5</span>沪联邦篮球俱乐部</div>
-                                    <div class="jb_b">12</div>
-                                    <div class="jb_c">15,465</div>
-                                </li>
-                                <li>
-                                    <div class="jb_a"><span>6</span>沪联邦篮球俱乐部</div>
-                                    <div class="jb_b">12</div>
-                                    <div class="jb_c">15,465</div>
-                                </li>
-                                <li>
-                                    <div class="jb_a"><span>3</span>沪联邦篮球俱乐部</div>
-                                    <div class="jb_b">12</div>
-                                    <div class="jb_c">15,465</div>
-                                </li>
-                                <li>
-                                    <div class="jb_a"><span>4</span>沪联邦篮球俱乐部</div>
-                                    <div class="jb_b">12</div>
-                                    <div class="jb_c">15,465</div>
-                                </li>
-                                <li>
-                                    <div class="jb_a"><span>5</span>沪联邦篮球俱乐部</div>
-                                    <div class="jb_b">12</div>
-                                    <div class="jb_c">15,465</div>
-                                </li>
+                                <?php } ?>
 
                             </ul>
                         </div>
@@ -262,7 +228,6 @@
 <script type="text/javascript">
     var myChart = echarts.init(document.getElementById('my_charts'));
     var myChart2 = echarts.init(document.getElementById('my_charts2'));
-    //var data_show = ['天籁之音', '绘声绘影', '书香瑰宝', '强身健体', '热血男儿', '玫瑰玫瑰', '职场达人','视觉盛宴','妙笔丹青','巧手灵心','藏品共赏','奇技淫巧','健康分享'];
     var data_show = [<?php echo $nameListText;?>];
     var options = {
         tooltip: {

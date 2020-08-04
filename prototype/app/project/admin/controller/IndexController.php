@@ -112,9 +112,6 @@ class IndexController extends AbstractController
                 $postCount[$activity_id] = $oPosts->getPostCountByList(array_keys($ListList['ListList']));
             }
         }
-        print_R($activityList);
-        print_R($userCount);
-        print_R($postCount);
         $nameListText = implode(",",$nameList);
         $userCountText = implode(",",$userCount);
         $postCountText = implode(",",$postCount);
@@ -149,39 +146,17 @@ class IndexController extends AbstractController
             $activityList = $oActivity->getActivityList(["club_id"=>$club_id],"activity_id");
             $clubList[$club_id]['user_count']= $oUser->getUserActivityLogCount(['activity_id'=>array_keys($activityList['ActivityList'])]);
         }
-        //print_r($clubList);
-        //
+        //顶部数据模块
+        $totalUserCount = $oUser->getUsercount(['company_id'=>$default_company]);
+        $currentDate = date("Y-m-d");
+        $monthStartDate = date("Y-07-01");
+        $totalStep_today = $oSteps->getStepsSum(['company_id'=>$default_company,"start_date"=>$currentDate])??0;
+        $totalStep_month = $oSteps->getStepsSum(['company_id'=>$default_company,"start_date"=>$monthStartDate])??0;
+        $totalStep_total = $oSteps->getStepsSum(['company_id'=>$default_company])??0;
+        $companyInfo = $oCompany->getCompany($default_company,"company_id,detail");
+        $companyInfo['detail'] = json_decode($companyInfo['detail'],true);
+        $dailyStep = $companyInfo['detail']['daily_step']??6000;
+        $achive_rate_month = $totalStep_month>0?sprintf("%10.2f" ,intval(date("t")) * $totalUserCount * $dailyStep / $totalStep_month * 100):0;
         include $this->tpl("Index_home3");
-        die();
-
-        $oUser = new Hj_UserInfo();
-        $totalPermission = $this->manager->getPermissionList($this->manager->data_groups,"only");
-        //获取企业列表
-        $companyList = $oCompany->getCompanyList(["permissionList"=>$totalPermission],"company_id,company_name");
-        $startDate = date("Y-m-d",time()-7*86400);
-        $endDate = date("Y-m-d",time());
-        $date = $endDate;
-        $regData = [];
-        while($date >= $startDate)
-        {
-            $regData[$date] = $oUser->getUserCount(["permissionList"=>$totalPermission,"regDate"=>$date]);
-            $date = date("Y-m-d",strtotime($date)-86400);
-        }
-        include('Third/fusion/Includes/FusionCharts_Gen.php');
-        $FC = new FusionCharts("MSLine",'100%','400');
-        # Set the relative path of the swf file
-        $FC->setSWFPath( '../Charts/');
-        $Step=1;
-        # Store chart attributes in a variable
-        $strParam="caption='最近7天用户情况';xAxisName='注册';baseFontSize=12;numberPrefix=;numberSuffix=人;decimalPrecision=0;showValues=0;formatNumberScale=0;labelStep=".$Step.";rotateNames=1;yAxisMinValue=0;yAxisMaxValue=100;numDivLines=9;showAlternateHGridColor=1;alternateHGridAlpha=5;alternateHGridColor='CC3300';hoverCapSepChar=，";
-        foreach($regData as $date => $regUser)
-        {
-            $FC->addCategory($date);
-        }
-        foreach($regData as $date => $regUser)
-        {
-            $FC->addChartData($regUser);
-        }
-        include $this->tpl("Hj_Index_Home");
     }
 }
