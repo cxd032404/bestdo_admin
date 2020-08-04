@@ -6,7 +6,8 @@
 
 class IndexController extends AbstractController
 {
-
+    protected $sign = '?ctl=index';
+    protected $ctl = 'ctl=index';
 	/**
 	 * 框架页
 	 */
@@ -86,6 +87,7 @@ class IndexController extends AbstractController
     }
     public function homeAction()
     {
+
         $oCompany = new Hj_Company();
         $oActivity = new Hj_Activity();
         $oUser = new Hj_UserInfo();
@@ -97,12 +99,13 @@ class IndexController extends AbstractController
         $totalPermission = $this->manager->getPermissionList($this->manager->data_groups,"only");
         //获取企业列表
         $companyList = $oCompany->getCompanyList(["permissionList"=>$totalPermission],"company_id,company_name,detail");
-        $default_company = array_column($companyList,'company_id')['0'];
+        //列表ID
+        $company_id = intval($this->request->company_id??array_column($companyList,'company_id')['0']);
         //活动报名与上传作品情况分析
         $nameList = [];
         $userCount = [];
         $postCount = [];
-        $activityList = $oActivity->getActivityList(["company_id"=>$default_company,'system'=>1,'purchased'=>1],"activity_id,activity_name");
+        $activityList = $oActivity->getActivityList(["company_id"=>$company_id,'system'=>1,'purchased'=>1],"activity_id,activity_name");
         foreach($activityList['ActivityList'] as $activity_id => $activityInfo)
         {
             {
@@ -124,7 +127,7 @@ class IndexController extends AbstractController
         //结束日期
         $params['end_date']= date("Y-m-d",$currentTime);
 
-        $params['company_id'] = $default_company;
+        $params['company_id'] = $company_id;
         //获取步数统计列表
         $StepsStatList = $oSteps->getStepsStatList($params,"department_id_1");
         $maxSteps = max(array_column($StepsStatList['List'],"totalStep"));
@@ -138,7 +141,7 @@ class IndexController extends AbstractController
             $StepsStatList['List'][$department_id]['circle_rate'] = sprintf("%10.2f",$detail['totalStep']/$totalSteps*100);
         }
         //俱乐部活动分析模块
-        $clubList = $oActivity->getActivityCountListByClub(["company_id"=>$default_company,"Page"=>1,"PageSize"=>10]);
+        $clubList = $oActivity->getActivityCountListByClub(["company_id"=>$company_id,"Page"=>1,"PageSize"=>10]);
         foreach($clubList as $club_id => $activityInfo)
         {
             $clubInfo = $oClub->getClub($club_id,"club_id,club_name");
@@ -147,13 +150,13 @@ class IndexController extends AbstractController
             $clubList[$club_id]['user_count']= $oUser->getUserActivityLogCount(['activity_id'=>array_keys($activityList['ActivityList'])]);
         }
         //顶部数据模块
-        $totalUserCount = $oUser->getUsercount(['company_id'=>$default_company]);
+        $totalUserCount = $oUser->getUsercount(['company_id'=>$company_id]);
         $currentDate = date("Y-m-d");
         $monthStartDate = date("Y-07-01");
-        $totalStep_today = $oSteps->getStepsSum(['company_id'=>$default_company,"start_date"=>$currentDate])??0;
-        $totalStep_month = $oSteps->getStepsSum(['company_id'=>$default_company,"start_date"=>$monthStartDate])??0;
-        $totalStep_total = $oSteps->getStepsSum(['company_id'=>$default_company])??0;
-        $companyInfo = $oCompany->getCompany($default_company,"company_id,company_name,detail");
+        $totalStep_today = $oSteps->getStepsSum(['company_id'=>$company_id,"start_date"=>$currentDate])??0;
+        $totalStep_month = $oSteps->getStepsSum(['company_id'=>$company_id,"start_date"=>$monthStartDate])??0;
+        $totalStep_total = $oSteps->getStepsSum(['company_id'=>$company_id])??0;
+        $companyInfo = $oCompany->getCompany($company_id,"company_id,company_name,detail");
         $companyInfo['detail'] = json_decode($companyInfo['detail'],true);
         $dailyStep = $companyInfo['detail']['daily_step']??6000;
         $achive_rate_month = $totalStep_month>0?sprintf("%10.2f" ,intval(date("t")) * $totalUserCount * $dailyStep / $totalStep_month * 100):0;
