@@ -19,10 +19,15 @@
 
     <div class="padd_alls">
         <div class="top_cont">
-            <select name="bbxb" id="selecte" class="shortselect">
-                <option value="">---请选择--</option>
-                <option value="0" selected="selected">男</option>
-                <option value="1">女</option>
+            <select name="company_id" id="company_id" onchange = "window.location=this.value;" class="shortselect">
+                <?php
+                foreach($totalPermission as $key => $value)
+                {
+                ?>
+                <option value="<?php echo $this->sign.'&ac=home&company_id='.$value['company_id'];?>" <?php if($value['company_id'] == $company_id){ echo 'selected="selected"';}?>><?php echo $value['company_name'];?></option>
+
+                <?php } ?>
+
             </select>
             <div class="padd_all">
                 <ul>
@@ -444,5 +449,6 @@
 
     myChart.setOption(options);
     myChart2.setOption(options2);
+
 </script>
 </html>
