@@ -140,8 +140,8 @@ class IndexController extends AbstractController
                 $StepsStatList['List'][$department_id]['totalStep'] = 0;
             }
             $StepsStatList['List'][$department_id]['department_name'] = $departmentInfo['department_name']??"未知部门";
-            $StepsStatList['List'][$department_id]['bar_rate'] = sprintf("%10.2f",$StepsStatList['List'][$department_id]['totalStep']['totalStep']/$maxSteps*100);
-            $StepsStatList['List'][$department_id]['circle_rate'] = sprintf("%10.2f",$StepsStatList['List'][$department_id]['totalStep']['totalStep']/$totalSteps*100);
+            $StepsStatList['List'][$department_id]['bar_rate'] = sprintf("%10.2f",$StepsStatList['List'][$department_id]['totalStep']/$maxSteps*100);
+            $StepsStatList['List'][$department_id]['circle_rate'] = sprintf("%10.2f",$StepsStatList['List'][$department_id]['totalStep']/$totalSteps*100);
         }
         //俱乐部活动分析模块
         $clubList = $oActivity->getActivityCountListByClub(["company_id"=>$company_id,"Page"=>1,"PageSize"=>10]);
