@@ -159,7 +159,7 @@ class IndexController extends AbstractController
         $companyInfo = $oCompany->getCompany($company_id,"company_id,company_name,detail");
         $companyInfo['detail'] = json_decode($companyInfo['detail'],true);
         $dailyStep = $companyInfo['detail']['daily_step']??6000;
-        $achive_rate_month = $totalStep_month>0?sprintf("%10.2f" , $totalStep_month/intval(date("t")) * $totalUserCount * $dailyStep * 100):0;
+        $achive_rate_month = $totalStep_month>0?sprintf("%10.2f" , $totalStep_month/(intval(date("t")) * $totalUserCount * $dailyStep) * 100):0;
         include $this->tpl("Index_home3");
     }
 }
