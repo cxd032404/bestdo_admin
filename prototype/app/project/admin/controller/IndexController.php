@@ -132,13 +132,16 @@ class IndexController extends AbstractController
         $StepsStatList = $oSteps->getStepsStatList($params,"department_id_1");
         $maxSteps = max(array_column($StepsStatList['List'],"totalStep"));
         $totalSteps = array_sum(array_column($StepsStatList['List'],"totalStep"));
-
-        foreach($StepsStatList['List'] as $department_id => $detail)
+        $DepartmentList = $oDepartment->getDepartmentList(['company_id'=>$company_id,"parent_id"=>0]);
+        foreach($DepartmentList as $department_id => $departmentInfo)
         {
-            $departmentInfo = $oDepartment->getDepartment($department_id,'department_name,department_id');
+            if(!isset($StepsStatList['List'][$department_id]))
+            {
+                $StepsStatList['List'][$department_id]['totalStep'] = 0;
+            }
             $StepsStatList['List'][$department_id]['department_name'] = $departmentInfo['department_name']??"未知部门";
-            $StepsStatList['List'][$department_id]['bar_rate'] = sprintf("%10.2f",$detail['totalStep']/$maxSteps*100);
-            $StepsStatList['List'][$department_id]['circle_rate'] = sprintf("%10.2f",$detail['totalStep']/$totalSteps*100);
+            $StepsStatList['List'][$department_id]['bar_rate'] = sprintf("%10.2f",$StepsStatList['List'][$department_id]['totalStep']['totalStep']/$maxSteps*100);
+            $StepsStatList['List'][$department_id]['circle_rate'] = sprintf("%10.2f",$StepsStatList['List'][$department_id]['totalStep']['totalStep']/$totalSteps*100);
         }
         //俱乐部活动分析模块
         $clubList = $oActivity->getActivityCountListByClub(["company_id"=>$company_id,"Page"=>1,"PageSize"=>10]);
