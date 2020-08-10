@@ -126,7 +126,7 @@ class Hj_CompanyController extends AbstractController
 	public function companyInsertAction()
 	{
 		//检查权限
-		$bind=$this->request->from('company_name','detail','parent_id','display');
+		$bind=$this->request->from('company_name','detail','parent_id','display','member_limit');
 		//企业名称不能为空
 		if(trim($bind['company_name'])=="")
 		{
@@ -153,6 +153,7 @@ class Hj_CompanyController extends AbstractController
                 {
                     //数据打包
                     $bind['detail'] = json_encode($bind['detail']);
+                    $companyInfo['member_limit'] = intval(abs($bind['member_limit']));
                     //添加企业
                     $res = $this->oCompany->insertCompany($bind);
                     //$this->manager->insertDataPermission($manager);
@@ -197,7 +198,7 @@ class Hj_CompanyController extends AbstractController
 	public function companyUpdateAction()
 	{
 	    //接收页面参数
-		$bind=$this->request->from('company_id','company_name','parent_id','detail','display');
+		$bind=$this->request->from('company_id','company_name','parent_id','detail','display','member_limit');
         //企业名称不能为空
 		if(trim($bind['company_name'])=="")
 		{
@@ -225,7 +226,7 @@ class Hj_CompanyController extends AbstractController
                 $companyInfo = $this->oCompany->getCompany($bind['company_id'],'*');
                 //数据解包
                 $companyInfo['detail'] = json_decode($companyInfo['detail'],true);
-
+                $companyInfo['member_limit'] = intval(abs($bind['member_limit']));
                 //数据打包
                 $bind['detail'] = json_encode(array_merge($companyInfo['detail'],$bind['detail']));
                 //修改企业

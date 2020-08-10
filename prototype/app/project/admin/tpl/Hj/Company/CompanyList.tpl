@@ -47,7 +47,8 @@ function regPage_miniprogram(mid,name){
     <th align="center" class="rowtip">上级</th>
     <th align="center" class="rowtip">显示</th>
     <th align="center" class="rowtip">图标</th>
-    <th align="center" class="rowtip">更新时间</th>
+      <th align="center" class="rowtip">人数上限</th>
+      <th align="center" class="rowtip">更新时间</th>
       <th align="center" class="rowtip">操作</th>
   </tr>
 
@@ -58,7 +59,8 @@ function regPage_miniprogram(mid,name){
     <td align="center">{tpl:$companyInfo.parent_name/}</td>
     <td align="center">{tpl:$companyInfo.display_name/}</td>
     <td align="center">{tpl:if($companyInfo.icon=="")}未定义{tpl:else}<img src="{tpl:$RootUrl/}{tpl:$companyInfo.icon/}" width='120' height='120'/>{/tpl:if}</td>
-    <td align="center">{tpl:$companyInfo.update_time/}</td>
+      <td align="center">{tpl:$companyInfo.member_limit/}</td>
+      <td align="center">{tpl:$companyInfo.update_time/}</td>
       <td align="center"><a class = "pb_btn_grey_1"  href="javascript:;" onclick="companyDelete('{tpl:$companyInfo.company_id/}','{tpl:$companyInfo.parent_id/}','{tpl:$companyInfo.company_name/}')">删除</a>
    <a class = "pb_btn_light_1" href="javascript:;" onclick="companyModify('{tpl:$companyInfo.company_id/}');">修改</a>
    <a class = "pb_btn_light_2" href="javascript:;" onclick="protocalModify('{tpl:$companyInfo.company_id/}','privacy');">隐私政策</a>

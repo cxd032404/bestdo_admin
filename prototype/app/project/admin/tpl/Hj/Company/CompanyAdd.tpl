@@ -20,6 +20,10 @@
 	<input type="radio" name="display" id="display" value="0" checked >隐藏
 </td>
 </tr>
+<tr class="noborder">
+	<td>人数上限</td>
+	<td align="left"><input type="text" class="span2" name="member_limit"  id="member_limit" value="10" size="50" /></td>
+</tr>
 <tr class="hover">
 <td>图片上传：</td>
 	<td align="left"><input name="upload_img[1]" type="file" id="upload_img[1]" /></td>

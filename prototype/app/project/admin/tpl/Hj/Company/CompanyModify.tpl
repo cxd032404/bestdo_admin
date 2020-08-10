@@ -46,6 +46,10 @@ function iconDelete(cid,name){
 	<input type="radio" name="display" id="display" value="0"  {tpl:if($companyInfo.display==0)}checked{/tpl:if}>隐藏
 </td>
 </tr>
+	<tr class="noborder">
+		<td>人数上限</td>
+		<td align="left"><input type="text" class="span2" name="member_limit"  id="member_limit" value="{tpl:$companyInfo.member_limit/}" size="50" /></td>
+	</tr>
         <tr class="hover"><td>上传图片</td>
             <td align="left">
                 {tpl:if($companyInfo.icon!="")}
