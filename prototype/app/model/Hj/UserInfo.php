@@ -19,15 +19,9 @@ class Hj_UserInfo extends Base_Widget
 
     protected $companyUserAuthType = array("mobile"=>"手机号","worker_id"=>"工号");
     //登录方式列表
-    protected $loginSource = array('WeChat'=>"微信",'Weibo'=>"微博",'Mobile'=>"手机",'MiniProgram'=>"小程序",'test'=>"测试用户");
+    protected $loginSource = array('101'=>"文体之家",'Mobile'=>"手机",'201'=>"健步走",'202'=>"俱乐部",'test'=>"测试用户");
     //性别列表
 	protected $sex = array('0'=>"保密",'1'=>"男",'2'=>"女");
-    //性别列表
-    protected $raceApplySourceList = array('0'=>"未知",'1'=>"线上","2"=>"线下");
-    //用户签到状态
-    protected $stage_user_checkin_status = array('0'=>'全部','2'=>"未签到",'1'=>"已签到");
-    //用户检录状态
-    protected $race_user_checkin_status = array('0'=>'全部','1'=>"已检录",'2'=>"未检录");
     //用户签到短信发送状态
     protected $user_checkin_sms_sent_status = array('3'=>"不需发送",'1'=>"待发送",'2'=>"已发送");
 
@@ -68,25 +62,10 @@ class Hj_UserInfo extends Base_Widget
     {
         return $this->user_license_status;
     }
-    //获得用户签到状态列表
-    public function getStageUserCheckInStatus()
-    {
-        return $this->stage_user_checkin_status;
-    }
-    //获得用户检录状态列表
-    public function getRaceUserCheckInStatus()
-    {
-        return $this->race_user_checkin_status;
-    }
     //获得用户签到短信发送状态列表
     public function getUserCheckInSmsSentStatus()
     {
         return $this->user_checkin_sms_sent_status;
-    }
-    //获得用户签到短信发送状态列表
-    public function getRaceApplySourceList()
-    {
-        return $this->raceApplySourceList;
     }
     //获得用户登录方式列表
     public function getLoginSourceList()
@@ -109,280 +88,12 @@ class Hj_UserInfo extends Base_Widget
     {
         return $this->chip_return_status;
     }
-
-    /**
-     * 新增单个用户注册中间记录
-     * @param array $bind 所要添加的数据列
-     * @return boolean
-     */
-    public function insertRegInfo($bind)
-    {
-        $table_to_process = Base_Widget::getDbTable($this->table_reg_info);
-        return $this->db->insert($table_to_process, $bind);
-    }
-    /**
-     * 新增单个用户注册中间记录
-     * @param array $bind 所要添加的数据列
-     * @return boolean
-     */
-    public function insertRegLog($bind)
-    {
-        $table_to_process = Base_Widget::getDbTable($this->table_reg_log);
-        return $this->db->insert($table_to_process, $bind);
-    }
-    /**
-     * 更新单个用户注册中间记录
-     * @param string $RegId 注册记录ID
-     * @param array $bind 所要更新的数据列
-     * @return boolean
-     */
-    public function updateRegInfo($RegId,$bind)
-    {
-        $RegId = intval($RegId);
-        $table_to_process = Base_Widget::getDbTable($this->table_reg_info);
-        return $this->db->update($table_to_process, $bind, '`RegId` = ?', $RegId);
-    }
-    /**
-     * 获取单个用户注册中间记录
-     * @param string $RegId 注册记录ID
-     * @return array
-     */
-    public function getRegInfo($RegId)
-    {
-        $RegId = intval($RegId);
-        $table_to_process = Base_Widget::getDbTable($this->table_reg_info);
-        return $this->db->selectRow($table_to_process, "*", '`RegId` = ?', $RegId);
-    }
-    /**
- * 新增单个用户注册中间记录
- * @param array $bind 所要添加的数据列
- * @return boolean
- */
-    public function deleteRegInfo($RegId)
-    {
-        $RegId = intval($RegId);
-        $table_to_process = Base_Widget::getDbTable($this->table_reg_info);
-        return $this->db->delete($table_to_process, '`RegId` = ?', $RegId);
-    }
-    /**
-     * 删除单个用户注册日志记录
-     * @param array $bind 所要添加的数据列
-     * @return boolean
-     */
-    public function deleteRegInfoByMobile($Mobile)
-    {
-        $Mobile = trim($Mobile);
-        $table_to_process = Base_Widget::getDbTable($this->table_reg_info);
-        return $this->db->delete($table_to_process, '`Mobile` = ?', $Mobile);
-    }
-    /**
-     * 删除单个用户注册日志记录
-     * @param array $bind 所要添加的数据列
-     * @return boolean
-     */
-    public function deleteRegLog($RegId)
-    {
-        $RegId = intval($RegId);
-        $table_to_process = Base_Widget::getDbTable($this->table_reg_log);
-        return $this->db->delete($table_to_process, '`RegId` = ?', $RegId);
-    }
-    /**
-     * 删除单个用户注册日志记录
-     * @param array $bind 所要添加的数据列
-     * @return boolean
-     */
-    public function deleteRegLogByMobile($Mobile)
-    {
-        $Mobile = trim($Mobile);
-        $table_to_process = Base_Widget::getDbTable($this->table_reg_log);
-        return $this->db->delete($table_to_process, '`Mobile` = ?', $Mobile);
-    }
-
-
-    /**
-     * 新增单个用户重置密码中间记录
-     * @param array $bind 所要添加的数据列
-     * @return boolean
-     */
-    public function insertResetInfo($bind)
-    {
-        $table_to_process = Base_Widget::getDbTable($this->table_reset);
-        return $this->db->insert($table_to_process, $bind);
-    }
-    /**
-     * 新增单个用户重置密码日志
-     * @param array $bind 所要添加的数据列
-     * @return boolean
-     */
-    public function insertResetLog($bind)
-    {
-        $table_to_process = Base_Widget::getDbTable($this->table_reset_log);
-        return $this->db->insert($table_to_process, $bind);
-    }
-    /**
-     * 更新单个用户重置密码中间记录
-     * @param string $ResetId 重置密码记录ID
-     * @param array $bind 所要更新的数据列
-     * @return boolean
-     */
-    public function updateResetInfo($ResetId,$bind)
-    {
-        $ResetId = intval($ResetId);
-        $table_to_process = Base_Widget::getDbTable($this->table_reset);
-        return $this->db->update($table_to_process, $bind, '`ResetId` = ?', $ResetId);
-    }
-    /**
-     * 获取单个用户重置密码中间记录
-     * @param string $ResetId 重置密码记录ID
-     * @return array
-     */
-    public function getResetInfo($ResetId)
-    {
-        $ResetId = intval($ResetId);
-        $table_to_process = Base_Widget::getDbTable($this->table_reset);
-        return $this->db->selectRow($table_to_process, "*", '`ResetId` = ?', $ResetId);
-    }
-    /**
-     * 新增单个用户重置密码中间记录
-     * @param array $bind 所要添加的数据列
-     * @return boolean
-     */
-    public function deleteResetInfo($ResetId)
-    {
-        $ResetId = intval($ResetId);
-        $table_to_process = Base_Widget::getDbTable($this->table_reset);
-        return $this->db->delete($table_to_process, '`ResetId` = ?', $ResetId);
-    }
-
-    /**
-     * 根据第三方身份数据获取单个用户注册中间记录
-     * @param string $RegPlatform 第三方平台
-     * @param string $RegPlatform 第三方平台
-     * @return array
-     */
-    public function getRegInfoByThirdParty($RegPlatform,$RegKey)
-    {
-        $RegPlatform = trim($RegPlatform);
-        $RegKey = trim($RegKey);
-        $table_to_process = Base_Widget::getDbTable($this->table_reg_info);
-        return $this->db->selectRow($table_to_process, "*", '`RegPlatform` = ? and `RegKey` = ?', array($RegPlatform,$RegKey));
-    }
-    /**
-     * 通过手机和短信验证码获取单个用户重置密码中间记录
-     * @param string $Mobile 用户手机号码
-     * @param string $Code 短信验证码
-     * @return array
-     *  */
-    public function getResetInfoByMobile($Mobile)
-    {
-        $Mobile = trim($Mobile);
-        $table_to_process = Base_Widget::getDbTable($this->table_reset);
-        return $this->db->selectRow($table_to_process, '*', '`Mobile` = ?', array($Mobile));
-    }
-    /**
-     * 通过手机和短信验证码获取单个用户注册中间记录
-     * @param string $Mobile 用户手机号码
-     * @param string $Code 短信验证码
-     * @return array
-     *  */
-    public function getRegInfoByMobile($Mobile)
-    {
-        $Mobile = trim($Mobile);
-        $table_to_process = Base_Widget::getDbTable($this->table_reg_info);
-        return $this->db->selectRow($table_to_process, '*', '`Mobile` = ?', array($Mobile));
-    }
-    public function getRegLogByMobile($Mobile)
-    {
-        $Mobile = trim($Mobile);
-        $table_to_process = Base_Widget::getDbTable($this->table_reg_log);
-        return $this->db->selectRow($table_to_process, '*', '`Mobile` = ?', array($Mobile));
-    }
-    /**
-    /**
+	/**
      * 获取单个用户记录
      * @param char $user_id 用户ID
      * @param string $fields 所要获取的数据列
      * @return array
      */
-    public function getUserInfo($user_id, $fields = '*',$Cache=1)
-    {
-        $oRedis = new Base_Cache_Redis("xrace");
-        //获取缓存
-        if($Cache == 1)
-        {
-            //获取缓存
-            $m = $oRedis->get("UserInfo_".$user_id);
-            //缓存解开
-            $UserInfo = json_decode($m,true);
-            //如果结果集不有效
-            if(!isset($UserInfo['user_id']))
-            {
-                //缓存置为0
-                $Cache = 0;
-            }
-            else
-            {
-                //echo "UserInfo cahced";
-            }
-        }
-        if($Cache == 0)
-        {
-            //从数据库中获取
-            $UserInfo = $this->getUser($user_id, "*");
-            //如果用户信息中的联系方式为空
-            if(strlen(trim($UserInfo['Mobile']))<=8 )
-            {
-                //可以报名
-                $UserInfo['NeedMobile'] = 1;
-            }
-            else
-            {
-                //可以报名
-                $UserInfo['NeedMobile'] = 0;
-            }
-            //如果用户信息中包含不少于六位的证件号码 和 不少于两位的姓名
-            if(strlen(trim($UserInfo['IdNo']))>=6 && strlen(trim($UserInfo['Name']))>=2)
-            {
-                //可以报名
-                $UserInfo['ReadyToRace'] =1;
-            }
-            else
-            {
-                //不可以报名
-                $UserInfo['ReadyToRace'] =0;
-            }
-            //如果结果集有效
-            if(isset($UserInfo['user_id']))
-            {
-                //写入缓存
-                $oRedis -> set("UserInfo_".$user_id,json_encode($UserInfo),86400);
-            }
-        }
-        //如果结果集有效，并且获取的字段列表不是全部
-        if(isset($UserInfo['user_id']) && $fields != "*")
-        {
-            //分解字段列表
-            $fieldsList = explode(",",$fields);
-            //循环结果集
-            foreach($UserInfo as $key => $value)
-            {
-                //如果不在字段列表中且不是主键+身份证+姓名
-                if(!in_array($key,$fieldsList) && !in_array($key, array("user_id","IdNo","UserName","ReadyToRace")))
-                {
-                    //删除
-                    unset($UserInfo[$key]);
-                }
-            }
-        }
-        //返回结果
-        return $UserInfo;
-    }
-	/**
- * 获取单个用户记录
- * @param char $user_id 用户ID
- * @param string $fields 所要获取的数据列
- * @return array
- */
     public function getUser($user_id, $fields = '*')
     {
         $user_id = intval($user_id);
@@ -774,58 +485,8 @@ class Hj_UserInfo extends Base_Widget
 
     public function getConnectedUserInfo($manager_id)
     {
-//        $managerInfo = (new Widget_Manager())->getRow($manager_id,"id,openid");
-//        $userInfo = [];
-//        if($managerInfo['openid']!="")
-//        {
             $table_to_process = Base_Widget::getDbTable($this->table);
             $userInfo = $this->db->selectRow($table_to_process, "user_id,wechatid", "manager_id = $manager_id");
-       // }
         return $userInfo;
     }
-    /**
-     * 获取用户列表
-     * @param $fields  所要获取的数据列
-     * @param $params 传入的条件列表
-     * @return array
-     */
-    public function getUserRegData($params,$fields = array("*"))
-    {
-        $fields = ["left(reg_time,10) as date","count(1) as userCount"];
-        //生成查询列
-        $fields = Base_common::getSqlFields($fields);
-        //获取需要用到的表名
-        $table_to_process = Base_Widget::getDbTable($this->table);
-        $order = " ORDER BY date desc";
-        $wherePermission = isset($params['permissionList'])?(
-        count($params['permissionList'])>0?
-            ( " company_id in (".implode(",",array_column($params['permissionList'],"company_id")).") ")
-            :" 0 "):"";
-        //企业
-        $whereCompany = (isset($params['company_id']) && ($params['company_id']>0))?" company_id = '".$params['company_id']."' ":"";
-        //注册开始日期
-        $whereRegStart = (isset($params['regStartDate']) && strtotime($params['regStartDate'])>0)?" reg_time >= '".$params['regStartDate']."' ":"";
-        //注册结束日期
-        $whereRegEnd = (isset($params['regEndDate']) && strtotime($params['regStartDate'])>0)?" reg_time <= '".$params['regStartDate']." 23:59:59"."' ":"";
-        //注册结束日期
-        $whereReg = (isset($params['regDate']) && strtotime($params['regDate'])>0)?" reg_time >= '".$params['regDate']."' and reg_time <= '".$params['regDate']." 23:59:59"."' ":"";
-        //所有查询条件置入数组
-        $whereCondition = array($wherePermission,$whereCompany,$whereRegStart,$whereRegEnd,$whereReg);
-        //生成条件列
-        $where = Base_common::getSqlWhere($whereCondition);
-        $sql = "SELECT $fields FROM $table_to_process where 1 ".$where." ".$order;
-        $return = $this->db->getAll($sql);
-        print_R($return);
-        die();
-        $UserList = array('UserList'=>array(),'UserCount'=>$UserCount);
-        if(count($return))
-        {
-            foreach($return as $key => $value)
-            {
-                $UserList['UserList'][$value['user_id']] = $value;
-            }
-        }
-        return $UserList;
-    }
-
 }
