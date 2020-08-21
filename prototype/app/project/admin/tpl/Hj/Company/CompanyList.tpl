@@ -21,6 +21,9 @@ function companyDelete(c_id,p_id,p_name){
 function companyModify(mid){
   modifycompanyBox = divBox.showBox('{tpl:$this.sign/}&ac=company.modify&company_id=' + mid, {title:'修改企业',width:600,height:400});
 }
+function accessModify(mid){
+    modifyaccessBox = divBox.showBox('{tpl:$this.sign/}&ac=company.access.modify&company_id=' + mid, {title:'登录权限',width:600,height:400});
+}
 function protocalModify(mid,type){
   modifycompanyBox = divBox.showBox('{tpl:$this.sign/}&ac=protocal.modify&company_id=' + mid + '&type=' + type, {title:'协议',width:600,height:600});
 }
@@ -63,6 +66,7 @@ function regPage_miniprogram(mid,name){
       <td align="center">{tpl:$companyInfo.update_time/}</td>
       <td align="center"><a class = "pb_btn_grey_1"  href="javascript:;" onclick="companyDelete('{tpl:$companyInfo.company_id/}','{tpl:$companyInfo.parent_id/}','{tpl:$companyInfo.company_name/}')">删除</a>
    <a class = "pb_btn_light_1" href="javascript:;" onclick="companyModify('{tpl:$companyInfo.company_id/}');">修改</a>
+      <a class = "pb_btn_light_1" href="javascript:;" onclick="accessModify('{tpl:$companyInfo.company_id/}');">权限</a>
    <a class = "pb_btn_light_2" href="javascript:;" onclick="protocalModify('{tpl:$companyInfo.company_id/}','privacy');">隐私政策</a>
            <a class = "pb_btn_light_2" href="javascript:;" onclick="protocalModify('{tpl:$companyInfo.company_id/}','user');">用户政策</a>
            <a class = "pb_btn_light_2" href="javascript:;" onclick="regPage('{tpl:$companyInfo.company_id/}','{tpl:$companyInfo.company_name/}');">注册页面</a>

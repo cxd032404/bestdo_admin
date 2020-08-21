@@ -83,6 +83,10 @@ $table['rich_text_text']['num'] = 1;
 $table['config_company']['db'] = 'hj_config';
 $table['config_company']['num'] = 1;
 
+#企业对客户端的权限
+$table['config_company_access']['db'] = 'hj_config';
+$table['config_company_access']['num'] = 1;
+
 #部门
 $table['config_department']['db'] = 'hj_config';
 $table['config_department']['num'] = 1;

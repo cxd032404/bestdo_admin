@@ -191,7 +191,6 @@ class Hj_CompanyController extends AbstractController
 			$home = $this->sign;
 			include $this->tpl('403');
 		}
-
 	}
 	
 	//更新企业信息
@@ -833,5 +832,70 @@ class Hj_CompanyController extends AbstractController
             }
         }
         echo $text;
+    }
+    //修改企业权限页面
+    public function companyAccessModifyAction()
+    {
+        //检查权限
+        $PermissionCheck = $this->manager->checkMenuPermission("updateCompany",$this->sign);
+        if($PermissionCheck['return'])
+        {
+            //企业ID
+            $company_id= intval($this->request->company_id);
+            //获取企业信息
+            $companyInfo = $this->oCompany->getCompany($company_id,'*');
+            //获取企业权限列表
+            $companyAccess = $this->oCompany->getAccessByCompany($company_id);
+            //客户端列表
+            $appList = $this->oCompany->getAppList();
+            $accessList = [];
+            foreach($appList as $key => $value)
+            {
+                $accessList[$key] = ['access'=>isset($companyAccess[$key])?1:0,"name"=>$value];
+            }
+            //渲染模版
+            include $this->tpl('Hj_Company_CompanyAccessModify');
+        }
+        else
+        {
+            $home = $this->sign;
+            include $this->tpl('403');
+        }
+    }
+    //权限修改
+    public function companyAccessUpdateAction()
+    {
+        //接收页面参数
+        $bind=$this->request->from('company_id','access');
+        //获取企业权限列表
+        $companyAccess = $this->oCompany->getAccessByCompany($bind['company_id']);
+        $toAdd = [];
+        $toDelete = [];
+        foreach($bind['access'] as $app_id => $value)
+        {
+            //现在有，原来没有
+            if(!isset($companyAccess[$app_id]))
+            {
+                $toAdd[] = $app_id;
+            }
+        }
+        foreach($companyAccess as $app_id => $value)
+        {
+            if(!isset($bind['access'][$app_id]))
+            {
+                $toDelete[] = $app_id;
+            }
+        }
+        foreach($toAdd as $app_id)
+        {
+            $this->oCompany->insertCompanyAccess(['company_id'=>$bind['company_id'],'app_id'=>$app_id]);
+        }
+        foreach($toDelete as $app_id)
+        {
+            $this->oCompany->deleteCompanyAccess($bind['company_id'],$app_id);
+        }
+        $response = array('errno' => 0);
+        echo json_encode($response);
+        return true;
     }
 }
