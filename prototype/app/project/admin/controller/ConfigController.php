@@ -17,6 +17,7 @@ class ConfigController extends AbstractController
 	 * @var object
 	 */
 	protected $oConfig;
+    protected $oSource;
 
     /**
 	 * 初始化
@@ -27,6 +28,7 @@ class ConfigController extends AbstractController
 	{
 		parent::init();
 		$this->oConfig = new Widget_Config();
+        $this->oSource = new Hj_Source();
 
 
     }
@@ -221,6 +223,13 @@ class ConfigController extends AbstractController
             $configInfo = $this->oConfig->getConfig($config_sign,'*');
             //数据解包
             $configInfo['content'] = json_decode($configInfo['content'],true);
+            foreach($configInfo['content'] as $key => $value)
+            {
+                if(!is_array($value))
+                {
+                    $configInfo['content'][$key] = $this->oSource->getSource($value);
+                }
+            }
             //渲染模版
             include $this->tpl('Config_SourceList');
         }
@@ -270,11 +279,30 @@ class ConfigController extends AbstractController
         else
         {
             $configInfo['content'] = $configInfo['content']??[];
-            $configInfo['content'][] = ['img_url'=>$oss_urls['0'],'img_jump_url'=>$detail['img_jump_url'],'text'=>trim($detail['text']??""),'title'=>trim($detail['title']??"")];
-            $configInfo['content'] = json_encode($configInfo['content']);
-            $res = $this->oConfig->updateConfig($config_sign,$configInfo);
-            //Base_Common::refreshCache($this->config,"config",$config_sign);
-            $response = $res ? array('errno' => 0) : array('errno' => 9);
+            $imgData = [
+                'img_url'=> $oss_urls['0'],
+                'img_jump_url'=>trim($detail['img_jump_url']??""),
+                'text'=>trim($detail['text']??""),
+                'title'=>trim($detail['title']??""),
+                'sort'=>trim($detail['sort']??80),
+                'start_time'=>date("Y-m-d H:i:s"),
+                'end_time'=>date("Y-m-d H:i:s",time()+86400*365*10),
+            ];
+            $imgData = array_merge($imgData,['type'=>"company","type_id"=>0,"sub_type"=>"config"]);
+            $source_id = $this->oSource->insertSource($imgData);
+            if($source_id)
+            {
+                $configInfo['content'][] = $source_id;
+                $configInfo['content'] = json_encode($configInfo['content']);
+                $res = $this->oConfig->updateConfig($config_sign,$configInfo);
+                $response = $res ? array('errno' => 0) : array('errno' => 9);
+                //Base_Common::refreshCache($this->config,"config",$config_sign);
+
+            }
+            else
+            {
+                $response = array('errno' => 9);
+            }
         }
         echo json_encode($response);
         return true;
@@ -287,7 +315,18 @@ class ConfigController extends AbstractController
         $pos = trim($this->request->pos??0);
         $configInfo = $this->oConfig->getConfig($config_sign,"config_sign,content");
         $configInfo['content'] = json_decode($configInfo['content'],true);
+        foreach($configInfo['content'] as $key => $value)
+        {
+            if(!is_array($value))
+            {
+                $configInfo['content'][$key] = $this->oSource->getSource($value);
+            }
+        }
         $sourceInfo = $configInfo['content'][$pos];
+        if(!is_array($sourceInfo))
+        {
+            $sourceInfo = $this->oSource->getSource($sourceInfo);
+        }
         //渲染模版
         include $this->tpl('Config_SourceModify');
     }
@@ -304,23 +343,25 @@ class ConfigController extends AbstractController
         $oUpload = new Base_Upload('upload_img');
         $upload = $oUpload->upload('upload_img',$this->config->oss);
         $oss_urls = array_column($upload->resultArr,'oss');
+        //取出原数据
+        $origin_id = $configInfo['content'][$pos];
+        $origin = $this->oSource->getSource($origin_id);
         //如果以前没上传过且这次也没有成功上传
-        if((!isset($configInfo['content'][$pos]['img_url']) || $configInfo['content'][$pos]['img_url']=="") && (!isset($oss_urls['0']) || $oss_urls['0'] == ""))
+        if((!isset($origin['img_url']) || $origin['img_url']=="") && (!isset($oss_urls['0']) || $oss_urls['0'] == ""))
         {
             $response = array('errno' => 2);
         }
         else
         {
-            //这次传成功了就用这次，否则维持
-            $configInfo['content'][$pos]['img_url'] = (isset($oss_urls['0']) && $oss_urls['0']!="")?($oss_urls['0']):($configInfo['content'][$pos]['img_url']);
-            //保存跳转链接
-            $configInfo['content'][$pos]['img_jump_url'] = trim($detail['img_jump_url']??"");
-            $configInfo['content'][$pos]['text'] = trim($detail['text']??"");
-            $configInfo['content'][$pos]['title'] = trim($detail['title']??"");
-            $configInfo['content'] = json_encode($configInfo['content']);
 
-            $res = $this->oConfig->updateConfig($config_sign,$configInfo);
-            //Base_Common::refreshCache($this->config,"config",$config_sign);
+            $imgData = [
+                'img_url'=> (isset($oss_urls['0']) && $oss_urls['0']!="")?($oss_urls['0']):($origin['img_url']),
+                'img_jump_url'=>trim($detail['img_jump_url']??""),
+                'text'=>trim($detail['text']??""),
+                'title'=>trim($detail['title']??""),
+                'sort'=>trim($detail['sort']??80),
+            ];
+            $res = $this->oSource->updateSource($origin_id,$imgData);
             $response = $res ? array('errno' => 0) : array('errno' => 9);
         }
         echo json_encode($response);

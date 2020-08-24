@@ -548,7 +548,7 @@ class Hj_CompanyController extends AbstractController
             include $this->tpl('403');
         }
     }
-    //俱乐部banner列表
+    //banner列表
     public function bannerListAction()
     {
         //检查权限
@@ -587,7 +587,7 @@ class Hj_CompanyController extends AbstractController
         }
 
     }
-    //俱乐部banner页面
+    //添加banner页面
     public function bannerAddAction()
     {
         //检查权限
@@ -691,7 +691,7 @@ class Hj_CompanyController extends AbstractController
             include $this->tpl('403');
         }
     }
-    //更新俱乐部banner详情
+    //更新banner
     public function bannerUpdateAction()
     {
         //banner类型

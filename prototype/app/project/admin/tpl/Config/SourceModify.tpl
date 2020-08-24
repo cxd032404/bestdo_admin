@@ -22,10 +22,14 @@
 <td>跳转路径</td>
 	<td align="left"><input type="text" class="span4" name="detail[img_jump_url]"  id="detail[img_jump_url]" value="{tpl:$sourceInfo.img_jump_url/}" size="50" /></td>
 </tr>
-	<tr class="hover">
-		<td>标签</td>
-		<td align="left"><input type="text" class="span2" name="detail[title]"  id="detail[title]" value="{tpl:$sourceInfo.title/}" size="50" /></td>
-	</tr>
+<tr class="hover">
+	<td>标签</td>
+	<td align="left"><input type="text" class="span2" name="detail[title]"  id="detail[title]" value="{tpl:$sourceInfo.title/}" size="50" /></td>
+</tr>
+<tr class="hover">
+	<td>排序</td>
+	<td align="left"><input type="text" class="span2" name="detail[sort]"  id="detail[sort]" value="{tpl:$sourceInfo.sort/}" size="50" /></td>
+</tr>
 <tr class="noborder"><td></td>
 <td><button type="submit" id="source_modify_submit" class="pb_btn_dark_1">提交</button></td>
 </tr>
