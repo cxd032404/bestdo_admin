@@ -146,7 +146,7 @@ class Base_Template
          * 模板嵌套
          */
         /**
-         * {cms:tpl default_header /}
+         * {tpl:tpl default_header /}
          */
         $this->source = preg_replace("/" . preg_quote($this->startTag . $this->nameSpace . ':', '/')
         . 'tpl\s+([a-z0-9_-]+)\s{0,}' . preg_quote('/' . $this->endTag, '/')
@@ -156,7 +156,7 @@ class Base_Template
          * 赋值
          * 二维数组
          *
-         * {cms:assign}{/cms:assign}
+         * {tpl:assign}{/tpl:assign}
          */
         $this->source = preg_replace_callback("/" . preg_quote($this->startTag . $this->nameSpace . ':', '/')
         . 'assign\s+(.+?)' . preg_quote($this->endTag . $this->startTag . '/' . $this->nameSpace . ':', '/')
@@ -165,26 +165,26 @@ class Base_Template
         /**
          * if,elseif,else
          *
-         * {cms:else}
+         * {tpl:else}
          */
         $this->source = preg_replace("/" . preg_quote($this->startTag . $this->nameSpace . ':', '/')
         . 'else' . preg_quote($this->endTag, '/') . "/is", "<?php } else { ?>", $this->source);
 
         /**
-         * {/cms:if}
+         * {/tpl:if}
          */
         $this->source = preg_replace("/" . preg_quote($this->startTag . '/' . $this->nameSpace . ':', '/')
         . 'if' . preg_quote($this->endTag, '/') . "/is", "<?php } ?>", $this->source);
 
         /**
-         * {cms:else if ($i == 1)}
+         * {tpl:else if ($i == 1)}
          */
         $this->source = preg_replace_callback("/" . preg_quote($this->startTag . $this->nameSpace . ':', '/')
         . 'else\s{0,}if\s{0,}\((.+?)\)\s{0,}' . preg_quote($this->endTag, '/')
         . "/is", array($this, 'elseifParse'), $this->source);
 
         /**
-         * {cms:if ($i == 1)}
+         * {tpl:if ($i == 1)}
          */
         $this->source = preg_replace_callback("/" . preg_quote($this->startTag . $this->nameSpace . ':', '/')
         . 'if\s{0,}\((.+?)\)\s{0,}' . preg_quote($this->endTag, '/')
@@ -193,18 +193,18 @@ class Base_Template
         /**
          * foreach
          *
-         * {/cms:loop}
+         * {/tpl:loop}
          */
         $this->source = preg_replace("/" . preg_quote($this->startTag . "/" . $this->nameSpace . ':', '/')
         . 'loop' . preg_quote($this->endTag, '/') . "/is", "<?php } } ?>", $this->source);
 
-        // {cms:loop $array $value}
+        // {tpl:loop $array $value}
         $this->source = preg_replace_callback("/" . preg_quote($this->startTag . $this->nameSpace . ':', '/')
         . "loop\s+(\S+)\s+(\S+)\s{0,}" . preg_quote($this->endTag, '/')
         . "/is", array($this, 'loopValueParse'), $this->source);
 
         /**
-         * {cms:loop $array $key $value}
+         * {tpl:loop $array $key $value}
          */
         $this->source = preg_replace_callback("/" . preg_quote($this->startTag . $this->nameSpace . ':', '/')
         . 'loop\s+(\S+)\s+(\S+)\s+(\S+)\s{0,}' . preg_quote($this->endTag)
@@ -213,14 +213,14 @@ class Base_Template
         /**
          * this,config 输出
          *
-         * {cms:$config.siteUrl/}
+         * {tpl:$config.siteUrl/}
          */
         $this->source = preg_replace_callback("/" . preg_quote($this->startTag . $this->nameSpace . ':', '/')
         . '\$config\.([a-z0-9_\.]+)\s{0,}' . preg_quote('/' . $this->endTag, '/')
         . "/is", array($this, 'echoConfigParse'), $this->source);
 
         /**
-         * {cms:$this.a.b/}
+         * {tpl:$this.a.b/}
          */
         $this->source = preg_replace_callback("/" . preg_quote($this->startTag . $this->nameSpace . ':', '/')
         . '\$this\.([a-z0-9_\.]+)\s{0,}' . preg_quote('/' . $this->endTag, '/')
@@ -229,7 +229,7 @@ class Base_Template
         /**
          * 变量输出
          *
-         * {cms:$a.b/}
+         * {tpl:$a.b/}
          */
         $this->source = preg_replace_callback("/" . preg_quote($this->startTag . $this->nameSpace . ':', '/')
         . '\$(.+?)\s?' . preg_quote('/' . $this->endTag, '/') . "/is", array($this, 'echoVarParse'), $this->source);

@@ -6,7 +6,7 @@
 
 class Hj_CompanyController extends AbstractController
 {
-	/**企业:SportsType
+	/**企业:Company
 	 * @var string
 	 */
 	protected $sign = '?ctl=hj/company';

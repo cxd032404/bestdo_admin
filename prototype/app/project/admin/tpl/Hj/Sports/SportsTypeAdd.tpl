@@ -16,6 +16,26 @@
 	</select>
 </td>
 </tr>
+<tr class="hover">
+	<td>决胜方式</td>
+	<td align="left">
+		<select name="winBy" size="1" class="span2">
+			{tpl:loop $winBy $winByType $winByName}
+			<option value="{tpl:$winByType/}" >{tpl:$winByName/}</option>
+			{/tpl:loop}
+		</select>
+	</td>
+</tr>
+<tr class="hover">
+	<td>取胜条件</td>
+	<td align="left">
+		<select name="winWith" size="1" class="span2">
+			{tpl:loop $winWith $winWithType $winWithName}
+			<option value="{tpl:$winWithType/}" >{tpl:$winWithName/}</option>
+			{/tpl:loop}
+		</select>
+	</td>
+</tr>
 	<tr class="noborder"><td></td>
 <td><button type="submit" id="app_add_submit" class="pb_btn_dark_1">提交</button></td>
 </tr>

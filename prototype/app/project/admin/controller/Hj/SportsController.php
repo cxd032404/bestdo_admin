@@ -35,16 +35,21 @@ class Hj_SportsController extends AbstractController
 	public function indexAction()
 	{
 		//检查权限
-		$PermissionCheck = $this->manager->checkMenuPermission(0);
+		$PermissionCheck = $this->manager->checkMenuPermission(0,$this->sign);
 		if($PermissionCheck['return'])
 		{
 			//获取运动类型列表
 			$SportTypeList = $this->oSports->getAllSportsTypeList();
+            //决胜条件
+			$winBy = $this->oSports->getWinBy();
+			$winWith = $this->oSports->getWinWith();
 			//循环运动类型列表
 			foreach($SportTypeList as $key => $SportsTypeInfo)
             {
                 //数据解包
                 $SportTypeList[$key]['comment'] = json_decode($SportsTypeInfo['comment'],true);
+                $SportTypeList[$key]['winBy'] = $winBy[$SportsTypeInfo['winBy']];
+                $SportTypeList[$key]['winWith'] = $winWith[$SportsTypeInfo['winWith']];
             }
 			//渲染模版
 			include $this->tpl('Hj_Sports_SportsTypeList');
@@ -59,11 +64,14 @@ class Hj_SportsController extends AbstractController
 	public function sportsTypeAddAction()
 	{
 		//检查权限
-		$PermissionCheck = $this->manager->checkMenuPermission("SportsTypeInsert");
+		$PermissionCheck = $this->manager->checkMenuPermission("SportsTypeInsert",$this->sign);
 		if($PermissionCheck['return'])
 		{
             //获取速度显示单位
             $SpeedDisplayTypeList = $this->oSports->getSpeedDisplayList();
+            //决胜条件
+            $winBy = $this->oSports->getWinBy();
+            $winWith = $this->oSports->getWinWith();
 			//渲染模版
 			include $this->tpl('Hj_Sports_SportsTypeAdd');
 		}
@@ -78,7 +86,7 @@ class Hj_SportsController extends AbstractController
 	public function sportsTypeInsertAction()
 	{
 		//检查权限
-		$bind=$this->request->from('SportsTypeName','SpeedDisplayType','HorizonSign');
+		$bind=$this->request->from('SportsTypeName','SpeedDisplayType','winWith','winBy');
 		//运动类型名称不能为空
 		if(trim($bind['SportsTypeName'])=="")
 		{
@@ -86,9 +94,6 @@ class Hj_SportsController extends AbstractController
 		}
 		else
 		{
-            //保存地平线对应的类型标识
-            $bind['comment']['HorizonSign'] = $bind['HorizonSign'];
-            unset($bind['HorizonSign']);
             //数据打包
             $bind['comment'] = json_encode($bind['comment']);
 		    //添加运动类型
@@ -103,7 +108,7 @@ class Hj_SportsController extends AbstractController
 	public function sportsTypeModifyAction()
 	{
 		//检查权限
-		$PermissionCheck = $this->manager->checkMenuPermission("SportsTypeModify");
+		$PermissionCheck = $this->manager->checkMenuPermission("SportsTypeModify",$this->sign);
 		if($PermissionCheck['return'])
 		{
 			//运动类型ID
@@ -114,6 +119,9 @@ class Hj_SportsController extends AbstractController
 			$SportsTypeInfo['comment'] = json_decode($SportsTypeInfo['comment'],true);
 			//获取速度显示单位
             $SpeedDisplayTypeList = $this->oSports->getSpeedDisplayList();
+            //决胜条件
+            $winBy = $this->oSports->getWinBy();
+            $winWith = $this->oSports->getWinWith();
             //渲染模版
 			include $this->tpl('Hj_Sports_SportsTypeModify');
 		}
@@ -128,7 +136,7 @@ class Hj_SportsController extends AbstractController
 	public function sportsTypeUpdateAction()
 	{
 	    //接收页面参数
-		$bind=$this->request->from('SportsTypeId','SportsTypeName','SpeedDisplayType');
+		$bind=$this->request->from('SportsTypeId','SportsTypeName','SpeedDisplayType','winWith','winBy');
         //运动类型名称不能为空
 		if(trim($bind['SportsTypeName'])=="")
 		{
@@ -150,7 +158,7 @@ class Hj_SportsController extends AbstractController
 	public function sportsTypeDeleteAction()
 	{
 		//检查权限
-		$PermissionCheck = $this->manager->checkMenuPermission("SportsTypeDelete");
+		$PermissionCheck = $this->manager->checkMenuPermission("SportsTypeDelete",$this->sign);
 		if($PermissionCheck['return'])
 		{
 			//运动类型ID

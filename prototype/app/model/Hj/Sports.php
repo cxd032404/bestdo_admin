@@ -18,10 +18,28 @@ class Hj_Sports extends Base_Widget
             'time/km'/*每公里耗时*/,
             'time/mile'/*每公里耗时*/
         ];
+    protected $winBy = [
+        'score'=>"比分",
+        'time'=>"时间",
+    ];
+    protected $winWith = [
+        0=>"少者胜",
+        1=>"多者胜",
+    ];
+
+
 
     public function getSpeedDisplayList()
     {
         return $this->speedDisplayList;
+    }
+    public function getWinBy()
+    {
+        return $this->winBy;
+    }
+    public function getWinWith()
+    {
+        return $this->winWith;
     }
     /**
 	 * 查询全部
