@@ -1,6 +1,4 @@
 <?php
-//ALTER TABLE `config_sports_type` ADD `SpeedDisplayType` VARCHAR(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '速度显示单位' AFTER `SportsTypeName`;
-
 /**
  * 运动管理
  * @author Chen<cxd032404@hotmail.com>
@@ -174,4 +172,148 @@ class Hj_SportsController extends AbstractController
 			include $this->tpl('403');
 		}
 	}
+    //运动类型分段信息页面
+    public function sectionAction()
+    {
+        //检查权限
+        $PermissionCheck = $this->manager->checkMenuPermission("SportsTypeModify",$this->sign);
+        if($PermissionCheck['return'])
+        {
+            //运动类型ID
+            $SportsTypeId = intval($this->request->SportsTypeId);
+            //获取运动类型信息
+            $SportsTypeInfo = $this->oSports->getSportsType($SportsTypeId,'*');
+            //数据解包
+            $SportsTypeInfo['comment'] = json_decode($SportsTypeInfo['comment'],true);
+            //渲染模版
+            include $this->tpl('Hj_Sports_Section');
+        }
+        else
+        {
+            $home = $this->sign;
+            include $this->tpl('403');
+        }
+    }
+    //添加分段填写配置页面
+    public function sectionAddAction()
+    {
+        //检查权限
+        $PermissionCheck = $this->manager->checkMenuPermission("SportsTypeModify",$this->sign);
+        if($PermissionCheck['return'])
+        {
+            //运动类型ID
+            $SportsTypeId = intval($this->request->SportsTypeId);
+            //渲染模版
+            include $this->tpl('Hj_Sports_SectionAdd');
+        }
+        else
+        {
+            $home = $this->sign;
+            include $this->tpl('403');
+        }
+    }
+    //添加分段
+    public function sectionInsertAction()
+    {
+        //检查权限
+        $bind=$this->request->from('SportsTypeId','name','time','additional','win');
+        //运动类型名称不能为空
+        if(trim($bind['name'])=="")
+        {
+            $response = array('errno' => 1);
+        }
+        else
+        {
+            //获取运动类型信息
+            $SportsTypeInfo = $this->oSports->getSportsType($bind['SportsTypeId'],'*');
+            //数据解包
+            $SportsTypeInfo['comment'] = json_decode($SportsTypeInfo['comment'],true);
+            //获取原有分段
+            $section = $SportsTypeInfo['comment']['section']??[];
+            //新增分段
+            $section[] = ['name'=>$bind['name'],'time'=>abs(intval($bind['time'])),'additional'=>$bind['additional'],'win'=>$bind['win']];
+            $SportsTypeInfo['comment']['section'] = $section;
+            //数据打包
+            $SportsTypeInfo['comment'] = json_encode($SportsTypeInfo['comment']);
+            //修改运动类型
+            $res = $this->oSports->updateSportsType($bind['SportsTypeId'],$SportsTypeInfo);
+            $response = $res ? array('errno' => 0) : array('errno' => 9);
+        }
+        echo json_encode($response);
+        return true;
+    }
+    //修改运动类型信息页面
+    public function sectionModifyAction()
+    {
+        //检查权限
+        $PermissionCheck = $this->manager->checkMenuPermission("SportsTypeModify",$this->sign);
+        if($PermissionCheck['return'])
+        {
+            //运动类型ID
+            $SportsTypeId = intval($this->request->SportsTypeId);
+            //位置
+            $pos = intval($this->request->pos);
+            //获取运动类型信息
+            $SportsTypeInfo = $this->oSports->getSportsType($SportsTypeId,'*');
+            //数据解包
+            $SportsTypeInfo['comment'] = json_decode($SportsTypeInfo['comment'],true);
+            //分段信息
+            $sectionInfo = $SportsTypeInfo['comment']['section'][$pos]??[];
+            //渲染模版
+            include $this->tpl('Hj_Sports_SectionModify');
+        }
+        else
+        {
+            $home = $this->sign;
+            include $this->tpl('403');
+        }
+    }
+    //添加分段
+    public function sectionUpdateAction()
+    {
+        //检查权限
+        $bind=$this->request->from('SportsTypeId','pos','name','time','additional','win');
+        //运动类型名称不能为空
+        if(trim($bind['name'])=="")
+        {
+            $response = array('errno' => 1);
+        }
+        else
+        {
+            //获取运动类型信息
+            $SportsTypeInfo = $this->oSports->getSportsType($bind['SportsTypeId'],'*');
+            //数据解包
+            $SportsTypeInfo['comment'] = json_decode($SportsTypeInfo['comment'],true);
+            //修改分段
+            $sectionInfo = ['name'=>$bind['name'],'time'=>abs(intval($bind['time'])),'additional'=>$bind['additional'],'win'=>$bind['win']];
+            $SportsTypeInfo['comment']['section'][$bind['pos']] = $sectionInfo;
+            //数据打包
+            $SportsTypeInfo['comment'] = json_encode($SportsTypeInfo['comment']);
+            //修改运动类型
+            $res = $this->oSports->updateSportsType($bind['SportsTypeId'],$SportsTypeInfo);
+            $response = $res ? array('errno' => 0) : array('errno' => 9);
+        }
+        echo json_encode($response);
+        return true;
+    }
+    //删除分段
+    public function sectionDeleteAction()
+    {
+        //运动类型ID
+        $SportsTypeId = intval($this->request->SportsTypeId);
+        //位置
+        $pos = intval($this->request->pos);
+        //获取运动类型信息
+        $SportsTypeInfo = $this->oSports->getSportsType($SportsTypeId,'*');
+        //数据解包
+        $SportsTypeInfo['comment'] = json_decode($SportsTypeInfo['comment'],true);
+        unset($SportsTypeInfo['comment']['section'][$pos]);
+        $SportsTypeInfo['comment']['section'] = array_values($SportsTypeInfo['comment']['section']);
+        //数据打包
+        $SportsTypeInfo['comment'] = json_encode($SportsTypeInfo['comment']);
+        //修改运动类型
+        $res = $this->oSports->updateSportsType($SportsTypeId,$SportsTypeInfo);
+        //返回之前的页面
+        $this->response->goBack();
+    }
 }

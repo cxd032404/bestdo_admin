@@ -6,6 +6,7 @@
 <td>运动类型名称</td>
 	<td align="left"><input type="text" class="span2" name="SportsTypeName"  id="SportsTypeName" value="" size="50" /></td>
 </tr>
+<tr class="hover">
 <td>速度显示单位</td>
 <td align="left">
 	<select name="SpeedDisplayType" size="1" class="span2">
