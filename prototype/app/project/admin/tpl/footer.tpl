@@ -58,7 +58,7 @@
 		
     });
     
-    getRightHtml('?ctl=index&ac=home','','','750');
+    getRightHtml('?ctl=index&ac=home','','','850');
     
     function getMenu(menu_id){        
         $.ajax
