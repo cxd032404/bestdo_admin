@@ -1,7 +1,7 @@
 {tpl:tpl contentHeader/}
 <div class="br_bottom"></div>
-<form id="race_update_form" name="race_update_form" action="{tpl:$this.sign/}&ac=sports.type.update" method="post">
-<input type="hidden" name="SportsTypeId" value="{tpl:$SportsTypeInfo.SportsTypeId/}" />
+<form id="race_update_form" name="race_update_form" action="{tpl:$this.sign/}&ac=race.update" method="post">
+<input type="hidden" name="race_id" value="{tpl:$RaceInfo.race_id/}" />
 <table width="99%" align="center" class="table table-bordered table-striped" >
 <tr class="hover">
 <td>赛事名称</td>
@@ -10,7 +10,7 @@
 <tr class="hover">
 <td>赛事类型</td>
 <td align="left">
-<select name="SpeedDisplayType" size="1" class="span2">
+<select name="race_type" size="1" class="span2">
 	{tpl:loop $RaceTypeList $RaceType $typeName}
 	<option value="{tpl:$RaceType/}" {tpl:if($SpeedDisplayType==$RaceType.race_type)}selected="selected"{/tpl:if}>{tpl:$typeName/}</option>
 	{/tpl:loop}

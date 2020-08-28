@@ -5,7 +5,7 @@
  */
 
 
-class Hj_Sports extends Base_Widget
+class Hj_Race extends Base_Widget
 {
 	//声明所用到的表
 	protected $table = 'config_race';
@@ -26,7 +26,7 @@ class Hj_Sports extends Base_Widget
 	 * @param $fields
 	 * @return array
 	 */
-	public function getAllRaceList($params,$fields = "*")
+	public function getRaceList($params = [],$fields = "*")
 	{
         $table_to_process = Base_Widget::getDbTable($this->table);
         $whereType = (isset($params['race_type']) && trim($params['race_type'])!="")?" race_type = '".$params['race_type']."'":"";
@@ -64,7 +64,8 @@ class Hj_Sports extends Base_Widget
 	public function updateRace($race_id, array $bind)
 	{
 		$race_id = intval($race_id);
-		$table_to_process = Base_Widget::getDbTable($this->table);
+        $bind['update_time'] = date("Y-m-d H:i:s");
+        $table_to_process = Base_Widget::getDbTable($this->table);
 		return $this->db->update($table_to_process, $bind, '`race_id` = ?', $race_id);
 	}
 	/**
@@ -74,7 +75,8 @@ class Hj_Sports extends Base_Widget
 	 */
 	public function insertRace(array $bind)
 	{
-		$table_to_process = Base_Widget::getDbTable($this->table);
+		$bind['create_time'] = $bind['update_time'] = date("Y-m-d H:i:s");
+	    $table_to_process = Base_Widget::getDbTable($this->table);
 		return $this->db->insert($table_to_process, $bind);
 	}
 

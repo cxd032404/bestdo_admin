@@ -32,7 +32,7 @@ function raceModify(sid){
 {tpl:loop $RaceList $RaceInfo}
   <tr class="hover">
     <td align="center">{tpl:$RaceInfo.race_id/}</td>
-    <td align="center">{tpl:$RaceInfo.race_id/}</td>
+    <td align="center">{tpl:$RaceInfo.race_name/}</td>
       <td align="center">{tpl:$RaceInfo.race_type/}</td>
       <td align="center"><a class = "pb_btn_grey_1" href="javascript:;" onclick="raceDelete('{tpl:$RaceInfo.race_id/}','{tpl:$RaceInfo.race_name/}')">删除</a><a class = "pb_btn_light_1" href="javascript:;" onclick="raceModify('{tpl:$RaceInfo.race_id/}');">修改</a></td>
   </tr>

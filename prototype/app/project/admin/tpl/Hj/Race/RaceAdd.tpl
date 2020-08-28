@@ -1,10 +1,10 @@
 {tpl:tpl contentHeader/}
 <div class="br_bottom"></div>
-<form id="race_add_form" name="race_add_form" action="{tpl:$this.sign/}&ac=sports.type.insert" method="post">
+<form id="race_add_form" name="race_add_form" action="{tpl:$this.sign/}&ac=race.insert" method="post">
 <table width="99%" align="center" class="table table-bordered table-striped">
 <tr class="hover">
 <td>运动类型名称</td>
-	<td align="left"><input type="text" class="span2" name="RaceName"  id="RaceName" value="" size="50" /></td>
+	<td align="left"><input type="text" class="span2" name="race_name"  id="race_name" value="" size="50" /></td>
 </tr>
 <tr class="hover">
 <td>赛事类型</td>

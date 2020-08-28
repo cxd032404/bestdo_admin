@@ -4,7 +4,7 @@
  * @author Chen<cxd032404@hotmail.com>
  */
 
-class Hj_SportsController extends AbstractController
+class Hj_RaceController extends AbstractController
 {
 	/**赛事类型:Race
 	 * @var string
@@ -16,7 +16,7 @@ class Hj_SportsController extends AbstractController
 	 * game对象
 	 * @var object
 	 */
-	protected $oSports;
+	protected $oRace;
 
 	/**
 	 * 初始化
@@ -26,7 +26,7 @@ class Hj_SportsController extends AbstractController
 	public function init()
 	{
 		parent::init();
-		$this->oSports = new Hj_Sports();
+		$this->oRace = new Hj_Race();
 
 	}
 	//赛事类型配置列表页面
@@ -36,21 +36,19 @@ class Hj_SportsController extends AbstractController
 		$PermissionCheck = $this->manager->checkMenuPermission(0,$this->sign);
 		if($PermissionCheck['return'])
 		{
-			//获取赛事类型列表
-			$SportTypeList = $this->oSports->getAllRaceList();
-            //决胜条件
-			$winBy = $this->oSports->getWinBy();
-			$winWith = $this->oSports->getWinWith();
+            //获取赛事类型列表
+            $RaceTypeList = $this->oRace->getRaceTypeList();
+		    //获取赛事列表
+			$RaceList = $this->oRace->getRaceList();
 			//循环赛事类型列表
-			foreach($SportTypeList as $key => $RaceInfo)
+			foreach($RaceList as $key => $RaceInfo)
             {
                 //数据解包
-                $SportTypeList[$key]['comment'] = json_decode($RaceInfo['comment'],true);
-                $SportTypeList[$key]['winBy'] = $winBy[$RaceInfo['winBy']];
-                $SportTypeList[$key]['winWith'] = $winWith[$RaceInfo['winWith']];
+                $RaceList[$key]['comment'] = json_decode($RaceInfo['comment'],true);
+                $RaceList[$key]['race_type'] = $RaceTypeList[$RaceInfo['race_type']]??"未知类型";
             }
 			//渲染模版
-			include $this->tpl('Hj_Sports_RaceList');
+			include $this->tpl('Hj_Race_RaceList');
 		}
 		else
 		{
@@ -62,16 +60,13 @@ class Hj_SportsController extends AbstractController
 	public function raceAddAction()
 	{
 		//检查权限
-		$PermissionCheck = $this->manager->checkMenuPermission("RaceInsert",$this->sign);
+		$PermissionCheck = $this->manager->checkMenuPermission("addRace",$this->sign);
 		if($PermissionCheck['return'])
 		{
-            //获取速度显示单位
-            $SpeedDisplayTypeList = $this->oSports->getSpeedDisplayList();
-            //决胜条件
-            $winBy = $this->oSports->getWinBy();
-            $winWith = $this->oSports->getWinWith();
+            //获取赛事类型列表
+            $RaceTypeList = $this->oRace->getRaceTypeList();
 			//渲染模版
-			include $this->tpl('Hj_Sports_RaceAdd');
+			include $this->tpl('Hj_Race_RaceAdd');
 		}
 		else
 		{
@@ -84,18 +79,18 @@ class Hj_SportsController extends AbstractController
 	public function raceInsertAction()
 	{
 		//检查权限
-		$bind=$this->request->from('RaceName','SpeedDisplayType','winWith','winBy');
+		$bind=$this->request->from('race_name','race_type');
 		//赛事类型名称不能为空
-		if(trim($bind['RaceName'])=="")
+		if(trim($bind['race_name'])=="")
 		{
 			$response = array('errno' => 1);
 		}
 		else
 		{
             //数据打包
-            $bind['comment'] = json_encode($bind['comment']);
+            $bind['detail'] = json_encode([]);
 		    //添加赛事类型
-			$res = $this->oSports->insertRace($bind);
+			$res = $this->oRace->insertRace($bind);
 			$response = $res ? array('errno' => 0) : array('errno' => 9);
 		}
 		echo json_encode($response);
@@ -106,22 +101,19 @@ class Hj_SportsController extends AbstractController
 	public function raceModifyAction()
 	{
 		//检查权限
-		$PermissionCheck = $this->manager->checkMenuPermission("RaceModify",$this->sign);
+		$PermissionCheck = $this->manager->checkMenuPermission("updateRace",$this->sign);
 		if($PermissionCheck['return'])
 		{
-			//赛事类型ID
-			$RaceId = intval($this->request->RaceId);
+			//赛事ID
+			$RaceId = intval($this->request->race_id);
 			//获取赛事类型信息
-			$RaceInfo = $this->oSports->getRace($RaceId,'*');
+			$RaceInfo = $this->oRace->getRace($RaceId,'*');
 			//数据解包
-			$RaceInfo['comment'] = json_decode($RaceInfo['comment'],true);
-			//获取速度显示单位
-            $SpeedDisplayTypeList = $this->oSports->getSpeedDisplayList();
-            //决胜条件
-            $winBy = $this->oSports->getWinBy();
-            $winWith = $this->oSports->getWinWith();
+			$RaceInfo['detail'] = json_decode($RaceInfo['detail'],true);
+            //获取赛事类型列表
+            $RaceTypeList = $this->oRace->getRaceTypeList();
             //渲染模版
-			include $this->tpl('Hj_Sports_RaceModify');
+			include $this->tpl('Hj_Race_RaceModify');
 		}
 		else
 		{
@@ -134,18 +126,16 @@ class Hj_SportsController extends AbstractController
 	public function raceUpdateAction()
 	{
 	    //接收页面参数
-		$bind=$this->request->from('RaceId','RaceName','SpeedDisplayType','winWith','winBy');
+		$bind=$this->request->from('race_id','race_name','race_type');
         //赛事类型名称不能为空
-		if(trim($bind['RaceName'])=="")
+		if(trim($bind['race_name'])=="")
 		{
 			$response = array('errno' => 1);
 		}
 		else
 		{
-            //数据打包
-            $bind['comment'] = json_encode($bind['comment']);
 			//修改赛事类型
-			$res = $this->oSports->updateRace($bind['RaceId'],$bind);
+			$res = $this->oRace->updateRace($bind['race_id'],$bind);
 			$response = $res ? array('errno' => 0) : array('errno' => 9);
 		}
 		echo json_encode($response);
@@ -156,13 +146,13 @@ class Hj_SportsController extends AbstractController
 	public function raceDeleteAction()
 	{
 		//检查权限
-		$PermissionCheck = $this->manager->checkMenuPermission("RaceDelete",$this->sign);
+		$PermissionCheck = $this->manager->checkMenuPermission("deleteRace",$this->sign);
 		if($PermissionCheck['return'])
 		{
 			//赛事类型ID
-			$RaceId = trim($this->request->RaceId);
+			$RaceId = trim($this->request->race_id);
 			//删除赛事类型
-			$this->oSports->deleteRace($RaceId);
+			$this->oRace->deleteRace($RaceId);
 			//返回之前的页面
 			$this->response->goBack();
 		}
