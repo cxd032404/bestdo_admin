@@ -22,6 +22,11 @@ $table['UpdateLog']['num'] = 1;
 $table['config_sports_type']['db'] = 'hj_config';
 $table['config_sports_type']['num'] = 1;
 
+#比赛
+$table['config_race']['db'] = 'hj_config';
+$table['config_race']['num'] = 1;
+
+
 #管理员
 $table['config_manager']['db'] = 'hj_config';
 $table['config_manager']['num'] = 1;

@@ -1,13 +1,13 @@
 {tpl:tpl contentHeader/}
 <script type="text/javascript">
 $(document).ready(function(){
-	$('#add_app').click(function(){
-		addAppBox = divBox.showBox('{tpl:$this.sign/}&ac=sports.type.add', {title:'添加运动类型',width:400,height:300});
+	$('#add_sports').click(function(){
+		addSportsTypeBox = divBox.showBox('{tpl:$this.sign/}&ac=sports.type.add', {title:'添加运动类型',width:400,height:300});
 	});
 });
 
 function sportsTypeDelete(p_id, p_name){
-	deleteAppBox = divBox.confirmBox({content:'是否删除 ' + p_name + '?',ok:function(){location.href = '{tpl:$this.sign/}&ac=sports.type.delete&SportsTypeId=' + p_id;}});
+	deleteSportsTypeBox = divBox.confirmBox({content:'是否删除 ' + p_name + '?',ok:function(){location.href = '{tpl:$this.sign/}&ac=sports.type.delete&SportsTypeId=' + p_id;}});
 }
 
 function sportsTypeModify(sid){
@@ -17,7 +17,7 @@ function sportsTypeModify(sid){
 </script>
 
 <fieldset><legend>操作</legend>
-    <div align=right><a class = "pb_btn_dark_1" href="javascript:;" id="add_app">新增</a></div>
+    <div align=right><a class = "pb_btn_dark_1" href="javascript:;" id="add_sports">新增</a></div>
 </fieldset>
 
 <fieldset><legend>运动类型列表</legend>
