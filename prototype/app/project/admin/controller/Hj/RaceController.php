@@ -169,7 +169,6 @@ class Hj_RaceController extends AbstractController
         $PermissionCheck = $this->manager->checkMenuPermission("updateRace",$this->sign);
         if($PermissionCheck['return'])
         {
-            echo "666";
             //赛事ID
             $RaceId = intval($this->request->race_id);
             //获取赛事信息
@@ -179,14 +178,15 @@ class Hj_RaceController extends AbstractController
             if($RaceInfo['team']==1)
             {
                 $teamList = (new Hj_Race_Team())->getTeamList(['race_id'=>$RaceId]);
-                print_R($teamList);
-
+                //渲染模版
+                include $this->tpl('Hj_Race_TeamList');
             }
             else
             {
-                $atheleteList = (new Hj_Race_Athlete())->getAthletList(['race_id'=>$RaceId]);
+                $atheleteList = (new Hj_Race_Athlete())->getAthleteList(['race_id'=>$RaceId]);
+                //渲染模版
+                include $this->tpl('Hj_Race_AthleteList');
             }
-
         }
         else
         {
