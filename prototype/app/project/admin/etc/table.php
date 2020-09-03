@@ -179,4 +179,12 @@ $table['config_list_series']['num'] = 1;
 #列表集合详情表
 $table['config_list_series_detail']['db'] = 'hj_config';
 $table['config_list_series_detail']['num'] = 1;
+
+#队伍表
+$table['user_team']['db'] = 'hj_user';
+$table['user_team']['num'] = 1;
+
+#选手表
+$table['user_athlete']['db'] = 'hj_user';
+$table['user_athlete']['num'] = 1;
 return $table;

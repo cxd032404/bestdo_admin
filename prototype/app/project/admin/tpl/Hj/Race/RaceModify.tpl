@@ -17,6 +17,15 @@
 </select>
 </td>
 </tr>
+<tr class="hover">
+	<td>选手类型</td>
+	<td align="left">
+		<select name="team" size="1" class="span2">
+			<option value="0" {tpl:if(0==$RaceInfo.team)}selected="selected"{/tpl:if}>个人</option>
+			<option value="1" {tpl:if(1==$RaceInfo.team)}selected="selected"{/tpl:if}>团队</option>
+		</select>
+	</td>
+</tr>
 <tr class="noborder"><td></td>
 <td><button type="submit" id="race_update_submit" class="pb_btn_dark_1">提交</button></td>
 </tr>

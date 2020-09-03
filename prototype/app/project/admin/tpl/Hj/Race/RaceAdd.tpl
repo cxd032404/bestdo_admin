@@ -3,7 +3,7 @@
 <form id="race_add_form" name="race_add_form" action="{tpl:$this.sign/}&ac=race.insert" method="post">
 <table width="99%" align="center" class="table table-bordered table-striped">
 <tr class="hover">
-<td>运动类型名称</td>
+<td>赛事名称</td>
 	<td align="left"><input type="text" class="span2" name="race_name"  id="race_name" value="" size="50" /></td>
 </tr>
 <tr class="hover">
@@ -15,6 +15,15 @@
 		{/tpl:loop}
 	</select>
 </td>
+</tr>
+<tr class="hover">
+	<td>选手类型</td>
+	<td align="left">
+		<select name="team" size="1" class="span2">
+			<option value="0">个人</option>
+			<option value="1">团队</option>
+		</select>
+	</td>
 </tr>
 	<tr class="noborder"><td></td>
 <td><button type="submit" id="app_add_submit" class="pb_btn_dark_1">提交</button></td>

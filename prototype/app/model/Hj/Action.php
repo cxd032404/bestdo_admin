@@ -36,7 +36,7 @@ class Hj_Action extends Base_Widget
 	}
 	/**
 	 * 获取单条记录
-	 * @param integer $ActtionId
+	 * @param integer $ActionId
 	 * @param string $fields
 	 * @return array
 	 */
@@ -48,7 +48,7 @@ class Hj_Action extends Base_Widget
 	}
     /**
      * 根据标示获取单条记录
-     * @param integer $Acttion
+     * @param integer $Action
      * @param string $fields
      * @return array
      */
@@ -60,7 +60,7 @@ class Hj_Action extends Base_Widget
     }
 	/**
 	 * 更新
-	 * @param integer $ActtionId
+	 * @param integer $ActionId
 	 * @param array $bind
 	 * @return boolean
 	 */
@@ -83,7 +83,7 @@ class Hj_Action extends Base_Widget
 
 	/**
 	 * 删除
-	 * @param integer $ActtionId
+	 * @param integer $ActionId
 	 * @return boolean
 	 */
 	public function deleteAction($ActionId)
