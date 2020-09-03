@@ -36,7 +36,7 @@ function raceModify(sid){
   <tr class="hover">
     <td align="center">{tpl:$team_info.team_id/}</td>
     <td align="center">{tpl:$team_info.team_name/}</td>
-      <td align="center">{tpl:if($team_info.group_id==0)}未分组{tpl:else}{tpl:$team_info.group_id/}{/tpl:if}</td>
+      <td align="center">{tpl:$team_info.group/}</td>
       <td align="center">{tpl:$team_info.create_time/}</td>
     <td align="center">{tpl:$team_info.update_time/}</td>
       </td>

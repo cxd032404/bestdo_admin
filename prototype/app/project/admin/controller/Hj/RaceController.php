@@ -36,7 +36,7 @@ class Hj_RaceController extends AbstractController
 		$PermissionCheck = $this->manager->checkMenuPermission(0,$this->sign);
 		if($PermissionCheck['return'])
 		{
-            //获取赛事列表
+		    //获取赛事列表
             $RaceTypeList = $this->oRace->getRaceTypeList();
 		    //获取赛事列表
 			$RaceList = $this->oRace->getRaceList();
@@ -169,6 +169,7 @@ class Hj_RaceController extends AbstractController
         $PermissionCheck = $this->manager->checkMenuPermission("updateRace",$this->sign);
         if($PermissionCheck['return'])
         {
+            $groups = Base_Common::generateGroups(8);
             //赛事ID
             $RaceId = intval($this->request->race_id);
             //获取赛事信息
@@ -178,12 +179,20 @@ class Hj_RaceController extends AbstractController
             if($RaceInfo['team']==1)
             {
                 $teamList = (new Hj_Race_Team())->getTeamList(['race_id'=>$RaceId]);
+                foreach($teamList as $key => $value)
+                {
+                    $teamList[$key]['group'] = $value['group_id']==0?"未分组":($groups[$value['group_id']]??"未知组");
+                }
                 //渲染模版
                 include $this->tpl('Hj_Race_TeamList');
             }
             else
             {
                 $atheleteList = (new Hj_Race_Athlete())->getAthleteList(['race_id'=>$RaceId]);
+                foreach($atheleteList as $key => $value)
+                {
+                    $atheleteList[$key]['group'] = $value['group_id'] == 0 ? "未分组" : ($groups[$value['group_id']] ?? "未知组");
+                }
                 //渲染模版
                 include $this->tpl('Hj_Race_AthleteList');
             }

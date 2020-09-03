@@ -1396,4 +1396,15 @@ EOF;
         }
         return $data;
     }
+    public static function generateGroups($count = 8)
+    {
+        $start = ord("A");
+        $return = [];
+        for($i=0;$i<$count;$i++)
+        {
+            $return[$i] = chr($start+$i);
+        }
+        return $return;
+    }
+
 }
