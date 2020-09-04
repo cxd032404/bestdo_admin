@@ -12,9 +12,12 @@ class Hj_Race extends Base_Widget
     //速度显示规则列表
     protected $raceTypeList =
         [
-            'cup'=>'杯赛',
-            'league'=>'联赛',
-            'single'=>'单独比赛'
+            'cup'=>['name'=>'杯赛','list'=>[
+                '32_8'=>['name'=>'32强小组混合赛','group'=>8,'team'=>32],
+                '16_4'=>['name'=>'16强小组混合赛','group'=>4,'team'=>16],
+            ]],
+            'league'=>['name'=>'联赛','list'=>[]],
+            'single'=>['name'=>'单独比赛','list'=>[]],
         ];
 
     public function getRaceTypeList()

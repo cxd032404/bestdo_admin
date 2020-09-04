@@ -44,8 +44,9 @@ class Hj_RaceController extends AbstractController
 			foreach($RaceList as $key => $RaceInfo)
             {
                 //数据解包
-                $RaceList[$key]['comment'] = json_decode($RaceInfo['comment'],true);
-                $RaceList[$key]['race_type'] = $RaceTypeList[$RaceInfo['race_type']]??"未知类型";
+                $RaceList[$key]['detail'] = json_decode($RaceInfo['detail'],true);
+                $RaceList[$key]['race_type'] = $RaceTypeList[$RaceInfo['race_type']]['name']??"未知类型";
+                $RaceList[$key]['detail_type'] = $RaceTypeList[$RaceInfo['race_type']]['list'][$RaceList[$key]['detail']['detail_type']??""]['name']??"未指定";
             }
 			//渲染模版
 			include $this->tpl('Hj_Race_RaceList');
@@ -112,6 +113,7 @@ class Hj_RaceController extends AbstractController
 			$RaceInfo['detail'] = json_decode($RaceInfo['detail'],true);
             //获取赛事列表
             $RaceTypeList = $this->oRace->getRaceTypeList();
+            $TypeDetailList = $RaceTypeList[$RaceInfo['race_type']]['list'];
             //渲染模版
 			include $this->tpl('Hj_Race_RaceModify');
 		}
@@ -126,7 +128,7 @@ class Hj_RaceController extends AbstractController
 	public function raceUpdateAction()
 	{
 	    //接收页面参数
-		$bind=$this->request->from('race_id','race_name','race_type','team');
+		$bind=$this->request->from('race_id','race_name','team','detail');
         //赛事名称不能为空
 		if(trim($bind['race_name'])=="")
 		{
@@ -134,7 +136,8 @@ class Hj_RaceController extends AbstractController
 		}
 		else
 		{
-			//修改赛事
+			$bind['detail'] = json_encode($bind['detail']);
+		    //修改赛事
 			$res = $this->oRace->updateRace($bind['race_id'],$bind);
 			$response = $res ? array('errno' => 0) : array('errno' => 9);
 		}
@@ -182,6 +185,7 @@ class Hj_RaceController extends AbstractController
                 foreach($teamList as $key => $value)
                 {
                     $teamList[$key]['group'] = $value['group_id']==0?"未分组":($groups[$value['group_id']]??"未知组");
+                    $teamList[$key]['seed'] = $value['seed']==0?"非种子":("第".$value['seed']."批次");
                 }
                 //渲染模版
                 include $this->tpl('Hj_Race_TeamList');
@@ -192,6 +196,7 @@ class Hj_RaceController extends AbstractController
                 foreach($atheleteList as $key => $value)
                 {
                     $atheleteList[$key]['group'] = $value['group_id'] == 0 ? "未分组" : ($groups[$value['group_id']] ?? "未知组");
+                    $atheleteList[$key]['seed'] = $value['seed']==0?"非种子":("第".$value['seed']."批次");
                 }
                 //渲染模版
                 include $this->tpl('Hj_Race_AthleteList');
@@ -202,5 +207,75 @@ class Hj_RaceController extends AbstractController
             $home = $this->sign;
             include $this->tpl('403');
         }
+    }
+    //成员列表
+    public function memberModifyAction()
+    {
+        //检查权限
+        $PermissionCheck = $this->manager->checkMenuPermission("updateRace",$this->sign);
+        if($PermissionCheck['return'])
+        {
+            $groups = Base_Common::generateGroups(8);
+            //赛事ID
+            $RaceId = intval($this->request->race_id);
+            //记录ID
+            $id = intval($this->request->id);
+            //获取赛事信息
+            $RaceInfo = $this->oRace->getRace($RaceId,'*');
+            //数据解包
+            $RaceInfo['detail'] = json_decode($RaceInfo['detail'],true);
+            //获取赛事列表
+            $RaceTypeList = $this->oRace->getRaceTypeList();
+            $detailType = $RaceTypeList[$RaceInfo['race_type']]['list'][$RaceInfo['detail']['detail_type']??""]??[];
+            $maxGroup = Base_Common::generateGroups($detailType['group']??8);
+            $maxSeed = Base_Common::generateSeed(3);
+            if($RaceInfo['team']==1)
+            {
+                $TeamInfo = (new Hj_Race_Team())->getTeam($id);
+                //渲染模版
+                include $this->tpl('Hj_Race_TeamModify');
+            }
+            else
+            {
+                $AthleteInfo = (new Hj_Race_Athlete())->getAthlete($id);
+                //渲染模版
+                include $this->tpl('Hj_Race_AthleteModify');
+            }
+        }
+        else
+        {
+            $home = $this->sign;
+            include $this->tpl('403');
+        }
+    }
+    //更新赛事信息
+    public function memberUpdateAction()
+    {
+        //接收页面参数
+        $bind=$this->request->from('race_id','id','name','group_id','seed');
+        //赛事名称不能为空
+        if(trim($bind['name'])=="")
+        {
+            $response = array('errno' => 1);
+        }
+        else
+        {
+            //获取赛事信息
+            $RaceInfo = $this->oRace->getRace($bind['race_id'],'*');
+            //团队赛
+            if($RaceInfo['team']==1)
+            {
+                $teamInfo = ['team_name'=>$bind['name'],'group_id'=>$bind['group_id'],'seed'=>$bind['seed']];
+                $res = (new Hj_Race_Team())->updateTeam($bind['id'],$teamInfo);
+            }
+            //个人赛
+            {
+                $athleteInfo = ['athlete_name'=>$bind['name'],'group_id'=>$bind['group_id'],'seed'=>$bind['seed']];
+                $res = (new Hj_Race_Athlete())->updateAthlete($bind['id'],$athleteInfo);
+            }
+            $response = $res ? array('errno' => 0) : array('errno' => 9);
+        }
+        echo json_encode($response);
+        return true;
     }
 }

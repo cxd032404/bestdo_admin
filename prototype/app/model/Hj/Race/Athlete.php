@@ -56,7 +56,8 @@ class Hj_Race_Athlete extends Base_Widget
 	public function updateAthlete($athlete_id, array $bind)
 	{
 		$athlete_id = intval($athlete_id);
-		$table_to_process = Base_Widget::getDbTable($this->table);
+        $bind['update_time'] = date("Y-m-d H:i:s");
+        $table_to_process = Base_Widget::getDbTable($this->table);
 		return $this->db->update($table_to_process, $bind, '`athlete_id` = ?', $athlete_id);
 	}
 	/**
@@ -66,7 +67,8 @@ class Hj_Race_Athlete extends Base_Widget
 	 */
 	public function insertAthlete(array $bind)
 	{
-		$table_to_process = Base_Widget::getDbTable($this->table);
+        $bind['create_time'] = $bind['update_time'] = date("Y-m-d H:i:s");
+        $table_to_process = Base_Widget::getDbTable($this->table);
 		return $this->db->insert($table_to_process, $bind);
 	}
 
@@ -78,7 +80,7 @@ class Hj_Race_Athlete extends Base_Widget
 	public function deleteAthlete($athlete_id)
 	{
 		$athlete_id = intval($athlete_id);
-		$table_to_process = Base_Widget::getDbTable($this->table);
+        $table_to_process = Base_Widget::getDbTable($this->table);
 		return $this->db->delete($table_to_process, '`athlete_id` = ?', $athlete_id);
 	}
 }

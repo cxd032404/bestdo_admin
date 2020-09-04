@@ -1400,9 +1400,18 @@ EOF;
     {
         $start = ord("A");
         $return = [];
-        for($i=0;$i<$count;$i++)
+        for($i=0;$i<=$count;$i++)
         {
-            $return[$i] = chr($start+$i);
+            $return[$i] = $i==0?"不指定":chr($start+$i-1);
+        }
+        return $return;
+    }
+    public static function generateSeed($count = 3)
+    {
+        $return = [];
+        for($i=0;$i<=$count;$i++)
+        {
+            $return[$i] = $i==0?"不指定":("第".$i."批次");
         }
         return $return;
     }

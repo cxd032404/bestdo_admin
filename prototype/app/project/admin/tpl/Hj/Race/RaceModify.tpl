@@ -10,9 +10,9 @@
 <tr class="hover">
 <td>赛事类型</td>
 <td align="left">
-<select name="race_type" size="1" class="span2">
-	{tpl:loop $RaceTypeList $RaceType $typeName}
-	<option value="{tpl:$RaceType/}" {tpl:if($SpeedDisplayType==$RaceType.race_type)}selected="selected"{/tpl:if}>{tpl:$typeName/}</option>
+<select name="detail[detail_type]" id="detail[detail_type]" size="1" class="span3">
+	{tpl:loop $TypeDetailList $RaceType $typeInfo}
+	<option value="{tpl:$RaceType/}" {tpl:if($RaceType==$RaceInfo.detail.detail_type)}selected="selected"{/tpl:if}>{tpl:$typeInfo.name/}</option>
 	{/tpl:loop}
 </select>
 </td>

@@ -56,6 +56,7 @@ class Hj_Race_Team extends Base_Widget
 	public function updateTeam($team_id, array $bind)
 	{
 		$team_id = intval($team_id);
+		$bind['update_time'] = date("Y-m-d H:i:s");
 		$table_to_process = Base_Widget::getDbTable($this->table);
 		return $this->db->update($table_to_process, $bind, '`team_id` = ?', $team_id);
 	}
@@ -66,7 +67,8 @@ class Hj_Race_Team extends Base_Widget
 	 */
 	public function insertTeam(array $bind)
 	{
-		$table_to_process = Base_Widget::getDbTable($this->table);
+        $bind['create_time'] = $bind['update_time'] = date("Y-m-d H:i:s");
+        $table_to_process = Base_Widget::getDbTable($this->table);
 		return $this->db->insert($table_to_process, $bind);
 	}
 

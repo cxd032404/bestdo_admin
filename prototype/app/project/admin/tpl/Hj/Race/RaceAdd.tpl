@@ -10,8 +10,8 @@
 <td>赛事类型</td>
 <td align="left">
 	<select name="race_type" size="1" class="span2">
-		{tpl:loop $RaceTypeList $RaceType $typeName}
-		<option value="{tpl:$RaceType/}">{tpl:$typeName/}</option>
+		{tpl:loop $RaceTypeList $RaceType $typeInfo}
+		<option value="{tpl:$RaceType/}">{tpl:$typeInfo.name/}</option>
 		{/tpl:loop}
 	</select>
 </td>
