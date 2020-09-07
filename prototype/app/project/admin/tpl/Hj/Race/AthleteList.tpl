@@ -7,7 +7,7 @@
   });
 
   function athleteDelete(p_id, p_name){
-    deleteAthleteBox = divBox.confirmBox({content:'是否删除 ' + p_name + '?',ok:function(){location.href = '{tpl:$this.sign/}&ac=athlete.delete&athlete_id=' + p_id;}});
+    deleteAthleteBox = divBox.confirmBox({content:'是否删除 ' + p_name + '?',ok:function(){location.href = '{tpl:$this.sign/}&ac=member.delete&id=' + p_id;}});
   }
 
   function athleteModify(sid){

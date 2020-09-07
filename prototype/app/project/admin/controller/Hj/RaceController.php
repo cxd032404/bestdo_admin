@@ -268,6 +268,7 @@ class Hj_RaceController extends AbstractController
                 $teamInfo = ['team_name'=>$bind['name'],'group_id'=>$bind['group_id'],'seed'=>$bind['seed']];
                 $res = (new Hj_Race_Team())->updateTeam($bind['id'],$teamInfo);
             }
+            else
             //个人赛
             {
                 $athleteInfo = ['athlete_name'=>$bind['name'],'group_id'=>$bind['group_id'],'seed'=>$bind['seed']];
@@ -277,5 +278,26 @@ class Hj_RaceController extends AbstractController
         }
         echo json_encode($response);
         return true;
+    }
+    //删除选手/队伍
+    public function memberDeleteAction()
+    {
+        //赛事ID
+        $RaceId = intval($this->request->race_id);
+        //记录ID
+        $id = intval($this->request->id);
+        //获取赛事信息
+        $RaceInfo = $this->oRace->getRace($RaceId);
+        //团队赛
+        if($RaceInfo['team']==1)
+        {
+            $res = (new Hj_Race_Team())->deleteTeam($id);
+        }
+        else //个人赛
+        {
+            $res = (new Hj_Race_Athlete())->deleteAthlete($id);
+        }
+        //返回之前的页面
+        $this->response->goBack();
     }
 }

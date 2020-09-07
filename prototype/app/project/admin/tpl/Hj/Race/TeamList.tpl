@@ -7,7 +7,7 @@ $(document).ready(function(){
 });
 
 function teamDelete(p_id, p_name){
-	deleteTeamBox = divBox.confirmBox({content:'是否删除 ' + p_name + '?',ok:function(){location.href = '{tpl:$this.sign/}&ac=team.delete&team_id=' + p_id;}});
+	deleteTeamBox = divBox.confirmBox({content:'是否删除 ' + p_name + '?',ok:function(){location.href = '{tpl:$this.sign/}&ac=member.delete&id=' + p_id;}});
 }
 
 function teamModify(sid){
