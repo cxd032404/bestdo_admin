@@ -23,7 +23,7 @@ class Hj_Race_Team extends Base_Widget
 		//生成条件列
 		$where = Base_common::getSqlWhere($whereCondition);
 		$table_to_process = Base_Widget::getDbTable($this->table);
-		$sql = "SELECT $fields FROM " . $table_to_process . " where 1 ".$where." ORDER BY team_id ASC";
+		$sql = "SELECT $fields FROM " . $table_to_process . " where 1 ".$where." ORDER BY group_id,seed,team_id desc";
         $return = $this->db->getAll($sql);
 		$TeamList = array();
 		if(count($return))
