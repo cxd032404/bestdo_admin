@@ -188,6 +188,8 @@ class Hj_RaceController extends AbstractController
                     $teamList[$key]['seed'] = $value['seed']==0?"非种子":("第".$value['seed']."批次");
                 }
                 //渲染模版
+                $export_var = "<a class = 'pb_btn_light_1' href =".(Base_Common::getUrl('',$this->ctl,'race.member.download',['is_team'=>1,'race_id'=>$RaceId])).">导出表格</a>";
+                $is_team = 1;
                 include $this->tpl('Hj_Race_TeamList');
             }
             else
@@ -199,6 +201,8 @@ class Hj_RaceController extends AbstractController
                     $atheleteList[$key]['seed'] = $value['seed']==0?"非种子":("第".$value['seed']."批次");
                 }
                 //渲染模版
+                $export_var = "<a class = 'pb_btn_light_1' href =".(Base_Common::getUrl('',$this->ctl,'race.member.download',['is_team'=>0,'race_id'=>$RaceId])).">导出表格</a>";
+                $is_team = 0;
                 include $this->tpl('Hj_Race_AthleteList');
             }
         }
@@ -299,5 +303,128 @@ class Hj_RaceController extends AbstractController
         }
         //返回之前的页面
         $this->response->goBack();
+    }
+
+    /*
+     * 下载成员列表或者团队列表
+     */
+    public function raceMemberDownloadAction(){
+           $team = $this->request->is_team??0;
+           $race_id = $this->request->race_id??0;
+           if($team)
+           {
+               //团队列表
+               $member_list = (new Hj_Race_Team())->getTeamList(['race_id'=>$race_id]);
+               $list_name = '队伍名称';
+               $file_name = '队伍列表';
+           }else
+           {
+               //选手列表
+               $member_list = (new Hj_Race_Athlete())->getAthleteList(['race_id'=>$race_id]);
+               $list_name = '选手名称';
+               $file_name = '选手列表';
+           }
+            foreach($member_list as $key => $value)
+            {
+                $member_list[$key]['group'] = $value['group_id']==0?"未分组":($groups[$value['group_id']]??"未知组");
+                $member_list[$key]['seed'] = $value['seed']==0?"非种子":("第".$value['seed']."批次");
+                $member_list[$key]['id'] = $value['team_id']??$value['athlete_id'];
+                $member_list[$key]['name'] = $value['team_name']??$value['athlete_name'];
+            }
+
+
+        $objPHPExcel = new PHPExcel();
+        /** 设置工作表名称 */
+        $objPHPExcel->getActiveSheet(0)
+            ->setCellValue('A1', '队伍id')
+            ->setCellValue('B1', $list_name)
+            ->setCellValue('C1', '分组')
+            ->setCellValue('D1', '种子');
+        $count = 2;
+        foreach ($member_list as $key =>$member_info)
+        {
+            $objPHPExcel->getActiveSheet(0)
+                ->setCellValue('A'.$count,$member_info['id'])
+                ->setCellValue('B'.$count,$member_info['name'])
+                ->setCellValue('C'.$count,$member_info['group'])
+                ->setCellValue('D'.$count,$member_info['seed']);
+            $count++;
+        }
+        ob_end_clean();
+        @header('pragma:public');
+        @header('Content-type:application/vnd.ms-excel;charset=utf-8;name="'.$file_name.'.xls"');
+        @header("Content-Disposition:attachment;filename=$file_name.xls");//attachment新窗口打印inline本窗口打印
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+        $objWriter->save('php://output');
+    }
+    /*
+       * 上传页面渲染
+       */public function raceMemberUploadSubmitAction()
+{
+    $race_id = $this->request->get("race_id")??0;
+    $is_team = $this->request->get("is_team")??0;
+    //检查权限
+    $PermissionCheck = $this->manager->checkMenuPermission(0,$this->sign);
+    if($PermissionCheck['return'])
+    {
+        //模板渲染
+        include $this->tpl('Hj_Race_RaceMemberUpload');
+    }
+    else
+    {
+        $home = $this->sign;
+        include $this->tpl('403');
+    }
+}
+    /*
+    * 上传队伍
+    */
+    public function raceMemberUploadAction()
+    {
+        $race_id = $this->request->race_id??0;
+        $team = $this->request->is_team??0;
+        $oUpload = new Base_Upload('upload_txt');
+        $upload = $oUpload->upload('upload_txt');
+        $upload = $upload->resultArr;
+        if($upload[1]['errno']==0) {
+            $file_path = $upload[1]['path'];
+        }
+
+        $inputFileType = PHPExcel_IOFactory::identify($file_path);
+        $objReader = PHPExcel_IOFactory::createReader($inputFileType);
+
+        $PHPExcel = $objReader->load($file_path); //读取文件
+        $currentSheet = $PHPExcel->getSheet(0); //读取第一个工作簿
+        $allRow = $currentSheet->getHighestRow(); // 所有行数
+        $response = ['errno'=>0];
+        $error = 0;
+        for ($rowIndex = 2; $rowIndex <= $allRow; $rowIndex++) {
+            $id = trim($currentSheet->getCell('A'.$rowIndex)->getValue()??0);
+            if($id == 0 && is_numeric($id))
+            {
+                $name = trim($currentSheet->getCell('B'.$rowIndex)->getValue()??'');
+                //插入数据
+                if($team)
+                {
+                    //插入队伍
+                   $res = (new Hj_Race_Team())->insertTeam(['race_id'=>$race_id,'team_name'=>$name]);
+                   if(!$res)
+                   {
+                       $error++;
+                   }
+                }else
+                {
+                    //插入选手
+                    $res = (new Hj_Race_Athlete())->insertAthlete(['race_id'=>$race_id,'athlete_name'=>$name]);
+                    if($res)
+                    {
+                        $error++;
+                    }
+                }
+            }
+        }
+        $response['result']['error'] = $error;
+        echo json_encode($response) ;
+        return;
     }
 }
