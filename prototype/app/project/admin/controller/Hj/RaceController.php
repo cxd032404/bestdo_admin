@@ -324,7 +324,8 @@ class Hj_RaceController extends AbstractController
                $list_name = '选手名称';
                $file_name = '选手列表';
            }
-            foreach($member_list as $key => $value)
+        $groups = Base_Common::generateGroups(8);
+        foreach($member_list as $key => $value)
             {
                 $member_list[$key]['group'] = $value['group_id']==0?"未分组":($groups[$value['group_id']]??"未知组");
                 $member_list[$key]['seed'] = $value['seed']==0?"非种子":("第".$value['seed']."批次");
