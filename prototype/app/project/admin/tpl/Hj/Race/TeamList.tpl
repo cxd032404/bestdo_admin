@@ -24,7 +24,7 @@ function teamModify(sid){
 </fieldset>
 
 <fieldset><legend>队伍列表</legend>
-<table width="99%" align="center" class="table table-bordered table-striped">d
+<table width="99%" align="center" class="table table-bordered table-striped">
   <tr>
     <th align="center" class="rowtip">队伍ID</th>
     <th align="center" class="rowtip">队伍名称</th>
