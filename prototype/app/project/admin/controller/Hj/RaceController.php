@@ -123,7 +123,7 @@ class Hj_RaceController extends AbstractController
 			include $this->tpl('403');
 		}
 	}
-	
+
 	//更新赛事信息
 	public function raceUpdateAction()
 	{
@@ -461,5 +461,115 @@ class Hj_RaceController extends AbstractController
         $response['result']['errno'] = $error;
         echo json_encode($response) ;
         return;
+    }
+
+    /*
+     * 场地列表
+     */
+    public function placeListAction(){
+        $race_id = $this->request->race_id;
+        $race_info =  $this->oRace->getRace($race_id,'*');
+        $race_name = $race_info['race_name'];
+        $params['race_id'] = $race_id;
+        $place_list = (new Hj_Place())->getPlaceList($params);
+        include $this->tpl('Hj_Race_PlaceList');
+    }
+    /*
+     * 添加场地
+     */
+    public function placeAddAction()
+    {
+        //检查权限
+        $PermissionCheck = $this->manager->checkMenuPermission("addPlace",$this->sign);
+        if($PermissionCheck['return'])
+        {
+            //渲染模版
+            $race_id = $this->request->race_id;
+            $race_info =  $this->oRace->getRace($race_id,'*');
+            $race_name = $race_info['race_name'];
+            include $this->tpl('Hj_Race_placeAdd');
+        }
+        else
+        {
+            $home = $this->sign;
+            include $this->tpl('403');
+        }
+    }
+
+    /*
+     * 插入场馆数据
+     */
+    public function placeInsertAction(){
+
+        $bind=$this->request->from('place_name','race_id');
+        if(trim($bind['place_name'])=="")
+        {
+            $response = array('errno' => 1);
+        }
+        else {
+            $res = (new Hj_Place())->insertPlace($bind);
+            $response = $res ? array('errno' => 0) : array('errno' => 9);
+        }
+        echo json_encode($response);
+        return true;
+    }
+
+    /*
+     * 渲染修改场地数据
+     */
+    public function placeModifyAction()
+    {
+        $PermissionCheck = $this->manager->checkMenuPermission("updatePlace",$this->sign);
+        if($PermissionCheck['return']) {
+            //场地id
+            $place_id = intval($this->request->place_id);
+            $place_info = (new Hj_Place())->getPlace($place_id, '*');
+            $race_info = $this->oRace->getRace($place_info['race_id'], '*');
+            $race_name = $race_info['race_name'];
+            //渲染模版
+            include $this->tpl('Hj_Race_PlaceModify');
+        } else
+        {
+            $home = $this->sign;
+            include $this->tpl('403');
+        }
+
+    }
+    //更新场地信息
+    public function placeUpdateAction()
+    {
+        //接收页面参数
+        $bind=$this->request->from('place_name','place_id');
+        //赛事名称不能为空
+        if(trim($bind['place_name'])=="")
+        {
+            $response = array('errno' => 1);
+        }
+        else
+        {
+            //修改赛事
+            $res = (new Hj_Place())->updatePlace($bind['place_id'],$bind);
+            $response = $res ? array('errno' => 0) : array('errno' => 9);
+        }
+        echo json_encode($response);
+        return true;
+    }
+
+    /*
+     * 删除场地
+     */
+    public function placeDeleteAction(){
+        $PermissionCheck = $this->manager->checkMenuPermission("deletePlace",$this->sign);
+        if($PermissionCheck['return']) {
+            $place_id = $this->request->place_id;
+            (new Hj_Place())->deletePlace($place_id);
+            //返回之前的页面
+            $this->response->goBack();
+        }else
+        {
+            $home = $this->sign;
+            include $this->tpl('403');
+        }
+
     }
 }

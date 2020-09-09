@@ -40,7 +40,7 @@ function raceModify(sid){
       <td align="center">{tpl:if($RaceInfo.team==1)}团队{tpl:else}个人{/tpl:if}
       </td>
       <td align="center"><a class = "pb_btn_grey_1" href="javascript:;" onclick="raceDelete('{tpl:$RaceInfo.race_id/}','{tpl:$RaceInfo.race_name/}')">删除</a><a class = "pb_btn_light_1" href="javascript:;" onclick="raceModify('{tpl:$RaceInfo.race_id/}');">修改</a>
-          <a class = "pb_btn_grey_1" href="{tpl:$this.sign/}&ac=member.list&race_id={tpl:$RaceInfo.race_id/}">{tpl:if($RaceInfo.team==1)}团队列表{tpl:else}选手列表{/tpl:if}</a></td>
+          <a class = "pb_btn_grey_1" href="{tpl:$this.sign/}&ac=member.list&race_id={tpl:$RaceInfo.race_id/}">{tpl:if($RaceInfo.team==1)}团队列表{tpl:else}选手列表{/tpl:if}</a> <a class = "pb_btn_grey_1" href="{tpl:$this.sign/}&ac=place.list&race_id={tpl:$RaceInfo.race_id/}">场地列表</a></td>
   </tr>
 {/tpl:loop}
 </table>
