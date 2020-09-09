@@ -188,8 +188,7 @@ class Hj_RaceController extends AbstractController
                     $teamList[$key]['seed'] = $value['seed']==0?"非种子":("第".$value['seed']."批次");
                 }
                 //渲染模版
-                $export_var = "<a class = 'pb_btn_light_1' href =".(Base_Common::getUrl('',$this->ctl,'race.member.download',['is_team'=>1,'race_id'=>$RaceId])).">导出表格</a>";
-                $is_team = 1;
+                $export_var = "<a class = 'pb_btn_light_1' href =".(Base_Common::getUrl('',$this->ctl,'race.member.download',['race_id'=>$RaceId])).">导出表格</a>";
                 include $this->tpl('Hj_Race_TeamList');
             }
             else
@@ -201,8 +200,7 @@ class Hj_RaceController extends AbstractController
                     $atheleteList[$key]['seed'] = $value['seed']==0?"非种子":("第".$value['seed']."批次");
                 }
                 //渲染模版
-                $export_var = "<a class = 'pb_btn_light_1' href =".(Base_Common::getUrl('',$this->ctl,'race.member.download',['is_team'=>0,'race_id'=>$RaceId])).">导出表格</a>";
-                $is_team = 0;
+                $export_var = "<a class = 'pb_btn_light_1' href =".(Base_Common::getUrl('',$this->ctl,'race.member.download',['race_id'=>$RaceId])).">导出表格</a>";
                 include $this->tpl('Hj_Race_AthleteList');
             }
         }
@@ -309,20 +307,22 @@ class Hj_RaceController extends AbstractController
      * 下载成员列表或者团队列表
      */
     public function raceMemberDownloadAction(){
-           $team = $this->request->is_team??0;
            $race_id = $this->request->race_id??0;
-           if($team)
+           $RaceInfo =  $this->oRace->getRace($race_id,'*');
+           $race_name = $RaceInfo['race_name'];
+
+        if($RaceInfo['team'])
            {
                //团队列表
                $member_list = (new Hj_Race_Team())->getTeamList(['race_id'=>$race_id]);
                $list_name = '队伍名称';
-               $file_name = '队伍列表';
+               $file_name = $race_name.'队伍列表';
            }else
            {
                //选手列表
                $member_list = (new Hj_Race_Athlete())->getAthleteList(['race_id'=>$race_id]);
                $list_name = '选手名称';
-               $file_name = '选手列表';
+               $file_name = $race_name.'选手列表';
            }
         $groups = Base_Common::generateGroups(8);
         foreach($member_list as $key => $value)
@@ -351,6 +351,7 @@ class Hj_RaceController extends AbstractController
                 ->setCellValue('D'.$count,$member_info['seed']);
             $count++;
         }
+        $objPHPExcel->getActiveSheet(0)->setTitle($race_name);
         ob_end_clean();
         @header('pragma:public');
         @header('Content-type:application/vnd.ms-excel;charset=utf-8;name="'.$file_name.'.xls"');
@@ -382,8 +383,9 @@ class Hj_RaceController extends AbstractController
     */
     public function raceMemberUploadAction()
     {
+        $response = ['errno'=>0,'msg'=>''];
         $race_id = $this->request->race_id??0;
-        $team = $this->request->is_team??0;
+        $RaceInfo =  $this->oRace->getRace($race_id,'*');
         $oUpload = new Base_Upload('upload_txt');
         $upload = $oUpload->upload('upload_txt');
         $upload = $upload->resultArr;
@@ -396,16 +398,24 @@ class Hj_RaceController extends AbstractController
 
         $PHPExcel = $objReader->load($file_path); //读取文件
         $currentSheet = $PHPExcel->getSheet(0); //读取第一个工作簿
+        $race_name = $currentSheet->getTitle();
+        if($RaceInfo['race_name'] != $race_name)
+        {
+            $response['msg'] = '赛事不匹配';
+            echo json_encode($response) ;
+            return;
+        }
+
+
         $allRow = $currentSheet->getHighestRow(); // 所有行数
-        $response = ['errno'=>0];
         $error = 0;
         for ($rowIndex = 2; $rowIndex <= $allRow; $rowIndex++) {
             $id = trim($currentSheet->getCell('A'.$rowIndex)->getValue()??0);
-            if($id == 0 && is_numeric($id))
+            if($id == 0)
             {
                 $name = trim($currentSheet->getCell('B'.$rowIndex)->getValue()??'');
                 //插入数据
-                if($team)
+                if($RaceInfo['team'])
                 {
                     //插入队伍
                    $res = (new Hj_Race_Team())->insertTeam(['race_id'=>$race_id,'team_name'=>$name]);
@@ -423,8 +433,32 @@ class Hj_RaceController extends AbstractController
                     }
                 }
             }
+             elseif(is_numeric($id))
+            {
+                $name = trim($currentSheet->getCell('B'.$rowIndex)->getValue()??'');
+                //插入数据
+                if($RaceInfo['team'])
+                {
+                    //修改队伍
+                    $res = (new Hj_Race_Team())->updateTeam($id,['team_name'=>$name]);
+                    if(!$res)
+                    {
+                        $error++;
+                    }
+                }else
+                {
+                    //修改选手
+                    $res = (new Hj_Race_Athlete())->updateAthlete($id,['athlete_name'=>$name]);
+                    if(!$res)
+                    {
+                        $error++;
+                    }
+                }
+
+            }
+
         }
-        $response['result']['error'] = $error;
+        $response['result']['errno'] = $error;
         echo json_encode($response) ;
         return;
     }

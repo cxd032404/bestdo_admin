@@ -20,7 +20,7 @@
     <span style="float:left;"><a class = "pb_btn_light_1"  href="{tpl:$this.sign/}">返回</a></span>
     <span style="float:right;"><a class = "pb_btn_dark_1"  href="javascript:;" id="add_race">新增</a></span>
     <span style="float:right;">{tpl:$export_var/}</span>
-    <span style="float:right;"><a class = "pb_btn_dark_2 raceMemberUpload" href="javascript:;"  race_id = {tpl:$RaceId/} is_team = {tpl:$is_team/}>导入选手</a></span>
+    <span style="float:right;"><a class = "pb_btn_dark_2 raceMemberUpload" href="javascript:;"  race_id = {tpl:$RaceId/}>导入选手</a></span>
 </fieldset>
 
 <fieldset><legend>选手</legend>
@@ -55,8 +55,7 @@
   $(document).ready(function(){
     $('.raceMemberUpload').click(function(){
       race_id = $(this).attr('race_id');
-      is_team = $(this).attr('is_team');
-      uploadUserBox = divBox.showBox("{tpl:$this.sign/}&ac=race.member.upload.submit&race_id="+race_id+"&is_team="+is_team, {title:'导入选手',width:600,height:300});
+      uploadUserBox = divBox.showBox("{tpl:$this.sign/}&ac=race.member.upload.submit&race_id="+race_id, {title:'导入选手',width:600,height:300});
     });
   });
 </script>

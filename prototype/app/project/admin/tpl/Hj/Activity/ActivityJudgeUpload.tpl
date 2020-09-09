@@ -1,4 +1,4 @@
-{tpl:tpl contentHeader/}
+app/pro	{tpl:tpl contentHeader/}
 <div class="br_bottom"></div>
 <form id="company_user_upload_form" name="company_user_upload_form" action="{tpl:$this.sign/}&ac=activity.judge.upload&activity_id={tpl:$activity_id/}" method="post" enctype="multipart/form-data">
 	<table width="99%" align="center" class="table table-bordered table-striped">

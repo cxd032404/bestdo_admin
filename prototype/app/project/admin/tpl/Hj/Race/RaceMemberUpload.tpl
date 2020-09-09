@@ -22,13 +22,20 @@ $('#company_user_upload_submit').click(function(){
 			if (jsonResponse.errno) {
 				divBox.alertBox(errors[jsonResponse.errno],function(){});
 			} else {
-				if(jsonResponse.result.error != 0 )
+				if(jsonResponse.msg)
 					{
-						var message = '上传完毕,'+jsonResponse.result.error+'条评分为负,请修改后上传'
+						var message = jsonResponse.msg
 					}else
 						{
-							var message = '上传完毕'
+							if(jsonResponse.errno != 0 )
+							{
+								var message = '上传完毕,'+jsonResponse.errno+'条修改失败'
+							}else
+							{
+								var message = '上传完毕'
+							}
 						}
+
 				divBox.confirmBox({content:message,ok:function(){windowParent.getRightHtml('{tpl:$this.sign/}')}});
 			}
 		}
