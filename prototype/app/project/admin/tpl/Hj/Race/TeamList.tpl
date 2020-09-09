@@ -14,13 +14,17 @@ function teamModify(sid){
 	modifyTeamBox = divBox.showBox('{tpl:$this.sign/}&ac=member.modify&race_id={tpl:$RaceId/}&id=' + sid, {title:'修改队伍',width:400,height:300});
 }
 
+function uploadMember(){
+  uploadUserBox = divBox.showBox("{tpl:$this.sign/}&ac=race.member.upload.submit&race_id={tpl:$RaceId/}", {title:'导入队伍',width:600,height:300});
+}
+
 </script>
 
 <fieldset><legend>操作</legend>
     <span style="float:left;"><a class = "pb_btn_light_1"  href="{tpl:$this.sign/}">返回</a></span>
     <span style="float:right;"><a class = "pb_btn_dark_1"  href="javascript:;" id="add_team">新增</a></span>
     <span style="float:right;">{tpl:$export_var/}</span>
-    <span style="float:right;"><a class = "pb_btn_dark_2 raceMemberUpload" href="javascript:;"  race_id = {tpl:$RaceId/}>导入队伍</a></span>
+    <span style="float:right;"><a class = "pb_btn_dark_2 raceMemberUpload" href="javascript:;" onclick="uploadMember()" >导入队伍</a></span>
 </fieldset>
 
 <fieldset><legend>队伍列表</legend>
@@ -50,12 +54,3 @@ function teamModify(sid){
 </table>
 </fieldset>
 {tpl:tpl contentFooter/}
-
-<script type="text/javascript">
-  $(document).ready(function(){
-    $('.raceMemberUpload').click(function(){
-      race_id = $(this).attr('race_id');
-      uploadUserBox = divBox.showBox("{tpl:$this.sign/}&ac=race.member.upload.submit&race_id="+race_id, {title:'导入队伍',width:600,height:300});
-    });
-  });
-</script>
