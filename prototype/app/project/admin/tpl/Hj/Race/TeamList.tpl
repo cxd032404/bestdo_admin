@@ -17,12 +17,16 @@ function teamModify(sid){
 function uploadMember(){
   uploadUserBox = divBox.showBox("{tpl:$this.sign/}&ac=race.member.upload.submit&race_id={tpl:$RaceId/}", {title:'导入队伍',width:600,height:300});
 }
+function reGroup(){
+  reGroupBox = divBox.confirmBox({content:'重新分组将清除之前所有的分组并重新创建，是否确定?',ok:function(){location.href = '{tpl:$this.sign/}&ac=re.group&race_id={tpl:$RaceId/}';}});
+}
 
 </script>
 
 <fieldset><legend>操作</legend>
-    <span style="float:left;"><a class = "pb_btn_light_1"  href="{tpl:$this.sign/}">返回</a></span>
-    <span style="float:right;"><a class = "pb_btn_dark_1"  href="javascript:;" id="add_team">新增</a></span>
+  <span style="float:left;"><a class = "pb_btn_light_1"  href="{tpl:$this.sign/}">返回</a>
+    <a class = "pb_btn_grey_1" href="javascript:;" onclick="reGroup()">自动分组</a></span>
+  <span style="float:right;"><a class = "pb_btn_dark_1"  href="javascript:;" id="add_team">新增</a></span>
     <span style="float:right;">{tpl:$export_var/}</span>
     <span style="float:right;"><a class = "pb_btn_dark_2 raceMemberUpload" href="javascript:;" onclick="uploadMember()" >导入队伍</a></span>
 </fieldset>

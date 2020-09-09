@@ -1,7 +1,7 @@
 {tpl:tpl contentHeader/}
 <div class="br_bottom"></div>
 <form id="team_update_form" name="team_update_form" action="{tpl:$this.sign/}&ac=member.update" method="post">
-	<input type="hidden" name="race_id" id="race_id" value="{tpl:$TeamInfo.team_id/}" />
+	<input type="hidden" name="race_id" id="race_id" value="{tpl:$TeamInfo.race_id/}" />
 	<input type="hidden" name="id" id="id" value="{tpl:$TeamInfo.team_id/}" />
 <table width="99%" align="center" class="table table-bordered table-striped" >
 <tr class="hover">

@@ -306,24 +306,25 @@ class Hj_RaceController extends AbstractController
     /*
      * 下载成员列表或者团队列表
      */
-    public function raceMemberDownloadAction(){
-           $race_id = $this->request->race_id??0;
-           $RaceInfo =  $this->oRace->getRace($race_id,'*');
-           $race_name = $RaceInfo['race_name'];
-
+    public function raceMemberDownloadAction()
+    {
+       $race_id = $this->request->race_id??0;
+       $RaceInfo =  $this->oRace->getRace($race_id,'*');
+       $race_name = $RaceInfo['race_name'];
         if($RaceInfo['team'])
-           {
-               //团队列表
-               $member_list = (new Hj_Race_Team())->getTeamList(['race_id'=>$race_id]);
-               $list_name = '队伍名称';
-               $file_name = $race_name.'队伍列表';
-           }else
-           {
-               //选手列表
-               $member_list = (new Hj_Race_Athlete())->getAthleteList(['race_id'=>$race_id]);
-               $list_name = '选手名称';
-               $file_name = $race_name.'选手列表';
-           }
+        {
+           //团队列表
+           $member_list = (new Hj_Race_Team())->getTeamList(['race_id'=>$race_id]);
+           $list_name = '队伍名称';
+           $file_name = $race_name.'队伍列表';
+        }
+        else
+        {
+           //选手列表
+           $member_list = (new Hj_Race_Athlete())->getAthleteList(['race_id'=>$race_id]);
+           $list_name = '选手姓名';
+           $file_name = $race_name.'选手列表';
+        }
         $groups = Base_Common::generateGroups(8);
         foreach($member_list as $key => $value)
             {
@@ -332,8 +333,6 @@ class Hj_RaceController extends AbstractController
                 $member_list[$key]['id'] = $value['team_id']??$value['athlete_id'];
                 $member_list[$key]['name'] = $value['team_name']??$value['athlete_name'];
             }
-
-
         $objPHPExcel = new PHPExcel();
         /** 设置工作表名称 */
         $objPHPExcel->getActiveSheet(0)
@@ -361,23 +360,24 @@ class Hj_RaceController extends AbstractController
     }
     /*
        * 上传页面渲染
-       */public function raceMemberUploadSubmitAction()
-{
-    $race_id = $this->request->get("race_id")??0;
-    $is_team = $this->request->get("is_team")??0;
-    //检查权限
-    $PermissionCheck = $this->manager->checkMenuPermission(0,$this->sign);
-    if($PermissionCheck['return'])
+       */
+    public function raceMemberUploadSubmitAction()
     {
-        //模板渲染
-        include $this->tpl('Hj_Race_RaceMemberUpload');
+        $race_id = $this->request->get("race_id")??0;
+        $is_team = $this->request->get("is_team")??0;
+        //检查权限
+        $PermissionCheck = $this->manager->checkMenuPermission(0,$this->sign);
+        if($PermissionCheck['return'])
+        {
+            //模板渲染
+            include $this->tpl('Hj_Race_RaceMemberUpload');
+        }
+        else
+        {
+            $home = $this->sign;
+            include $this->tpl('403');
+        }
     }
-    else
-    {
-        $home = $this->sign;
-        include $this->tpl('403');
-    }
-}
     /*
     * 上传队伍
     */
@@ -392,10 +392,8 @@ class Hj_RaceController extends AbstractController
         if($upload[1]['errno']==0) {
             $file_path = $upload[1]['path'];
         }
-
         $inputFileType = PHPExcel_IOFactory::identify($file_path);
         $objReader = PHPExcel_IOFactory::createReader($inputFileType);
-
         $PHPExcel = $objReader->load($file_path); //读取文件
         $currentSheet = $PHPExcel->getSheet(0); //读取第一个工作簿
         $race_name = $currentSheet->getTitle();
@@ -405,8 +403,6 @@ class Hj_RaceController extends AbstractController
             echo json_encode($response) ;
             return;
         }
-
-
         $allRow = $currentSheet->getHighestRow(); // 所有行数
         $error = 0;
         for ($rowIndex = 2; $rowIndex <= $allRow; $rowIndex++) {
@@ -454,12 +450,53 @@ class Hj_RaceController extends AbstractController
                         $error++;
                     }
                 }
-
             }
-
         }
         $response['result']['errno'] = $error;
         echo json_encode($response) ;
         return;
+    }
+    //删除赛事
+    public function reGroupAction()
+    {
+        //检查权限
+        $PermissionCheck = $this->manager->checkMenuPermission("updateRace",$this->sign);
+        if($PermissionCheck['return'])
+        {
+            //赛事ID
+            $RaceId = trim($this->request->race_id);
+            $RaceInfo =  $this->oRace->getRace($RaceId,'*');
+            //数据解包
+            $RaceInfo['detail'] = json_decode($RaceInfo['detail'],true);
+            //获取赛事列表
+            $RaceTypeList = $this->oRace->getRaceTypeList();
+            $detailType = $RaceTypeList[$RaceInfo['race_type']]['list'][$RaceInfo['detail']['detail_type']??""]??[];
+            $maxGroup = Base_Common::generateGroups($detailType['group']??8);
+            print_R($RaceInfo);
+            print_R($detailType);
+            print_R($maxGroup);
+
+            //团队赛
+            if($RaceInfo['team']==1)
+            {
+                $oTeam = new Hj_Race_Team();
+                $clear = $oTeam->clearGroup($RaceId);
+                $clear = $oTeam->reGroup($RaceId,$detailType);
+                print_R("clear");
+                print_R($clear);
+                //$reGroup = $oTeam->
+                die();
+                $res = (new Hj_Race_Team())->deleteTeam($id);
+            }
+            else //个人赛
+            {
+                $res = (new Hj_Race_Athlete())->deleteAthlete($id);
+            }
+        }
+        else
+        {
+            $home = $this->sign;
+            include $this->tpl('403');
+        }
     }
 }

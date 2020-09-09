@@ -83,4 +83,91 @@ class Hj_Race_Team extends Base_Widget
 		$table_to_process = Base_Widget::getDbTable($this->table);
 		return $this->db->delete($table_to_process, '`team_id` = ?', $team_id);
 	}
+    //清除所有分组信息
+	public function clearGroup($race_id)
+    {
+        $updated = 0;
+        //获取队伍列表
+        $teamList = $this->getTeamList(['race_id'=>$race_id]);
+        if(count($teamList))
+        {
+            foreach($teamList as $team_id => $team_info)
+            {
+                //清除分组
+                $update = $this->updateTeam($team_id,['group_id'=>0]);
+                if($update)
+                {
+                    $updated++;
+                }
+            }
+        }
+        return $updated;
+    }
+    //清除所有分组信息
+    public function reGroup($race_id,$detailType)
+    {
+        $updated = 0;
+        //获取队伍列表
+        $teamList = $this->getTeamList(['race_id'=>$race_id]);
+        echo "<pre>";
+        $seedList = [];
+        $groupSeedList = [];
+        for($seed = 3;$seed>=0;$seed--)
+        {
+            foreach($teamList as $team_id => $team_info)
+            {
+                //print_R($team_info);
+                if($team_info['seed'] == $seed)
+                {
+                    $seedList[$seed][] = $team_info;
+                    unset($teamList[$team_id]);
+                }
+            }
+        }
+        //print_R($seedList);
+        print_R($detailType);
+        foreach($seedList as $seed => $teamList)
+        {
+            echo "seed:".$seed."<br>";
+            for($i = 1;$i<=$detailType['group'];$i++)
+            {
+                echo "i:".$i."<br>";
+                $rand = rand(0,count($teamList)-1);
+                $groupSeedList[$seed][] = array_merge($teamList[$rand],['group_id'=>$i]);
+                unset($teamList[$rand]);
+                $teamList = array_values($teamList);
+                if(count($teamList)==0)
+                {
+                    break;
+                }
+                else
+                {
+                    if($i == $detailType['group'])
+                    {
+                        $i = 0;
+                        echo "turn to $i<br>";
+                    }
+                }
+            }
+        }
+        print_R($groupSeedList);
+        die();
+        print_R($teamList);
+        print_R($detailType);
+        die();
+            if(count($teamList))
+        {
+            foreach($teamList as $team_id => $team_info)
+            {
+                //清除分组
+                $update = $this->updateTeam($team_id,['group_id'=>0]);
+                if($update)
+                {
+                    $updated++;
+                }
+            }
+        }
+        return $updated;
+    }
+
 }
