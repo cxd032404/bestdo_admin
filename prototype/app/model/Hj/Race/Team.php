@@ -109,14 +109,15 @@ class Hj_Race_Team extends Base_Widget
         $updated = 0;
         //获取队伍列表
         $teamList = $this->getTeamList(['race_id'=>$race_id]);
-        echo "<pre>";
+        //echo "<pre>";
+        //初始化种子分组前和分组后列表
         $seedList = [];
         $groupSeedList = [];
+        //将各队按照种子分配情况，放到分配前数组
         for($seed = 3;$seed>=0;$seed--)
         {
             foreach($teamList as $team_id => $team_info)
             {
-                //print_R($team_info);
                 if($team_info['seed'] == $seed)
                 {
                     $seedList[$seed][] = $team_info;
@@ -124,43 +125,71 @@ class Hj_Race_Team extends Base_Widget
                 }
             }
         }
-        //print_R($seedList);
-        print_R($detailType);
+        //循环各个种子批次
         foreach($seedList as $seed => $teamList)
         {
-            echo "seed:".$seed."<br>";
+            if($seed ==0)
+            {
+                $teamList = $seedList[0];
+            }
+            //echo "seed:".$seed."<br>";
+            //echo "count:".count($teamList)."<br>";
+            //依次用分组
             for($i = 1;$i<=$detailType['group'];$i++)
             {
-                echo "i:".$i."<br>";
-                $rand = rand(0,count($teamList)-1);
-                $groupSeedList[$seed][] = array_merge($teamList[$rand],['group_id'=>$i]);
-                unset($teamList[$rand]);
-                $teamList = array_values($teamList);
+                //如果队伍列表变空
                 if(count($teamList)==0)
                 {
-                    break;
+                    if($i == 1)
+                    {
+                        //跳出循环
+                        break;
+                    }
+                    else
+                    {
+                        //如果数量不足就从非种子中借取
+                        if(($seed != 0) && (count($seedList[0])>0))
+                        {
+                            $rand = rand(0,count($seedList[0])-1);
+                            $groupSeedList[$seed][] = array_merge($seedList[0][$rand],['group_id'=>$i]);
+                            unset($seedList[0][$rand]);
+                            $seedList[0] = array_values($seedList[0]);
+                            //echo "current[0]:".count($seedList[0]);
+                        }
+                        else
+                        {
+                            //echo "current seed:".$seed.-"count:".count($seedList[0])."<br>";
+                            break;
+                        }
+                    }
                 }
                 else
                 {
-                    if($i == $detailType['group'])
-                    {
-                        $i = 0;
-                        echo "turn to $i<br>";
-                    }
+                    //循环随机获取一个队伍加入
+                    $rand = rand(0,count($teamList)-1);
+                    $groupSeedList[$seed][] = array_merge($teamList[$rand],['group_id'=>$i]);
+                    //从原有组中删除这个队伍，并重排
+                    unset($teamList[$rand]);
+                    $teamList = array_values($teamList);
+                }
+                //echo "here seed:".$seed."-round:".$i."<br>";
+                //如果所有组循环了一次
+                if($i == $detailType['group'])
+                {
+                    //echo "seed:".$seed."-round:".$i."<br>";
+                    //回头重来
+                    $i = 0;
                 }
             }
         }
-        print_R($groupSeedList);
-        die();
-        print_R($teamList);
-        print_R($detailType);
-        die();
-            if(count($teamList))
+        //print_R($groupSeedList);
+        //循环各个种子批次
+        foreach($groupSeedList as $seed => $teamList)
         {
-            foreach($teamList as $team_id => $team_info)
+            foreach($teamList as $key => $teamInfo)
             {
-                //清除分组
-                $update = $this->updateTeam($team_id,['group_id'=>0]);
+                $update =
+                $this->updateTeam($teamInfo['team_id'],['group_id'=>$teamInfo['group_id']]);
                 if($update)
                 {
                     $updated++;

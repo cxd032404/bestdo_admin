@@ -187,4 +187,7 @@ $table['user_team']['num'] = 1;
 #选手表
 $table['user_athlete']['db'] = 'hj_user';
 $table['user_athlete']['num'] = 1;
+#场地表
+$table['config_place']['db'] = 'hj_config';
+$table['config_place']['num'] = 1;
 return $table;
