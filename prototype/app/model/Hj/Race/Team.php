@@ -109,7 +109,6 @@ class Hj_Race_Team extends Base_Widget
         $updated = 0;
         //获取队伍列表
         $teamList = $this->getTeamList(['race_id'=>$race_id]);
-        //echo "<pre>";
         //初始化种子分组前和分组后列表
         $seedList = [];
         $groupSeedList = [];
@@ -132,8 +131,6 @@ class Hj_Race_Team extends Base_Widget
             {
                 $teamList = $seedList[0];
             }
-            //echo "seed:".$seed."<br>";
-            //echo "count:".count($teamList)."<br>";
             //依次用分组
             for($i = 1;$i<=$detailType['group'];$i++)
             {
@@ -154,11 +151,9 @@ class Hj_Race_Team extends Base_Widget
                             $groupSeedList[$seed][] = array_merge($seedList[0][$rand],['group_id'=>$i]);
                             unset($seedList[0][$rand]);
                             $seedList[0] = array_values($seedList[0]);
-                            //echo "current[0]:".count($seedList[0]);
                         }
                         else
                         {
-                            //echo "current seed:".$seed.-"count:".count($seedList[0])."<br>";
                             break;
                         }
                     }
@@ -172,17 +167,14 @@ class Hj_Race_Team extends Base_Widget
                     unset($teamList[$rand]);
                     $teamList = array_values($teamList);
                 }
-                //echo "here seed:".$seed."-round:".$i."<br>";
                 //如果所有组循环了一次
                 if($i == $detailType['group'])
                 {
-                    //echo "seed:".$seed."-round:".$i."<br>";
                     //回头重来
                     $i = 0;
                 }
             }
         }
-        //print_R($groupSeedList);
         //循环各个种子批次
         foreach($groupSeedList as $seed => $teamList)
         {
