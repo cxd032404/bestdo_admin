@@ -83,4 +83,119 @@ class Hj_Race_Athlete extends Base_Widget
         $table_to_process = Base_Widget::getDbTable($this->table);
 		return $this->db->delete($table_to_process, '`athlete_id` = ?', $athlete_id);
 	}
+    //清除所有分组信息
+    public function clearGroup($race_id)
+    {
+        $updated = 0;
+        //获取选手列表
+        $athleteList = $this->getAthleteList(['race_id'=>$race_id]);
+        if(count($athleteList))
+        {
+            foreach($athleteList as $athlete_id => $athlete_info)
+            {
+                //清除分组
+                $update = $this->updateAthlete($athlete_id,['group_id'=>0]);
+                if($update)
+                {
+                    $updated++;
+                }
+            }
+        }
+        return $updated;
+    }
+    //清除所有分组信息
+    public function reGroup($race_id,$detailType)
+    {
+        $updated = 0;
+        //获取选手列表
+        $athleteList = $this->getAthleteList(['race_id'=>$race_id]);
+        //echo "<pre>";
+        //初始化种子分组前和分组后列表
+        $seedList = [];
+        $groupSeedList = [];
+        //将各人按照种子分配情况，放到分配前数组
+        for($seed = 3;$seed>=0;$seed--)
+        {
+            foreach($athleteList as $athlete_id => $athlete_info)
+            {
+                if($athlete_info['seed'] == $seed)
+                {
+                    $seedList[$seed][] = $athlete_info;
+                    unset($athleteList[$athlete_id]);
+                }
+            }
+        }
+        //循环各个种子批次
+        foreach($seedList as $seed => $athleteList)
+        {
+            if($seed ==0)
+            {
+                $athleteList = $seedList[0];
+            }
+            //echo "seed:".$seed."<br>";
+            //echo "count:".count($athleteList)."<br>";
+            //依次用分组
+            for($i = 1;$i<=$detailType['group'];$i++)
+            {
+                //如果选手列表变空
+                if(count($athleteList)==0)
+                {
+                    if($i == 1)
+                    {
+                        //跳出循环
+                        break;
+                    }
+                    else
+                    {
+                        //如果数量不足就从非种子中借取
+                        if(($seed != 0) && (count($seedList[0])>0))
+                        {
+                            $rand = rand(0,count($seedList[0])-1);
+                            $groupSeedList[$seed][] = array_merge($seedList[0][$rand],['group_id'=>$i]);
+                            unset($seedList[0][$rand]);
+                            $seedList[0] = array_values($seedList[0]);
+                            //echo "current[0]:".count($seedList[0]);
+                        }
+                        else
+                        {
+                            //echo "current seed:".$seed.-"count:".count($seedList[0])."<br>";
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    //循环随机获取一个选手加入
+                    $rand = rand(0,count($athleteList)-1);
+                    $groupSeedList[$seed][] = array_merge($athleteList[$rand],['group_id'=>$i]);
+                    //从原有组中删除这个选手，并重排
+                    unset($athleteList[$rand]);
+                    $athleteList = array_values($athleteList);
+                }
+                //echo "here seed:".$seed."-round:".$i."<br>";
+                //如果所有组循环了一次
+                if($i == $detailType['group'])
+                {
+                    //echo "seed:".$seed."-round:".$i."<br>";
+                    //回头重来
+                    $i = 0;
+                }
+            }
+        }
+        //print_R($groupSeedList);
+        //循环各个种子批次
+        foreach($groupSeedList as $seed => $athleteList)
+        {
+            foreach($athleteList as $key => $athleteInfo)
+            {
+                $update =
+                    $this->updateAthlete($athleteInfo['athlete_id'],['group_id'=>$athleteInfo['group_id']]);
+                if($update)
+                {
+                    $updated++;
+                }
+            }
+        }
+        return $updated;
+    }
 }

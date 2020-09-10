@@ -480,7 +480,10 @@ class Hj_RaceController extends AbstractController
             }
             else //个人赛
             {
-                $res = (new Hj_Race_Athlete())->deleteAthlete($id);
+                $oAthlete = new Hj_Race_Athlete();
+                $clear = $oAthlete->clearGroup($RaceId);
+                $clear = $oAthlete->reGroup($RaceId, $detailType);
+                $this->response->goBack();
             }
         } else {
             $home = $this->sign;
