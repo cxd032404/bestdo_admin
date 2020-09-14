@@ -91,7 +91,7 @@ class Hj_Race_Team extends Base_Widget
         $teamList = $this->getTeamList(['race_id'=>$race_id]);
         if(count($teamList))
         {
-            foreach($teamList as $team_id => $team_info)
+            foreach($teamList as $team_id => $teamInfo)
             {
                 //清除分组
                 $update = $this->updateTeam($team_id,['group_id'=>0]);
@@ -115,11 +115,11 @@ class Hj_Race_Team extends Base_Widget
         //将各队按照种子分配情况，放到分配前数组
         for($seed = 3;$seed>=0;$seed--)
         {
-            foreach($teamList as $team_id => $team_info)
+            foreach($teamList as $team_id => $teamInfo)
             {
-                if($team_info['seed'] == $seed)
+                if($teamInfo['seed'] == $seed)
                 {
-                    $seedList[$seed][] = $team_info;
+                    $seedList[$seed][] = $teamInfo;
                     unset($teamList[$team_id]);
                 }
             }
@@ -189,6 +189,23 @@ class Hj_Race_Team extends Base_Widget
             }
         }
         return $updated;
+    }
+    public function schedule_cup_32_8($race_id)
+    {
+        //获取队伍列表
+        $teamList = $this->getTeamList(['race_id'=>$race_id]);
+        $groupTeamList = [];
+        $matchList = [];
+        foreach($teamList as $team_id => $teamInfo)
+        {
+            $groupTeamList[$teamInfo['group_id']][count($groupTeamList[$teamInfo['group_id']]??[])+1] = $team_id;
+        }
+        foreach($groupTeamList as $group_id => $teamList)
+        {
+            $matchList = Base_Common::generateGroupLeague($teamList);
+            //$matchList['1_1'] = ['home'=>1,'away'=>2];
+
+        }
     }
 
 }

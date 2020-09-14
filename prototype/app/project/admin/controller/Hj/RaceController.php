@@ -600,4 +600,36 @@ class Hj_RaceController extends AbstractController
             include $this->tpl('403');
         }
     }
+    //重新进行小组赛分组
+    public function reScheduleAction()
+    {
+        //检查权限
+        $PermissionCheck = $this->manager->checkMenuPermission("updateRace", $this->sign);
+        if ($PermissionCheck['return']) {
+            //赛事ID
+            $RaceId = trim($this->request->race_id);
+            $RaceInfo = $this->oRace->getRace($RaceId, '*');
+            //数据解包
+            $RaceInfo['detail'] = json_decode($RaceInfo['detail'], true);
+            //获取赛事列表
+            $RaceTypeList = $this->oRace->getRaceTypeList();
+            $detailType = $RaceTypeList[$RaceInfo['race_type']]['list'][$RaceInfo['detail']['detail_type'] ?? ""] ?? [];
+            $reScheduleFunction = "schedule_".$RaceInfo['race_type']."_".$RaceInfo['detail']['detail_type'];
+            //团队赛
+            if ($RaceInfo['team'] == 1) {
+                $oTeam = new Hj_Race_Team();
+                $schedule = $oTeam->$reScheduleFunction($RaceId);
+                $this->response->goBack();
+            }
+            else //个人赛
+            {
+                $oAthlete = new Hj_Race_Athlete();
+                $schedule = $oAthlete->$reScheduleFunction($RaceId);
+                $this->response->goBack();
+            }
+        } else {
+            $home = $this->sign;
+            include $this->tpl('403');
+        }
+    }
 }

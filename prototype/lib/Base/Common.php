@@ -1415,5 +1415,68 @@ EOF;
         }
         return $return;
     }
+    //生成小组内循环赛阵容 team_list必须是从1开始计数
+    public static function generateGroupLeague($team_list)
+    {
+        $num = 4;
+        for($i = 1;$i<=$num;$i++)
+        {
+            $team_list[$i] = $i;
+        }
+        $matchList = [];
+        $teamCount = count($team_list);
+        //计算轮数
+        $totalRound = $teamCount-1;
+        $matchList = [];
+        //偶数队伍
+        if(($teamCount%2)==0)
+        {
+            for($i=1;$i<=$totalRound;$i++)
+            {
+                $l = array_values($team_list);
+
+                //初始化空的反向序列
+                $l_reverse = [];
+                $list = $team_list;
+                //反向序列每一轮会下移一位
+                $start = $teamCount-($i-1);
+                $current = $start;
+                for($j=0;$j<($teamCount/2);$j++)
+                {
+                    if($current == 1)
+                    {
+                        $current = $teamCount;
+                    }
+                    $l_reverse[count($l_reverse)+1] = $current;
+                    unset($l[$current-1]);
+                    $current--;
+                }
+                $l_list = [];$s_list = [];
+                foreach($l as $key => $value)
+                {
+                    if($value<=($teamCount/2))
+                    {
+                        $s_list[] = $value;
+                    }
+                    else
+                    {
+                        $l_list[] = $value;
+                    }
+                }
+                unset($s_list[0]);
+                $s_list = array_values($s_list);
+                $k_list = array_merge([1],array_values($l_list),array_values($s_list));
+                $l_reverse = array_combine($k_list,$l_reverse);
+                print_R($l_reverse);
+            }
+        }
+        else//奇数队伍
+        {
+            echo "there";
+        }
+        die();
+
+    }
+
 
 }
