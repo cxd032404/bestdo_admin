@@ -621,8 +621,6 @@ class Hj_RaceController extends AbstractController
                 $oSchedual = new Hj_Race_Schedual();
                 $clearSchedual = $oSchedual->clearRace($RaceId);
                 $schedule = $oTeam->$reScheduleFunction($RaceId);
-                print_R($schedule);
-                die();
                 $this->response->goBack();
             }
             else //个人赛
