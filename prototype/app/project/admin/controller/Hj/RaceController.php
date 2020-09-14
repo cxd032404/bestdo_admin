@@ -618,7 +618,11 @@ class Hj_RaceController extends AbstractController
             //团队赛
             if ($RaceInfo['team'] == 1) {
                 $oTeam = new Hj_Race_Team();
+                $oSchedual = new Hj_Race_Schedual();
+                $clearSchedual = $oSchedual->clearRace($RaceId);
                 $schedule = $oTeam->$reScheduleFunction($RaceId);
+                print_R($schedule);
+                die();
                 $this->response->goBack();
             }
             else //个人赛

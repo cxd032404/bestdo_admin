@@ -1418,26 +1418,25 @@ EOF;
     //生成小组内循环赛阵容 team_list必须是从1开始计数
     public static function generateGroupLeague($team_list)
     {
-        $num = 4;
-        for($i = 1;$i<=$num;$i++)
-        {
-            $team_list[$i] = $i;
-        }
         $matchList = [];
         $teamCount = count($team_list);
         //计算轮数
         $totalRound = $teamCount-1;
+        for($i = 1;$i<=$teamCount;$i++)
+        {
+            $t_list[$i] = $i;
+        }
         $matchList = [];
         //偶数队伍
         if(($teamCount%2)==0)
         {
             for($i=1;$i<=$totalRound;$i++)
             {
-                $l = array_values($team_list);
+                $l = array_values($t_list);
 
                 //初始化空的反向序列
                 $l_reverse = [];
-                $list = $team_list;
+                $list = $t_list;
                 //反向序列每一轮会下移一位
                 $start = $teamCount-($i-1);
                 $current = $start;
@@ -1467,15 +1466,17 @@ EOF;
                 $s_list = array_values($s_list);
                 $k_list = array_merge([1],array_values($l_list),array_values($s_list));
                 $l_reverse = array_combine($k_list,$l_reverse);
-                print_R($l_reverse);
+                foreach($l_reverse as $home => $away)
+                {
+                    $matchList[$i][count($matchList[$i])+1] = ['home'=>$team_list[$home],'away'=>$team_list[$away]];
+                }
             }
         }
         else//奇数队伍
         {
             echo "there";
         }
-        die();
-
+        return $matchList;
     }
 
 

@@ -192,6 +192,8 @@ class Hj_Race_Team extends Base_Widget
     }
     public function schedule_cup_32_8($race_id)
     {
+        $inserted = 0;
+        $oSchedual = new Hj_Race_Schedual();
         //获取队伍列表
         $teamList = $this->getTeamList(['race_id'=>$race_id]);
         $groupTeamList = [];
@@ -200,12 +202,105 @@ class Hj_Race_Team extends Base_Widget
         {
             $groupTeamList[$teamInfo['group_id']][count($groupTeamList[$teamInfo['group_id']]??[])+1] = $team_id;
         }
+        $maxGroup = Base_Common::generateGroups(count($groupTeamList));
+        //创建小组赛
         foreach($groupTeamList as $group_id => $teamList)
         {
             $matchList = Base_Common::generateGroupLeague($teamList);
-            //$matchList['1_1'] = ['home'=>1,'away'=>2];
-
+            foreach($matchList as $round => $roundMatchList)
+            {
+                foreach($roundMatchList as $key => $match)
+                {
+                    $match['group_id'] = $group_id;
+                    $match['race_id'] = $race_id;
+                    $match['team'] = 1;
+                    $match['match_name'] = "小组赛".$maxGroup[$group_id]."组第".$round."轮第".$key."场";
+                    $insert = $oSchedual->insertSchedual($match);
+                    if($insert)
+                    {
+                        $inserted++;
+                    }
+                }
+            }
         }
+        $remainTeamCount = count($groupTeamList)*2;
+        $knockoutMatchList = [];
+        foreach($groupTeamList as $group_id => $teamList)
+        {
+            if($group_id%2==1)
+            {
+                $match = ['race_id'=>$race_id,'team'=>1,'from_group_home'=>$group_id,'from_group_rank_home'=>1,'from_group_away'=>$group_id+1,'from_group_rank_away'=>1];
+                $match['match_name'] = $remainTeamCount."强淘汰赛:".$maxGroup[$group_id]."组第1 VS ".$maxGroup[$group_id+1]."组第2";
+                $insert = $oSchedual->insertSchedual($match);
+                if($insert)
+                {
+                    $knockoutMatchList['1'][count($knockoutMatchList['1'])+1] = $insert;
+                    $inserted++;
+                }
+                $match = ['race_id'=>$race_id,'team'=>1,'from_group_home'=>$group_id,'from_group_rank_home'=>2,'from_group_away'=>$group_id,'from_group_rank_away'=>1];
+                $match['match_name'] = $remainTeamCount."强淘汰赛:".$maxGroup[$group_id+1]."组第1 VS ".$maxGroup[$group_id]."组第2";
+                $insert = $oSchedual->insertSchedual($match);
+                if($insert)
+                {
+                    $knockoutMatchList['1'][count($knockoutMatchList['1'])+1] = $insert;
+                    $inserted++;
+                }
+            }
+        }
+        $remainTeamCount = count($knockoutMatchList[1]);
+        $i = 1;
+        foreach($knockoutMatchList[1] as $key => $match_id)
+        {
+            if($key%2==1)
+            {
+                $match = ['race_id'=>$race_id,'team'=>1,'from_race_home'=>$match_id,'from_race_away'=>$knockoutMatchList[1][$key+1]];
+                $match['match_name'] = $remainTeamCount."强淘汰赛:第".$i."场";
+                $i++;
+                $insert = $oSchedual->insertSchedual($match);
+                if($insert)
+                {
+                    $knockoutMatchList['2'][count($knockoutMatchList['2'])+1] = $insert;
+                    $inserted++;
+                }
+            }
+        }
+        $remainTeamCount = count($knockoutMatchList[2]);
+        $i = 1;
+        foreach($knockoutMatchList[2] as $key => $match_id)
+        {
+            if($key%2==1)
+            {
+                $match = ['race_id'=>$race_id,'team'=>1,'from_race_home'=>$match_id,'from_race_away'=>$knockoutMatchList[2][$key+1]];
+                $match['match_name'] = "1/2决赛第".$i."场";
+                $i++;
+                $insert = $oSchedual->insertSchedual($match);
+                if($insert)
+                {
+                    $knockoutMatchList['3'][count($knockoutMatchList['3'])+1] = $insert;
+                    $inserted++;
+                }
+            }
+        }
+        //决赛
+        $match = ['race_id'=>$race_id,'team'=>1,'from_race_home'=>$knockoutMatchList[3][1],'from_race_away'=>$knockoutMatchList[3][2]];
+        $match['match_name'] = "冠军决赛";
+        $insert = $oSchedual->insertSchedual($match);
+        if($insert)
+        {
+            $knockoutMatchList['4'][count($knockoutMatchList['4'])+1] = $insert;
+            $inserted++;
+        }
+        //3/4名决赛
+        $match = ['race_id'=>$race_id,'team'=>1,'from_race_home'=>$knockoutMatchList[3][1],'from_race_away'=>$knockoutMatchList[3][2],'from_race_winner'=>0];
+        $match['match_name'] = "3/4名决赛";
+        $insert = $oSchedual->insertSchedual($match);
+        if($insert)
+        {
+            $knockoutMatchList['4'][count($knockoutMatchList['4'])+1] = $insert;
+            $inserted++;
+        }
+        print_R($knockoutMatchList);
+        return $inserted;
     }
 
 }
