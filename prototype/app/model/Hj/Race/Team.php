@@ -232,7 +232,7 @@ class Hj_Race_Team extends Base_Widget
         {
             if($group_id%2==1)
             {
-                $match = ['race_id'=>$race_id,'team'=>1,'from_group_home'=>$group_id,'from_group_rank_home'=>1,'from_group_away'=>$group_id+1,'from_group_rank_away'=>1,'phase'=>2];
+                $match = ['race_id'=>$race_id,'team'=>1,'from_group_home'=>$group_id,'from_group_rank_home'=>1,'from_group_away'=>$group_id+1,'from_group_rank_away'=>2,'phase'=>2];
                 $match['match_name'] = $remainTeamCount."强淘汰赛:".$maxGroup[$group_id]."组第1 VS ".$maxGroup[$group_id+1]."组第2";
                 $insert = $oSchedual->insertSchedual($match);
                 if($insert)
@@ -348,7 +348,7 @@ class Hj_Race_Team extends Base_Widget
         {
             if($group_id%2==1)
             {
-                $match = ['race_id'=>$race_id,'team'=>1,'from_group_home'=>$group_id,'from_group_rank_home'=>1,'from_group_away'=>$group_id+1,'from_group_rank_away'=>1,'phase'=>2];
+                $match = ['race_id'=>$race_id,'team'=>1,'from_group_home'=>$group_id,'from_group_rank_home'=>1,'from_group_away'=>$group_id+1,'from_group_rank_away'=>2,'phase'=>2];
                 $match['match_name'] = $remainTeamCount."强淘汰赛:".$maxGroup[$group_id]."组第1 VS ".$maxGroup[$group_id+1]."组第2";
                 $insert = $oSchedual->insertSchedual($match);
                 if($insert)
