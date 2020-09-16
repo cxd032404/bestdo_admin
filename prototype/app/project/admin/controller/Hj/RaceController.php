@@ -648,7 +648,7 @@ class Hj_RaceController extends AbstractController
             //获取赛事列表
             $RaceTypeList = $this->oRace->getRaceTypeList();
             $detailType = $RaceTypeList[$RaceInfo['race_type']]['list'][$RaceInfo['detail']['detail_type'] ?? ""] ?? [];
-            //$reScheduleFunction = "schedule_".$RaceInfo['race_type']."_".$RaceInfo['detail']['detail_type'];
+            $maxGroup = Base_Common::generateGroups($detailType['group']??8);
             //团队赛
             if ($RaceInfo['team'] == 1) {
                 $teamList = [];
@@ -658,6 +658,7 @@ class Hj_RaceController extends AbstractController
                 $phaseCount = [];
                 foreach($scheduleList as $key => $value)
                 {
+                    $vs = [];
                     $scheduleList[$key]['start_time'] = is_null($value['start_time'])?"待定":$value['start_time'];
                     $scheduleList[$key]['end_time'] = is_null($value['end_time'])?"待定":$value['end_time'];
                     if(isset($phaseCount[$value['phase']]))
@@ -668,29 +669,34 @@ class Hj_RaceController extends AbstractController
                     {
                         $phaseCount[$value['phase']] = ['count'=>1,'start'=>$value['id']];
                     }
-                    if($value['home']>0)
+                    $value['vs'] = json_decode($value['vs'],true);
+                    foreach($value['vs'] as $k => $v)
                     {
-                        if(!isset($teamList[$value['home']]))
+                        if(is_int($v))
                         {
-                            $teamInfo = $oTeam->getTeam($value['home']);
-                            if(isset($teamInfo['team_id']))
+                            if(!isset($teamList[$v]))
                             {
-                                $teamList[$value['home']] = $teamInfo;
+                                $teamInfo = $oTeam->getTeam($v);
+                                if(isset($teamInfo['team_id']))
+                                {
+                                    $teamList[$v] = $teamInfo;
+                                }
+                            }
+                            if(isset($teamList[$v]))
+                            {
+                                $vs[] = $teamList[$v]['team_name']??"待定";
                             }
                         }
-                    }
-                    if($value['away']>0)
-                    {
-                        if(!isset($teamList[$value['away']]))
+                        elseif(isset($v['from_race']))
                         {
-                            $teamInfo = $oTeam->getTeam($value['away']);
-                            if(isset($teamInfo['team_id']))
-                            {
-                                $teamList[$value['away']] = $teamInfo;
-                            }
+                            $vs[] = "来自比赛".$v['from_race']."的".((isset($v['winner']) && ($v['winner']==0))?"负方":"胜方");
+                        }
+                        elseif(isset($v['from_group']))
+                        {
+                            $vs[] = "来自分组".$maxGroup[$v['from_group']]."的第".$v['from_group_rank']."名";
                         }
                     }
-                    $scheduleList[$key]['vs'] = ($teamList[$value['home']]['team_name']??"待定")." - ".($teamList[$value['away']]['team_name']??"待定");
+                    $scheduleList[$key]['vs'] = implode("<p>",$vs);
                 }
                 //渲染模版
                 include $this->tpl('Hj_Race_ScheduleList');

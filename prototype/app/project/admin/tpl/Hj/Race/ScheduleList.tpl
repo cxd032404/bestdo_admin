@@ -21,7 +21,9 @@ function reSchedule(sid){
 </script>
 
 <fieldset><legend>操作</legend>
-    <div align=right><a class = "pb_btn_dark_1" href="javascript:;" id="add_race">新增</a></div>
+    <span style="float:left;"><a class = "pb_btn_light_1"  href="{tpl:$this.sign/}">返回</a></span>
+    <span style="float:right;"><a class = "pb_btn_dark_1" href="javascript:;" id="add_race" >新增</a></span>
+
 </fieldset>
 
 <fieldset><legend>赛程列表</legend>
