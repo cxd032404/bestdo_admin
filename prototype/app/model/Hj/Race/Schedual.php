@@ -18,13 +18,14 @@ class Hj_Race_Schedual extends Base_Widget
 	public function getSchedualList($params,$fields = "*")
 	{
         $whereRace = (isset($params['race_id']) && $params['race_id']>0)?" race_id = ".$params['race_id']:"";
+        $wherePhase = (isset($params['phase']) && $params['phase']>0)?" phase = ".$params['phase']:"";
         //初始化查询条件
-		$whereCondition = array($whereRace);
+		$whereCondition = array($whereRace,$wherePhase);
 		//生成条件列
 		$where = Base_common::getSqlWhere($whereCondition);
 		$table_to_process = Base_Widget::getDbTable($this->table);
-		$sql = "SELECT $fields FROM " . $table_to_process . " where 1 ".$where." ORDER BY id desc";
-        $return = $this->db->getAll($sql);
+		$sql = "SELECT $fields FROM " . $table_to_process . " where 1 ".$where." ORDER BY phase,group_id,round,id asc";
+		$return = $this->db->getAll($sql);
 		$SchedualList = array();
 		if(count($return))
 		{
@@ -67,7 +68,11 @@ class Hj_Race_Schedual extends Base_Widget
 	 */
 	public function insertSchedual(array $bind)
 	{
-        $bind['create_time'] = $bind['update_time'] = date("Y-m-d H:i:s");
+        if(isset($bind['vs']) && is_array($bind['vs']))
+        {
+            $bind['vs'] = json_encode($bind['vs']);
+        }
+	    $bind['create_time'] = $bind['update_time'] = date("Y-m-d H:i:s");
         $table_to_process = Base_Widget::getDbTable($this->table);
 		return $this->db->insert($table_to_process, $bind);
 	}
