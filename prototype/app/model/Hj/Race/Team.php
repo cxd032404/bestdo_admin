@@ -227,7 +227,7 @@ class Hj_Race_Team extends Base_Widget
             }
         }
         //16进8
-        $remainTeamCount = count($groupTeamList)*2;
+        $remainCount = count($groupTeamList)*2;
         $knockoutMatchList = [];
         foreach($groupTeamList as $group_id => $teamList)
         {
@@ -238,7 +238,7 @@ class Hj_Race_Team extends Base_Widget
                     'phase'=>2,
                     'race_id'=>$race_id,
                     'team'=>1,
-                    'match_name'=>$remainTeamCount."强淘汰赛:".$maxGroup[$group_id]."组第1 VS ".$maxGroup[$group_id+1]."组第2"];
+                    'match_name'=>$remainCount."强淘汰赛:".$maxGroup[$group_id]."组第1 VS ".$maxGroup[$group_id+1]."组第2"];
                 $insert = $oSchedual->insertSchedual($match);
                 if($insert)
                 {
@@ -250,7 +250,7 @@ class Hj_Race_Team extends Base_Widget
                     'phase'=>2,
                     'race_id'=>$race_id,
                     'team'=>1,
-                    'match_name'=>$remainTeamCount."强淘汰赛:".$maxGroup[$group_id+1]."组第1 VS ".$maxGroup[$group_id]."组第2"];
+                    'match_name'=>$remainCount."强淘汰赛:".$maxGroup[$group_id+1]."组第1 VS ".$maxGroup[$group_id]."组第2"];
                 $insert = $oSchedual->insertSchedual($match);
                 if($insert)
                 {
@@ -260,7 +260,7 @@ class Hj_Race_Team extends Base_Widget
             }
         }
         //8进4
-        $remainTeamCount = count($knockoutMatchList[1]);
+        $remainCount = count($knockoutMatchList[1]);
         $i = 1;
         foreach($knockoutMatchList[1] as $key => $match_id)
         {
@@ -271,7 +271,7 @@ class Hj_Race_Team extends Base_Widget
                     'phase'=>3,
                     'race_id'=>$race_id,
                     'team'=>1,
-                    'match_name'=>$remainTeamCount."强淘汰赛:第".$i."场"];
+                    'match_name'=>$remainCount."强淘汰赛:第".$i."场"];
                 $i++;
                 $insert = $oSchedual->insertSchedual($match);
                 if($insert)
@@ -282,7 +282,7 @@ class Hj_Race_Team extends Base_Widget
             }
         }
         //4进2
-        $remainTeamCount = count($knockoutMatchList[2]);
+        $remainCount = count($knockoutMatchList[2]);
         $i = 1;
         foreach($knockoutMatchList[2] as $key => $match_id)
         {
@@ -368,7 +368,7 @@ class Hj_Race_Team extends Base_Widget
             }
         }
         //8进4
-        $remainTeamCount = count($groupTeamList)*2;
+        $remainCount = count($groupTeamList)*2;
         $knockoutMatchList = [];
         foreach($groupTeamList as $group_id => $teamList)
         {
@@ -379,7 +379,7 @@ class Hj_Race_Team extends Base_Widget
                     'phase'=>2,
                     'race_id'=>$race_id,
                     'team'=>1,
-                    'match_name'=>$remainTeamCount."强淘汰赛:".$maxGroup[$group_id]."组第1 VS ".$maxGroup[$group_id+1]."组第2"];
+                    'match_name'=>$remainCount."强淘汰赛:".$maxGroup[$group_id]."组第1 VS ".$maxGroup[$group_id+1]."组第2"];
                 $insert = $oSchedual->insertSchedual($match);
                 if($insert)
                 {
@@ -391,7 +391,7 @@ class Hj_Race_Team extends Base_Widget
                     'phase'=>2,
                     'race_id'=>$race_id,
                     'team'=>1,
-                    'match_name'=>$remainTeamCount."强淘汰赛:".$maxGroup[$group_id+1]."组第1 VS ".$maxGroup[$group_id]."组第2"];
+                    'match_name'=>$remainCount."强淘汰赛:".$maxGroup[$group_id+1]."组第1 VS ".$maxGroup[$group_id]."组第2"];
                 $insert = $oSchedual->insertSchedual($match);
                 if($insert)
                 {
@@ -401,7 +401,7 @@ class Hj_Race_Team extends Base_Widget
             }
         }
         //4进2
-        $remainTeamCount = count($knockoutMatchList[2]);
+        $remainCount = count($knockoutMatchList[2]);
         $i = 1;
         foreach($knockoutMatchList[1] as $key => $match_id)
         {
