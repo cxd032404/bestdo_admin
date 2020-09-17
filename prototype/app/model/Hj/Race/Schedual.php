@@ -9,6 +9,7 @@ class Hj_Race_Schedual extends Base_Widget
 {
 	//声明所用到的表
 	protected $table = 'user_race_schedual';
+    protected $table_vs = 'schedual_vs_detail';
 
 	/**
 	 * 查询全部
@@ -70,23 +71,69 @@ class Hj_Race_Schedual extends Base_Widget
 	{
         if(isset($bind['vs']) && is_array($bind['vs']))
         {
+            $vs = $bind['vs'];
             $bind['vs'] = json_encode($bind['vs']);
         }
 	    $bind['create_time'] = $bind['update_time'] = date("Y-m-d H:i:s");
         $table_to_process = Base_Widget::getDbTable($this->table);
-		return $this->db->insert($table_to_process, $bind);
+		$schedule_id = $this->db->insert($table_to_process, $bind);
+        if($schedule_id)
+        {
+            foreach($vs as $key => $value)
+            {
+                if(is_int($value))
+                {
+                    $vsBind = ['race_id'=>$bind['race_id'],'match_id'=>$schedule_id,'pos'=>$key,'id'=>$value];
+                    $this->insertVs($vsBind);
+                }
+            }
+        }
+        return $schedule_id;
 	}
+    /**
+     * 插入
+     * @param array $bind
+     * @return boolean
+     */
+    public function insertVs(array $bind)
+    {
+        $bind['create_time'] = $bind['update_time'] = date("Y-m-d H:i:s");
+        $table_to_process = Base_Widget::getDbTable($this->table_vs);
+        return $this->db->insert($table_to_process, $bind);
+    }
+
+    /**
+     * 删除
+     * @param integer $schedual_id
+     * @return boolean
+     */
+    public function deleteSchedual($schedual_id)
+    {
+        $schedual_id = intval($schedual_id);
+        $schedual = $this->getSchedual($schedual_id);
+        $schedual['vs'] = json_decode($schedual['vs'],true);
+        foreach($schedual['vs'] as $key => $value)
+        {
+            if(is_int($value))
+            {
+                $this->deleteVsByMatch($schedual_id,$key);
+            }
+        }
+        $table_to_process = Base_Widget::getDbTable($this->table);
+        return $this->db->delete($table_to_process, '`id` = ?', $schedual_id);
+    }
 
 	/**
 	 * 删除
 	 * @param integer $schedual_id
 	 * @return boolean
 	 */
-	public function deleteSchedual($schedual_id)
+	public function deleteVsByMatch($match_id,$vs_id)
 	{
-		$schedual_id = intval($schedual_id);
-		$table_to_process = Base_Widget::getDbTable($this->table);
-		return $this->db->delete($table_to_process, '`id` = ?', $schedual_id);
+        $match_id = intval($match_id);
+        $vs_id = intval($vs_id);
+        $table_to_process = Base_Widget::getDbTable($this->table_vs);
+		return $this->db->delete($table_to_process, '`match_id` = ? and `pos` = ?', [$match_id,$vs_id]);
 	}
     //清除所有分组信息
 	public function clearRace($race_id)

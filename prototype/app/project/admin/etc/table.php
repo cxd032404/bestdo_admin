@@ -195,4 +195,8 @@ $table['config_place']['num'] = 1;
 #赛程表
 $table['user_race_schedual']['db'] = 'hj_user';
 $table['user_race_schedual']['num'] = 1;
+
+#赛程表详情表
+$table['schedual_vs_detail']['db'] = 'hj_user';
+$table['schedual_vs_detail']['num'] = 1;
 return $table;
