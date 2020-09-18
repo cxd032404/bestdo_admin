@@ -5,7 +5,7 @@
  */
 
 
-class Hj_Place extends Base_Widget
+class Hj_Race_Place extends Base_Widget
 {
     //声明所用到的表
     protected $table = 'config_place';
@@ -17,23 +17,23 @@ class Hj_Place extends Base_Widget
      */
     public function getPlaceList($params,$fields = "*")
     {
-        $wherePlace = (isset($params['race_id']) && $params['race_id']>0)?" race_id = ".$params['race_id']:"";
+        $whereRace = (isset($params['race_id']) && $params['race_id']>0)?" race_id = ".$params['race_id']:"";
         //初始化查询条件
-        $whereCondition = array($wherePlace);
+        $whereCondition = array($whereRace);
         //生成条件列
         $where = Base_common::getSqlWhere($whereCondition);
         $table_to_process = Base_Widget::getDbTable($this->table);
         $sql = "SELECT $fields FROM " . $table_to_process . " where 1 ".$where." ORDER BY place_id desc";
         $return = $this->db->getAll($sql);
-        $TeamList = array();
+        $PlaceList = array();
         if(count($return))
         {
             foreach($return as $key => $value)
             {
-                $TeamList[$value['place_id']] = $value;
+                $PlaceList[$value['place_id']] = $value;
             }
         }
-        return $TeamList;
+        return $PlaceList;
     }
     /**
      * 获取单条记录

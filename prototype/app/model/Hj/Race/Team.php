@@ -211,7 +211,8 @@ class Hj_Race_Team extends Base_Widget
             {
                 foreach($roundMatchList as $key => $matchInfo)
                 {
-                    $match = ['vs'=>['0'=>$matchInfo['home'],'1'=>$matchInfo['away']],
+                    $match = ['vs'=>['0'=>['id'=>$matchInfo['home']],
+                                    '1'=>['id'=>$matchInfo['away']]],
                         'group_id'=>$group_id,
                         'race_id'=>$race_id,
                         'round'=>$round,
@@ -352,7 +353,8 @@ class Hj_Race_Team extends Base_Widget
             {
                 foreach($roundMatchList as $key => $matchInfo)
                 {
-                    $match = ['vs'=>['0'=>$matchInfo['home'],'1'=>$matchInfo['away']],
+                    $match = ['vs'=>['0'=>['id'=>$matchInfo['home']],
+                        '1'=>['id'=>$matchInfo['away']]],
                         'group_id'=>$group_id,
                         'race_id'=>$race_id,
                         'round'=>$round,

@@ -81,9 +81,9 @@ class Hj_Race_Schedual extends Base_Widget
         {
             foreach($vs as $key => $value)
             {
-                if(is_int($value))
+                if(isset($value['id']))
                 {
-                    $vsBind = ['race_id'=>$bind['race_id'],'match_id'=>$schedule_id,'pos'=>$key,'id'=>$value];
+                    $vsBind = ['race_id'=>$bind['race_id'],'match_id'=>$schedule_id,'pos'=>$key,'id'=>$value['id']];
                     $this->insertVs($vsBind);
                 }
             }
@@ -114,7 +114,7 @@ class Hj_Race_Schedual extends Base_Widget
         $schedual['vs'] = json_decode($schedual['vs'],true);
         foreach($schedual['vs'] as $key => $value)
         {
-            if(is_int($value))
+            if(isset($value['id']))
             {
                 $this->deleteVsByMatch($schedual_id,$key);
             }

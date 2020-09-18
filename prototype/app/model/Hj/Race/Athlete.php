@@ -211,7 +211,8 @@ class Hj_Race_Athlete extends Base_Widget
             {
                 foreach($roundMatchList as $key => $matchInfo)
                 {
-                    $match = ['vs'=>['0'=>$matchInfo['home'],'1'=>$matchInfo['away']],
+                    $match = ['vs'=>['0'=>['id'=>$matchInfo['home']],
+                                    '1'=>['id'=>$matchInfo['away']]],
                         'group_id'=>$group_id,
                         'race_id'=>$race_id,
                         'round'=>$round,
@@ -234,7 +235,7 @@ class Hj_Race_Athlete extends Base_Widget
             if($group_id%2==1)
             {
                 $match = ['vs'=>['0'=>['from_group'=>$group_id,'from_group_rank'=>1],
-                    '1'=>['from_group'=>$group_id+1,'from_group_rank'=>2]],
+                                '1'=>['from_group'=>$group_id+1,'from_group_rank'=>2]],
                     'phase'=>2,
                     'race_id'=>$race_id,
                     'team'=>1,
@@ -267,7 +268,7 @@ class Hj_Race_Athlete extends Base_Widget
             if($key%2==1)
             {
                 $match = ['vs'=>['0'=>['from_race'=>$match_id],
-                    '1'=>['from_race'=>$knockoutMatchList[1][$key+1]]],
+                                '1'=>['from_race'=>$knockoutMatchList[1][$key+1]]],
                     'phase'=>3,
                     'race_id'=>$race_id,
                     'team'=>1,
@@ -289,7 +290,7 @@ class Hj_Race_Athlete extends Base_Widget
             if($key%2==1)
             {
                 $match = ['vs'=>['0'=>['from_race'=>$match_id],
-                    '1'=>['from_race'=>$knockoutMatchList[2][$key+1]]],
+                                '1'=>['from_race'=>$knockoutMatchList[2][$key+1]]],
                     'phase'=>4,
                     'race_id'=>$race_id,
                     'team'=>1,
@@ -305,7 +306,7 @@ class Hj_Race_Athlete extends Base_Widget
         }
         //决赛
         $match = ['vs'=>['0'=>['from_race'=>$knockoutMatchList[3][1]],
-            '1'=>['from_race'=>$knockoutMatchList[3][2]]],
+                        '1'=>['from_race'=>$knockoutMatchList[3][2]]],
             'phase'=>5,
             'race_id'=>$race_id,
             'team'=>1,
@@ -318,7 +319,7 @@ class Hj_Race_Athlete extends Base_Widget
         }
         //3/4名决赛
         $match = ['vs'=>['0'=>['from_race'=>$knockoutMatchList[3][1],'winner'=>0],
-            '1'=>['from_race'=>$knockoutMatchList[3][2],'winner'=>0]],
+                        '1'=>['from_race'=>$knockoutMatchList[3][2],'winner'=>0]],
             'phase'=>5,
             'race_id'=>$race_id,
             'team'=>1,
@@ -352,7 +353,8 @@ class Hj_Race_Athlete extends Base_Widget
             {
                 foreach($roundMatchList as $key => $matchInfo)
                 {
-                    $match = ['vs'=>['0'=>$matchInfo['home'],'1'=>$matchInfo['away']],
+                    $match = ['vs'=>['0'=>['id'=>$matchInfo['home']],
+                                    '1'=>['id'=>$matchInfo['away']]],
                         'group_id'=>$group_id,
                         'race_id'=>$race_id,
                         'round'=>$round,
@@ -375,7 +377,7 @@ class Hj_Race_Athlete extends Base_Widget
             if($group_id%2==1)
             {
                 $match = ['vs'=>['0'=>['from_group'=>$group_id,'from_group_rank'=>1],
-                    '1'=>['from_group'=>$group_id+1,'from_group_rank'=>2]],
+                                '1'=>['from_group'=>$group_id+1,'from_group_rank'=>2]],
                     'phase'=>2,
                     'race_id'=>$race_id,
                     'team'=>1,
@@ -408,7 +410,7 @@ class Hj_Race_Athlete extends Base_Widget
             if($key%2==1)
             {
                 $match = ['vs'=>['0'=>['from_race'=>$match_id],
-                    '1'=>['from_race'=>$knockoutMatchList[1][$key+1]]],
+                                '1'=>['from_race'=>$knockoutMatchList[1][$key+1]]],
                     'phase'=>3,
                     'race_id'=>$race_id,
                     'team'=>1,
@@ -425,7 +427,7 @@ class Hj_Race_Athlete extends Base_Widget
         }
         //决赛
         $match = ['vs'=>['0'=>['from_race'=>$knockoutMatchList[2][1]],
-            '1'=>['from_race'=>$knockoutMatchList[2][2]]],
+                        '1'=>['from_race'=>$knockoutMatchList[2][2]]],
             'phase'=>4,
             'race_id'=>$race_id,
             'team'=>1,

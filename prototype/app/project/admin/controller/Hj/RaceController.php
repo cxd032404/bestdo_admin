@@ -153,7 +153,7 @@ class Hj_RaceController extends AbstractController
 		if($PermissionCheck['return'])
 		{
 			//赛事ID
-			$RaceId = trim($this->request->race_id);
+			$RaceId = intval($this->request->race_id);
 			//删除赛事
 			$this->oRace->deleteRace($RaceId);
 			//返回之前的页面
@@ -463,7 +463,7 @@ class Hj_RaceController extends AbstractController
         $PermissionCheck = $this->manager->checkMenuPermission("updateRace", $this->sign);
         if ($PermissionCheck['return']) {
             //赛事ID
-            $RaceId = trim($this->request->race_id);
+            $RaceId = intval($this->request->race_id);
             $RaceInfo = $this->oRace->getRace($RaceId, '*');
             //数据解包
             $RaceInfo['detail'] = json_decode($RaceInfo['detail'], true);
@@ -498,7 +498,7 @@ class Hj_RaceController extends AbstractController
         $race_info =  $this->oRace->getRace($race_id,'*');
         $race_name = $race_info['race_name'];
         $params['race_id'] = $race_id;
-        $place_list = (new Hj_Place())->getPlaceList($params);
+        $place_list = (new Hj_Race_Place())->getPlaceList($params);
         include $this->tpl('Hj_Race_PlaceList');
     }
     /*
@@ -534,7 +534,7 @@ class Hj_RaceController extends AbstractController
             $response = array('errno' => 1);
         }
         else {
-            $res = (new Hj_Place())->insertPlace($bind);
+            $res = (new Hj_Race_Place())->insertPlace($bind);
             $response = $res ? array('errno' => 0) : array('errno' => 9);
         }
         echo json_encode($response);
@@ -550,7 +550,7 @@ class Hj_RaceController extends AbstractController
         if($PermissionCheck['return']) {
             //场地id
             $place_id = intval($this->request->place_id);
-            $place_info = (new Hj_Place())->getPlace($place_id, '*');
+            $place_info = (new Hj_Race_Place())->getPlace($place_id, '*');
             $race_info = $this->oRace->getRace($place_info['race_id'], '*');
             $race_name = $race_info['race_name'];
             //渲染模版
@@ -575,7 +575,7 @@ class Hj_RaceController extends AbstractController
         else
         {
             //修改赛事
-            $res = (new Hj_Place())->updatePlace($bind['place_id'],$bind);
+            $res = (new Hj_Race_Place())->updatePlace($bind['place_id'],$bind);
             $response = $res ? array('errno' => 0) : array('errno' => 9);
         }
         echo json_encode($response);
@@ -591,7 +591,7 @@ class Hj_RaceController extends AbstractController
         if($PermissionCheck['return'])
         {
             $place_id = $this->request->place_id;
-            (new Hj_Place())->deletePlace($place_id);
+            (new Hj_Race_Place())->deletePlace($place_id);
             //返回之前的页面
             $this->response->goBack();
         }else
@@ -642,6 +642,7 @@ class Hj_RaceController extends AbstractController
         //检查权限
         $PermissionCheck = $this->manager->checkMenuPermission("updateRace", $this->sign);
         if ($PermissionCheck['return']) {
+            $oSchedual = new Hj_Race_Schedual();
             //赛事ID
             $RaceId = trim($this->request->race_id);
             $RaceInfo = $this->oRace->getRace($RaceId, '*');
@@ -650,17 +651,18 @@ class Hj_RaceController extends AbstractController
             //获取赛事列表
             $RaceTypeList = $this->oRace->getRaceTypeList();
             $detailType = $RaceTypeList[$RaceInfo['race_type']]['list'][$RaceInfo['detail']['detail_type'] ?? ""] ?? [];
+            $placeList = (new Hj_Race_Place())->getPlaceList(['race_id'=>$RaceInfo['race_id']],"place_name,place_id");
             $maxGroup = Base_Common::generateGroups($detailType['group']??8);
             //团队赛
             if ($RaceInfo['team'] == 1) {
                 $teamList = [];
                 $oTeam = new Hj_Race_Team();
-                $oSchedual = new Hj_Race_Schedual();
                 $scheduleList = $oSchedual->getSchedualList(['race_id'=>$RaceId]);
                 $phaseCount = [];
                 foreach($scheduleList as $key => $value)
                 {
                     $vs = [];
+                    $scheduleList[$key]['place_name'] = $placeList[$value['place']]['place_name']??"待定";
                     $scheduleList[$key]['start_time'] = is_null($value['start_time'])?"待定":$value['start_time'];
                     $scheduleList[$key]['end_time'] = is_null($value['end_time'])?"待定":$value['end_time'];
                     if(isset($phaseCount[$value['phase']]))
@@ -674,19 +676,19 @@ class Hj_RaceController extends AbstractController
                     $value['vs'] = json_decode($value['vs'],true);
                     foreach($value['vs'] as $k => $v)
                     {
-                        if(is_int($v))
+                        if(isset($v['id']))
                         {
-                            if(!isset($teamList[$v]))
+                            if(!isset($teamList[$v['id']]))
                             {
-                                $teamInfo = $oTeam->getTeam($v);
+                                $teamInfo = $oTeam->getTeam($v['id']);
                                 if(isset($teamInfo['team_id']))
                                 {
-                                    $teamList[$v] = $teamInfo;
+                                    $teamList[$v['id']] = $teamInfo;
                                 }
                             }
-                            if(isset($teamList[$v]))
+                            if(isset($teamList[$v['id']]))
                             {
-                                $vs[] = $teamList[$v]['team_name']??"待定";
+                                $vs[] = $teamList[$v['id']]['team_name']??"待定";
                             }
                         }
                         elseif(isset($v['from_race']))
@@ -706,12 +708,12 @@ class Hj_RaceController extends AbstractController
             {
                 $athleteList = [];
                 $oAthlete = new Hj_Race_Athlete();
-                $oSchedual = new Hj_Race_Schedual();
                 $scheduleList = $oSchedual->getSchedualList(['race_id'=>$RaceId]);
                 $phaseCount = [];
                 foreach($scheduleList as $key => $value)
                 {
                     $vs = [];
+                    $scheduleList[$key]['place_name'] = $placeList[$value['place']]['place_name']??"待定";
                     $scheduleList[$key]['start_time'] = is_null($value['start_time'])?"待定":$value['start_time'];
                     $scheduleList[$key]['end_time'] = is_null($value['end_time'])?"待定":$value['end_time'];
                     if(isset($phaseCount[$value['phase']]))
@@ -725,19 +727,19 @@ class Hj_RaceController extends AbstractController
                     $value['vs'] = json_decode($value['vs'],true);
                     foreach($value['vs'] as $k => $v)
                     {
-                        if(is_int($v))
+                        if(isset($v['id']))
                         {
-                            if(!isset($athleteList[$v]))
+                            if(!isset($athleteList[$v['id']]))
                             {
-                                $athleteInfo = $oAthlete->getAthlete($v);
+                                $athleteInfo = $oAthlete->getAthlete($v['id']);
                                 if(isset($athleteInfo['athlete_id']))
                                 {
-                                    $athleteList[$v] = $athleteInfo;
+                                    $athleteList[$v['id']] = $athleteInfo;
                                 }
                             }
-                            if(isset($athleteList[$v]))
+                            if(isset($athleteList[$v['id']]))
                             {
-                                $vs[] = $athleteList[$v]['athlete_name']??"待定";
+                                $vs[] = $athleteList[$v['id']]['athlete_name']??"待定";
                             }
                         }
                         elseif(isset($v['from_race']))
@@ -758,5 +760,53 @@ class Hj_RaceController extends AbstractController
             $home = $this->sign;
             include $this->tpl('403');
         }
+    }
+    //更新赛程提交页面
+    public function scheduleModifyAction()
+    {
+        //检查权限
+        $PermissionCheck = $this->manager->checkMenuPermission("updateRace", $this->sign);
+        if ($PermissionCheck['return']) {
+            $oSchedual = new Hj_Race_Schedual();
+            //赛程ID
+            $id = intval($this->request->id);
+            $schedualInfo = $oSchedual->getSchedual($id, '*');
+            $raceInfo = $this->oRace->getRace($schedualInfo['race_id'],"*");
+            $placeList = (new Hj_Race_Place())->getPlaceList(['race_id'=>$raceInfo['race_id']],"place_name,place_id");
+            //渲染模版
+            include $this->tpl('Hj_Race_ScheduleModify');
+        } else {
+            $home = $this->sign;
+            include $this->tpl('403');
+        }
+    }
+    //更新赛事信息
+    public function scheduleUpdateAction()
+    {
+        //接收页面参数
+        $bind=$this->request->from('start_time','end_time','place','match_name');
+        $schedule_id = intval($this->request->schedule_id);
+        //比赛名称不能为空
+        if(trim($bind['match_name'])=="")
+        {
+            $response = array('errno' => 1);
+        }
+        else
+        {
+            if(strtotime($bind['start_time'])==0)
+            {
+                unset($bind['start_time']);
+            }
+            if(strtotime($bind['end_time'])==0)
+            {
+                unset($bind['end_time']);
+            }
+            $oSchedual = new Hj_Race_Schedual();
+            //修改赛事
+            $res = $oSchedual->updateSchedual($schedule_id,$bind);
+            $response = $res ? array('errno' => 0) : array('errno' => 9);
+        }
+        echo json_encode($response);
+        return true;
     }
 }
